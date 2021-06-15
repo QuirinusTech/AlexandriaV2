@@ -1,0 +1,575 @@
+/********************************* ADMIN PAGE **********************/
+
+* {
+  font-family: system-ui !important;
+  transition: 0.4s ease;
+}
+
+#admin_manual_message {
+  height: 80%;
+  width: 80%;
+}
+
+#manual_message_type_select {
+  width: 100px;
+  height: 30px;
+  font-size: large;
+  text-transform: uppercase;
+}
+
+.displayblock {
+  display: block;
+}
+
+.admin-div-width {
+  min-width: 1000px;
+}
+
+.highlighted-red {
+  border: red 1px solid !important;
+  color: red !important;
+}
+
+.highlighted > input {
+  border: 1px solid green !important;
+  color: fuchsia;
+  font-weight: bold;
+}
+
+.highlighted > button, .highlighted > select {
+  background: white !important;
+  color: darkorchid;
+  border: 1px solid darkorchid;
+}
+
+.highlighted {
+  background-color: paleturquoise;
+  margin-left: -5px;
+  border-radius: 8px;
+}
+
+.w400px {
+  min-width: 400px !important;
+}
+
+.flexdc {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.flexdr {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.jcfs {
+  justify-content: flex-start !important;
+}
+
+.jcc {
+  justify-content: center !important;
+}
+
+.jcse {
+  justify-content: space-evenly !important;
+}
+
+.jcsb {
+  justify-content: space-between !important;
+}
+
+.asc {
+  align-self: center !important; 
+}
+
+.acc {
+  align-content: center !important;
+}
+
+.pad10px {
+  padding: 10px;
+}
+
+.mar10px {
+  margin: 10px;
+}
+
+.w80perc {
+  width: 80% !important;
+}
+
+.w70perc {
+  width: 70% !important;
+}
+
+.w60perc {
+  width: 60% !important;
+}
+
+.w30perc {
+  width: 30% !important;
+}
+
+.w25perc {
+  width: 25% !important;
+}
+
+#usertickboxes {
+  background-color: white;
+  border: 1px solid aliceblue;
+  border-collapse: collapse;
+}
+
+#messageCentreTable > table, #messageCentreTable > table > tr > td > table, #messageCentreTable > table, #messageCentreTable > table > tr > td > table > tr, #messageCentreTable > table, #messageCentreTable > table > tr > td > table > tr > td {
+  margin:0;
+  padding:0;
+  background:none;
+  border:none;
+  border-collapse:collapse;
+  border-spacing:0;
+  background-image:none;
+  width: auto;
+  height: auto;
+  flex: none;
+}
+
+#messageCentreTable > table > tr {
+  border: 1px solid black;
+  background-color: white;
+}
+
+#messageCentreTable > table > tr > th {
+  text-transform: uppercase;
+  font-size: large;
+}
+
+#messageCentreTable > table > tr > td {
+  padding: 15px;
+}
+
+#messageCentreTable > table > tr > td > button {
+  display: block;
+  font-family: system-ui;
+  font-weight: 300;
+  font-size: small;
+  text-align: center;
+  padding: none;
+  border: white solid 2px;
+  box-shadow: none;
+  border-radius: 0px;
+  background-color: black;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: none;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  background-color: #343A40;
+  border-radius: 4px;  
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.a{color: #E7484F}
+.b{color: #F68B1D}
+.c{color: #FCED00}
+.d{color: #009E4F}
+.e{color: #00AAC3}
+.f{color:  #732982}
+
+@keyframes slidebg {
+  to {
+    background-position:20vw;
+  }
+}
+
+.follow{
+  margin-top: 40px;
+}
+
+.follow a{
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+#controlPanel {
+  position: relative;
+  z-index: 1;
+  margin: 0px;
+  transition: .5s ease;
+
+}
+
+#controlPanel_showhide_btn {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  border-radius: 20px;
+  height: 60px;
+  width: 60px;
+  background-size: 85%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 5px;
+  background-color: white;
+  border-radius: 0px;
+}
+
+
+.controlPanel_content {
+  position: fixed;
+  bottom: -400px;
+  overflow: hidden;
+  transition: .5s ease;
+  flex-direction: column;
+}
+
+
+#controlPanel:hover .controlPanel_content {
+  display: flex;
+  bottom: 0px;
+  background-color: orange;
+  border: 1px solid aqua;
+  border-radius: 5px;
+  padding-bottom: 70px;
+}
+
+#controlPanel:hover #controlPanel_showhide_btn {
+border-radius: 15px;
+}
+
+#messageCentreTable > table > tr > td > button:hover {
+  background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);
+  animation:slidebg 5s linear infinite;
+}
+
+#editmode_on, #Bulk_Status_update_div {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+#editmode_on > div {
+  margin: 20px 10px;
+  padding: 10px;
+  background: rgb(235, 235, 255);
+}
+
+#Bulk_Status_update_div > select {
+  align-self: center;
+  width: fit-content;
+}
+
+.usertickboxestable td {
+  padding: 0px;
+  margin: 0px;
+  border-bottom: 1px solid darkorchid;
+}
+
+.admin-mode {
+  width: 100%;
+  column-span: all;
+  display: flex;
+  flex-direction: row;
+  margin-top: 2px;
+  flex-wrap: nowrap;
+
+}
+
+
+
+
+
+
+
+
+.admin-mode > button, .admin-mode > div > button {
+  box-shadow: none;
+  text-shadow: none;
+  border-radius: 0%;
+  border: 1px solid peru;
+  padding: 0px;
+  margin: 0px;
+  height: 20px;
+  background-color: darkorchid;
+  font-size: inherit;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.admin-mode_th_tr {
+  align-content: space-around;
+}
+
+/**.admin-mode-col > div {
+  justify-content: flex-start;
+}*/
+
+.admin-mode input {
+  font-family: 'Courier New', Courier, monospace;
+  border-radius: 0%;
+  border: 1px solid peru;
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  color: black;
+  font-size: 1rem;
+  height: 20px;
+}
+/*
+#editmode_on {
+  align-items: ;
+}*/
+
+.mw300px  {
+  width: 300px !important;
+}
+
+.admin-mode > .admin_colhead_series, .mw200px  {
+  width: 200px !important;
+}
+
+.admin-mode > .admin_colhead_id, .admin-mode > .admin_colhead_genre, .admin-mode > .admin_colhead_type, .admin-mode > .admin_colhead_status, .admin-mode > .dynamicContent td {
+  width: 100px !important;
+}
+
+.admin-mode > .admin_colhead_Date {
+  width: 125px !important;
+}
+
+
+
+.admin-mode > .admin_colhead_sf, .admin_colhead_poster, .admin-mode > .admin_colhead_ef, .admin-mode > .admin_colhead_et, .admin-mode > .admin_colhead_st, .admin-mode > .admin_colhead_year {
+  width: 50px !important;
+}
+
+.mw40px {
+  width: 40px !important;
+}
+
+.EDIT_BUTTON {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+}
+
+.EDIT_BUTTON{
+  text-align: center;
+  cursor: pointer;
+  font-size:24px;
+  margin: 0 0 0 100px;
+}
+
+/*Button Three*/
+.EDIT_BUTTON {
+  background-color: darkorchid;
+  border: none;
+  padding: 10px;
+  width: 100px;
+  text-align: center;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.EDIT_BUTTON:hover{
+ background:#fff;
+ box-shadow:0px 2px 10px 5px #97B1BF;
+ color:#000;
+}
+
+.EDIT_BUTTON:after {
+  content: "";
+  background: rgba(50,224,196, 0.7);
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.EDIT_BUTTON:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+.rowdiv:hover {
+  background-color: orange;
+}
+
+.admin-mode-col {
+  width: 95%;
+  column-span: all;
+  display: flex;
+  flex-direction: column;
+}
+
+.mw50px {
+  width: 50px;
+}
+
+.mw75px {
+  width: 75px;
+}
+
+.admin_hidden {
+  display: none;
+}
+
+.w200px {
+  width: 195px;
+}
+
+.mw65px, .admin-mode > .admin_colhead_Poster {
+  width: 65px;
+}
+
+.readonly-field {
+  color: white !important;
+  background-color: grey !important;
+}
+
+.admin_btn_delete {
+  background-image: url("img/admin_imgs/delete.png");
+}
+
+.admin_btn_manual_create {
+  background-image: url("img/admin_imgs/manual_create.png");
+}
+
+.admin_btn_msg_centre {
+  background-image: url("img/admin_imgs/msg_centre.png");
+}
+
+.admin_btn_new_msg {
+  background-image: url("img/admin_imgs/new_msg.png");
+}
+
+.admin_btn_settings {
+  background-image: url("img/admin_imgs/settings.png");
+}
+
+.admin_btn_update {
+  background-image: url("img/admin_imgs/update.png");
+}
+
+.admin_btn_wishlist {
+  background-image: url("img/admin_imgs/wishlist.png");
+}
+
+.admin-wishlist-inline-button {
+  height: 22px;
+  width: 22px;
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.adminplusbutton {
+  font-size: medium;
+  color: white;
+  background-color: darkorchid;
+  border-radius: inherit;
+  border: black 1px solid;
+  font-weight: bold;
+  height: 60px;
+  width: 60px;
+  background-size: 85%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 5px;
+  transition: 0.4s ease;
+}
+
+.adminplusbutton:hover {
+  border: 1px solid aqua;
+  box-shadow: 2px 2px purple, 3px 3px 3px pink !important;
+}
+
+.greybutton {
+  background-color: grey !important;
+  color: #dadada !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  font-weight: unset !important;
+}
+
+.greybutton:hover {
+  background-color: grey !important;
+  color: white !important;
+  border: 1px solid white;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  font-weight: unset !important;
+  box-shadow: 1px 1px black, 2px 2px 2px slategrey !important;
+}
+
+.adminpagebutton {
+  font-size: 1.5rem !important;
+  color: #f4f4f4 !important;
+  text-transform: uppercase !important;
+  border: 1px solid rgb(146, 148, 248) !important;
+  overflow: hidden;
+  padding: 10px !important;
+  height: auto !important; 
+  position: relative; 
+  background-color: white !important;
+  color: darkorchid !important;
+  font-weight: bold;
+  border-radius: 0px !important;
+  box-shadow: 1px 1px purple, 2px 2px 2px pink !important;
+}
+
+.adminpagebutton:hover {
+  box-shadow: 1px 1px 25px 10px rgba(146, 148, 248, 0.4);
+}
+
+.adminpagebutton:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(146, 148, 248, 0.4),
+    transparent
+  );
+  transition: all 650ms;
+}
+
+.adminpagebutton:hover:before {
+  left: 100%;
+}
+
+#scrolltotopbtn {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed/sticky position */
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 30px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: red; /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 15px; /* Some padding */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Increase font size */
+}
+
+#scrolltotopbtn:hover {
+  background-color: #555; /* Add a dark-grey background on hover */
+}

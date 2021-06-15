@@ -9,6 +9,7 @@
       name="description"
       content="Web site created using create-react-app"
     />
+    <link rel="stylesheet" href="%PUBLIC_URL%/styles.css">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -24,11 +25,24 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Alexandria (Development Mode)</title>
   </head>
   <body>
+    <nav>
+      <a href="/" class="nav_menu_element">Home</a>
+      <a href="/addnew" class="nav_menu_element">Add New</a>
+      <a href="/list" class="nav_menu_element">Wishlist</a>
+      <a href="/report" class="nav_menu_element">Report</a>
+      <a href="/login" class="nav_menu_element">Log in</a>
+      <a href="/admin" class="nav_menu_element">Admin</a>
+      <a href="/logout" class="nav_menu_element">Logout</a>
+    </nav>
+    <div class="banner">
+      <h1><a href="/">The Library of Alexandria</a></h1>
+
+   </div>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root" class="w3-margin-top"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -40,4 +54,22 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <footer>
+      <div>
+        <a href="/about">//About Alexandria//</a>
+        <a href="/contactus">//Contact Us//</a>
+    </div>
+    <p>Created by Matthew Gird. </p>
+    <a class="bugreportlink"
+        href="/contactus?subject=Bug+report&amp;bugreport=true">Report
+        a bug</a>
+
+    <p>TV information and images are provided by omdbapi.com. </p>
+    <p>
+        This site is neither endorsed nor certified by IMDB.com and/or its affiliates.
+    </p>
+    <p>Original styling by Allison Gird</p>
+    <p><img class="quirinuslogo" src="%PUBLIC_URL%/img/QuirinusTech.png">Quirinus Technologies © 2021</p>
+    <p>v2.0.1 (React - 1st edition) - 11/06/2021</p>
+  </footer>
 </html>

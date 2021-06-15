@@ -1,0 +1,75 @@
+<div class="about_div">
+  <div id="about" class="about_row">
+      <h2>About Alexandria</h2>
+      <h3 id="libraryinfoh3">The actual library</h3>
+      <p>
+          The Great Library of Alexandria in Alexandria, Egypt, was one of the largest and most significant libraries of the ancient world.
+      </p>
+      <p class="moreinfo"> The Library was part of a larger research institution called the Mouseion, which was dedicated to the Muses, the nine goddesses of the arts. The idea of a universal library in Alexandria may have been proposed by Demetrius of Phalerum, an exiled
+          Athenian statesman living in Alexandria, to Ptolemy I Soter, who may have established plans for the Library, but the Library itself was probably not built until the reign of his son Ptolemy II Philadelphus.
+      </p>
+      <p class="moreinfo">
+          The Library quickly acquired many papyrus scrolls, due largely to the Ptolemaic kings' aggressive and well-funded policies for procuring texts. It is unknown precisely how many such scrolls were housed at any given time, but estimates range from 40,000 to 400,000 at its height.
+      </p>
+      <p class="moreinfo">
+          Despite the widespread modern belief that the Library of Alexandria was burned once and cataclysmically destroyed, the Library actually declined gradually over the course of several centuries.
+      </p>
+      <p class="moreinfo">
+          This decline began with the purging of intellectuals from Alexandria in 145 BC during the reign of Ptolemy VIII Physcon, which resulted in Aristarchus of Samothrace, the head librarian, resigning from his position and exiling himself to Cyprus. Many other scholars, including Dionysius Thrax and Apollodorus of Athens, fled to other cities, where they continued teaching and conducting scholarship.
+      </p>
+      <p class="moreinfo">
+          The Library, or part of its collection, was accidentally burned by Julius Caesar during his civil war in 48 BC, but it is unclear how much was actually destroyed and it seems to have either survived or been rebuilt shortly thereafter; the geographer Strabo mentions having visited the Mouseion in around 20 BC and the prodigious scholarly output of Didymus Chalcenterus in Alexandria from this period indicates that he had access to at least some of the Library's resources.
+      </p>
+      <blockquote class="moreinfo"> 
+          [Source:
+          <a href="https://en.wikipedia.org/wiki/Library_of_Alexandria">
+              Wikipedia
+          </a>]
+      </blockquote>
+      <button onclick="showmore()" id="showmorebutton" class="morelink">[More...]</button>
+      <br>
+      <h3>This site</h3>
+      <p>In 2020, an aspiring crepologist by the name of Matthew Gird decided to get his shit together and get a real job.</p>
+      <p>In his search for meaning to learn something pursuing a meaning in life, he started learning web development.</p>
+      <p>As a small-scale starter project, he sought to create this site: a media center where users could request media and thus Alexandria was born.</p>
+      <p>This site was the creator's first foray into the realm of back-end development in Python using the Flask framework.</p>
+      <br>
+      <blockquote><h4>Let this site be testament to the triumph of determination and hard work over chaos.</h4></blockquote>
+  </div>
+
+  <div class="about_row">
+      <button style="width: auto;" onclick="Redirect('/contactus')">Contact the administrator</button>
+  </div>
+  
+      <div class="about_row">
+          <h2>Aknowlegments & Sources</h2>
+          <p>Styling and occasional ass-kicking by Allison Gird.</p>
+          <p>UI Feedback, testing, swatches and Couch-Potatoing by Tje Anne.</p>
+          <blockquote>
+              "Proof of that Couch-Potatoing can be beneficial." -Tje
+          </blockquote>
+          <p>Code review, mentoring and cheerleading by Shaun Matthysen.</p>
+          <p>The creator of the site would also like to extend their thanks to:</p>
+          <ul>
+              <li><a class="purplelink" href="https://www.w3schools.com/default.asp">w3schools.com</a> for their amazing tutorials and cheatsheets</li>
+              <li><a class="purplelink" href="https://www.edx.org/course/cs50s-introduction-to-computer-science">David J. Malan and CS50</a> for being a solid foundation</li>
+              <li><a class="purplelink" href="https://www.youtube.com/c/TraversyMedia/about">Traversy Media</a> for getting us started</li>
+              <li><a class="purplelink" href="https://www.youtube.com/c/AngularFirebase/about">Fireship.io</a> for proving that there are real wizards (Javascript wizards)</li>
+              <li><a class="purplelink" href="https://stackoverflow.com/questions/63654924/user-authentification-failure-despite-successful-login">Stack Overflow</a> for answering my inane questions</li>
+              <li><a class="purplelink" href="https://www.freecodecamp.org/">freecodecamp.org</a> for their tutorials</li>
+              <li>The <a class="purplelink" href="http://www.omdbapi.com/">OMDB API</a> for providing free access to their easy-to-use API</li>
+              <li><a class="purplelink" href="https://firebase.google.com/">Firebase</a> and <a class="purplelink" href="https://www.heroku.com/">Heroku</a> for providing free Database and Server Hosting.</li>
+              <li><a class="purplelink" href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Miguel Grinberg</a> for his amazing Flask tutorial.</li>
+          </ul>
+          <p>If you have not been credited for something on this site, please get in touch <a class="purplelink" href="{{ url_for('contactus', subject='Missing attribution')}}">here</a>.</p>
+          <p>TV information and images are provided by omdbapi.com.</p>
+          <p>This site is neither endorsed nor certified by IMDB.com and/or its affiliates.</p>
+          <br>
+          <blockquote><img class="quirinuslogo" src="/static/img/QuirinusTech.png">Quirinus Technologies &#169; 2020</blockquote>
+      </div>
+      <button onclick="togglehide('changelog_div')">Show Changelog</button>
+      <div class="about_row hidden" id="changelog_div">
+          {% include "changelog.html" %}
+      </div>
+  </div>
+</div>
