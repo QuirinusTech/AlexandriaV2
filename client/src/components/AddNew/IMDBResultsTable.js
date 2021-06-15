@@ -3,16 +3,16 @@ import EpisodesPick from "./EpisodesPick";
 import TableBody from "./IMDBResultsTableBody"
 
 
-function IMDBResultsTable({ IMDBResults, reset }) {
+function IMDBResultsTable({ IMDBResults, reset, SetProgress, setRecentlyAdded }) {
   const isSeries = IMDBResults["Type"] === "series";
   const [readyToAdd, setReadyToAdd] = useState(!isSeries)
   const [episodes, setEpisodes] = useState(
     isSeries ? 
     {
-      "sf": '',
-      "ef": '',
-      "st": '',
-      "et": ''
+      "sf": 1,
+      "ef": 1,
+      "st": IMDBResults['totalSeasons'],
+      "et": 'all'
     }
     :
     false
@@ -25,19 +25,24 @@ function IMDBResultsTable({ IMDBResults, reset }) {
   function AddToList() {
     const {ef, sf, et, st } = episodes
     const readyObj = {
-      IMDBResults,
-      ef,
-      sf,
-      st,
-      et
-    }
+      data: {
+        IMDBResults,
+        ef,
+        sf,
+        st,
+        et,
+      }
+    };
+    setRecentlyAdded(readyObj['data']['IMDBResults']['Title'])
     console.log(readyObj)
     fetch("/addtolist", {
       method: 'POST',
-      body: JSON.stringify(readyObj)
+      body: JSON.stringify(readyObj),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
     })
     .then(res => {
-      console.log(res.data)
+      console.log(res)
+      SetProgress("JustAdded")
     })
   }
 
@@ -50,9 +55,9 @@ function IMDBResultsTable({ IMDBResults, reset }) {
       </table>
       {isSeries && 
         <EpisodesPick
+          episodes={episodes}
           setEpisodes={setEpisodes}
           setReadyToAdd={setReadyToAdd}
-          maxseries={IMDBResults["totalSeasons"]}
         />
       }
       <button

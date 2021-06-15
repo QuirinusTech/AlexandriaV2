@@ -3,22 +3,27 @@ const { v4 } = require("uuid");
 const fetch = require('node-fetch') ;
 
 class WishlistItem {
-  constructor(obj) {
-    this.addedBy = obj.addedBy;
-    this.id = v4();
-    this.mediaType = obj.mediaType;
-    this.status = "new";
-    this.imdbID = obj.imdbID;
-    this.name = obj.name;
-    this.dateAdded = obj.dateAdded;
-    this.sf = obj.sf;
-    this.ef = obj.ef;
-    this.st = obj.st;
-    this.et = obj.et;
-    this.episodes = this.parseEpisodeVars();
+
+  static async setData(data) {
+    let obj = {}
+    obj.addedBy = data.addedBy;
+    obj.id = v4();
+    obj.mediaType = data.mediaType;
+    obj.status = "new";
+    obj.imdbID = data.imdbID;
+    obj.name = data.name;
+    obj.dateAdded = data.dateAdded;
+    if (data.mediaType !== "movie") {
+      obj.sf = data.sf;
+      obj.ef = data.ef;
+      obj.st = data.st;
+      obj.et = data.et;
+      obj.episodes = await this.parseEpisodeVars(data.sf, data.ef, data.st, data.et, data.imdbID);
+    }
+    return obj
   }
 
-  updateStatus(status) {
+  static updateStatus(status) {
     var checkvar = false
     allPossibleStatuses.forEach(possibleStatus => {
       if (possibleStatus === status) {
@@ -29,17 +34,19 @@ class WishlistItem {
     return checkvar
   }
 
-  async parseEpisodeVars() {
-    let sf = parseInt(this.sf)
-    let ef = parseInt(this.ef)
-    let st = parseInt(this.st)
-    let et = this.et
+  static async parseEpisodeVars(sf, ef, st, et, imdbID) {
+    sf = parseInt(sf)
+    ef = parseInt(ef)
+    st = parseInt(st)
+    if (!isNaN(parseInt(et))) {
+      et = parseInt(et)
+    }
     console.log(sf, ef, st, et)
     // no existing episodes
     if (st-sf === 0) {
       // only one season
       if (et == "all" || isNaN(parseInt(et))) {
-        et = await this.GetMaxEpisodes(st)
+        et = await this.GetMaxEpisodes(st, imdbID)
       }
       return this.addSeason(sf, ef, et)
     } else {
@@ -50,7 +57,7 @@ class WishlistItem {
         }
         console.log(episodesvar)
         for (let j = sf; j <= st; j++) {
-          const maxEpisodes = await this.GetMaxEpisodes(j)
+          const maxEpisodes = await this.GetMaxEpisodes(j, imdbID)
           console.log(maxEpisodes)
           episodesvar[j] = this.addSeason(j, ef, maxEpisodes)
         }
@@ -58,9 +65,9 @@ class WishlistItem {
       }
     }
 
-  async GetMaxEpisodes(season) {
+    static async GetMaxEpisodes(season, imdbID) {
     console.log('getMaxEpisodes', season)
-    const result = await fetch(`https://www.omdbapi.com/?t=${this.imdbID}&apikey=5fadb6ca&season=${season}`, {method: 'POST'})
+    const result = await fetch(`https://www.omdbapi.com/?t=${imdbID}&apikey=5fadb6ca&season=${season}`, {method: 'POST'})
     .then(response => response.json())
     .then(result => {
       return parseInt(result.Episodes[result.Episodes.length-1].Episode) 
@@ -69,26 +76,22 @@ class WishlistItem {
     return result
   }
 
-  addSeason(season, ef, et) {
+  static addSeason(season, ef, et) {
     console.log("Add Episodes ", season, ef, et)
-    if (this.mediaType === "movie") {
-      return { success: false, response: "movies cannot have episodes" };
-    } else {
-      let obj = {};
-      obj[season] = {}
-      for (let i = ef; i <= et; i++) {
-        obj[season][i] = "new";
-      }
-      return obj[season]
+    let obj = {};
+    obj[season] = {}
+    for (let i = ef; i <= et; i++) {
+      obj[season][i] = "new";
     }
+    return obj[season]
   }
 
-  delEpisodes(array) {
+  static delEpisodes(array, episodes) {
     // if passed in format [s, [ef,et]]
     if (Number.isInteger(array[0])) {
       let qtycounter = 0;
       for (let i = array[1][0]; i <= array[1][1]; i++) {
-        delete this.episodes[array[0]][i];
+        delete episodes[array[0]][i];
         qtycounter++;
       }
       return { success: true, response: qtycounter };
@@ -96,20 +99,16 @@ class WishlistItem {
       // if passed as array of arrays in format [[sfef,stet],[sfef,stet] etc.]
       let qtycounter = 0;
       array.forEach((ep) => {
-        delete this.episodes[ep[0]][ep[1]];
+        delete episodes[ep[0]][ep[1]];
         qtycounter++;
       });
-      return { success: true, response: qtycounter };
+      return episodes;
     } else {
-      return { success: false, response: 0 };
+      return false;
     }
   }
 
-  getFullEpisodeList() {
-    const episodesObj = this.episodes;
-    if (episodesObj === false) {
-      return { success: false, response: "movies cannot have episodes" };
-    }
+  static getFullEpisodeList(episodesObj) {
     var seasons = Object.keys(episodesObj);
     var fullList = [];
     for (let i = 0; i < seasons.length; i++) {
@@ -121,29 +120,25 @@ class WishlistItem {
         });
       });
     }
-    return { success: true, response: fullList };
+    return fullList;
   }
 
-  getProgress() {
-    let results = this.getFullEpisodeList()["response"];
-    if (!results) {
-      return { success: true, response: 0 };
-    } else {
-      let progress = {};
-      results.forEach((item) => {
-        const value = Object.values(item);
-        if (!Number.isInteger(progress[value])) {
-          progress[value] = 0;
-        }
-        progress[value] = progress[value] + 1;
-      });
-      Object.keys(progress).forEach((key) => {
-        progress[key] = parseFloat(
-          ((progress[key] / results.length) * 100).toFixed(2)
-        );
-      });
-      return progress;
-    }
+  static getProgress(episodesObj) {
+    let fullList = this.getFullEpisodeList(episodesObj);
+    let progress = {};
+    fullList.forEach((item) => {
+      const value = Object.values(item);
+      if (!Number.isInteger(progress[value])) {
+        progress[value] = 0;
+      }
+      progress[value] = progress[value] + 1;
+    });
+    Object.keys(progress).forEach((key) => {
+      progress[key] = parseFloat(
+        ((progress[key] / fullList.length) * 100).toFixed(2)
+      );
+    });
+    return progress;
   }
 }
 

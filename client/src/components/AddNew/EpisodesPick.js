@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function EpisodesPick({ maxseries, setReadyToAdd, setEpisodes }) {
-  const [sf, setsf] = useState("1");
-  const [ef, setef] = useState("1");
-  const [st, setst] = useState(maxseries);
-  const [et, setet] = useState("all");
+function EpisodesPick({ setReadyToAdd, setEpisodes, episodes }) {
+  const [sf, setsf] = useState(episodes['sf']);
+  const [ef, setef] = useState(episodes['ef']);
+  const [st, setst] = useState(episodes['st']);
+  const [et, setet] = useState(episodes['et']);
 
+  useEffect( ()=> {
+    checkready()
+  }, [] )
   const handleChange = (e) => {
     const { value, name } = e.target;
     switch (name) {

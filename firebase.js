@@ -6,7 +6,7 @@
 const admin = require('firebase-admin');
 
 const serviceAccount = require("./alexandria-v2-89a5a-30e14e932b3d.json");
-const { default: WishlistItem } = require("./Classes/WishlistItem");
+const WishlistItem = require("./Classes/WishlistItem");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -15,16 +15,16 @@ admin.initializeApp({
 const db = admin.firestore();
 
 module.exports = {
-  dbProcess: function dbProcess(operation, data) {
+  dbProcess: async function dbProcess(operation, data) {
     switch (operation) {
       case "C":
-        return addToWishlist(data);
+        return await addToWishlist(data);
       case "R":
-        return getWishlist(data);
+        return await getWishlist(data);
       case "U":
-        return updateWishlist(data);
+        return await updateWishlist(data);
       case "D":
-        return deleteFromWishlist(data);
+        return await deleteFromWishlist(data);
       default:
         break;
     }
@@ -33,19 +33,21 @@ module.exports = {
 
 async function addToWishlist(data) {
   let d = new Date();
-  const newEntry = new WishlistItem({
-    "addedBy": GetCurrentUser(),
-    "mediaType": data["IMDBResults"]["Type"].toLowerCase(),
-    "imdbID": data["IMDBResults"]["imdbID"],
-    "name": data["IMDBResults"]["Title"],
-    "sf": data["sf"],
-    "ef": data["ef"],
-    "st": data["st"],
-    "et": data["et"],
-    "dateAdded": d.toDateString(),
-  });
-  const response = db.collection("wishlist").doc(newEntry.id.set(newEntry));
-  return response;
+  let obj = {
+      "addedBy": GetCurrentUser(),
+      "mediaType": data["IMDBResults"]["Type"].toLowerCase(),
+      "imdbID": data["IMDBResults"]["imdbID"],
+      "name": data["IMDBResults"]["Title"],
+      "sf": data["sf"],
+      "ef": data["ef"],
+      "st": data["st"],
+      "et": data["et"],
+      "dateAdded": d.toDateString(),
+  }
+  console.log(obj)
+  obj = await WishlistItem.setData(obj);
+  return db.collection("wishlist").doc(obj.id).set(obj).then( ()=> { return "success" }  )
+  
 }
 
 function GetCurrentUser() {
@@ -76,5 +78,3 @@ function deleteFromWishlist(data) {
 }
 
 // BATCH ACTION
-
-

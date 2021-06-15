@@ -4,21 +4,27 @@ import Structure from './components/Structure';
 
 function App() {
 
-  const [connectionTest, setConnectionTest] = useState({
-    data: null,
-  })
+  const [connectionTest, setConnectionTest] = useState(false)
+  const [connData, setConnData] = useState("")
 
   async function confirmConnection() {
-    const response = await fetch('/serverping');
-    const body = await response.json();
-    if (response.status !== 200) {throw Error(body.message)};
-    setConnectionTest({data: body});
+    setConnData("Connecting")
+    const response = await fetch('/serverping')
+    const data = await response.json()
+    setConnectionTest(true)
+    setConnData(data['server'])
   };
+
+  useEffect( ()=> {
+    confirmConnection()
+  }, [] ) 
 
   return (
     <div>
-      <button onClick={confirmConnection}>Confirm server connectivity</button>
-      {connectionTest && <p>{connectionTest["data"]}</p>}
+      <div className="ConnectivityTestBox">
+      <button className={ connectionTest ? "connsuccess" : "connfail" } onClick={confirmConnection}>ConnectionTest</button>
+      <p>{connectionTest ?  connData : "Link not yet established"}</p>
+      </div>
       <Structure />
     </div>
   );

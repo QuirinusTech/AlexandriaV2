@@ -2,6 +2,7 @@ import FormSearch from "./AddNew/FormSearch";
 import IMDBResultsPosterList from "./AddNew/IMDBResultsPosterList";
 import IMDBResultsTable from "./AddNew/IMDBResultsTable";
 import React, { useState } from "react";
+import {Link} from 'react-router-dom'
 
 function AddNew() {
   const [progress, SetProgress] = useState('FormSearch')
@@ -10,6 +11,7 @@ function AddNew() {
   var [posterList, setPosterList] = useState([]);
   const [field, setField ] = useState("");
   const [isSearching, setIsSearching] = useState(false)
+  const [recentlyadded, setRecentlyAdded] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +37,21 @@ function AddNew() {
     setField("")
     setPosterList([])
     SetProgress("FormSearch")
+  }
+
+  function Completed(){
+    
+    return (
+      <div className="PopupBox">
+        <p>You've successfully added "{recentlyadded}" to the Wishlist.</p>
+        <p>Would you like to:</p>
+        <div>
+          <button onClick={reset}>Add another</button>
+          <button><Link to="/list">View the Wishlist</Link></button>
+          <button onClick={console.log("quack")}>Go to home screen</button>
+        </div>
+      </div>
+    )
   }
 
   function searchIMDB(searchBy, field) {
@@ -69,6 +86,7 @@ function AddNew() {
   return (
     <div>
       <h2>Add New</h2>
+      {progress === "JustAdded" && <Completed />}
       {progress !== "IMDBResultsTable" &&
       <FormSearch
         isSearching={isSearching}
@@ -91,9 +109,10 @@ function AddNew() {
       />}
       {progress === "IMDBResultsTable" &&
         <IMDBResultsTable
+        setRecentlyAdded={setRecentlyAdded}
         reset={reset}
         IMDBResults={IMDBResultsVar}
-      SetProgress={SetProgress}
+        SetProgress={SetProgress}
       />
       }
     </div>
