@@ -12,7 +12,7 @@ function ListFilters ({statusFilters, setStatusFilters}) {
   }
 
   return (
-    <div class="spanc" id="listFilters_Div">
+    <div className="spanc" id="listFilters_Div">
       {Object.keys(statusFilters).map((status)=> {
         return (
           <ListFilter

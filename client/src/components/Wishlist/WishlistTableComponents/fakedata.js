@@ -30,9 +30,9 @@ let var1 = [{
       10: "new",
       11: "new",
       12: "new",
-      et: "all",
     },
   },
+  et: "all",
   id: "16d01c97-d200-4463-b7b4-9c649c4c3a5a",
   imdbData: {
     Actors: "Tyler Posey, Holland Roden, Dylan O'Brien, Linden Ashby",

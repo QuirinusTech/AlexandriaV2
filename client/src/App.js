@@ -10,7 +10,7 @@ function App() {
   async function confirmConnection() {
     setConnData("Connecting")
     const response = await fetch('/serverping')
-    const data = await response.json()
+    const data = await response
     setConnectionTest(true)
     setConnData(data['server'])
   };

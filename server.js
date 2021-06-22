@@ -113,7 +113,12 @@ app.post('/logout', (_req, res) => {
 })
 
 app.get('/serverping', (_req, res) => {
-  res.json({ server: "Successful. Port: "+ port + "." })
+  if (res.locals.username) {
+    res.json({ server: "You are logged in as: " + res.locals.username + " Port: "+ port + "." })
+  } else {
+    res.json({ server: "Successful. Port: "+ port + "." })
+  }
+  
 })
 
 /* app.get('*', (req, res) => {

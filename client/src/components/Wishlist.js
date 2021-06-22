@@ -17,6 +17,14 @@ const WishlistItemTemplate = [
   "name"
 ];
 
+const wishlistData = async () => {
+  const response = fetch('/db/r', {
+    method: "POST",
+    body: JSON.stringify(localStorage.getItem('username'))
+  })
+  return response.json()
+}
+
 function Wishlist() {
   const [showInfoTable, setShowInfoTable] = useState(false)
   const [statusFilters, setStatusFilters] = useState(()=> {

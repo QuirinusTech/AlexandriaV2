@@ -672,9 +672,40 @@ button, input[type=submit] {
     border-radius: 15px;
 }
 
-#wishlistdiv > div.row.span{
+#listFilters_Div {
+    width:auto;
+    padding:10px 15px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.listFilterTickboxDiv {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 47%;
+    margin: 2px;
+    flex-wrap: nowrap;
+}
+
+.listFilterTickboxDiv > input {
+    margin: 0px 7px 0px 0px!important;
+}
+
+/* .listFilterTickboxDiv > input[type="checkbox"] {
+    align-self: flex-end;
+} */
+
+#wishlistdiv > div.row.span {
     max-width:100vw;
 }
+
+.dynamicContent > td {
+    text-align: center;
+    vertical-align: baseline;
+}
+
 
 #wishlisttablediv{
     width:100vw;
@@ -707,6 +738,11 @@ button, input[type=submit] {
     font-size:0.8rem;
 }
 
+.episodeStatusDiv {
+    display: flex;
+    flex-direction: row;
+}
+
 .colhead_genre {
     max-width: 100px;
 }
@@ -718,6 +754,7 @@ button, input[type=submit] {
     width: -webkit-calc(100% - 2rem);
     width: -moz-calc(100% - 2rem);
     width: calc(100% - 2rem);
+    margin-right: 0.5rem;
     margin-right: 0.5rem;
 }
 
@@ -1180,10 +1217,21 @@ div.about_div{
     width: auto;
     padding:10px 15px;
     }
+
     #listFilters_Div {
         width:auto;
         padding:10px 15px;
+        flex-direction: row;
+        justify-content: space-evenly;
     }
+
+    .listFilterTickboxDiv {
+        /* border: 1px solid aqua; */
+        /* margin-left: -0.5px; */
+        flex-direction: column;
+        align-items: center !important;
+    }
+
     #wishlisttablediv > table {
     font-size: 1rem;
     }

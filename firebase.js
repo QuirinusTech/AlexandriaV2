@@ -13,14 +13,17 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const usersRef = db.collection('users')
+const wishlistRef = db.collection('wishlist')
 
 module.exports = {
   dbProcess: async function dbProcess(operation, data) {
+    username = GetCurrentUser()
     switch (operation) {
       case "C":
-        return await addToWishlist(data);
+        return await addToWishlist(username, data);
       case "R":
-        return await getWishlist(data);
+        return await getWishlistByUser(username);
       case "U":
         try {
           if (WishlistItem.isValidStatusUpdate(data['status'])) {
@@ -29,16 +32,16 @@ module.exports = {
         } catch {
           pass
         }
-        return await updateWishlist(id, data);
+        return await updateWishlistItem(id, data);
       case "D":
-        return await deleteFromWishlist(data);
+        return await deleteDocFromWishlist(data);
       default:
         break;
     }
   },
   getUserByUsername: async function searchForUser(username) {
     console.log(username)
-    const doc = await db.collection('users').doc(username).get()
+    const doc = await usersRef.doc(username).get()
     if (!doc.exists) {
       return false
     }
@@ -46,7 +49,7 @@ module.exports = {
   },
   addUserToDatabase: async function addUserToDatabase(user) {
     console.log("USER: ", user)
-    const response = await db.collection('users').doc(user['username']).set(user)
+    const response = await usersRef.doc(user['username']).set(user)
     createEmailNotification("admin", "new", "user")
     return response['updateTime']
   },
@@ -79,8 +82,7 @@ async function addToWishlist(username, data) {
     snapshot.forEach(doc => {
       let item = doc.data()
       if (data['imdbID'] === item['imdbID'] && username === item['username']) {
-        const response = await updateWishlist(item['id'], data)
-        return response
+        return updateWishlistItem(item['id'], data)
       }
     })
   }
@@ -110,11 +112,8 @@ async function addToWishlist(username, data) {
 }
 
 function GetCurrentUser() {
-  return "testuser"
+  return req.locals.username
 }
-// CREATE
-// const docRef = db.collection('wishlist').doc('alovelace');
-
 
 // READ
 async function getWishlistByUser(username) {
@@ -125,20 +124,19 @@ async function getWishlistByUser(username) {
     return "empty";
   }
   snapshot.forEach((doc) => {
-    inventory.push(doc.data());
-  });
-  inventory.forEach(item => {
+    let item = doc.data()
     if (item["progress"] === null || item["progress"] === "undefined" || item["progress"] === undefined) {
       item["progress"] = WishlistItem.getProgress(item["episodes"], item['status']);
     }
-  })
+    inventory.push(item);
+  });
 
   return inventory;
 }
 
 
 // UPDATE
-async function updateWishlist(data, username) {
+async function updateWishlistItem(data, username) {
   const docRef = wishlistRef.doc(data['id']);
   const res = await docRef.update({data});
   console.log('Update: ', res);

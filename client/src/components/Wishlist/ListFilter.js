@@ -1,11 +1,12 @@
 function ListFilter({status, listFilterToggle, isChecked}) {
   return (
     <div
-    className="w25 hidden_f"
+    className="w25 hidden_f listFilterTickboxDiv"
     id={`${status}_tickboxdiv`}
     >
-      <label>{status}</label>
+      
       <input name={status} type="checkbox" id={status} onChange={listFilterToggle} className="listFilters" checked={isChecked} />
+      <label>{status}</label>
     </div>
   )
 }
