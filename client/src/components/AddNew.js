@@ -4,14 +4,33 @@ import IMDBResultsTable from "./AddNew/IMDBResultsTable";
 import React, { useState } from "react";
 import {Link} from 'react-router-dom'
 
+
+
 function AddNew() {
   const [progress, SetProgress] = useState('FormSearch')
   const [IMDBResultsVar, SetIMDBResultsVar] = useState('')
   const [searchBy, setSearchBy] = useState("title");
-  var [posterList, setPosterList] = useState([]);
+  const [posterList, setPosterList] = useState([]);
   const [field, setField ] = useState("");
   const [isSearching, setIsSearching] = useState(false)
   const [recentlyadded, setRecentlyAdded] = useState('')
+  const [minvals, setMinvals] = useState([1,1])
+  const [warning, setWarning] = useState(null)
+
+  const getImdbidlist = async () => {
+      const response = await fetch("/imdbidlist", {
+        method: "POST",
+        body: JSON.stringify({ username: localStorage.getItem("username") }),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }).then((res) => res.json());
+      if (response.response !== "error") {
+        console.log("response: ", response);
+        return response;
+      } else {
+        console.log("response: ", response);
+        return ([]);
+      }
+  };  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,10 +55,11 @@ function AddNew() {
   const reset = () => {
     setField("")
     setPosterList([])
+    setIsSearching(false)
     SetProgress("FormSearch")
   }
 
-  function Completed(){
+  function Completed() {
     
     return (
       <div className="PopupBox">
@@ -48,13 +68,14 @@ function AddNew() {
         <div>
           <button onClick={reset}>Add another</button>
           <button><Link to="/list">View the Wishlist</Link></button>
-          <button onClick={console.log("quack")}>Go to home screen</button>
+          <button><Link to="/">Go to home screen</Link></button>
         </div>
       </div>
     )
   }
 
-  function searchIMDB(searchBy, field) {
+  async function searchIMDB(searchBy, field) {
+    const imdbidlist = await getImdbidlist()
     console.log("searchIMDB(",searchBy,",",field,")")
     const apikey = "5fadb6ca"
     if (searchBy === "title") {
@@ -77,17 +98,32 @@ function AddNew() {
         testarr.push(result)
         console.log(testarr)
         SetIMDBResultsVar(testarr[0])
-        SetProgress("IMDBResultsTable")
         setIsSearching(false)
+        imdbidlist.forEach(id => {
+          if (testarr[0]['imdbID'] === id['imdbID']) {
+            if (id['mediaType'] !== "movie") {
+              const {st, et } = id
+              if (et !== "all") {
+                setMinvals([parseInt(st), parseInt(et)])
+              } else if (et === "all") {
+                setMinvals([(parseInt(st)+1), (1)])
+              }
+            } else {
+              setWarning("This movie is already on the wishlist")
+            }
+          }
+        })
+        SetProgress("IMDBResultsTable")
+        
        })
     }
   }
-  
+
   return (
     <div>
       <h2>Add New</h2>
       {progress === "JustAdded" && <Completed />}
-      {progress !== "IMDBResultsTable" &&
+      {progress === "FormSearch" &&
       <FormSearch
         isSearching={isSearching}
         handleSubmit={handleSubmit}
@@ -109,14 +145,17 @@ function AddNew() {
       />}
       {progress === "IMDBResultsTable" &&
         <IMDBResultsTable
+        warning={warning}
+        minvals={minvals}
         setRecentlyAdded={setRecentlyAdded}
         reset={reset}
         IMDBResults={IMDBResultsVar}
         SetProgress={SetProgress}
-      />
-      }
+      />}
+      
     </div>
     )
+    
   }
 
 export default AddNew;

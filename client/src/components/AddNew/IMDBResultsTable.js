@@ -59,18 +59,17 @@ function IMDBResultsTable({ warning, minvals, IMDBResults, reset, SetProgress, s
         isOngoing,
         isPriority
     };
-    setRecentlyAdded(readyObj['data']['IMDBResults']['Title'])
+    setRecentlyAdded(readyObj['IMDBResults']['Title'])
     console.log(readyObj)
-    fetch("/addtolist", {
+    fetch("/db/c", {
       method: 'POST',
       body: JSON.stringify(readyObj),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     })
     .then(res => {
       if (res.status === 200) {
-        SetProgress("JustAdded")
         setRecentlyAdded(readyObj['IMDBResults']['Title'])
- 
+        SetProgress("JustAdded")
       } else {
         if (res.data.response === 'error') {
           setErrorPopupContent(res.data.error)

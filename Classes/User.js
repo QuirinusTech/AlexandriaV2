@@ -1,30 +1,33 @@
 const bcrypt = require("bcrypt");
+const uuid = require('uuid')
+
 
 class User {
-  constructor(x) {
-    this.email = x["email"];
-    this.password = this.set_password(x["password"]);
-    this.userId = x["id"];
-    this.name = x["name"];
-    this.uname = x["thisname"];
-    this.is_admin = x["is_admin"];
-    this.can_add = x["can_add"];
-    this.display_message_centre = x["display_message_centre"];
+  
+  static async setParamsNewUser(x) {
+    let obj = {}  
+    obj.password = await this.set_password(x["password"]);
+    obj.userId = uuid.v4();
+    obj.name = x["name"];
+    obj.username = x["username"];
+    obj.email = x["email"]
+    obj.privileges = {
+      "is_admin" : false,
+      "can_add" : false,
+      "is_active_user" : false
+    }
+    obj.display_message_centre = true;
+    return obj
   }
 
-  set_password(password) {
-    bcrypt.hash(password, 8, function (err, hash) {
-      if (err) throw err;
-      return hash;
-    });
+  static async set_password(password) {
+    const hash = await bcrypt.hash(password, 10)
+    return hash;
   }
 
-  check_password(password, dbpassword) {
-    bcrypt.compare(password, dbpassword, function (err, result) {
-      if (err) throw err;
-      return result;
-    });
+  static async check_password(password, dbpassword) {
+    return await bcrypt.compare(password, dbpassword);
   }
 }
 
-export default User;
+module.exports = User;

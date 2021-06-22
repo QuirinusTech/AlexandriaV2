@@ -4,7 +4,7 @@
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 const admin = require('firebase-admin');
-
+const createEmailNotification = require('./createEmailNotification')
 const serviceAccount = require("./alexandria-v2-89a5a-30e14e932b3d.json");
 const WishlistItem = require("./Classes/WishlistItem");
 
@@ -17,8 +17,7 @@ const usersRef = db.collection('users')
 const wishlistRef = db.collection('wishlist')
 
 module.exports = {
-  dbProcess: async function dbProcess(operation, data) {
-    username = GetCurrentUser()
+  dbProcess: async function dbProcess(username, operation, data) {
     switch (operation) {
       case "C":
         return await addToWishlist(username, data);
@@ -88,7 +87,7 @@ async function addToWishlist(username, data) {
   }
   let d = new Date();
   let obj = {
-      "addedBy": GetCurrentUser(),
+      "addedBy": username,
       "mediaType": data["IMDBResults"]["Type"].toLowerCase(),
       "imdbID": data["IMDBResults"]["imdbID"],
       "name": data["IMDBResults"]["Title"],
@@ -109,10 +108,6 @@ async function addToWishlist(username, data) {
   createEmailNotification("admin", "new", "wishlistItem")
   return db.collection("wishlist").doc(obj.id).set(obj).then( ()=> { return "success" }  )
   
-}
-
-function GetCurrentUser() {
-  return req.locals.username
 }
 
 // READ

@@ -9,6 +9,7 @@ const User = require('./Classes/User')
 const jwt = require('jsonwebtoken')
 const createErrorResponseObject = require('./createErrorResponseObject')
 
+
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(express.static('public'));
 app.use(express.json())
@@ -18,8 +19,9 @@ app.post('/db/:operation', verifyToken, async (req, res) => {
   const operation = req.params.operation.toUpperCase();
   console.log(data);
   let username = res.locals.username
-  let result = dbProcess(operation, username, data);
-  res.json({result});
+  let result = await dbProcess(username, operation, data);
+  console.log(result)
+  res.json(result);
 });
 
 app.post('/imdbidlist', verifyToken, async (req, res) => {

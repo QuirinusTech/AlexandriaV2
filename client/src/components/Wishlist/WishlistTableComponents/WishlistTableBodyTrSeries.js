@@ -1,4 +1,4 @@
-function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
+function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
     let progressBarNewVals = [0, item['progress']['new'] || 0]
     let progressBarValueDownloading =[progressBarNewVals[1], item['progress']['downloading'] || 0]
     let progressBarValueComplete = [progressBarValueDownloading[0]+progressBarValueDownloading[1], item['progress']['complete'] || 0]
@@ -82,9 +82,9 @@ function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
   let trClassNameVar = "dynamicContent wishlisttabletr" + item["status"]
   function SeasonString() {
     if (item['et'] === "all" || item['et'] === undefined) {
-      return <p>Season {item["sf"]} through {item['st']}</p>
+      return `Seasons: ${item["sf"]} - ${item['st']}`
     } else {
-      return <p>S{item['sf']}E{item['ef']} to S{item['st']}E{item['et']}</p>
+      return `S${item['sf']}E${item['ef']} to S${item['st']}E${item['et']}`
     }
   }
   return (
@@ -105,17 +105,17 @@ function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
           >
             {heading === "status" ? (
               <div>
-                <p><b>{item[heading]}</b></p>
+                <h4><b>{item[heading]}</b></h4> 
                 
                 <ProgressBar />
                 <br />
                 <details>
-                  <summary>Status per episode</summary>
+                  <summary><SeasonString /></summary>
                   {Object.keys(item['episodes']).map(seasonnumber => {
                     return Object.keys(item['episodes'][seasonnumber]).map(episode => {
                       return (<div className="episodeStatusDiv" key={seasonnumber.toString() + episode}>
-                        <p>{episode} : </p>
-                        <p>{item['episodes'][seasonnumber][episode]}</p>
+                        <p>S{seasonnumber}E{episode}: </p><br />
+                        <p> {item['episodes'][seasonnumber][episode]}</p>
                       </div>)
                     })
                   })}
@@ -123,7 +123,9 @@ function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
               </div>
             ) : (
               <div>
-                <b>{item[heading]}</b> <SeasonString />
+                <h4>{item[heading]}</h4>
+                <p>{`${item['mediaType']}  (${item['imdbData']['Year']})`}</p>
+                
               <details>
                 <summary>Media Info</summary>
                 {Object.keys(item['imdbData']).map((imdbKey)=>  {
@@ -136,11 +138,12 @@ function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
                         alt={item["imdbData"]["Title"]}
                       />
                     );
+                  } else if (imdbKey === "Ratings" || imdbKey === "Response") {
+                    return <></>
                   } else {
-                    return <p key={imdbKey}><b>{imdbKey}</b> - {item['imdbData'][imdbKey].toString()}</p>}
+                    return <p key={imdbKey}><b>{imdbKey}</b> - {item['imdbData'][imdbKey].toString()}</p>
+                  }
                 })}
-                <p>{item[heading]}</p>
-                
               </details>
               </div>
             )}
@@ -151,4 +154,4 @@ function WishlistTableBodyTr({ item, WishlistItemTemplate, display }) {
   );
 }
 
-export default WishlistTableBodyTr;
+export default WishlistTableBodyTrSeries;

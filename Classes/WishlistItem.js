@@ -151,7 +151,7 @@ class WishlistItem {
   }
 
   static getProgress(episodesObj, status) {
-    if (episodesObj === false) {
+    if (typeof(episodesObj) !== "object") {
       return status
     }
     const fullList = this.getFullEpisodeList(episodesObj)
