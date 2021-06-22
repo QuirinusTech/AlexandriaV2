@@ -43,7 +43,7 @@ function AddNew() {
     
     return (
       <div className="PopupBox">
-        <p>You've successfully added "{recentlyadded}" to the Wishlist.</p>
+        {recentlyadded !== '' && <p>You've successfully added "{recentlyadded}" to the Wishlist.</p>}
         <p>Would you like to:</p>
         <div>
           <button onClick={reset}>Add another</button>

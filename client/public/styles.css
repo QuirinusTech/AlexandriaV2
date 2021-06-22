@@ -28,7 +28,7 @@ body.span{
 /*NAV******************************************************NAV*/
 
 
-body > nav{
+nav{
     background-color: #414141;
     display: flex;
     flex-direction: row;
@@ -38,7 +38,7 @@ body > nav{
     position: absolute;  
 }
 
-body > nav > a{
+nav > a{
 
     background-color: #414141;
     text-decoration: none;
@@ -48,17 +48,17 @@ body > nav > a{
     font-size: 15px;
     font-weight: 400;
 }
-body > nav > a::first-letter{
+nav > a::first-letter{
 color: #a1dad0;
     }
 
-body > nav > a:hover{
+nav > a:hover{
 color: #08FFC8;
 }
 
 /*BANNER******************************************************BANNER*/
 
-body > div.banner{
+.banner{
     background-image: url("img/banner.png");
     background-size: 100% auto;
     background-repeat: no-repeat;
@@ -69,7 +69,7 @@ body > div.banner{
 }
 
 
-body > div.banner > h1{
+.banner > h1{
     color:white;
     font-family: 'Bungee Outline', sans-serif;
     font-size: 2rem;
@@ -80,7 +80,7 @@ body > div.banner > h1{
     margin-top:140px;
 }
 
-body > div.banner > h1 > a{
+.banner > h1 > a{
     text-decoration: none;
     color: white;
     }
@@ -351,12 +351,18 @@ div > div.grid7{
 
 /*<!-- LOGIN******************************************************LOGIN -->*/
 
-div.login_form_rememberme_div{
-    margin-top: 20px;
-}
-
 #username, #password {
     width: 90%;
+}
+
+.login_page_form {
+    flex-direction: column;
+    align-items: center;
+}
+
+.login_page_form > form {
+    width: 60%;
+    max-width: 400px;
 }
 
 body > div.w3-margin-top > ul > li{
@@ -415,7 +421,47 @@ footer > div > a, a:visited {
 
 /*<!-- ADD NEW******************************************************ADD NEW -->*/
 
+.errorPopupContentBoxSmall {
+    flex-direction: column;
+    padding: 15px;
+    border: 2px solid purple;
+    margin: 10px;
+    border-radius: 20px;
+  }
 
+.EpisodesPickForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.EpisodesPickForm > label {
+    align-self: center;
+}
+
+.EpisodesPickFormRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.EpisodesPickFormRowColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.EpisodesPickTickboxesRow, .IMDBResultsTablePriorityCheckboxRow {
+    display: flex;
+    padding: 0px 10px;
+    flex-grow: 1;
+    justify-content: space-between;
+    margin-top: 11px;
+    align-items: center;
+
+}
+
+label + input[type="checkbox"] {
+    zoom: 2;
+}
 
 h2{
     text-align: center;
@@ -665,6 +711,50 @@ button, input[type=submit] {
     max-width: 100px;
 }
 
+.progressBar {
+    height: 0.5rem;
+    border: 1px solid #8a898a;
+    position: relative;
+    width: -webkit-calc(100% - 2rem);
+    width: -moz-calc(100% - 2rem);
+    width: calc(100% - 2rem);
+    margin-right: 0.5rem;
+}
+
+.progressBarSegment {
+    height: 100%;
+    position: absolute;
+    top: 0rem;
+}
+
+.progressBarNew {
+    background-color: aqua;
+}
+
+.progressBarDl {
+    background-color: rgb(238, 255, 0);
+}
+
+.progressBarComp {
+    background-color: rgb(77, 255, 77);
+}
+
+.progressBarCopy {
+    background-color: purple;
+}
+
+.progressBarFail {
+    background-color: red;
+}
+
+.progressBarPostP {
+    background-color: orange;
+}
+
+.progressBarSegment > p {
+    font-size: 5pt;
+    margin-top: 0px
+}
 
 
 /***************************************REPORT******************************************/
@@ -807,7 +897,8 @@ width:90%;
     display: grid;
 }
 
-.login_form_uname_div label, .login_form_psw_div label, .login_form_rememberme_div label {
+.registration_form_field_div label,
+.login_form_uname_div label, .login_form_psw_div label, .login_form_rememberme_div label  {
     text-align: center;
     font-family: 'bungee hairline', sans-serif;
     font-size: 1.5rem;
@@ -816,6 +907,22 @@ width:90%;
     margin-block-end: 0.5em;
     font-weight: 100;
     color: #393E46;
+}
+
+.registration_form_field_div > input {
+    width: 90%;
+    margin: 10px 0px;
+    text-align: left;
+    padding: 10px 15px;
+    font-size: larger;
+}
+
+.registration_form_field_div > input[type=submit] {
+    text-align: center;
+}
+
+.registration_form {
+    width: 80%;
 }
 
 .login_form_psw_div > p {
@@ -828,15 +935,53 @@ width:90%;
 }
 
 .login_form_buttons_row {
+    margin: 20px 0px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
 }
 
-.login_form_buttons_row > div > button, .login_form_buttons_row > div > input[type=submit] {
-    width: 110px;
-    margin: 0px 10px;
+.login_form_buttons_row > button, .login_form_buttons_row > input[type=submit] {
+    width: 40%;
+    margin: 0px;
 }
+
+.flash {
+    -moz-animation: flash 1s ease-out;
+    -moz-animation-iteration-count: 1;
+  
+    -webkit-animation: flash 1s ease-out;
+    -webkit-animation-iteration-count: 1;
+  
+    -ms-animation: flash 1s ease-out;
+    -ms-animation-iteration-count: 1;
+  }
+  
+  @keyframes flash {
+      0% { background-color: transparent; }
+      50% { background-color: #fbf8b2; }
+      100% { background-color: transparent; }
+  }
+  
+  @-webkit-keyframes flash {
+      0% { background-color: transparent; }
+      50% { background-color: #fbf8b2; }
+      100% { background-color: transparent; }
+  }
+  
+  @-moz-keyframes flash {
+      0% { background-color: transparent; }
+      50% { background-color: #fbf8b2; }
+      100% { background-color: transparent; }
+  }
+  
+  @-ms-keyframes flash {
+      0% { background-color: transparent; }
+      50% { background-color: #fbf8b2; }
+      100% { background-color: transparent; }
+  }
 
 /** CONTACT US **/
 
@@ -983,11 +1128,11 @@ div.about_div{
 /* **************************SM 576 - 767 */
 
 @media only screen and (min-width: 576px) {
-    body > nav > a{
+    nav > a{
 
         font-size: 17px;
     }
-    body > div.banner > h1{
+    .banner > h1{
         font-size: 3rem;
         padding: 5px;
         margin-top:140px;
@@ -1000,7 +1145,7 @@ div.about_div{
         padding-top: 30px;
     }
 
-    body > div.banner {
+    .banner {
         background-size: 70% auto;
         height: 400px;
     }
@@ -1081,14 +1226,14 @@ div.about_div{
 
 @media only screen and (min-width: 992px) {
 
-    body > div.banner > h1{
+    .banner > h1{
         font-size: 3.5rem;
         padding: 40px 5px 40px 5px;
         margin:20vh auto 5vh auto;
         width: 60%;
     }
     
-    body > div.banner {
+    .banner {
         background-size: auto 100%;
         width:100%;
         height: 60vh;
@@ -1125,14 +1270,14 @@ div.about_div{
 /**
 @media only screen and (min-width: 1100px) {
 
-    body > div.banner > h1{
+    .banner > h1{
         font-size: 6rem;
         padding: 40px 5px 40px 5px;
         margin:20vh auto 5vh auto;
         width: 60%;
     }
     
-    body > div.banner {
+    .banner {
         background-size: auto 100%;
         width:100%;
         height: 75vh;

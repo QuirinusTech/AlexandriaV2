@@ -7,7 +7,7 @@ function WishListTableHead({WishlistItemTemplate}) {
           let classnamevar = "colhead_" + heading
           let idnamevar = "col_header_" + heading 
           return (
-            <th id={idnamevar} className={classnamevar}>
+            <th id={idnamevar} className={classnamevar} style={{width: heading === "status" && "300px"}}>
               {heading}
             </th>
           )

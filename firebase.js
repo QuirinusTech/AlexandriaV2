@@ -22,30 +22,89 @@ module.exports = {
       case "R":
         return await getWishlist(data);
       case "U":
-        return await updateWishlist(data);
+        try {
+          if (WishlistItem.isValidStatusUpdate(data['status'])) {
+            createNotification(username, data['id'], data['status'])
+          }
+        } catch {
+          pass
+        }
+        return await updateWishlist(id, data);
       case "D":
         return await deleteFromWishlist(data);
       default:
         break;
     }
+  },
+  getUserByUsername: async function searchForUser(username) {
+    console.log(username)
+    const doc = await db.collection('users').doc(username).get()
+    if (!doc.exists) {
+      return false
+    }
+    return doc.data()
+  },
+  addUserToDatabase: async function addUserToDatabase(user) {
+    console.log("USER: ", user)
+    const response = await db.collection('users').doc(user['username']).set(user)
+    createEmailNotification("admin", "new", "user")
+    return response['updateTime']
+  },
+  getimdbidlist: async function getimdbidlist(username) {
+    const snapshot = await wishlistRef.where("addedBy", "==", username).get();
+    if (snapshot.empty) {
+      return "empty";
+    }
+    const imdbidlist = []
+    snapshot.forEach((doc) => {
+      let item = doc.data();
+      let obj = {};
+      if (item.mediaType !== "movie") {
+        obj["st"] = item.st;
+        obj["et"] = item.et;
+      }
+      obj["mediaType"] = item.mediaType;
+      obj["imdbID"] = item.imdbID;
+      imdbidlist.push(obj);
+    });
+    console.log("imdbidlist: ", imdbidlist)
+    return imdbidlist
   }
 }
 
-async function addToWishlist(data) {
+async function addToWishlist(username, data) {
+  // check if this entry is already in the list for this username
+  const snapshot = await wishlistRef.where("addedBy", "==", username).get();
+  if (!snapshot.empty) {
+    snapshot.forEach(doc => {
+      let item = doc.data()
+      if (data['imdbID'] === item['imdbID'] && username === item['username']) {
+        const response = await updateWishlist(item['id'], data)
+        return response
+      }
+    })
+  }
   let d = new Date();
   let obj = {
       "addedBy": GetCurrentUser(),
       "mediaType": data["IMDBResults"]["Type"].toLowerCase(),
       "imdbID": data["IMDBResults"]["imdbID"],
       "name": data["IMDBResults"]["Title"],
+      "imdbData": data['IMDBResults'],
       "sf": data["sf"],
       "ef": data["ef"],
       "st": data["st"],
       "et": data["et"],
-      "dateAdded": d.toDateString(),
+      "isPriority": data['isPriority'],
+      "isOngoing": data['isOngoing'],
+      "dateAdded": d.toDateString()
   }
   console.log(obj)
   obj = await WishlistItem.setData(obj);
+  if (obj["progress"] === null || obj["progress"] === "undefined" || obj["progress"] === undefined) {
+    obj["progress"] = WishlistItem.getProgress(obj["episodes"], obj['status']);
+  }
+  createEmailNotification("admin", "new", "wishlistItem")
   return db.collection("wishlist").doc(obj.id).set(obj).then( ()=> { return "success" }  )
   
 }
@@ -58,23 +117,43 @@ function GetCurrentUser() {
 
 
 // READ
-function getWishlist(data) {
-  console.log("getlist", data);
-  return "quack";
+async function getWishlistByUser(username) {
+  const inventory = [];
+  console.log(`getWishlistByUser(${username})`)
+  const snapshot = await wishlistRef.where("addedBy", "==", username).get();
+  if (snapshot.empty) {
+    return "empty";
+  }
+  snapshot.forEach((doc) => {
+    inventory.push(doc.data());
+  });
+  inventory.forEach(item => {
+    if (item["progress"] === null || item["progress"] === "undefined" || item["progress"] === undefined) {
+      item["progress"] = WishlistItem.getProgress(item["episodes"], item['status']);
+    }
+  })
+
+  return inventory;
 }
 
 
 // UPDATE
-function updateWishlist(data) {
-  console.log("updateWishlist", data);
-  return "quack";
+async function updateWishlist(data, username) {
+  const docRef = wishlistRef.doc(data['id']);
+  const res = await docRef.update({data});
+  console.log('Update: ', res);
 }
 
 
 // DELETE
 
-function deleteFromWishlist(data) {
-  console.log("delete ", data)
+async function deleteDocFromWishlist(id) {
+    // [START delete_document]
+    // [START firestore_data_delete_doc]
+    const res = await wishlistRef.doc(id).delete();
+    // [END firestore_data_delete_doc]
+    // [END delete_document]
+    console.log('Delete: ', res);
 }
 
 // BATCH ACTION

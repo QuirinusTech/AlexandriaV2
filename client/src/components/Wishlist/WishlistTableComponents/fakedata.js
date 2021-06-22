@@ -1,6 +1,4 @@
-import WishlistTableBodyTr from "./WishlistTableBodyTr"
-
-const wishlistvar = [{
+let var1 = [{
   addedBy: "aegisthus",
   dateAdded: "Tue Jun 22 2021",
   ef: 1,
@@ -68,33 +66,8 @@ const wishlistvar = [{
   isPriority: true,
   mediaType: "series",
   name: "Teen Wolf",
-  progress: {
-    new: 20,
-    downloading: 60,
-    complete: 10,
-    failed: 10
-  },
+  progress: { new: 100 },
   sf: 1,
   st: 2,
   status: "new",
 }];
-
-function WishlistTableBody({WishlistItemTemplate, statusFilters}) {
-  return (
-    <tbody id="wishlistTableBody">
-      {wishlistvar.map(wishlistitem => {
-        return (
-          <WishlistTableBodyTr
-          wishlistitem={wishlistitem}
-          key={wishlistitem['id']}
-          display={statusFilters[wishlistitem["status"]]}
-          item={wishlistitem}
-          WishlistItemTemplate={WishlistItemTemplate}
-          />
-        )
-      })}
-    </tbody>
-  )
-}
-
-export default WishlistTableBody
