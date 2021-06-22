@@ -1,13 +1,13 @@
 const allPossibleStatuses = [
-  "new",
-  "downloading",
-  "complete",
-  "copied",
-  "failed",
-  "postponed",
+  "new", //aqua
+  "downloading", //yellow
+  "complete", //green
+  "copied", //
+  "failed", //red
+  "postponed", //orange
 ];
 
-const mediatypes = ["movie", "series", "seriesOngoing"];
+const mediatypes = ["movie", "series"];
 
 const WishlistItemTemplate = [
   "imdbId",

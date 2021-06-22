@@ -1,7 +1,7 @@
 import GIFLoader from "../GIFLoader"
 
 
-const IMDBResultsPosterList = ({posterList, resetPosters, searchIMDB, setPosterList}) => {
+const IMDBResultsPosterList = ({posterList, reset, searchIMDB, setPosterList}) => {
 
   function selectMovie(arg) {
     console.log(`selectMovie(${arg})`)
@@ -27,7 +27,7 @@ const IMDBResultsPosterList = ({posterList, resetPosters, searchIMDB, setPosterL
     console.log(posterarr)
     return (
       <div className="PosterList">
-        {posterList.length <1 ? <GIFLoader /> : <button onClick={resetPosters}>Reset</button>}
+        {posterList.length <1 ? <GIFLoader /> : <button onClick={reset}>Reset</button>}
         <ul>
           {posterarr}
         </ul>

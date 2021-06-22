@@ -4,23 +4,17 @@ import {useState} from "react"
 import WishlistTableStruct from "./Wishlist/WishlistTableComponents/WishlistTableStruct";
 
 const allPossibleStatuses = [
-  "processing",
-  "received",
+  "new",
+  "downloading",
   "complete",
-  "copied"
+  "copied",
+  "failed",
+  "postponed",
 ];
 
 const WishlistItemTemplate = [
-  "id",
   "status",
-  "series",
-  "genre",
-  "year",
-  "Date",
-  "sf",
-  "ef",
-  "st",
-  "et"  
+  "name"
 ];
 
 function Wishlist() {
@@ -28,23 +22,18 @@ function Wishlist() {
   const [statusFilters, setStatusFilters] = useState(()=> {
     const stateobj = {}
     allPossibleStatuses.forEach(status => {
-      if (status === "copied") {
-        return stateobj[status] = false
-      } else {
+      if (status === "new" || status === "downloading" || status === "complete") {
         return stateobj[status] = true
+      } else {
+        return stateobj[status] = false
       }
     })
     return stateobj
   })
 
-
-  const infoTableClick = () => {
-    setShowInfoTable((prevState => {return !prevState}))
-  }
-
   return (<div>
       <h2>Wishlist</h2>
-      <button onClick={infoTableClick}>TOGGLE TABLE LEGEND</button>
+      <button onClick={()=>setShowInfoTable(!showInfoTable)}>TOGGLE TABLE LEGEND</button>
       <div className="row" id="wishlistdiv">
       {showInfoTable && <WishlistTableLegend />}
       <ListFilters

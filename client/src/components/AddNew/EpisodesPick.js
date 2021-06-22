@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function EpisodesPick({ setReadyToAdd, setEpisodes, episodes }) {
   const [sf, setsf] = useState(episodes['sf']);
   const [ef, setef] = useState(episodes['ef']);
   const [st, setst] = useState(episodes['st']);
   const [et, setet] = useState(episodes['et']);
+  const [isOngoing, setIsOngoing] = useState(episodes['isOngoing'])
 
-  useEffect( ()=> {
-    checkready()
-  }, [] )
   const handleChange = (e) => {
-    const { value, name } = e.target;
+    const { value, name, checked } = e.target;
     switch (name) {
       case "sf":
         setsf(value);
@@ -24,9 +22,13 @@ function EpisodesPick({ setReadyToAdd, setEpisodes, episodes }) {
       case "et":
         setet(value);
         break;
+      case "isOngoing":
+        setIsOngoing(checked)
+        break;
       default:
         return false;
     }
+    checkready()
   };
 
   function checkready() {
@@ -39,71 +41,79 @@ function EpisodesPick({ setReadyToAdd, setEpisodes, episodes }) {
         sf,
         ef,
         st,
-        et
+        et,
+        isOngoing
     })
   }
 
   return (
-    <form>
-       <label>From</label>
-  <div className="TopRow">
- 
-    <div className="LeftColumn">
-    <label>Season </label>
-<input
-  type="text"
-  name="sf"
-  placeholder="Season"
-  id="form_specify_sf"
-  value={sf}
-  onChange={handleChange}
-  onBlur={checkready}
-/>
-    </div>
-    <div className="RightColumn">
-    <label>Episode </label>
-<input
-  type="text"
-  name="ef"
-  placeholder="Episode"
-  id="form_specify_ef"
-  value={ef}
-  onChange={handleChange}
-  onBlur={checkready}
-/>
-    </div>
-  </div>
-  <label>To</label>
-  <div className="BtmRow">
-
-  <div className="LeftColumn">
-  <label>Season </label>
-<input
-  type="text"
-  name="st"
-  placeholder="Season"
-  id="form_specify_st"
-  value={st}
-  onChange={handleChange}
-  onBlur={checkready}
-/>
-</div>
-<div className="RightColumn">
-<label>Episode </label>
-<input
-  type="text"
-  name="et"
-  placeholder="Episode"
-  id="form_specify_et"
-  value={et}
-  onChange={handleChange}
-  onBlur={checkready}
-/>
-</div>
-  </div>
+    <form className="EpisodesPickForm">
+      <label>From</label>
+      <div className="EpisodesPickFormRow">
+        <div className="EpisodesPickFormRowColumn">
+          <label>Season </label>
+          <input
+            type="text"
+            name="sf"
+            placeholder="Season"
+            id="form_specify_sf"
+            value={sf}
+            onChange={handleChange}
+            onBlur={checkready}
+          />
+        </div>
+        <div className="EpisodesPickFormRowColumn">
+          <label>Episode </label>
+          <input
+            type="text"
+            name="ef"
+            placeholder="Episode"
+            id="form_specify_ef"
+            value={ef}
+            onChange={handleChange}
+            onBlur={checkready}
+          />
+        </div>
+      </div>
+      <label>To</label>
+      <div className="EpisodesPickFormRow">
+        <div className="EpisodesPickFormRowColumn">
+          <label>Season </label>
+          <input
+            type="text"
+            name="st"
+            placeholder="Season"
+            id="form_specify_st"
+            value={st}
+            onChange={handleChange}
+            onBlur={checkready}
+          />
+        </div>
+        <div className="EpisodesPickFormRowColumn">
+          <label>Episode </label>
+          <input
+            type="text"
+            name="et"
+            placeholder="Episode"
+            id="form_specify_et"
+            value={et}
+            onChange={handleChange}
+            onBlur={checkready}
+          />
+        </div>
+      </div>
+      <div className="EpisodesPickTickboxesRow">
+        <label>Is there a new episode due to release within the next month?</label>
+          <input
+            type="checkbox"
+            name="isOngoing"
+            id="form_specify_isOngoing"
+            checked={isOngoing}
+            onChange={handleChange}
+          />
+      </div>
     </form>
-  );
-}
+  );}
 
 export default EpisodesPick;
 
