@@ -349,6 +349,11 @@ div > div.grid7{
     background-image: url("/img/yl_pyr_eye.png");
 }
 
+.go_button {
+    min-width: 100px;
+    text-align: center;
+}
+
 /*<!-- LOGIN******************************************************LOGIN -->*/
 
 #username, #password {

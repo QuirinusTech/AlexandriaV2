@@ -40,7 +40,7 @@ function Notifications({ notifications, setShowMsgCentre }) {
   return (
     <div
       className="message_centre"
-      style={{ display: "flex", flexDirection: "column" }}
+      style={{ display: "flex", flexDirection: "column", width: "100vw" }}
     >
       {showNotification && <MessageCentre />}
       {!showNotification && <p>No new messages</p>}

@@ -5,6 +5,8 @@ import Report from "./Report"
 import AdminCMS from "./AdminCMS"
 import Start from "./Start"
 import LogIn from "./LogIn"
+import Navbar from './Navbar';
+import Logout from './Logout';
 
 
 var notifications = []
@@ -12,7 +14,9 @@ var notifications = []
 function Structure() {
   return (
     <Router>
+      <Navbar />
       <div>
+        
         <Route 
           exact path='/' 
           notifications={notifications}
@@ -23,6 +27,7 @@ function Structure() {
         <Route path='/report' component={Report} />
         <Route path='/admin' component={AdminCMS} />
         <Route path='/login' component={LogIn} />
+        <Route path='/logout' component={Logout} />
       </div>
     </Router>
   )

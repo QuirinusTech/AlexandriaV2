@@ -4,30 +4,35 @@ function Navbar() {
   const is_active_user = localStorage.getItem('is_active_user') || false
 
   return (
-    <nav>
+    <div>
+          <nav>
       <a id="navbar_button--home" href="/" className="nav_menu_element">
-        Home
+        Startseite
       </a>
       {can_add && <a id="navbar_button--addnew" href="/addnew" className="nav_menu_element">
-        Add New
+        Hinzufuegen
       </a>}
       {is_active_user && <a id="navbar_button--list" href="/list" className="nav_menu_element">
-        Wishlist
+        Wuenschliste
       </a>}
       {is_active_user && <a id="navbar_button--report" href="/report" className="nav_menu_element">
-        Report
+        Melden
       </a>}
       {is_admin && <a id="navbar_button--admin" href="/admin" className="nav_menu_element">
         Admin
       </a>}
       {!is_active_user && <a id="navbar_button--login" href="/login" className="nav_menu_element">
-        Log in
+        Einloggen
       </a>}
-
       {is_active_user && <a id="navbar_button--addnew" href="/logout" className="nav_menu_element">
-        Logout
+        Ausloggen
       </a>}
     </nav>
+    <div className="banner">
+        <h1><a href="/">The Library of Alexandria</a></h1>
+  
+     </div>
+    </div>
   );
 }
 
