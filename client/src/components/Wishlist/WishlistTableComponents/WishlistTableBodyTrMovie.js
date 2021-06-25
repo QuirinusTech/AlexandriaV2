@@ -1,4 +1,4 @@
-function WishlistTableBodyTrMovie({ item, WishlistItemTemplate, display }) {
+function WishlistTableBodyTrMovie({ item, WishlistItemTemplate, display, recentlyViewedBool }) {
 
   let statusstring = item['status']
   let progressBarSegmentClassname = "progressBarSegment progressBar" + statusstring[0].toUpperCase() + statusstring.slice(1)
@@ -24,7 +24,7 @@ let trClassNameVar = "dynamicContent wishlisttabletr" + item["status"]
 return (
   <tr
     key={item["id"]}
-    style={{ display: !display && "none" }}
+    style={{ display: !display && "none", border: recentlyViewedBool && "1px solid green" }}
     id={item["id"]}
     className={trClassNameVar}
   >
@@ -35,7 +35,7 @@ return (
         <td
           key={heading}
           className={classnamevar}
-          style={{ width: "50%" }}
+          style={{ width: "50%", border: recentlyViewedBool && "1px solid green"  }}
         >
           {heading === "status" ? (
             <div>
@@ -46,7 +46,7 @@ return (
             <div>
               <h4>{item[heading]}</h4>
               <p>{`${item['mediaType']}  (${item['imdbData']['Year']})`}</p>
-            <details>
+            {/* <details>
               <summary>Media Info</summary>
               {Object.keys(item['imdbData']).map((imdbKey)=>  {
                 if (imdbKey === "Poster") {
@@ -64,7 +64,7 @@ return (
                   return <p key={imdbKey}><b>{imdbKey}</b> - {item['imdbData'][imdbKey].toString()}</p>
                 }
               })}
-            </details>
+            </details> */}
             </div>
           )}
         </td>

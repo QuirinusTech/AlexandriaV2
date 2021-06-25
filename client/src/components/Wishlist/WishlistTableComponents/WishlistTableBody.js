@@ -85,16 +85,23 @@ import GIFLoader from "../../GIFLoader"
 
 function WishlistTableBody({WishlistItemTemplate, statusFilters}) {
   const [wishlistReady, setWishlistReady] = useState(false)
-  const [wishlistData, setWishlistData] = useState(null)
+  const [wishlistData, setWishlistData] = useState([])
+  const recentlyViewed = useState(localStorage.getItem('recentlyViewed') || null)
   async function getWishlistData() {
-    return await fetch('/db/r', {
-      method: "POST"
+    fetch('/db/r', {
+      method: "POST",
+      body: JSON.stringify({plssendlist: 'yas pls'}),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
     }).then(
       res => res.json()
     ).then(data => {
       console.log(data)
-      setWishlistData(data)
-      setWishlistReady(true)
+      if (typeof data !== "string") {
+        setWishlistData(data);
+        setWishlistReady(true);
+      } else {
+        alert(data);
+      }    
     })
   }
 
@@ -102,36 +109,48 @@ function WishlistTableBody({WishlistItemTemplate, statusFilters}) {
     getWishlistData()
   },[]  )
 
-  function TableBodySetup({wishlistData}) {
-    const results = wishlistData.map(wishlistitem => {
-      if (wishlistitem['mediaType'] === "series") {
-        return (
-          <WishlistTableBodyTrSeries
-            wishlistitem={wishlistitem}
-            key={wishlistitem['id']}
-            display={statusFilters[wishlistitem["status"]]}
-            item={wishlistitem}
-            WishlistItemTemplate={WishlistItemTemplate}
-          />
-        )
-      } else {
-        return (
-          <WishlistTableBodyTrMovie
-            wishlistitem={wishlistitem}
-            key={wishlistitem['id']}
-            display={statusFilters[wishlistitem["status"]]}
-            item={wishlistitem}
-            WishlistItemTemplate={WishlistItemTemplate}
-          />)
+  function TableBodySetup({wishlistData, recentlyViewed}) {
+    if (wishlistReady) {
+      try {
+        const results = wishlistData.map(wishlistitem => {
+          let recentlyViewedBool = false
+          console.log(recentlyViewed[0], wishlistitem['imdbID'])
+          if (recentlyViewed[0] === wishlistitem['imdbID']) {
+            recentlyViewedBool = true
+          }
+          if (wishlistitem['mediaType'] === "series") {
+            return (
+              <WishlistTableBodyTrSeries
+                recentlyViewedBool={recentlyViewedBool}
+                wishlistitem={wishlistitem}
+                key={wishlistitem['id']}
+                display={statusFilters[wishlistitem["status"]]}
+                item={wishlistitem}
+                WishlistItemTemplate={WishlistItemTemplate}
+              />
+            )
+          } else {
+            return (
+              <WishlistTableBodyTrMovie
+                recentlyViewedBool={recentlyViewedBool}
+                wishlistitem={wishlistitem}
+                key={wishlistitem['id']}
+                display={statusFilters[wishlistitem["status"]]}
+                item={wishlistitem}
+                WishlistItemTemplate={WishlistItemTemplate}
+              />)
+          }
+        })
+        return results
+      } catch (error) {
+        return <tr><td>Chill pls</td></tr>
       }
-    })
-    return results
+    }
   }
 
-  return (
-    <tbody id="wishlistTableBody" >
-      {!wishlistReady ? <GIFLoader/> : <TableBodySetup wishlistData={wishlistData}/>}
-    </tbody>
-  )}
+    
+  return !wishlistReady ? <GIFLoader/> : <tbody id="wishlistTableBody" ><TableBodySetup wishlistData={wishlistData} recentlyViewed={recentlyViewed} /></tbody>
+    
+  }
 
 export default WishlistTableBody

@@ -1,11 +1,14 @@
+import {useState} from 'react'
+
 function Navbar() {
   const can_add = localStorage.getItem('can_add') || false
   const is_admin = localStorage.getItem('is_admin') || false
   const is_active_user = localStorage.getItem('is_active_user') || false
+  const [showNav, setShowNav] = useState(false)
 
   return (
     <div>
-          <nav>
+      <nav style={{display: !showNav && "none"}}>
       <a id="navbar_button--home" href="/" className="nav_menu_element">
         Startseite
       </a>
@@ -28,8 +31,9 @@ function Navbar() {
         Ausloggen
       </a>}
     </nav>
+    <button onClick={(()=> setShowNav(!showNav))}>Menue</button>
     <div className="banner">
-        <h1><a href="/">The Library of Alexandria</a></h1>
+        <h1><a href="/">Die Bibliothek von Alexandria</a></h1>
   
      </div>
     </div>

@@ -6,6 +6,7 @@ function App() {
 
   const [connectionTest, setConnectionTest] = useState(false)
   const [connData, setConnData] = useState("")
+  // const [wishlistData, setWishlistData] = useState([])
 
   async function confirmConnection() {
     setConnData("Connecting")

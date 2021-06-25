@@ -1,4 +1,6 @@
-function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
+import CheckAvailabilityWidget from "./CheckAvailabilityWidget"
+
+function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display, recentlyViewedBool }) {
     let progressBarNewVals = [0, item['progress']['new'] || 0]
     let progressBarValueDownloading =[progressBarNewVals[1], item['progress']['downloading'] || 0]
     let progressBarValueComplete = [progressBarValueDownloading[0]+progressBarValueDownloading[1], item['progress']['complete'] || 0]
@@ -90,7 +92,7 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
   return (
     <tr
       key={item["id"]}
-      style={{ display: !display && "none" }}
+      style={{ display: !display && "none"}}
       id={item["id"]}
       className={trClassNameVar}
     >
@@ -101,7 +103,8 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
           <td
             key={heading}
             className={classnamevar}
-            style={{ width: "50%" }}
+            style={{ width: "50%", border: recentlyViewedBool && "1px solid green" }}
+
           >
             {heading === "status" ? (
               <div>
@@ -125,8 +128,12 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
               <div>
                 <h4>{item[heading]}</h4>
                 <p>{`${item['mediaType']}  (${item['imdbData']['Year']})`}</p>
-                
-              <details>
+                {item['isOngoing'] && <p>Ongoing</p>}
+                <details>
+                  <summary>Add Episodes</summary>
+                  <CheckAvailabilityWidget imdbID={item['imdbID']} st={item['st']} et={item['et']} />
+                </details>
+              {/* <details>
                 <summary>Media Info</summary>
                 {Object.keys(item['imdbData']).map((imdbKey)=>  {
                   if (imdbKey === "Poster") {
@@ -144,7 +151,7 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display }) {
                     return <p key={imdbKey}><b>{imdbKey}</b> - {item['imdbData'][imdbKey].toString()}</p>
                   }
                 })}
-              </details>
+              </details> */}
               </div>
             )}
           </td>

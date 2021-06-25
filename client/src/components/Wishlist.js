@@ -1,4 +1,3 @@
-import WishlistTableLegend from "./Wishlist/WishlistTableLegend"
 import ListFilters from "./Wishlist/ListFilters"
 import {useState} from "react"
 import WishlistTableStruct from "./Wishlist/WishlistTableComponents/WishlistTableStruct";
@@ -18,7 +17,7 @@ const WishlistItemTemplate = [
 ];
 
 function Wishlist() {
-  const [showInfoTable, setShowInfoTable] = useState(false)
+
   const [statusFilters, setStatusFilters] = useState(()=> {
     const stateobj = {}
     allPossibleStatuses.forEach(status => {
@@ -33,9 +32,7 @@ function Wishlist() {
 
   return (<div>
       <h2>Wishlist</h2>
-      <button onClick={()=>setShowInfoTable(!showInfoTable)}>TOGGLE TABLE LEGEND</button>
       <div className="row" id="wishlistdiv">
-      {showInfoTable && <WishlistTableLegend />}
       <ListFilters
         allPossibleStatuses={allPossibleStatuses}
         setStatusFilters={setStatusFilters}

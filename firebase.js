@@ -80,7 +80,7 @@ async function addToWishlist(username, data) {
   if (!snapshot.empty) {
     snapshot.forEach(doc => {
       let item = doc.data()
-      if (data['imdbID'] === item['imdbID'] && username === item['username']) {
+      if (data['imdbID'] === item['imdbID'] && username === item['addedBy']) {
         return updateWishlistItem(item['id'], data)
       }
     })
@@ -131,9 +131,10 @@ async function getWishlistByUser(username) {
 
 
 // UPDATE
-async function updateWishlistItem(data, username) {
-  const docRef = wishlistRef.doc(data['id']);
-  const res = await docRef.update({data});
+async function updateWishlistItem(id, updateData) {
+  const docRef = wishlistRef.doc(id);
+  const doc = docRef.get()
+  const res = await docRef.update({...doc.data, ...updateData});
   console.log('Update: ', res);
 }
 

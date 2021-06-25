@@ -75,6 +75,7 @@ function AddNew() {
   }
 
   async function searchIMDB(searchBy, field) {
+    // retrieve list of existing imdbID's in the user's wishlist
     const imdbidlist = await getImdbidlist()
     console.log("searchIMDB(",searchBy,",",field,")")
     const apikey = "5fadb6ca"

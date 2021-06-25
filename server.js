@@ -15,6 +15,7 @@ app.use(express.static('public'));
 app.use(express.json())
 
 app.post('/db/:operation', verifyToken, async (req, res) => {
+  console.log("Operation: ", req.params.operation)
   const data = req.body;
   const operation = req.params.operation.toUpperCase();
   console.log(data);
