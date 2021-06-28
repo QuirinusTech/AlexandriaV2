@@ -1,41 +1,99 @@
 import {useState} from 'react'
+import {Link} from 'react-router-dom'
 
-function Navbar() {
+function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection}) {
   const can_add = localStorage.getItem('can_add') || false
   const is_admin = localStorage.getItem('is_admin') || false
   const is_active_user = localStorage.getItem('is_active_user') || false
   const [showNav, setShowNav] = useState(false)
 
+  function hideNav() {
+    setShowNav(false)
+  }
+
   return (
     <div>
-      <nav style={{display: !showNav && "none"}}>
-      <a id="navbar_button--home" href="/" className="nav_menu_element">
-        Startseite
-      </a>
-      {can_add && <a id="navbar_button--addnew" href="/addnew" className="nav_menu_element">
-        Hinzufuegen
-      </a>}
-      {is_active_user && <a id="navbar_button--list" href="/list" className="nav_menu_element">
-        Wuenschliste
-      </a>}
-      {is_active_user && <a id="navbar_button--report" href="/report" className="nav_menu_element">
-        Melden
-      </a>}
-      {is_admin && <a id="navbar_button--admin" href="/admin" className="nav_menu_element">
-        Admin
-      </a>}
-      {!is_active_user && <a id="navbar_button--login" href="/login" className="nav_menu_element">
-        Einloggen
-      </a>}
-      {is_active_user && <a id="navbar_button--addnew" href="/logout" className="nav_menu_element">
-        Ausloggen
-      </a>}
-    </nav>
-    <button onClick={(()=> setShowNav(!showNav))}>Menue</button>
-    <div className="banner">
-        <h1><a href="/">Die Bibliothek von Alexandria</a></h1>
-  
-     </div>
+      <nav style={{ display: !showNav && "none" }}>
+        <button onClick={hideNav} id="closeNavButton">❌</button>
+        <Link id="navbar_button--home" to="/" onClick={hideNav}className="nav_menu_element">
+          Start
+        </Link>
+        {can_add && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--addnew"
+            to="/addnew"
+            className="nav_menu_element"
+          >
+            Neu
+          </Link>
+        )}
+        {is_active_user && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--list"
+            to="/list"
+            className="nav_menu_element"
+          >
+            Liste
+          </Link>
+        )}
+        {is_active_user && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--report"
+            to="/report"
+            className="nav_menu_element"
+          >
+            Melden
+          </Link>
+        )}
+        {is_admin && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--admin"
+            to="/admin"
+            className="nav_menu_element"
+          >
+            Admin
+          </Link>
+        )}
+        {!is_active_user && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--login"
+            to="/login"
+            className="nav_menu_element"
+          >
+            Login
+          </Link>
+        )}
+        {is_active_user && (
+          <Link
+          onClick={hideNav}
+            id="navbar_button--addnew"
+            to="/logout"
+            className="nav_menu_element"
+          >
+            Abmelden
+          </Link>
+        )}
+      </nav>
+      <div className="ConnectivityTestBox">
+        <button
+          className={connectionTest ? "connsuccess" : "connfail"}
+          onClick={async () => setConnectionTest(await confirmConnection())}
+        >
+          ConnectionTest
+        </button>
+        <p>{connectionTest ? connMsg : "Link not yet established"}</p>
+      </div>
+      <button id="showNavButton" onClick={() => setShowNav(true)}>Menu</button>
+      <div className="banner">
+        <h1>
+          <Link to="/">Die Bibliothek von Alexandria</Link>
+        </h1>
+      </div>
     </div>
   );
 }

@@ -56,6 +56,65 @@ nav > a:hover{
 color: #08FFC8;
 }
 
+nav > a {
+    border: 1px solid white;
+    padding: 20px 50px;
+    font-size: xx-large;
+    width: 53%;
+    /* justify-self: center; */
+    text-align: center;
+    background: linear-gradient(45deg, black, transparent);
+}
+
+nav {
+    background-color: #4b4b4b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    min-width: 360px;
+    position: fixed;
+    height: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+#closeNavButton {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    text-align: end;
+    text-shadow: none;
+}
+
+#showNavButton {
+    background-image: url(img/menu-icon.png);
+    background-repeat: no-repeat;
+    /* background-position-x: center; */
+    background-position: center;
+    background-size: 100px;
+    width: 75px;
+    border: none;
+    background-color: transparent;
+    height: 75px;
+    border-radius: 0px;
+    box-shadow: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+}
+
 /*BANNER******************************************************BANNER*/
 
 .banner{
@@ -803,6 +862,27 @@ button, input[type=submit] {
 .colhead_status > div {
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.btn_submit {
+    background-color: darkturquoise;
+}
+
+.btn_warning {
+    background-color: orange;
+}
+
+.wishListWidgetButtonRow > button {
+    font-size: small;
+    padding: inherit;
+    margin: 10px 0px -5px 0px;
+}
+
+.wishListWidgetButtonRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 

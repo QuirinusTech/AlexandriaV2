@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 
-function Logout() {
+function Logout({setIsLoggedIn}) {
   const [pleaseWait, setPleaseWait] = useState(true)
   
   useEffect( ( )=>{
@@ -15,6 +15,7 @@ function Logout() {
     
     if (result.status === 200) {
       localStorage.clear()
+      setIsLoggedIn(false)
       setPleaseWait(false)
     }
   }

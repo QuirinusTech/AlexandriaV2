@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Notifications from "./Notifications"
+import {Link} from 'react-router-dom'
 
 function Start({notifications}) {
   const [showMsgCentre, setShowMsgCentre] = useState(true)
@@ -15,50 +16,50 @@ function Start({notifications}) {
       {showMsgCentre && <Notifications notifications={notifications} setShowMsgCentre={setShowMsgCentre} />}
       
       {!is_active_user && <div className="grid5">
-        <a id="Go_Button_5" href="/login" className="go_button">
+        <Link id="Go_Button_5" to="/login" className="go_button">
           Einloggen
-        </a>
+        </Link>
       </div>}
 
       {can_add && <div className="grid1">
-        <a id="Go_Button_1" href="/addnew" className="go_button">
+        <Link id="Go_Button_1" to="/addnew" className="go_button">
           Hinzufuegen
-        </a>
+        </Link>
       </div>}
 
       {is_active_user && <div className="grid2">
-        <a id="Go_Button_2" href="/list" className="go_button">
+        <Link id="Go_Button_2" to="/list" className="go_button">
           Wuenschliste
-        </a>
+        </Link>
       </div>}
 
       {is_active_user && <div className="grid3">
-        <a id="Go_Button_3" href="/report" className="go_button">
+        <Link id="Go_Button_3" to="/report" className="go_button">
           Melden
-        </a>
+        </Link>
       </div>}
 
       <div className="grid4">
-        <a id="Go_Button_4" href="/about" className="go_button">
+        <Link id="Go_Button_4" to="/about" className="go_button">
           Ueber uns
-        </a>
+        </Link>
       </div>
 
       {is_admin && <div className="grid6">
-        <a
+        <Link
           id="Go_Button_6"
           className="admin_btn_admin go_button"
-          href="/admin"
+          to="/admin"
         >
           Admin
-        </a>
+        </Link>
       </div>}
 
       {displayName !== "Guest" && 
       <div className="grid7">
-        <a id="Go_Button_7" href="/logout" className="go_button">
+        <Link id="Go_Button_7" to="/logout" className="go_button">
           Ausloggen
-        </a>
+        </Link>
       </div>}
     </div>
     </div>

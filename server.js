@@ -33,6 +33,19 @@ app.post('/imdbidlist', verifyToken, async (req, res) => {
   res.json(results)
 })
 
+app.post('/getnotifications', verifyToken, async (req, res) => {
+  const newObj = req.body;
+  console.log(newObj)
+  const { username } = newObj;
+  const results = username === res.locals.username ? await getNotifications(username) : {"response": "error", "error": "forbidden"}
+  res.json(results)
+})
+
+async function getNotifications(username) {
+  console.log("Get notifications for user: ", username)
+  return []
+}
+
 app.post('/register', async (req, res) => {
   const newObj = req.body
   console.log(req.body)

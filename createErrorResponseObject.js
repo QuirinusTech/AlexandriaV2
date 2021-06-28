@@ -1,3 +1,9 @@
+  
+  /**
+   * 
+   * @param {string} error aergia=inactive account, medusa=incorrect username or password, horse=not logged in, Tantalus=insufficient permissions, prometheus=username taken, britta=general error 
+   * @returns 
+   */
   function createErrorResponseObject(error) {
   error = error.toLowerCase();
   switch(error) {
@@ -6,6 +12,13 @@
       'response': "error",
       'errormsg': "Account status is inactive. The administrator has been notified. Please do not attempt to log in again.",
       'error_desc': "Aergia",
+      responsecode: 403
+    }
+  case "horse":
+    return {
+      'response': "error",
+      'errormsg': "You're not logged in. You need to be logged in to access that page.",
+      'error_desc': "Horse",
       responsecode: 403
     }
   case "medusa":

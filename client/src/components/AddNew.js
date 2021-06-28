@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import {Link} from 'react-router-dom'
 
 
-
-function AddNew() {
+function AddNew({wishlistData}) {
   const [progress, SetProgress] = useState('FormSearch')
   const [IMDBResultsVar, SetIMDBResultsVar] = useState('')
   const [searchBy, setSearchBy] = useState("title");
@@ -17,19 +16,17 @@ function AddNew() {
   const [minvals, setMinvals] = useState([1,1])
   const [warning, setWarning] = useState(null)
 
-  const getImdbidlist = async () => {
-      const response = await fetch("/imdbidlist", {
-        method: "POST",
-        body: JSON.stringify({ username: localStorage.getItem("username") }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }).then((res) => res.json());
-      if (response.response !== "error") {
-        console.log("response: ", response);
-        return response;
-      } else {
-        console.log("response: ", response);
-        return ([]);
+  const getImdbidlist = () => {
+    return wishlistData.map(item => {
+      let obj = {};
+      if (item.mediaType !== "movie") {
+        obj["st"] = item.st;
+        obj["et"] = item.et;
       }
+      obj["mediaType"] = item.mediaType;
+      obj["imdbID"] = item.imdbID;
+      return obj
+    })
   };  
 
   const handleSubmit = (e) => {
@@ -115,7 +112,6 @@ function AddNew() {
           }
         })
         SetProgress("IMDBResultsTable")
-        
        })
     }
   }

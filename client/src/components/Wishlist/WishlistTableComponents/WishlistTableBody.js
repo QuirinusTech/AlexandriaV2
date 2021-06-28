@@ -1,7 +1,6 @@
-import WishlistTableBodyTrSeries from "./WishlistTableBodyTrSeries"
-import WishlistTableBodyTrMovie from "./WishlistTableBodyTrMovie"
-import {useEffect, useState} from 'react'
-import GIFLoader from "../../GIFLoader"
+
+import { useState} from 'react'
+import TableBodySetup from './TableBodySetup';
 
 // const getWishlistData = [{
 //   addedBy: "aegisthus",
@@ -83,73 +82,18 @@ import GIFLoader from "../../GIFLoader"
 // }];
 
 
-function WishlistTableBody({WishlistItemTemplate, statusFilters}) {
-  const [wishlistReady, setWishlistReady] = useState(false)
-  const [wishlistData, setWishlistData] = useState([])
-  const recentlyViewed = useState(localStorage.getItem('recentlyViewed') || null)
-  async function getWishlistData() {
-    fetch('/db/r', {
-      method: "POST",
-      body: JSON.stringify({plssendlist: 'yas pls'}),
-      headers: {"Content-type": "application/json; charset=UTF-8"}
-    }).then(
-      res => res.json()
-    ).then(data => {
-      console.log(data)
-      if (typeof data !== "string") {
-        setWishlistData(data);
-        setWishlistReady(true);
-      } else {
-        alert(data);
-      }    
-    })
-  }
+function WishlistTableBody({wishlistData, WishlistItemTemplate, statusFilters}) {
 
-  useEffect( ()=> {
-    getWishlistData()
-  },[]  )
-
-  function TableBodySetup({wishlistData, recentlyViewed}) {
-    if (wishlistReady) {
-      try {
-        const results = wishlistData.map(wishlistitem => {
-          let recentlyViewedBool = false
-          console.log(recentlyViewed[0], wishlistitem['imdbID'])
-          if (recentlyViewed[0] === wishlistitem['imdbID']) {
-            recentlyViewedBool = true
-          }
-          if (wishlistitem['mediaType'] === "series") {
-            return (
-              <WishlistTableBodyTrSeries
-                recentlyViewedBool={recentlyViewedBool}
-                wishlistitem={wishlistitem}
-                key={wishlistitem['id']}
-                display={statusFilters[wishlistitem["status"]]}
-                item={wishlistitem}
-                WishlistItemTemplate={WishlistItemTemplate}
-              />
-            )
-          } else {
-            return (
-              <WishlistTableBodyTrMovie
-                recentlyViewedBool={recentlyViewedBool}
-                wishlistitem={wishlistitem}
-                key={wishlistitem['id']}
-                display={statusFilters[wishlistitem["status"]]}
-                item={wishlistitem}
-                WishlistItemTemplate={WishlistItemTemplate}
-              />)
-          }
-        })
-        return results
-      } catch (error) {
-        return <tr><td>Chill pls</td></tr>
-      }
-    }
-  }
-
-    
-  return !wishlistReady ? <GIFLoader/> : <tbody id="wishlistTableBody" ><TableBodySetup wishlistData={wishlistData} recentlyViewed={recentlyViewed} /></tbody>
+  
+  return (
+    <tbody id="wishlistTableBody">
+      <TableBodySetup
+        wishlistData={wishlistData}
+        statusFilters={statusFilters}
+        WishlistItemTemplate={WishlistItemTemplate}
+      />
+    </tbody>
+  );
     
   }
 

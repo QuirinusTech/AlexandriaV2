@@ -1,6 +1,7 @@
 import ListFilters from "./Wishlist/ListFilters"
 import {useState} from "react"
 import WishlistTableStruct from "./Wishlist/WishlistTableComponents/WishlistTableStruct";
+import GIFLoader from "./GIFLoader";
 
 const allPossibleStatuses = [
   "new",
@@ -16,7 +17,7 @@ const WishlistItemTemplate = [
   "name"
 ];
 
-function Wishlist() {
+function Wishlist({wishlistData}) {
 
   const [statusFilters, setStatusFilters] = useState(()=> {
     const stateobj = {}
@@ -30,20 +31,26 @@ function Wishlist() {
     return stateobj
   })
 
-  return (<div>
+  return (
+    <div>
       <h2>Wishlist</h2>
       <div className="row" id="wishlistdiv">
-      <ListFilters
-        allPossibleStatuses={allPossibleStatuses}
-        setStatusFilters={setStatusFilters}
-        statusFilters={statusFilters}
-      />
-      <WishlistTableStruct
-        statusFilters={statusFilters}
-        WishlistItemTemplate={WishlistItemTemplate}
-      />
+        <ListFilters
+          allPossibleStatuses={allPossibleStatuses}
+          setStatusFilters={setStatusFilters}
+          statusFilters={statusFilters}
+        />
+        {wishlistData[0] === "init" && <GIFLoader />}
+        {wishlistData[0] !== "init" && (
+          <WishlistTableStruct
+            wishlistData={wishlistData}
+            statusFilters={statusFilters}
+            WishlistItemTemplate={WishlistItemTemplate}
+          />
+        )}
       </div>
-  </div>)
+    </div>
+  );
 }
 
 export default Wishlist

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom"
 import GIFLoader from "./GIFLoader";
 
-function LogIn() {
+function LogIn({setIsLoggedIn, isRestricted}) {
   const [pleaseWait, setPleasewait] = useState(false)
   let history = useHistory()
   async function loginHandler(e) {
@@ -26,6 +26,7 @@ function LogIn() {
         localStorage.setItem("is_admin", data['is_admin']);
         localStorage.setItem("can_add", data["can_add"]);
         localStorage.setItem("is_active_user", data['is_active_user'])
+        setIsLoggedIn(true)
         history.push('/')
       }
       
@@ -37,7 +38,7 @@ function LogIn() {
     'password': ''
   })
 
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(isRestricted ? "You need to be logged in to access that page." : null)
 
   function changeHandler(e) {
     const {name, value} = e.target
