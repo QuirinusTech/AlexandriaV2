@@ -24,16 +24,11 @@ module.exports = {
       case "R":
         return await getWishlistByUser(username);
       case "U":
-        try {
-          if (WishlistItem.isValidStatusUpdate(data['status'])) {
-            createNotification(username, data['id'], data['status'])
-          }
-        } catch {
-          pass
-        }
-        return await updateWishlistItem(id, data);
+        return await updateWishlistItem(username, data);
       case "D":
         return await deleteDocFromWishlist(data);
+      case "UE":
+        return await addEpisodesToWishlistItem(data['readyobj'])
       default:
         break;
     }
@@ -52,26 +47,37 @@ module.exports = {
     createEmailNotification("admin", "new", "user")
     return response['updateTime']
   },
-  getimdbidlist: async function getimdbidlist(username) {
-    const snapshot = await wishlistRef.where("addedBy", "==", username).get();
-    if (snapshot.empty) {
-      return "empty";
+  addEpisodesToWishlistItem
+  // getimdbidlist: async function getimdbidlist(username) {
+  //   const snapshot = await wishlistRef.where("addedBy", "==", username).get();
+  //   if (snapshot.empty) {
+  //     return "empty";
+  //   }
+  //   const imdbidlist = []
+  //   snapshot.forEach((doc) => {
+  //     let item = doc.data();
+  //     let obj = {};
+  //     if (item.mediaType !== "movie") {
+  //       obj["st"] = item.st;
+  //       obj["et"] = item.et;
+  //     }
+  //     obj["mediaType"] = item.mediaType;
+  //     obj["imdbID"] = item.imdbID;
+  //     imdbidlist.push(obj);
+  //   });
+  //   console.log("imdbidlist: ", imdbidlist)
+  //   return imdbidlist
+  // }
+}
+
+async function createDbNotification(username, id, field, update) {
+  const res = await usersRef.doc(username).update({"notifications" : {
+    [`${id}`]: {
+      field,
+      update
     }
-    const imdbidlist = []
-    snapshot.forEach((doc) => {
-      let item = doc.data();
-      let obj = {};
-      if (item.mediaType !== "movie") {
-        obj["st"] = item.st;
-        obj["et"] = item.et;
-      }
-      obj["mediaType"] = item.mediaType;
-      obj["imdbID"] = item.imdbID;
-      imdbidlist.push(obj);
-    });
-    console.log("imdbidlist: ", imdbidlist)
-    return imdbidlist
-  }
+  }}).then(()=> "success").catch(err => err)
+  return res
 }
 
 async function addToWishlist(username, data) {
@@ -81,7 +87,7 @@ async function addToWishlist(username, data) {
     snapshot.forEach(doc => {
       let item = doc.data()
       if (data['imdbID'] === item['imdbID'] && username === item['addedBy']) {
-        return updateWishlistItem(item['id'], data)
+        return updateWishlistItem(username, data)
       }
     })
   }
@@ -102,11 +108,15 @@ async function addToWishlist(username, data) {
   }
   console.log(obj)
   obj = await WishlistItem.setData(obj);
-  if (obj["progress"] === null || obj["progress"] === "undefined" || obj["progress"] === undefined) {
-    obj["progress"] = WishlistItem.getProgress(obj["episodes"], obj['status']);
+  if (!obj.hasOwnProperty("progress")) {
+    obj["progress"] = WishlistItem.setProgress(obj["episodes"], obj['status']);
   }
   createEmailNotification("admin", "new", "wishlistItem")
-  return db.collection("wishlist").doc(obj.id).set(obj).then( ()=> { return "success" }  )
+  const success = db.collection("wishlist").doc(obj['id']).set(obj).then( ()=> { return "success" }  ).catch(err => {console.log(err)})
+  return {
+    "success": success,
+    "newEntry": obj
+  }
   
 }
 
@@ -120,8 +130,8 @@ async function getWishlistByUser(username) {
   }
   snapshot.forEach((doc) => {
     let item = doc.data()
-    if (item["progress"] === null || item["progress"] === "undefined" || item["progress"] === undefined) {
-      item["progress"] = WishlistItem.getProgress(item["episodes"], item['status']);
+    if (!item.hasOwnProperty("progress")) {
+      item["progress"] = WishlistItem.setProgress(item["episodes"], item['status']);
     }
     inventory.push(item);
   });
@@ -131,11 +141,51 @@ async function getWishlistByUser(username) {
 
 
 // UPDATE
-async function updateWishlistItem(id, updateData) {
-  const docRef = wishlistRef.doc(id);
+async function updateWishlistItem(username, data) {
+
+  try {
+    if (WishlistItem.isValidStatusUpdate(data['status'])) {
+      await createDbNotification(username, data['id'], 'status', data['status'])
+    }
+  } catch (err) {
+    console.log(err)
+  }
+
+  const docRef = wishlistRef.doc(data['id']);
   const doc = docRef.get()
-  const res = await docRef.update({...doc.data, ...updateData});
+  const res = await docRef.update({...doc.data(), ...data});
   console.log('Update: ', res);
+}
+
+async function addEpisodesToWishlistItem(data) {
+
+    const { id, newSeasons, newEpisodes } = data
+    let wishlistEntry = await wishlistRef.doc(id).get().then(doc => doc.data())
+    wishlistEntry['episodes'] = WishlistItem.addEpisodes(data, wishlistEntry['episodes'])
+    wishlistEntry['progress'] = WishlistItem.setProgress(wishlistEntry['episodes'], wishlistEntry['status'])
+    
+    if (data.hasOwnProperty('newSeasons')) {
+      let checkvar = newSeasons.length-1
+      let updated = false
+      let i = checkvar
+      while (!updated) {
+        if (newSeasons[i]["selected"]) {
+          wishlistEntry['st'] = newSeasons[i]['season']
+          wishlistEntry['et'] = newSeasons[i]['maxEpisodes']
+          updated = true
+          }
+        i--
+        }
+      } else {
+      wishlistEntry['et'] = parseInt(wishlistEntry['et']) + parseInt(newEpisodes)
+    }
+    wishlistEntry['status'] = 'new'
+
+    const res = await wishlistRef.doc(id).set(wishlistEntry).then(()=>"success").catch(err=>{
+      console.log(err)
+      return "fail"
+    })
+    return res === "success" ? {updated: wishlistEntry} : res
 }
 
 

@@ -82,7 +82,7 @@ import TableBodySetup from './TableBodySetup';
 // }];
 
 
-function WishlistTableBody({wishlistData, WishlistItemTemplate, statusFilters}) {
+function WishlistTableBody({wishlistData, WishlistItemTemplate, setWishlistData, statusFilters}) {
 
   
   return (
@@ -91,6 +91,7 @@ function WishlistTableBody({wishlistData, WishlistItemTemplate, statusFilters}) 
         wishlistData={wishlistData}
         statusFilters={statusFilters}
         WishlistItemTemplate={WishlistItemTemplate}
+        setWishlistData={setWishlistData}
       />
     </tbody>
   );

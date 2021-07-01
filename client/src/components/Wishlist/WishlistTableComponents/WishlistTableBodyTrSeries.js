@@ -1,6 +1,6 @@
 import CheckAvailabilityWidget from "./CheckAvailabilityWidget"
 
-function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display, recentlyViewedBool }) {
+function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, wishlistData, display, recentlyViewedBool, setWishlistData }) {
     let progressBarNewVals = [0, item['progress']['new'] || 0]
     let progressBarValueDownloading =[progressBarNewVals[1], item['progress']['downloading'] || 0]
     let progressBarValueComplete = [progressBarValueDownloading[0]+progressBarValueDownloading[1], item['progress']['complete'] || 0]
@@ -131,7 +131,7 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display, recent
                 {item['isOngoing'] && <p>Ongoing</p>}
                 <details>
                   <summary>Add Episodes</summary>
-                  <CheckAvailabilityWidget imdbID={item['imdbID']} st={item['st']} et={item['et']} />
+                  <CheckAvailabilityWidget setWishlistData={setWishlistData} imdbID={item['imdbID']} st={item['st']} et={item['et']} id={item['id']} />
                 </details>
               {/* <details>
                 <summary>Media Info</summary>

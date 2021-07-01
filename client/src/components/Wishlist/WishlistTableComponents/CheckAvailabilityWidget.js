@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom/cjs/react-router-dom.min"
 import GIFLoader from "../../GIFLoader"
 
-function CheckAvailabilityWidget({imdbID, st, et}) {
+function CheckAvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
   const [widgetProgress, setWidgetProgress] = useState(null)
   const [newEpisodes, setNewEpisodes] = useState(0)
   const [newSeasons, setNewSeasons] = useState(0)
@@ -76,24 +76,34 @@ function CheckAvailabilityWidget({imdbID, st, et}) {
     setWidgetProgress("submitting")
     const {name} = e.target
     let readyobj = {
-      imdbID,
-      newEpisodes
+      st,
+      et,
+      newEpisodes,
+      id
     }
     if (name !== "addSingle") {
       readyobj["newSeasons"] = newSeasons
+      let counter = 0
+      newSeasons.forEach(season => {
+        season['selected'] && counter++;
+      })
+      setDoneInfo([newEpisodes, counter])
+    } else {
+      setDoneInfo([newEpisodes, 0])
     }
-    let counter = 0
-    newSeasons.forEach(season => {
-      season['selected'] && counter++;
-    })
-    setDoneInfo([newEpisodes, counter])
+    
     e.preventDefault()
-    fetch("/db/u", {
+    fetch("/db/ue", {
       method: 'POST',
       body: JSON.stringify({readyobj}),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     }).then(res => {
       if (res.status > 199 && res.status < 299) {
+        res.json().then(result => {
+          setWishlistData(prevstate => prevstate.map(wishlistitem => {
+            return wishlistitem['id'] === id ? result["updated"]: wishlistitem
+          }))
+        })
         setWidgetProgress('done')
       } else {
         setWidgetProgress('error')
@@ -128,14 +138,14 @@ function CheckAvailabilityWidget({imdbID, st, et}) {
           <div>
             <p>We found another {newEpisodes} episodes.</p>
             <button onClick={postUpdateEpisodes} name="addSingle">Add</button>
-            <button className="btn_warning" onClick={() => setWidgetProgress(null)}>Cancel</button>
           </div>
         );
       case "foundMulti":
           return (
             <div className="foundMulti">
-            {!isNaN(newEpisodes) && <p>We found another {newEpisodes} episodes for season {st}.</p>}
-            <p>We found another {!isNaN(newEpisodes) ? newSeasons.length-1 : newSeasons.length} seasons:</p>
+              <p>We found another:</p>
+              {!isNaN(newEpisodes) && <p><b>{newEpisodes}</b> episodes for season {st}.</p>}
+              <p><b>{!isNaN(newEpisodes) ? newSeasons.length-1 : newSeasons.length}</b> new seasons:</p>
             {newSeasons.map(seasonObj => {
               let index = newSeasons.indexOf(seasonObj)
               if (seasonObj['season'] === st) {
@@ -156,7 +166,6 @@ function CheckAvailabilityWidget({imdbID, st, et}) {
 
             })}
             <button name="addMulti" onClick={postUpdateEpisodes} className="btn_submit">Add</button>
-            <button className="btn_warning" onClick={() => setWidgetProgress(null)}>Cancel</button>
           </div>
           )
       case "nonew":
@@ -173,8 +182,9 @@ function CheckAvailabilityWidget({imdbID, st, et}) {
           <div>
             <p>Added to wishlist:</p>
             {!isNaN(doneInfo[0]) && <p> - {doneInfo[0]} new episodes for the current season.</p>}
-            <p> - {doneInfo[1]} new seasons to the wishlist.</p>
-            <p>It may take a few minutes for the changes to reflect on the list.</p>
+            {doneInfo[1] !== 0 && <p> - {doneInfo[1]} new seasons to the wishlist.</p>}
+            <br />
+            <button className="btn_submit" onClick={CheckAvailability}>Add more?</button>
           </div>
         )
       case "error":
@@ -192,6 +202,7 @@ function CheckAvailabilityWidget({imdbID, st, et}) {
   return (
     <div className='wishListWidgetButtonRow'>
       <WidgetInsides setWidgetProgress={setWidgetProgress} />
+      {widgetProgress!==null && widgetProgress!== "done" && <button className="btn_warning" onClick={() => setWidgetProgress(null)}>Cancel</button>}
     </div>
   )
  

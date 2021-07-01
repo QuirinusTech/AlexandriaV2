@@ -1,6 +1,6 @@
-const { allPossibleStatuses } = require("./globals") ;
 const { v4 } = require("uuid");
 const fetch = require('node-fetch') ;
+const {allPossibleStatuses} =require("./globals");
 
 class WishlistItem {
 
@@ -113,6 +113,27 @@ class WishlistItem {
     return obj[season]
   }
 
+  static addEpisodes(data, episodes) {
+    const {st, et, newEpisodes} = data
+    let episodesObj = {...episodes}
+    let newet = 0
+    newet += parseInt(newEpisodes) + parseInt(et)
+    Object.keys(episodesObj).forEach(ep => console.log(ep, episodesObj[ep]))
+    console.log("et", et, "newet", newet)
+    for (let index = parseInt(et)+1; index <= newet; index++) {
+      episodesObj[st][index.toString()] = "new"
+    }
+    if (data.hasOwnProperty("newSeasons")) {
+      data["newSeasons"].forEach((thisNewSeason) => {
+        let {season, maxEpisodes, selected} = thisNewSeason
+        if (selected) {
+          episodesObj[season] = WishlistItem.addSeason(parseInt(season), 1, parseInt(maxEpisodes))
+        }
+      });
+    }
+    return episodesObj
+  }
+
   static delEpisodes(array, episodes) {
     // if passed in format [s, [ef,et]]
     if (Number.isInteger(array[0])) {
@@ -150,7 +171,7 @@ class WishlistItem {
     return fullList;
   }
 
-  static getProgress(episodesObj, status) {
+  static setProgress(episodesObj, status="new") {
     if (typeof(episodesObj) !== "object") {
       return status
     }
@@ -170,6 +191,8 @@ class WishlistItem {
     });
     return progress;
   }
+
+
 }
 
 module.exports = WishlistItem

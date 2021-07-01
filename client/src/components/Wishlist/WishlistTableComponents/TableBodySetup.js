@@ -1,7 +1,7 @@
 import WishlistTableBodyTrSeries from "./WishlistTableBodyTrSeries"
 import WishlistTableBodyTrMovie from "./WishlistTableBodyTrMovie"
 
-function TableBodySetup({wishlistData, statusFilters, WishlistItemTemplate}) {
+function TableBodySetup({wishlistData, statusFilters, WishlistItemTemplate, setWishlistData}) {
   const recentlyViewed = localStorage.getItem('recentlyViewed') || null
   return wishlistData.map(wishlistitem => {
     let recentlyViewedBool = false
@@ -12,6 +12,8 @@ function TableBodySetup({wishlistData, statusFilters, WishlistItemTemplate}) {
     if (wishlistitem['mediaType'] === "series") {
       return (
         <WishlistTableBodyTrSeries
+        wishlistData={wishlistData}
+          setWishlistData={setWishlistData}
           recentlyViewedBool={recentlyViewedBool}
           wishlistitem={wishlistitem}
           key={wishlistitem['id']}

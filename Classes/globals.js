@@ -25,3 +25,5 @@ const globals = {
   mediatypes,
   WishlistItemTemplate
 };
+
+module.exports = globals

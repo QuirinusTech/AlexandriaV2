@@ -3,7 +3,7 @@ import EpisodesPick from "./EpisodesPick";
 import TableBody from "./IMDBResultsTableBody"
 
 
-function IMDBResultsTable({ warning, minvals, IMDBResults, reset, SetProgress, setRecentlyAdded }) {
+function IMDBResultsTable({ warning, minvals, IMDBResults, reset, SetProgress, setRecentlyAdded, setWishlistData }) {
   const isSeries = IMDBResults["Type"] === "series";
   const [readyToAdd, setReadyToAdd] = useState(!isSeries)
   const [isPriority, setIsPriority] = useState(false)
@@ -68,6 +68,12 @@ function IMDBResultsTable({ warning, minvals, IMDBResults, reset, SetProgress, s
     })
     .then(res => {
       if (res.status === 200) {
+        res.json().then(data => {setWishlistData(prevState => {
+          let newobj = data.newEntry
+          let newarr = [...prevState]
+          newarr.push(newobj)
+          return newarr
+        })})
         setRecentlyAdded(readyObj['IMDBResults']['Title'])
         SetProgress("JustAdded")
       } else {

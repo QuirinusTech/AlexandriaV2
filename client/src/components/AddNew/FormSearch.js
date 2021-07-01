@@ -3,12 +3,18 @@ function FormSearch({
   field,
   handleChange,
   searchBy,
-  isSearching
+  isSearching,
+  errorMsg
 }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <h2>Let's get some info first:</h2>
+        {errorMsg !== null && <div className="FormSearch--NoResults">
+          <p>No results found for <b>{errorMsg[1]}</b>. </p>
+          <p>Please check your spelling and try again. </p>
+          <p>Error from IMDB: {errorMsg[0]}</p>
+          </div>}
         <div className="flex-left" id="left">
         <label className="formsearchSearchByRadioButton">
           <input

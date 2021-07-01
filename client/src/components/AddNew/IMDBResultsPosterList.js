@@ -27,7 +27,7 @@ const IMDBResultsPosterList = ({posterList, reset, searchIMDB, setPosterList}) =
     console.log(posterarr)
     return (
       <div className="PosterList">
-        {posterList.length <1 ? <GIFLoader /> : <button onClick={reset}>Reset</button>}
+        {posterList.length <1 ? <GIFLoader /> : <button onClick={reset}>Cancel</button>}
         <ul>
           {posterarr}
         </ul>

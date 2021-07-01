@@ -17,7 +17,7 @@ const WishlistItemTemplate = [
   "name"
 ];
 
-function Wishlist({wishlistData}) {
+function Wishlist({wishlistData, setWishlistData}) {
 
   const [statusFilters, setStatusFilters] = useState(()=> {
     const stateobj = {}
@@ -43,6 +43,7 @@ function Wishlist({wishlistData}) {
         {wishlistData[0] === "init" && <GIFLoader />}
         {wishlistData[0] !== "init" && (
           <WishlistTableStruct
+            setWishlistData={setWishlistData}
             wishlistData={wishlistData}
             statusFilters={statusFilters}
             WishlistItemTemplate={WishlistItemTemplate}

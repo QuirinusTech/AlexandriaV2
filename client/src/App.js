@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar";
 import Logout from "./components/Logout";
 
 async function getWishlistData() {
+
   const results = await fetch("/db/r", {
     method: "POST",
     body: JSON.stringify({ plssendlist: "yas pls" }),
@@ -53,6 +54,7 @@ async function getNotifications() {
 }
 
 function App() {
+  const [wishlistLoading, setWishlistLoading] = useState(false)
   const history = useHistory();
   const [notifications, setNotifications] = useState([]);
   const [connectionTest, setConnectionTest] = useState(false);
@@ -73,21 +75,24 @@ function App() {
   }
 
   useEffect(() => {
+
     async function dataSetup() {
       setIsLoggedIn(checkForJwtCookie());
 
-      if (isLoggedIn && wishlistData[0] === "init") {
+      if (isLoggedIn && wishlistData[0] === "init" && !wishlistLoading) {
+        setWishlistLoading(true)
         const dbdata = await getWishlistData();
         setWishlistData(dbdata);
         const notificantionsArr = await getNotifications();
         setNotifications(notificantionsArr);
+        setWishlistLoading(false)
       } else {
         setWishlistData([]);
         setNotifications([]);
       }
     }
     dataSetup();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <Router>
@@ -110,11 +115,11 @@ function App() {
       </Route>
 
       <Route exact path="/addnew">
-        <AddNew wishlistData={wishlistData} />;
+        <AddNew setWishlistData={setWishlistData} wishlistData={wishlistData} />;
       </Route>
 
       <Route exact path="/list">
-        <Wishlist wishlistData={wishlistData} />;
+        <Wishlist wishlistData={wishlistData} setWishlistData={setWishlistData} />;
       </Route>
 
       <Route exact path="/report">

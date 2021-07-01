@@ -2,10 +2,10 @@ import FormSearch from "./AddNew/FormSearch";
 import IMDBResultsPosterList from "./AddNew/IMDBResultsPosterList";
 import IMDBResultsTable from "./AddNew/IMDBResultsTable";
 import React, { useState } from "react";
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
-function AddNew({wishlistData}) {
+function AddNew({wishlistData, setWishlistData}) {
   const [progress, SetProgress] = useState('FormSearch')
   const [IMDBResultsVar, SetIMDBResultsVar] = useState('')
   const [searchBy, setSearchBy] = useState("title");
@@ -15,6 +15,7 @@ function AddNew({wishlistData}) {
   const [recentlyadded, setRecentlyAdded] = useState('')
   const [minvals, setMinvals] = useState([1,1])
   const [warning, setWarning] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   const getImdbidlist = () => {
     return wishlistData.map(item => {
@@ -49,7 +50,7 @@ function AddNew({wishlistData}) {
       //console.log("Search by: ", searchBy)
     }
 
-  const reset = () => {
+  function reset() {
     setField("")
     setPosterList([])
     setIsSearching(false)
@@ -73,7 +74,7 @@ function AddNew({wishlistData}) {
 
   async function searchIMDB(searchBy, field) {
     // retrieve list of existing imdbID's in the user's wishlist
-    const imdbidlist = await getImdbidlist()
+    const imdbidlist = getImdbidlist()
     console.log("searchIMDB(",searchBy,",",field,")")
     const apikey = "5fadb6ca"
     if (searchBy === "title") {
@@ -82,9 +83,20 @@ function AddNew({wishlistData}) {
       method: 'POST',
     })
     .then(response => response.json())
-    .then(result => { setPosterList(result['Search']) })
-    SetProgress("IMDBResultsPosterList")
-    console.log("Progress = ", progress)
+    .then(result => { 
+      console.log(result)
+      if (result['Response'] === "True") {
+        console.log("no problem!");
+        setPosterList(result['Search']) 
+        SetProgress("IMDBResultsPosterList")
+      } else {
+        console.log("error!");
+        console.log(result['Response'], result['Error'])
+        reset()
+        setErrorMsg([result['Error'], field])
+      }
+      console.log("Progress = ", progress)
+      })
     } else {
       fetch(`http://www.omdbapi.com/?i=${field}&apikey=${apikey}`, {
       method: 'POST',
@@ -122,6 +134,7 @@ function AddNew({wishlistData}) {
       {progress === "JustAdded" && <Completed />}
       {progress === "FormSearch" &&
       <FormSearch
+        errorMsg={errorMsg}
         isSearching={isSearching}
         handleSubmit={handleSubmit}
         searchBy={searchBy}
@@ -130,11 +143,6 @@ function AddNew({wishlistData}) {
       />}
       {progress === "IMDBResultsPosterList" &&
       <IMDBResultsPosterList
-        searchBy={searchBy}
-        field={field}
-        setField={setField}
-        setSearchBy={setSearchBy}
-        SetProgress={SetProgress}
         reset={reset}
         posterList={posterList}
         setPosterList={setPosterList}
@@ -142,6 +150,7 @@ function AddNew({wishlistData}) {
       />}
       {progress === "IMDBResultsTable" &&
         <IMDBResultsTable
+        setWishlistData={setWishlistData}
         warning={warning}
         minvals={minvals}
         setRecentlyAdded={setRecentlyAdded}
@@ -149,7 +158,7 @@ function AddNew({wishlistData}) {
         IMDBResults={IMDBResultsVar}
         SetProgress={SetProgress}
       />}
-      
+      <button onClick={reset}>Cancel / Reset </button>
     </div>
     )
     

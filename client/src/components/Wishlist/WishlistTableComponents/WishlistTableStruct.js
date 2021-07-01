@@ -1,7 +1,7 @@
 import WishlistTableBody from "./WishlistTableBody";
 import WishListTableHead from "./WishlistTableHead";
 
-function WishlistTableStruct({WishlistItemTemplate, statusFilters, wishlistData}) {
+function WishlistTableStruct({WishlistItemTemplate, statusFilters, wishlistData,setWishlistData}) {
 
   return (
     <div id="wishlisttablediv">
@@ -11,6 +11,8 @@ function WishlistTableStruct({WishlistItemTemplate, statusFilters, wishlistData}
           wishlistData={wishlistData}
           statusFilters={statusFilters}
           WishlistItemTemplate={WishlistItemTemplate}
+          setWishlistData={setWishlistData}
+          wishlistData={wishlistData}
         />
       </table>
     </div>
