@@ -903,7 +903,7 @@ button, input[type=submit] {
 
 /***************************************REPORT******************************************/
 
-body > div.w3-margin-top > div.container.issue-form{
+.issue-form {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size:1rem;
@@ -923,7 +923,7 @@ body > div.w3-margin-top > div.container.issue-form{
 }
 
 
-body > div.w3-margin-top > div.container.issue-form > div:nth-child(3){
+.issue-form > div:nth-child(3){
     display:inline-flex;
     flex-direction: row;
     justify-content: space-around;
@@ -936,7 +936,7 @@ body > div.w3-margin-top > div.container.issue-form > div:nth-child(3){
     margin: 5px;
 }
 
-body > div.w3-margin-top > div.container.issue-form > div.issue-form{
+.issue-form {
     width:90%;
     display:inline-flex;
     flex-direction: row;
@@ -963,7 +963,7 @@ body > div.w3-margin-top > div.container.issue-form > div.issue-form{
     padding: .6em 1.4em .5em .8em;
 }
 
-body > div.w3-margin-top > div.container.issue-form > h4{
+.issue-form > h4{
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     text-align: center;
@@ -971,7 +971,7 @@ body > div.w3-margin-top > div.container.issue-form > h4{
     font-size: 1.5rem;
 }
 
-body > div.w3-margin-top > div.container.issue-form > div.issue-form > div > p{
+.issue-form > div.issue-form > div > p{
 
     font-family: 'Open Sans', sans-serif;
     font-weight: 500;
@@ -1401,7 +1401,7 @@ div.about_div{
     }
    
 
-    body > div.w3-margin-top > div.container.issue-form > div.issue-form{
+    .issue-form{
         margin: 5px auto;
     }
     .spacer_footer{

@@ -5,7 +5,7 @@ function TableBodySetup({wishlistData, statusFilters, WishlistItemTemplate, setW
   const recentlyViewed = localStorage.getItem('recentlyViewed') || null
   return wishlistData.map(wishlistitem => {
     let recentlyViewedBool = false
-    console.log(recentlyViewed[0], wishlistitem['imdbID'])
+    // console.log(recentlyViewed[0], wishlistitem['imdbID'])
     if (recentlyViewed[0] === wishlistitem['imdbID']) {
       recentlyViewedBool = true
     }

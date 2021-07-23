@@ -75,7 +75,7 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
             to="/logout"
             className="nav_menu_element"
           >
-            Abmelden
+            Ausloggen
           </Link>
         )}
       </nav>
