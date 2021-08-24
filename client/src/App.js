@@ -5,7 +5,7 @@ import OldLoader from "./components/OldLoader";
 import AddNew from "./components/AddNew";
 import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 import Wishlist from "./components/Wishlist";
-import Report from "./components/Report";
+// import Report from "./components/Defunct/Report";
 import AdminCMS from "./components/AdminCMS";
 import Start from "./components/Start";
 import LogIn from "./components/LogIn";
@@ -109,7 +109,7 @@ function App() {
 
       <Route exact path="/oops">
         <div>
-          <h2>FEHLER</h2>
+          <h2>EIN FEHLER IST AUFGETRETEN</h2>
           <p>{errorPageContent}</p>
         </div>
       </Route>
@@ -122,12 +122,12 @@ function App() {
         <Wishlist wishlistData={wishlistData} setWishlistData={setWishlistData} />;
       </Route>
 
-      <Route exact path="/report">
+      {/* <Route exact path="/report">
         <Report wishlistData={wishlistData} />;
-      </Route>
+      </Route> */}
 
       <Route exact path="/admin">
-        <AdminCMS wishlistData={wishlistData} />;
+        <AdminCMS setErrorPageContent={setErrorPageContent} />;
       </Route>
 
       <Route exact path="/login">

@@ -12,36 +12,36 @@ function Start({notifications}) {
   return (
     <div>
     <div className="grid_main">
-      <h2>Willkommen, {displayName}!</h2>
+      <h2>Welcome, {displayName}!</h2>
       {showMsgCentre && <Notifications notifications={notifications} setShowMsgCentre={setShowMsgCentre} />}
       
       {!is_active_user && <div className="grid5">
         <Link id="Go_Button_5" to="/login" className="go_button">
-          Einloggen
+          Log in
         </Link>
       </div>}
 
       {can_add && <div className="grid1">
         <Link id="Go_Button_1" to="/addnew" className="go_button">
-          Hinzufuegen
+          Add
         </Link>
       </div>}
 
       {is_active_user && <div className="grid2">
         <Link id="Go_Button_2" to="/list" className="go_button">
-          Wuenschliste
+          List
         </Link>
       </div>}
 
-      {is_active_user && <div className="grid3">
+      {/* {is_active_user && <div className="grid3">
         <Link id="Go_Button_3" to="/report" className="go_button">
           Melden
         </Link>
-      </div>}
+      </div>} */}
 
       <div className="grid4">
         <Link id="Go_Button_4" to="/about" className="go_button">
-          Ueber uns
+          About
         </Link>
       </div>
 
@@ -58,7 +58,7 @@ function Start({notifications}) {
       {displayName !== "Guest" && 
       <div className="grid7">
         <Link id="Go_Button_7" to="/logout" className="go_button">
-          Ausloggen
+          Log out
         </Link>
       </div>}
     </div>

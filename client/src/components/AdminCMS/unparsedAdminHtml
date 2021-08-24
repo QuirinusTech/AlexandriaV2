@@ -4985,225 +4985,225 @@
             </div> <!-- manually_add_entry_div -->
 
 
-            <div id="manual_message_div" style="min-width: 950px; display: none;" class="admin_hidden_f displayblock">
-                <h2>Manual message</h2>
-                <div class="flexdr mar10px">
-                                    <!-- Select message type -->
-                <select name="manual_message_type" id="manual_message_type_select" onchange="manualMessageType()">
-                    <option value="custom" default="">custom</option>
-                    <option value="status">status</option>
-                </select>
-                </div>
-                <div class="flexdr">
-                    <!-- custom message-->
-                    <div class="flexdr w70perc" id="manual_message_custom_text_div">
-                        <textarea type="text" id="admin_manual_message" placeholder="Custom message"></textarea>
-                    </div> <!-- left 70-->
+        <div id="manual_message_div" style="min-width: 950px; display: none;" class="admin_hidden_f displayblock">
+            <h2>Manual message</h2>
+            <div class="flexdr mar10px">
+                                <!-- Select message type -->
+            <select name="manual_message_type" id="manual_message_type_select" onchange="manualMessageType()">
+                <option value="custom" default="">custom</option>
+                <option value="status">status</option>
+            </select>
+            </div>
+            <div class="flexdr">
+                <!-- custom message-->
+                <div class="flexdr w70perc" id="manual_message_custom_text_div">
+                    <textarea type="text" id="admin_manual_message" placeholder="Custom message"></textarea>
+                </div> <!-- left 70-->
 
-                    <!-- status update message -->
-                    <div class="w70perc acc" id="manual_message_status_update_div" style="display: none;">
-                        <select name="manual_message_status" id="manual_message_status_select">
-                            <option value="" default="" hidden="">Status Update Options</option>
-                            
-                            <option value="received">received</option>
-                        
-                            <option value="complete">complete</option>
-                        
-                            <option value="copied">copied</option>
-                        
-                            <option value="processing">processing</option>
-                        
-                        </select>
-                        <select name="manual_message_status" id="manual_message_series">
-                            <option value="" default="" hidden="">Select a series</option>
-                            
-                            <option value="TT1694423_S09-MasterChef USA S09">MasterChef USA S09 - TT1694423_S09</option>
-                        
-                            <option value="masterchef_au_s11-Masterchef Australia S11">Masterchef Australia S11 - masterchef_au_s11</option>
-                        
-                            <option value="masterchef_au_s12-Masterchef Australia S12">Masterchef Australia S12 - masterchef_au_s12</option>
-                        
-                            <option value="tt0133985-A Murder of Crows">A Murder of Crows - tt0133985</option>
-                        
-                            <option value="tt0303461-Firefly">Firefly - tt0303461</option>
-                        
-                            <option value="tt0379786-Serenity">Serenity - tt0379786</option>
-                        
-                            <option value="tt0413573-Grey's Anatomy">Grey's Anatomy - tt0413573</option>
-                        
-                            <option value="tt10016180-The Little Things">The Little Things - tt10016180</option>
-                        
-                            <option value="tt10121392-Thunder Force">Thunder Force - tt10121392</option>
-                        
-                            <option value="tt10333426-Bliss">Bliss - tt10333426</option>
-                        
-                            <option value="tt10334148-Blithe Spirit">Blithe Spirit - tt10334148</option>
-                        
-                            <option value="tt11041132-The Mosquito Coast">The Mosquito Coast - tt11041132</option>
-                        
-                            <option value="tt11794642-Big Sky">Big Sky - tt11794642</option>
-                        
-                            <option value="tt11937816-Who Killed Sara?">Who Killed Sara? - tt11937816</option>
-                        
-                            <option value="tt12809988-Sweet Tooth">Sweet Tooth - tt12809988</option>
-                        
-                            <option value="tt13318052-Midnight at the Magnolia">Midnight at the Magnolia - tt13318052</option>
-                        
-                            <option value="tt1378167-NCIS: Los Angeles">NCIS: Los Angeles - tt1378167</option>
-                        
-                            <option value="tt1433870-MasterChef Australia S13">MasterChef Australia S13 - tt1433870</option>
-                        
-                            <option value="tt1520211-The Walking Dead">The Walking Dead - tt1520211</option>
-                        
-                            <option value="tt1586680-Shameless">Shameless - tt1586680</option>
-                        
-                            <option value="tt1694423-MasterChef USA S6,7,8,10">MasterChef USA S6,7,8,10 - tt1694423</option>
-                        
-                            <option value="tt1831804-The Stand">The Stand - tt1831804</option>
-                        
-                            <option value="tt1844624-American Horror Story">American Horror Story - tt1844624</option>
-                        
-                            <option value="tt2177268-Clarice">Clarice - tt2177268</option>
-                        
-                            <option value="tt2433738-Wentworth">Wentworth - tt2433738</option>
-                        
-                            <option value="tt2737304-Bird Box">Bird Box - tt2737304</option>
-                        
-                            <option value="tt2805096-Chicago P.D.">Chicago P.D. - tt2805096</option>
-                        
-                            <option value="tt3498622-Fortitude">Fortitude - tt3498622</option>
-                        
-                            <option value="tt3906732-Good Witch">Good Witch - tt3906732</option>
-                        
-                            <option value="tt4192782-Glitch">Glitch - tt4192782</option>
-                        
-                            <option value="tt4192782_s03-Glitch Season 3">Glitch Season 3 - tt4192782_s03</option>
-                        
-                            <option value="tt4477976-Superstore">Superstore - tt4477976</option>
-                        
-                            <option value="tt4513678-Ghostbusters: Afterlife">Ghostbusters: Afterlife - tt4513678</option>
-                        
-                            <option value="tt4655480-Chicago Med">Chicago Med - tt4655480</option>
-                        
-                            <option value="tt4687880-Goliath">Goliath - tt4687880</option>
-                        
-                            <option value="tt4736550-The Great Hack">The Great Hack - tt4736550</option>
-                        
-                            <option value="tt5057054-Tom Clancy's Jack Ryan">Tom Clancy's Jack Ryan - tt5057054</option>
-                        
-                            <option value="tt5191110-Berlin Station">Berlin Station - tt5191110</option>
-                        
-                            <option value="tt5651844-Travelers">Travelers - tt5651844</option>
-                        
-                            <option value="tt5774002-Jupiter's Legacy">Jupiter's Legacy - tt5774002</option>
-                        
-                            <option value="tt5905354-Norsemen">Norsemen - tt5905354</option>
-                        
-                            <option value="tt5974610-The Big Fat Quiz of Everything">The Big Fat Quiz of Everything - tt5974610</option>
-                        
-                            <option value="tt6475714-Monster Hunter">Monster Hunter - tt6475714</option>
-                        
-                            <option value="tt6483832-The Resident">The Resident - tt6483832</option>
-                        
-                            <option value="tt7053188-Station 19">Station 19 - tt7053188</option>
-                        
-                            <option value="tt7587890-The Rookie">The Rookie - tt7587890</option>
-                        
-                            <option value="tt7612548-The Outpost">The Outpost - tt7612548</option>
-                        
-                            <option value="tt7772588-For All Mankind">For All Mankind - tt7772588</option>
-                        
-                            <option value="tt7817340-New Amsterdam">New Amsterdam - tt7817340</option>
-                        
-                            <option value="tt7949204-Chambers">Chambers - tt7949204</option>
-                        
-                            <option value="tt7985576-The Serpent">The Serpent - tt7985576</option>
-                        
-                            <option value="tt8129450-Breeders">Breeders - tt8129450</option>
-                        
-                            <option value="tt8398600-After Life">After Life - tt8398600</option>
-                        
-                            <option value="tt8580274-Eurovision Song Contest: The Story of Fire Saga">Eurovision Song Contest: The Story of Fire Saga - tt8580274</option>
-                        
-                            <option value="tt8594324-Ghosts">Ghosts - tt8594324</option>
-                        
-                            <option value="tt8633062-The Wilds">The Wilds - tt8633062</option>
-                        
-                            <option value="tt8690918-Resident Alien">Resident Alien - tt8690918</option>
-                        
-                            <option value="tt8697870-The Nevers">The Nevers - tt8697870</option>
-                        
-                            <option value="tt9055008-Evil">Evil - tt9055008</option>
-                        
-                            <option value="tt9059704-An American Pickle">An American Pickle - tt9059704</option>
-                        
-                            <option value="tt9170108-Raised by Wolves">Raised by Wolves - tt9170108</option>
-                        
-                            <option value="tt9251798-Ragnarok">Ragnarok - tt9251798</option>
-                        
-                            <option value="tt9484998-Palm Springs">Palm Springs - tt9484998</option>
-                        
-                            <option value="tt9612516-Space Force">Space Force - tt9612516</option>
-                        
-                            <option value="tt9698442-Behind Her Eyes">Behind Her Eyes - tt9698442</option>
-                        
-                            <option value="tt9742794-The Vault (Way Down)">The Vault (Way Down) - tt9742794</option>
-                        
-                        </select>
-                    </div>
+                <!-- status update message -->
+                <div class="w70perc acc" id="manual_message_status_update_div" style="display: none;">
+                    <select name="manual_message_status" id="manual_message_status_select">
+                        <option value="" default="" hidden="">Status Update Options</option>
+                        
+                        <option value="received">received</option>
+                    
+                        <option value="complete">complete</option>
+                    
+                        <option value="copied">copied</option>
+                    
+                        <option value="processing">processing</option>
+                    
+                    </select>
+                    <select name="manual_message_status" id="manual_message_series">
+                        <option value="" default="" hidden="">Select a series</option>
+                        
+                        <option value="TT1694423_S09-MasterChef USA S09">MasterChef USA S09 - TT1694423_S09</option>
+                    
+                        <option value="masterchef_au_s11-Masterchef Australia S11">Masterchef Australia S11 - masterchef_au_s11</option>
+                    
+                        <option value="masterchef_au_s12-Masterchef Australia S12">Masterchef Australia S12 - masterchef_au_s12</option>
+                    
+                        <option value="tt0133985-A Murder of Crows">A Murder of Crows - tt0133985</option>
+                    
+                        <option value="tt0303461-Firefly">Firefly - tt0303461</option>
+                    
+                        <option value="tt0379786-Serenity">Serenity - tt0379786</option>
+                    
+                        <option value="tt0413573-Grey's Anatomy">Grey's Anatomy - tt0413573</option>
+                    
+                        <option value="tt10016180-The Little Things">The Little Things - tt10016180</option>
+                    
+                        <option value="tt10121392-Thunder Force">Thunder Force - tt10121392</option>
+                    
+                        <option value="tt10333426-Bliss">Bliss - tt10333426</option>
+                    
+                        <option value="tt10334148-Blithe Spirit">Blithe Spirit - tt10334148</option>
+                    
+                        <option value="tt11041132-The Mosquito Coast">The Mosquito Coast - tt11041132</option>
+                    
+                        <option value="tt11794642-Big Sky">Big Sky - tt11794642</option>
+                    
+                        <option value="tt11937816-Who Killed Sara?">Who Killed Sara? - tt11937816</option>
+                    
+                        <option value="tt12809988-Sweet Tooth">Sweet Tooth - tt12809988</option>
+                    
+                        <option value="tt13318052-Midnight at the Magnolia">Midnight at the Magnolia - tt13318052</option>
+                    
+                        <option value="tt1378167-NCIS: Los Angeles">NCIS: Los Angeles - tt1378167</option>
+                    
+                        <option value="tt1433870-MasterChef Australia S13">MasterChef Australia S13 - tt1433870</option>
+                    
+                        <option value="tt1520211-The Walking Dead">The Walking Dead - tt1520211</option>
+                    
+                        <option value="tt1586680-Shameless">Shameless - tt1586680</option>
+                    
+                        <option value="tt1694423-MasterChef USA S6,7,8,10">MasterChef USA S6,7,8,10 - tt1694423</option>
+                    
+                        <option value="tt1831804-The Stand">The Stand - tt1831804</option>
+                    
+                        <option value="tt1844624-American Horror Story">American Horror Story - tt1844624</option>
+                    
+                        <option value="tt2177268-Clarice">Clarice - tt2177268</option>
+                    
+                        <option value="tt2433738-Wentworth">Wentworth - tt2433738</option>
+                    
+                        <option value="tt2737304-Bird Box">Bird Box - tt2737304</option>
+                    
+                        <option value="tt2805096-Chicago P.D.">Chicago P.D. - tt2805096</option>
+                    
+                        <option value="tt3498622-Fortitude">Fortitude - tt3498622</option>
+                    
+                        <option value="tt3906732-Good Witch">Good Witch - tt3906732</option>
+                    
+                        <option value="tt4192782-Glitch">Glitch - tt4192782</option>
+                    
+                        <option value="tt4192782_s03-Glitch Season 3">Glitch Season 3 - tt4192782_s03</option>
+                    
+                        <option value="tt4477976-Superstore">Superstore - tt4477976</option>
+                    
+                        <option value="tt4513678-Ghostbusters: Afterlife">Ghostbusters: Afterlife - tt4513678</option>
+                    
+                        <option value="tt4655480-Chicago Med">Chicago Med - tt4655480</option>
+                    
+                        <option value="tt4687880-Goliath">Goliath - tt4687880</option>
+                    
+                        <option value="tt4736550-The Great Hack">The Great Hack - tt4736550</option>
+                    
+                        <option value="tt5057054-Tom Clancy's Jack Ryan">Tom Clancy's Jack Ryan - tt5057054</option>
+                    
+                        <option value="tt5191110-Berlin Station">Berlin Station - tt5191110</option>
+                    
+                        <option value="tt5651844-Travelers">Travelers - tt5651844</option>
+                    
+                        <option value="tt5774002-Jupiter's Legacy">Jupiter's Legacy - tt5774002</option>
+                    
+                        <option value="tt5905354-Norsemen">Norsemen - tt5905354</option>
+                    
+                        <option value="tt5974610-The Big Fat Quiz of Everything">The Big Fat Quiz of Everything - tt5974610</option>
+                    
+                        <option value="tt6475714-Monster Hunter">Monster Hunter - tt6475714</option>
+                    
+                        <option value="tt6483832-The Resident">The Resident - tt6483832</option>
+                    
+                        <option value="tt7053188-Station 19">Station 19 - tt7053188</option>
+                    
+                        <option value="tt7587890-The Rookie">The Rookie - tt7587890</option>
+                    
+                        <option value="tt7612548-The Outpost">The Outpost - tt7612548</option>
+                    
+                        <option value="tt7772588-For All Mankind">For All Mankind - tt7772588</option>
+                    
+                        <option value="tt7817340-New Amsterdam">New Amsterdam - tt7817340</option>
+                    
+                        <option value="tt7949204-Chambers">Chambers - tt7949204</option>
+                    
+                        <option value="tt7985576-The Serpent">The Serpent - tt7985576</option>
+                    
+                        <option value="tt8129450-Breeders">Breeders - tt8129450</option>
+                    
+                        <option value="tt8398600-After Life">After Life - tt8398600</option>
+                    
+                        <option value="tt8580274-Eurovision Song Contest: The Story of Fire Saga">Eurovision Song Contest: The Story of Fire Saga - tt8580274</option>
+                    
+                        <option value="tt8594324-Ghosts">Ghosts - tt8594324</option>
+                    
+                        <option value="tt8633062-The Wilds">The Wilds - tt8633062</option>
+                    
+                        <option value="tt8690918-Resident Alien">Resident Alien - tt8690918</option>
+                    
+                        <option value="tt8697870-The Nevers">The Nevers - tt8697870</option>
+                    
+                        <option value="tt9055008-Evil">Evil - tt9055008</option>
+                    
+                        <option value="tt9059704-An American Pickle">An American Pickle - tt9059704</option>
+                    
+                        <option value="tt9170108-Raised by Wolves">Raised by Wolves - tt9170108</option>
+                    
+                        <option value="tt9251798-Ragnarok">Ragnarok - tt9251798</option>
+                    
+                        <option value="tt9484998-Palm Springs">Palm Springs - tt9484998</option>
+                    
+                        <option value="tt9612516-Space Force">Space Force - tt9612516</option>
+                    
+                        <option value="tt9698442-Behind Her Eyes">Behind Her Eyes - tt9698442</option>
+                    
+                        <option value="tt9742794-The Vault (Way Down)">The Vault (Way Down) - tt9742794</option>
+                    
+                    </select>
+                </div>
 
-                    <!-- usersvis table -->
-                    <div class="w30perc flexdc">
-                        <table id="usertickboxes" class="usertickboxestable w60perc">
-                            <tbody><tr>
-                                <th colspan="2">
-                                    <h4>Visible to:</h4>
-                                </th>
-                            </tr>
-                            
-                            <tr class="usersVisTableRow">
-                                <td>
-                                    <input class="checkbox_uservis" type="checkbox" value="allison">
-                                </td>
-                                <td>
-                                    <label>allison</label>
-                                </td>
-                            </tr>
-                            
-                            <tr class="usersVisTableRow">
-                                <td>
-                                    <input class="checkbox_uservis" type="checkbox" value="guest">
-                                </td>
-                                <td>
-                                    <label>guest</label>
-                                </td>
-                            </tr>
-                            
-                            <tr class="usersVisTableRow">
-                                <td>
-                                    <input class="checkbox_uservis" type="checkbox" value="Aegisthus">
-                                </td>
-                                <td>
-                                    <label>Aegisthus</label>
-                                </td>
-                            </tr>
-                            
-                            <tr class="usersVisTableRow">
-                                <td>
-                                    <input class="checkbox_uservis" type="checkbox" value="antje">
-                                </td>
-                                <td>
-                                    <label>antje</label>
-                                </td>
-                            </tr>
-                            
-                        </tbody></table>
-                    </div> <!-- right 30 -->
-                </div>
-                <div class="jcc mar10px">
-                    <button class="adminpagebutton" onclick="AdminNewMessage()">Submit</button>
-                </div>
-            </div> <!-- manualmessagediv-->
+                <!-- usersvis table -->
+                <div class="w30perc flexdc">
+                    <table id="usertickboxes" class="usertickboxestable w60perc">
+                        <tbody><tr>
+                            <th colspan="2">
+                                <h4>Visible to:</h4>
+                            </th>
+                        </tr>
+                        
+                        <tr class="usersVisTableRow">
+                            <td>
+                                <input class="checkbox_uservis" type="checkbox" value="allison">
+                            </td>
+                            <td>
+                                <label>allison</label>
+                            </td>
+                        </tr>
+                        
+                        <tr class="usersVisTableRow">
+                            <td>
+                                <input class="checkbox_uservis" type="checkbox" value="guest">
+                            </td>
+                            <td>
+                                <label>guest</label>
+                            </td>
+                        </tr>
+                        
+                        <tr class="usersVisTableRow">
+                            <td>
+                                <input class="checkbox_uservis" type="checkbox" value="Aegisthus">
+                            </td>
+                            <td>
+                                <label>Aegisthus</label>
+                            </td>
+                        </tr>
+                        
+                        <tr class="usersVisTableRow">
+                            <td>
+                                <input class="checkbox_uservis" type="checkbox" value="antje">
+                            </td>
+                            <td>
+                                <label>antje</label>
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </div> <!-- right 30 -->
+            </div>
+            <div class="jcc mar10px">
+                <button class="adminpagebutton" onclick="AdminNewMessage()">Submit</button>
+            </div>
+        </div> <!-- manualmessagediv-->
 
 
             <div id="messageCentreCMS" class="admin_hidden_f" style="display: none;">

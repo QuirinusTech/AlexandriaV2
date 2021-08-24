@@ -1,3 +1,6 @@
+import OptionsWidget from "./OptionsWidget"
+
+
 function WishlistTableBodyTrMovie({ item, WishlistItemTemplate, display, recentlyViewedBool }) {
 
   let statusstring = item['status']
@@ -13,7 +16,7 @@ const ProgressBar = () => {
           }}
           className={progressBarSegmentClassname}
         >
-          <p>{item['status']} - 100%</p>
+          <p>{item['status']}</p>
         </div>
     </div>
   );
@@ -46,9 +49,11 @@ return (
             <div>
               <h4>{item[heading]}</h4>
               <p>{`${item['mediaType']}  (${item['imdbData']['Year']})`}</p>
-            {/* <details>
-              <summary>Media Info</summary>
-              {Object.keys(item['imdbData']).map((imdbKey)=>  {
+              
+            <details>
+              <summary>Options</summary>
+              <OptionsWidget itemId={item['id']} isSeries={false} />
+              {/* {Object.keys(item['imdbData']).map((imdbKey)=>  {
                 if (imdbKey === "Poster") {
                   return (
                     <img
@@ -63,8 +68,8 @@ return (
                 } else {
                   return <p key={imdbKey}><b>{imdbKey}</b> - {item['imdbData'][imdbKey].toString()}</p>
                 }
-              })}
-            </details> */}
+              })} */}
+            </details>
             </div>
           )}
         </td>

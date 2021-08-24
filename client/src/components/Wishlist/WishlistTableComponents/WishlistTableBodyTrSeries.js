@@ -1,6 +1,8 @@
 import CheckAvailabilityWidget from "./CheckAvailabilityWidget"
+import OptionsWidget from "./OptionsWidget"
 
-function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, wishlistData, display, recentlyViewedBool, setWishlistData }) {
+
+function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, display, recentlyViewedBool, setWishlistData }) {
     let progressBarNewVals = [0, item['progress']['new'] || 0]
     let progressBarValueDownloading =[progressBarNewVals[1], item['progress']['downloading'] || 0]
     let progressBarValueComplete = [progressBarValueDownloading[0]+progressBarValueDownloading[1], item['progress']['complete'] || 0]
@@ -104,7 +106,6 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, wishlistData, d
             key={heading}
             className={classnamevar}
             style={{ width: "50%", border: recentlyViewedBool && "1px solid green" }}
-
           >
             {heading === "status" ? (
               <div>
@@ -114,14 +115,24 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, wishlistData, d
                 <br />
                 <details>
                   <summary><SeasonString /></summary>
+                  
                   {Object.keys(item['episodes']).map(seasonnumber => {
-                    return Object.keys(item['episodes'][seasonnumber]).map(episode => {
-                      return (<div className="episodeStatusDiv" key={seasonnumber.toString() + episode}>
-                        <p>S{seasonnumber}E{episode}: </p><br />
-                        <p> {item['episodes'][seasonnumber][episode]}</p>
-                      </div>)
-                    })
+                    return (
+                      <div key={seasonnumber}>
+                        <details>
+                        <summary>S{seasonnumber}</summary>
+                        {Object.keys(item['episodes'][seasonnumber]).map(episode => {
+                          let thiskey = seasonnumber+episode
+                          return (<div className="episodeStatusDiv" key={thiskey}>
+                            <p>E{episode}: </p><br />
+                            <p>{item['episodes'][seasonnumber][episode]}</p>
+                            </div>)
+                    })}
+                    </details>
+                      </div>
+                    )
                   })}
+
                 </details>
               </div>
             ) : (
@@ -130,8 +141,9 @@ function WishlistTableBodyTrSeries({ item, WishlistItemTemplate, wishlistData, d
                 <p>{`${item['mediaType']}  (${item['imdbData']['Year']})`}</p>
                 {item['isOngoing'] && <p>Ongoing</p>}
                 <details>
-                  <summary>Add Episodes</summary>
+                  <summary>Options</summary>
                   <CheckAvailabilityWidget setWishlistData={setWishlistData} imdbID={item['imdbID']} st={item['st']} et={item['et']} id={item['id']} />
+                  <OptionsWidget itemId={item['id']} isSeries={true} />
                 </details>
               {/* <details>
                 <summary>Media Info</summary>

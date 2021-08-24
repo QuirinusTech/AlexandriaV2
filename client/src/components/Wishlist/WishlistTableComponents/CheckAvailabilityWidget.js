@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom/cjs/react-router-dom.min"
-import GIFLoader from "../../GIFLoader"
+import PNGLoader from "../../PNGLoader"
+
 
 function CheckAvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
   const [widgetProgress, setWidgetProgress] = useState(null)
@@ -129,7 +130,7 @@ function CheckAvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
       case "searching":
         return (
           <div>
-            <GIFLoader />
+            <PNGLoader />
             <p>This could take a while. Please bear with us!</p>
           </div>
         );
@@ -173,7 +174,7 @@ function CheckAvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
       case "submitting":
           return (
             <div>
-              <GIFLoader />
+              <PNGLoader />
               <p>Just a moment. The slaves are tabulating your request.</p>
             </div>
           );
@@ -195,12 +196,13 @@ function CheckAvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
           </div>
         )
       default:
-        return <button className="btn_submit" onClick={CheckAvailability}>Check Availability</button>;
+        return <button className="btn_submit" onClick={CheckAvailability}>Search for episodes</button>;
     }
   }
 
   return (
-    <div className='wishListWidgetButtonRow'>
+    <div className='wishListWidgetButtonRow availabilityWidget'>
+      <h4>Add Episodes</h4>
       <WidgetInsides setWidgetProgress={setWidgetProgress} />
       {widgetProgress!==null && widgetProgress!== "done" && <button className="btn_warning" onClick={() => setWidgetProgress(null)}>Cancel</button>}
     </div>

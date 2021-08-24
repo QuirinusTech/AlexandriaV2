@@ -1,10 +1,12 @@
+// in order of priority for media entry
 const allPossibleStatuses = [
+  "error", //red
+  "failed", // cyan
+  "postponed", //orange
   "new", //aqua
   "downloading", //yellow
   "complete", //green
-  "copied", //
-  "failed", //red
-  "postponed", //orange
+  "copied", // grey
 ];
 
 const mediatypes = ["movie", "series"];

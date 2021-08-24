@@ -1,2 +1,2 @@
 # AlexandriaV2
-Version 2 of Alexandria, this time in React/Node/Express
+Version 2 of Alexandria, ported to React with Node/Express back end.

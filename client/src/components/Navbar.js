@@ -25,7 +25,7 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
             to="/addnew"
             className="nav_menu_element"
           >
-            Neu
+            Add New
           </Link>
         )}
         {is_active_user && (
@@ -35,10 +35,10 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
             to="/list"
             className="nav_menu_element"
           >
-            Liste
+            List
           </Link>
         )}
-        {is_active_user && (
+        {/* {is_active_user && (
           <Link
           onClick={hideNav}
             id="navbar_button--report"
@@ -47,7 +47,7 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
           >
             Melden
           </Link>
-        )}
+        )} */}
         {is_admin && (
           <Link
           onClick={hideNav}
@@ -65,7 +65,7 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
             to="/login"
             className="nav_menu_element"
           >
-            Login
+            Log in
           </Link>
         )}
         {is_active_user && (
@@ -75,7 +75,7 @@ function Navbar({connectionTest, connMsg, setConnectionTest, confirmConnection})
             to="/logout"
             className="nav_menu_element"
           >
-            Ausloggen
+            Log out
           </Link>
         )}
       </nav>

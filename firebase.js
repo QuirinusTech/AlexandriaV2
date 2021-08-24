@@ -4,9 +4,9 @@
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 const admin = require('firebase-admin');
-const createEmailNotification = require('./createEmailNotification')
 const serviceAccount = require("./alexandria-v2-89a5a-30e14e932b3d.json");
 const WishlistItem = require("./Classes/WishlistItem");
+const NotificationUpdateEmail = require('./MercuryService')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
