@@ -1,5 +1,5 @@
 // import { useState } from "react/cjs/react.development";
-// import CSSLoader from "../CSSLoader"
+// import CSSLoader from "../Loaders/CSSLoader"
 
 // function ReportFaultyMediaForm() {
 //   const [affectedTitle, setAffectedTitle] = useState({

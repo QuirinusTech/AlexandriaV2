@@ -2,44 +2,68 @@ import NewMessage from "./NewMessage";
 import MessageCMS from "./MessageCMS";
 import Preview from "./Preview";
 
-async function getGlobals() {
-  const data = await fetch("/globals/allPossibleStatuses", {
-    method: "POST",
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
-    .then((res) => res.json())
-    .then((data) => data);
-  return data;
-}
-
 function MsgCentreContent({
-  msgCentreMode,
+  adminActiveMode,
   adminListNotifications,
   setAdminListNotifications,
   adminListUsers,
   adminListWishlist,
+  allPossibleStatuses
 }) {
-  var allPossibleStatuses = getGlobals();
 
-  const Content = ({ msgCentreMode }) => {
-    return msgCentreMode === "Preview" ? 
-      <Preview
-        adminListNotifications={adminListNotifications}
-        users={adminListUsers}
-      />
-    :
-      <MessageCMS
-        adminListNotifications={adminListNotifications}
-        users={adminListUsers}
-        allPossibleStatuses={allPossibleStatuses}
-        wishlist={adminListWishlist}
-        setAdminListNotifications={setAdminListNotifications}
-      />
+  const Content = ({
+    adminActiveMode,
+    adminListNotifications,
+    adminListUsers,
+    allPossibleStatuses,
+    adminListWishlist,
+    setAdminListNotifications
+  }) => {
+    switch (adminActiveMode) {
+      case "msgPreview":
+        return (
+          <Preview
+            adminListNotifications={adminListNotifications}
+            adminListUsers={adminListUsers}
+          />
+        );
+      case "msgNew":
+        return (
+          <NewMessage
+            allPossibleStatuses={allPossibleStatuses}
+            adminListWishlist={adminListWishlist}
+            adminListUsers={adminListUsers}
+          />
+        );
+      case "msgCMS":
+        return (
+          <MessageCMS
+            adminListNotifications={adminListNotifications}
+            adminListUsers={adminListUsers}
+            allPossibleStatuses={allPossibleStatuses}
+            adminListWishlist={adminListWishlist}
+            setAdminListNotifications={setAdminListNotifications}
+          />
+        );
+      default:
+        return (
+          <div className="AdminCMSTitlePage--Welcome">
+            <h3>Select a mode to begin</h3>
+          </div>
+        );
     }
+  };
 
   return (
-    <div>
-      <Content msgCentreMode={msgCentreMode} />
+    <div className="AdminCMSTitlePage">
+      <Content
+        adminActiveMode={adminActiveMode}
+        adminListUsers={adminListUsers}
+        adminListWishlist={adminListWishlist}
+        adminListNotifications={adminListNotifications}
+        setAdminListNotifications={setAdminListNotifications}
+        allPossibleStatuses={allPossibleStatuses}
+      />
     </div>
   );
 }

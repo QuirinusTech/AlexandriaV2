@@ -10,7 +10,7 @@
   case "aergia":
     return {
       'response': "error",
-      'errormsg': "Account status is inactive. The administrator has been notified. Please do not attempt to log in again.",
+      'errormsg': "Account status is inactive. Please do not attempt to log in again.",
       'error_desc': "Aergia",
       responsecode: 403
     }

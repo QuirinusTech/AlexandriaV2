@@ -1,0 +1,39 @@
+{"StandardisedDataFormats" : [
+  {"Notification / Message" :
+  {
+    "messageType": "status || custom",
+    "customMessageContent": "messageString",
+    "entryStatusUpdate": "[...allPossibleStatuses]",
+    "usersVis": {
+      "username1": "FALSE if this user will not see it",
+      "username2": "TRUE if this user will see it"
+    },
+    "affectedEntry": "entry title",
+    "affectedEntryEpisodes": [ "An array of season objects containing arrays of episodes "]
+  }},
+  {"user": {
+    "userId": "uuid",
+    "username": "username",
+    "details": {
+        "name": "name",
+        "email": "email@email.com"
+      },
+    "privileges": {
+      "can_add": "bool",
+      "is_active_user": "bool",
+      "is_admin": "bool"
+    },
+    "password": "hashed and salted",
+    "preferences": {
+      "language": "'EN'",
+      "display_message_centre": "bool"
+      }
+    }
+  },
+  {
+    "wishlistEntry": {
+
+    }
+  }
+]}
+

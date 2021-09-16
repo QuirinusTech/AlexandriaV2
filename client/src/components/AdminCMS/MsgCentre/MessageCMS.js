@@ -1,4 +1,3 @@
-import NewMessage from "./NewMessage";
 import MessageEntryTemplate from "./MessageEntryTemplate";
 import { useState } from "react";
 
@@ -6,42 +5,46 @@ function MessageCMS({
   adminListNotifications,
   setAdminListNotifications,
   adminListWishlist,
-  users,
-  allPossibleStatuses,
-  wishlist
+  adminListUsers,
+  allPossibleStatuses
 }) {
   function MsgTable({ adminListNotifications }) {
     const [messageList, setMessageList] = useState(() => {
-      adminListNotifications.map(message => {
-        let obj = { ...message };
-        obj["checked"] = false;
-        obj["editable"] = false;
-        return obj;
+      let newList = adminListNotifications.filter(message => message['id'] !== 'placeholder')
+      newList.forEach(element => {
+        element["checked"] = false;
+        element["editable"] = false;
       });
+      return newList
     });
 
     function bulkFunctionSelect(e) {
-      const [checked] = e.target;
+      const {name} = e.target
       setMessageList(prevState => {
-        prevState.map(msg => {
-          msg["checked"] = checked;
-          return msg;
+        let newList = [...prevState]
+        newList.forEach(msg => {
+          msg["checked"] = name === "all" ? true : false;
         });
+        return newList
       });
     }
 
-    function bulkFunctionDelete() {
+    async function bulkFunctionDelete() {
       let bulkDelete = [];
       messageList.forEach(message => {
         if (message["checked"]) {
           bulkDelete.push(message["id"]);
         }
       });
-      let msgString = `Are you sure you want to delete these ${
-        bulkDelete.length
-      } entries?`;
 
-      // confirmation
+      // delete from db
+      const response = await fetch("/Admin/MsgCentre/deleteBulk", {
+        method: "POST",
+        body: JSON.stringify(bulkDelete)
+      }).then(res => res.json());
+
+      // delete from notificationsList
+      setAdminListNotifications(response);
     }
 
     function deleteMessage(e) {
@@ -52,18 +55,19 @@ function MessageCMS({
 
     function handleTick(e) {
       const { name, checked } = e.target;
-      setMessageList(prevState => {
-        prevState.map(message => {
-          if (message["id"] === name) {
-            message["checked"] = checked;
-          }
-          return message;
-        });
+
+      let obj = [...messageList];
+
+      obj.forEach(message => {
+        if (message["id"] === name) {
+          message["checked"] = checked;
+        }
       });
+      setMessageList(obj);
     }
 
     return (
-      <table>
+      <table className="messageCMSTable">
         <thead>
           <tr>
             <th>Select</th>
@@ -87,21 +91,23 @@ function MessageCMS({
                 setMessageList={setMessageList}
                 adminListWishlist={adminListWishlist}
                 allPossibleStatuses={allPossibleStatuses}
-                users={users}
+                adminListUsers={adminListUsers}
               />
             );
           })}
           <tr>
-            <td colSpan="7"> Bulk Actions</td>
-          </tr>
-          <tr>
-            <th onClick={bulkFunctionSelect}>Select</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th onClick={bulkFunctionDelete}>Delete</th>
+            <th>
+              <button className="adminButton--Neutral" name="all" onClick={bulkFunctionSelect}>Select All</button>
+            </th>
+            <th>
+              <button className="adminButton--Neutral" name="none" onClick={bulkFunctionSelect}>Select None</button>
+            </th>
+            <th colSpan="4">
+              
+            </th>
+            <th colSpan="2">
+              <button className="adminButton--Danger" onClick={bulkFunctionDelete}> Delete Selected</button>
+            </th>
           </tr>
         </tbody>
       </table>
@@ -110,11 +116,6 @@ function MessageCMS({
 
   return (
     <div>
-      <NewMessage
-        allPossibleStatuses={allPossibleStatuses}
-        wishlist={wishlist}
-        users={users}
-      />
       <MsgTable adminListNotifications={adminListNotifications} />
     </div>
   );

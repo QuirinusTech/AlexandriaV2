@@ -2,31 +2,16 @@ import { useState } from "react";
 import LinksList from "./LinksList"
 
 function LinkGenerator({ currentEntry }) {
-  const episodesObj = () => {
-    let obj = {};
-    let fullList = {};
-    currentEntry["outstanding"].forEach(entry => {
-      if (fullList.hasOwnProperty(entry["season"])) {
-        fullList[entry["season"]].push(entry["episode"]);
-      } else {
-        fullList[entry["season"]] = [entry["episode"]];
-      }
-    });
 
-    obj["sf"] = Math.min(...Object.keys(obj["fullList"]));
-    obj["ef"] = Math.min(...fullList[obj["sf"]]);
-    obj["st"] = Math.max(...Object.keys(obj["fullList"]));
-    obj["ef"] = Math.max(...fullList[obj["st"]]);
-    obj["fullList"] = fullList;
-    return obj;
-  };
+
   const [sortBy, setSortBy] = useState("seeds");
  
-  return (
+  return (<>
     <div className="LinkGenerator">
-      <h4>Settings</h4>
+    <h4>Link Generator</h4>
+      <h5>Settings</h5>
       <div>
-        <h5>Sort by</h5>
+        <p>Sort by</p>
         <label>
           <input
             type="radio"
@@ -58,13 +43,13 @@ function LinkGenerator({ currentEntry }) {
           Name
         </label>
       </div>
-      <h4>Link Buttons</h4>
+      <h5>Link Buttons</h5>
       <LinksList
         currentEntry={currentEntry}
         sortBy={sortBy}
-        episodesObj={episodesObj}
        />
     </div>
+    </>
   );
 }
 

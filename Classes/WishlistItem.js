@@ -1,6 +1,8 @@
+const fetch = require('node-fetch');
+require('dotenv').config();
 const { v4 } = require("uuid");
-const fetch = require('node-fetch') ;
-const {allPossibleStatuses} =require("./globals");
+const {allPossibleStatuses} = require("./globals");
+
 
 class WishlistItem {
 
@@ -9,7 +11,12 @@ class WishlistItem {
     obj.addedBy = data.addedBy;
     obj.id = v4();
     obj.mediaType = data.mediaType;
-    obj.status = "new";
+    let status = ''
+    if (typeof(data['status']) === 'string') {
+      obj.status = data['status']
+    } else {
+      obj.status = "new"
+    }
     obj.imdbID = data.imdbID;
     obj.name = data.name;
     obj.dateAdded = data.dateAdded;
@@ -21,7 +28,12 @@ class WishlistItem {
       obj.st = data.st;
       obj.et = data.et;
       obj.isOngoing = data['isOngoing'];
-      obj.episodes = await this.parseEpisodeVars(data.sf, data.ef, data.st, data.et, data.imdbID);
+      let episodes = await this.parseEpisodeVars(data.sf, data.ef, data.st, data.et, data.imdbID);
+      obj.episodes = episodes
+      if (typeof data.et !== "number") {
+        let keysarr = Object.keys(episodes[data['st']])
+        obj.et = Math.max(...keysarr)
+      }
     }
     return obj
   }
@@ -55,7 +67,7 @@ class WishlistItem {
     if (!isNaN(parseInt(et))) {
       et = parseInt(et)
     }
-    console.log(sf, ef, st, et)
+    // console.log(sf, ef, st, et)
     // no existing episodes
     if (st-sf === 0) {
       // only one season
@@ -71,10 +83,10 @@ class WishlistItem {
         for (let index = sf; index <= st; index++) {
           episodesvar[index] = {}
         }
-        console.log(episodesvar)
+        // console.log(episodesvar)
         for (let j = sf; j <= st; j++) {
           const maxEpisodes = await this.GetMaxEpisodes(j, imdbID)
-          console.log(maxEpisodes)
+          // console.log(maxEpisodes)
           episodesvar[j] = this.addSeason(j, ef, maxEpisodes)
         }
         return episodesvar;
@@ -87,15 +99,16 @@ class WishlistItem {
      * @return {integer} integer number of episodes in the given season
      */
     static async GetMaxEpisodes(season, imdbID) {
-    console.log('getMaxEpisodes', season)
-    const result = await fetch(`https://www.omdbapi.com/?t=${imdbID}&apikey=5fadb6ca&season=${season}`, {method: 'POST'})
+    // console.log('getMaxEpisodes', season)
+    const result = await fetch(`https://www.omdbapi.com/?t=${imdbID}&apikey=${process.env.imdbAPI_key}&season=${season}`, {method: 'POST'})
     .then(response => response.json())
     .then(result => {
       return parseInt(result.Episodes[result.Episodes.length-1].Episode) 
     })
-    console.log(result)
+   // console.log(result)
     return result
   }
+
 
   /** given a range, returns a season obect with nested numerical values corresponding to episodes. Initial values of all episodes is "new"
    * @param {int} season int: season number
@@ -104,7 +117,7 @@ class WishlistItem {
    * @returns {object} Season object which is nested inside the 'episodes' key of the wishlist item.
    */
   static addSeason(season, ef, et) {
-    console.log("Add Episodes ", season, ef, et)
+   // console.log("Add Episodes ", season, ef, et)
     let obj = {};
     obj[season] = {}
     for (let i = ef; i <= et; i++) {
@@ -113,23 +126,77 @@ class WishlistItem {
     return obj[season]
   }
 
-  static addEpisodes(data, episodes) {
+  static appendEpisodes(data, episodes) {
     const {st, et, newEpisodes} = data
     let episodesObj = {...episodes}
-    let newet = 0
-    newet += parseInt(newEpisodes) + parseInt(et)
-    Object.keys(episodesObj).forEach(ep => console.log(ep, episodesObj[ep]))
-    console.log("et", et, "newet", newet)
-    for (let index = parseInt(et)+1; index <= newet; index++) {
-      episodesObj[st][index.toString()] = "new"
-    }
-    if (data.hasOwnProperty("newSeasons")) {
-      data["newSeasons"].forEach((thisNewSeason) => {
-        let {season, maxEpisodes, selected} = thisNewSeason
-        if (selected) {
-          episodesObj[season] = WishlistItem.addSeason(parseInt(season), 1, parseInt(maxEpisodes))
+    let newet = parseInt(newEpisodes) + parseInt(et)
+    // console.log(ep, episodesObj[ep]))
+    // console.log("et", et, "newet", newet)
+    Object.keys(episodesObj).forEach(ep => {
+      for (let index = parseInt(et)+1; index <= newet; index++) {
+        episodesObj[st][index.toString()] = "new"
+      }
+      if (data.hasOwnProperty("newSeasons")) {
+        data["newSeasons"].forEach((thisNewSeason) => {
+          let {season, maxEpisodes, selected} = thisNewSeason
+          if (selected) {
+            episodesObj[season] = WishlistItem.addSeason(parseInt(season), 1, parseInt(maxEpisodes))
+          }
+        });
+      }
+    })
+    return episodesObj
+  }
+
+  static shrinkEpisodesObj(episodes, range) {
+
+    let episodesObj = {...episodes}
+
+    Object.keys(episodesObj).forEach(season => {
+      if (season < range['sf']) {
+        delete episodesObj[season]
+      } else if (season === range['sf']) {
+        Object.keys(episodesObj[season]).forEach(ep => {
+          if (ep < range['ef'] ) {
+            delete episodesObj[season][ep]
+          }
+        })
+      }
+      if (season > range['st']) {
+        delete episodesObj[season]
+      } else if (season === range['st']) {
+        Object.keys(episodesObj[season]).forEach(ep => {
+            if (ep > range['et'] ) {
+              delete episodesObj[season][ep]
+            }
+          }
+        )}
+    })
+    return episodesObj
+  }
+
+  static async prependEpisodes(oldEpisodes, oldSf, oldEf, newSf, newEf, imdbID) {
+    let episodesObj = {...oldEpisodes}
+    let multiSeason = oldEf-oldSf > 0
+    for (let season = newSf; season <= oldSf; season++) {
+      let episodeMaxVal = 0
+      if (multiSeason && season === oldSf && oldEf === 1) {
+        break;
+      } else if (season === oldSf && oldEf > 1) {
+        episodesObj[season] = {}
+        episodeMaxVal = oldEf
+        let episodeInitval = multiSeason ? 1 : newEf
+        for (let episode = episodeInitval; episode < episodeMaxVal; episode++) {
+          episodesObj[season][episode] = 'new'
         }
-      });
+      } else {
+        episodesObj[season] = {}
+        episodeMaxVal = await this.GetMaxEpisodes(season, imdbID)
+        let episodeInitval = season === newSf ? newEf : 1
+        for (let episode = episodeInitval; episode <= episodeMaxVal; episode++) {
+          episodesObj[season][episode] = 'new'
+        }
+      }
     }
     return episodesObj
   }
@@ -156,43 +223,39 @@ class WishlistItem {
     }
   }
 
-  static getFullEpisodeList(episodesObj) {
-    let seasons = Object.keys(episodesObj);
-    let fullList = [];
-    for (let i = 0; i < seasons.length; i++) {
-      let seasonNumber = seasons[i];
-      let episodes = Object.keys(episodesObj[seasonNumber]);
-      episodes.forEach((episode) => {
-        fullList.push({
-          [`S${seasonNumber}E${episode}`]: episodesObj[seasonNumber][episode],
-        });
-      });
-    }
-    return fullList;
-  }
-
   static setProgress(episodesObj, status="new") {
     if (typeof(episodesObj) !== "object") {
       return status
     }
-    const fullList = this.getFullEpisodeList(episodesObj)
-    let progress = {};
-    fullList.forEach((item) => {
-      const value = Object.values(item);
-      if (!Number.isInteger(progress[value])) {
-        progress[value] = 0;
-      }
-      progress[value] = progress[value] + 1;
-    });
-    Object.keys(progress).forEach((key) => {
-      progress[key] = parseFloat(
-        ((progress[key] / fullList.length) * 100).toFixed(2)
-      );
-    });
-    return progress;
+
+    let allStatuses = []
+    Object.keys(episodesObj).forEach(season => {
+      Object.keys(episodesObj[season]).forEach(ep => {
+        if (episodesObj[season][ep] !== "copied") {
+        allStatuses.push(episodesObj[season][ep])
+        }
+      })
+    })
+    let usedStatuses = Array.from(new Set([...allStatuses]))
+    if (usedStatuses.length === 0) {
+      return {copied: 100}
+    } else if (usedStatuses.length === 1) {
+      return {[usedStatuses[0]]: 100}
+    } else {
+      let counters = {};
+      usedStatuses.forEach(status => {
+        counters[status] = 0
+      })
+      allStatuses.forEach(status => {
+          counters[status]++
+      })
+      let progress = {}
+      Object.keys(counters).forEach(status => {
+        progress[status] = (counters[status] / allStatuses.length * 100).toFixed(2)
+      })
+      return progress;
+    }
   }
-
-
 }
 
 module.exports = WishlistItem

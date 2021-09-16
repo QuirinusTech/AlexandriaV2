@@ -1,19 +1,20 @@
-function FormSearch({
+const FormSearch = ({
   handleSubmit,
   field,
   handleChange,
   searchBy,
   isSearching,
   errorMsg
-}) {
+}) => {
   return (
-    <div>
+    <div className="FormSearch">
       <form onSubmit={handleSubmit}>
         <h2>Let's get some info first:</h2>
         {errorMsg !== null && <div className="FormSearch--NoResults">
           <p>No results found for <b>{errorMsg[1]}</b>. </p>
           <p>Please check your spelling and try again. </p>
-          <p>Error from IMDB: {errorMsg[0]}</p>
+          <p>Error from IMDB: </p>
+          <p className="warning"><b>{errorMsg[0]}</b></p>
           </div>}
         <div className="flex-left" id="left">
         <label className="formsearchSearchByRadioButton">
@@ -43,10 +44,10 @@ function FormSearch({
         </div>
 
         <input
-        className="formsearchFieldInput"
+          className="formsearchFieldInput"
           type="text"
-          name={field}
-          value={field.value}
+          name="field"
+          value={field}
           onChange={handleChange}
         />
         <input className={isSearching ? "buttonload" : ""} type="submit" value={isSearching ? "searching..." : "Search!"} />

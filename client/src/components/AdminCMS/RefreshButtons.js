@@ -1,43 +1,45 @@
 function RefreshButtons({ refreshButtonsActivity, refreshData }) {
   return (
+    <>
     <div className="RefreshButtons">
       <button
-        disabled={refreshButtonsActivity["wishlist"] && "disabled"}
+        disabled={refreshButtonsActivity["wishlist"]}
         className={
           refreshButtonsActivity["wishlist"]
-            ? "adminRefreshButton--loading"
+            ? "adminRefreshButton loading"
             : "adminRefreshButton"
         }
         name="wishlist"
         onClick={refreshData}
       >
-        Wishlist
+        Refresh Wishlist
       </button>
       <button
-        disabled={refreshButtonsActivity["messages"] && "disabled"}
+        disabled={refreshButtonsActivity["messages"]}
         className={
           refreshButtonsActivity["messages"]
-            ? "adminRefreshButton--loading"
+            ? "adminRefreshButton loading"
             : "adminRefreshButton"
         }
         name="messages"
         onClick={refreshData}
       >
-        Messages
+        Refresh Messages
       </button>
       <button
-        disabled={refreshButtonsActivity["users"] && "disabled"}
+        disabled={refreshButtonsActivity["users"]}
         className={
           refreshButtonsActivity["users"]
-            ? "adminRefreshButton--loading"
+            ? "adminRefreshButton loading"
             : "adminRefreshButton"
         }
         name="users"
         onClick={refreshData}
       >
-        Users
+        Refresh Users List
       </button>
     </div>
+    </>
   );
 }
 

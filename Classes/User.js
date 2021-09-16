@@ -8,15 +8,20 @@ class User {
     let obj = {}  
     obj.password = await this.set_password(x["password"]);
     obj.userId = uuid.v4();
-    obj.name = x["name"];
     obj.username = x["username"];
-    obj.email = x["email"]
+    obj.details = {
+      email: x["email"],
+      name: x["name"]
+    }
+    obj.preferences = {
+      display_message_centre: true,
+      language: "EN"
+    }
     obj.privileges = {
       "is_admin" : false,
       "can_add" : false,
       "is_active_user" : false
     }
-    obj.display_message_centre = true;
     return obj
   }
 

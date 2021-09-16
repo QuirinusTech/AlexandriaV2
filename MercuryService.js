@@ -32,5 +32,50 @@ module.exports = {
         console.log('Email sent: ' + info.response);
       }
     });
+  },
+  passwordResetMail: async function passwordResetMail(validationCode, username, email) {
+
+    return new Promise((resolve, reject) => {
+
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'quirinus.mercury.service@gmail.com',
+        pass: process.env.mercuryServiceAppPassword
+      }
+    });
+
+    let htmlstring = `<div><div><img src="cid:quirinusLogo"/></div><p>You requested a password reset.</p><p>To reset your password, please use the following link:</p><p>`
+    htmlstring += `<a href="https://quirinus-alexandriav2.herokuapp.com/passwordReset/${username}/${validationCode}">Reset Password.</a></p>`
+    htmlstring += "<p>If this doesn't work please visit https://quirinus-alexandriav2.herokuapp.com/passwordReset/ and enter your username and validation code manually.</p>"
+    htmlstring += "<p>Your username is: <b>" + username + "</b></p>"
+    htmlstring += "<p>Your code is: <b>" + validationCode + "</b></p></div>"
+
+    let textmessage = `Please visit https://quirinus-alexandriav2.herokuapp.com/passwordReset/ and enter your username (${username}) and validation code (${validationCode}).`
+
+    var mailOptions = {
+      from: 'quirinus.mercury.service@gmail.com',
+      to: email,
+      subject: 'Notification update - Alexandria V2',
+      text: textmessage,
+      html: htmlstring,
+      attachments: [{
+        filename: 'QuirinusTech.png',
+        path: '/client/public/img/QuirinusTech.png',
+        cid: 'quirinusLogo' //same cid value as in the html img src
+    }]
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        resolve(false)
+      } else {
+        console.log('Email sent: ' + info.response);
+        resolve(true)
+      }
+    });
+
+    })
   }
 }

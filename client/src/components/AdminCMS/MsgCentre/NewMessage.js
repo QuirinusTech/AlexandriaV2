@@ -1,113 +1,141 @@
 import { useState } from "react";
-import GIFLoader from "../../GIFLoader.js"
+import GIFLoader from "../../Loaders/GIFLoader.js";
+import AffectedEntryEpisodeListCheckboxes from "./AffectedEntryEpisodesListCheckboxes";
 
-function NewMessage({ wishlist, users, allPossibleStatuses }) {
+function NewMessage({
+  adminListWishlist,
+  adminListUsers,
+  allPossibleStatuses
+}) {
   const [messageType, setMessageType] = useState("custom");
   const [customMessageContent, setCustomMessageContent] = useState("");
   const [entryStatusUpdate, setEntryStatusUpdate] = useState("");
-  const [usersVis, setUsersVis] = useState(()=> {
-    let obj = {}
-    users.forEach(user => {
-      obj[user] = false
-    })
-    return obj
+  const [usersVis, setUsersVis] = useState(() => {
+    let obj = {};
+    adminListUsers.forEach(user => {
+      obj[user["username"]] = false;
+    });
+    return obj;
   });
-  const [affectedEntry, setAffectedEntry] = useState("");
-  const [loading, setLoading] = useState(false)
-  const [affectedEntryEpisodesList, setAffectedEntryEpisodesList] = useState(null)
+  const [affectedEntry, setAffectedEntry] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [affectedEntryEpisodesList, setAffectedEntryEpisodesList] = useState(
+    null
+  );
+  const [wishlistFilters, setWishlistFilters] = useState({
+    addedBy: "reset",
+    mediaType: "reset",
+    status: "reset"
+  });
+  const [filteredWishlist, setFilteredWishlist] = useState(
+    sortWishlist([...adminListWishlist])
+  );
+
+  function filterEntriesSelect(e) {
+    const { name, value } = e.target;
+    let newFilters = { ...wishlistFilters, [name]: value };
+
+    let firstFilter = [];
+    let secondFilter = [];
+    let thirdFilter = [];
+
+    if (newFilters["mediaType"] !== "reset") {
+      firstFilter = adminListWishlist.filter(
+        entry => entry["mediaType"] === newFilters["mediaType"]
+      );
+      // console.log("firstFilter TRUE", newFilters['mediaType'], firstFilter)
+    } else {
+      firstFilter = [...adminListWishlist];
+      // console.log("firstFilter FALSE", newFilters['mediaType'], firstFilter)
+    }
+
+    if (newFilters["addedBy"] !== "reset") {
+      secondFilter = firstFilter.filter(
+        entry => entry["addedBy"] === newFilters["addedBy"]
+      );
+      // console.log("secondFilter TRUE", newFilters['addedBy'], secondFilter)
+    } else {
+      secondFilter = [...firstFilter];
+      // console.log("secondFilter FALSE", newFilters['addedBy'], secondFilter)
+    }
+
+    if (newFilters["status"] !== "reset") {
+      thirdFilter = secondFilter.filter(
+        entry => entry["status"] === newFilters["status"]
+      );
+      // console.log("secondFilter TRUE", newFilters['addedBy'], secondFilter)
+    } else {
+      thirdFilter = [...secondFilter];
+      // console.log("secondFilter FALSE", newFilters['addedBy'], secondFilter)
+    }
+
+    setWishlistFilters(newFilters);
+    setFilteredWishlist(sortWishlist(thirdFilter));
+  }
+
+  function resetFilters() {
+    setWishlistFilters({
+                  addedBy: "reset",
+                  mediaType: "reset",
+                  status: "reset"
+                });
+    setFilteredWishlist(sortWishlist([...adminListWishlist]))
+  }
+
+  function sortWishlist(array) {
+    return array.sort(function(a, b) {
+      var x = a["name"];
+      var y = b["name"];
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+  }
 
   function affectedEntryCheckboxHandler(e) {
-    const {name, value, checked} = e.target
+    const { name, value, checked } = e.target;
     if (name === "seasonCheckbox") {
-      let season = parseInt(value.slice(1))
+      let season = parseInt(value.slice(1));
       setAffectedEntryEpisodesList(prevState => {
-        let obj = {...prevState}
+        let obj = { ...prevState };
         Object.keys(obj[season]).forEach(episode => {
-          obj[season][episode] = checked
-        })
-        return obj
-      })
+          obj[season][episode] = checked;
+        });
+        return obj;
+      });
     } else {
-      let season = parseInt(value.slice(1,3))
-      let episode = parseInt(value.slice(4))
+      let season = parseInt(value.slice(1, 3));
+      let episode = parseInt(value.slice(4));
       setAffectedEntryEpisodesList(prevState => {
-        let obj = {...prevState}
-        obj[season][episode] = checked
-        return obj
-      })
+        let obj = { ...prevState };
+        obj[season][episode] = checked;
+        return obj;
+      });
     }
   }
 
   function assignAffectedEntry(e) {
-    setAffectedEntry(e.target.value);
-    for (const entry in wishlist) {
-      if (entry["id"] === e.target.value) {
-        // set visibility for the owner
-        let usersVisobj = {...usersVis}
-        usersVisobj[entry['addedBy']] = true
-        setUsersVis(usersVisobj)
+    let entry = adminListWishlist.filter(
+      entry => entry["id"] === e.target.value
+    )[0];
 
-        let obj = {};
-        Object.keys(entry["episodes"]).forEach(season => {
-          obj[season] = {
-            season: false,
-          };
-          Object.keys(entry["episodes"][season]).forEach(episode => {
+    // set visibility for the owner
+    let usersVisobj = { ...usersVis };
+    usersVisobj[entry["addedBy"]] = true;
+    setUsersVis(usersVisobj);
+
+    if (entry["mediaType"] === "series") {
+      let obj = {};
+      Object.keys(entry["episodes"]).forEach(season => {
+        obj[season] = {
+          season: false
+        };
+        Object.keys(entry["episodes"][season]).forEach(episode => {
           obj[season][episode] = false;
-          });
         });
-        
-        setAffectedEntryEpisodesList(obj);
-        break;
-      }
+      });
+      setAffectedEntryEpisodesList(obj);
     }
+    setAffectedEntry(entry);
   }
-
-
-  const AffectedEntryEpisodeListCheckboxes = ({
-    affectedEntry,
-    affectedEntryCheckboxHandler,
-    affectedEntryEpisodesList
-  }) => {
-  
-    return Object.keys(affectedEntry["episodes"]).map(season => {
-      let seasonString = "S" + season < 10 ? "0" + season : season;
-      return (
-        <details>
-          <div key={season}>
-            <h4>Season {season}</h4>
-            <summary>
-              <input
-                name="seasonCheckbox"
-                value={season}
-                type="checkbox"
-                checked={affectedEntryEpisodesList[season]}
-                onChange={affectedEntryCheckboxHandler}
-              />
-              {seasonString} (Select All)
-            </summary>
-            {affectedEntry["episodes"][season].map(episode => {
-              let episodeString =
-                "E" + episode < 10 ? "0" + episode : episode;
-              return (
-                <label>
-                  <input
-                    name="episodeCheckbox"
-                    value={seasonString+episodeString}
-                    type="checkbox"
-                    checked={affectedEntryEpisodesList[season]}
-                    onChange={affectedEntryCheckboxHandler}
-                  />
-                  {episodeString}
-                </label>
-              );
-            })}
-          </div>
-        </details>
-      );
-    });
-  }
-
 
   function usersTickboxChange(e) {
     const { name, checked } = e.target;
@@ -116,137 +144,253 @@ function NewMessage({ wishlist, users, allPossibleStatuses }) {
     setUsersVis(usersVisObj);
   }
 
-  async function submit(e) {
-  e.preventDefault();
-  let affectedEntryEpisodes = [];
+  async function createNewMessage(e) {
+    let affectedEntryEpisodes = [];
 
-  Object.keys(affectedEntryEpisodesList).forEach(season => {
-    let seasonString = "S" + season < 10 ? "0" + season : season
-    if (affectedEntryEpisodesList[season]['season']) {
-      affectedEntryEpisodes.push(seasonString)
-    } else {
-      let thisSeason = []
-      Object.keys(affectedEntryEpisodesList[season]).forEach(episode => {
-        if (affectedEntryEpisodesList[season][episode] && episode !== "season") {
-          thisSeason.push(episode)
+    if (affectedEntryEpisodesList !== null) {
+
+    Object.keys(affectedEntryEpisodesList).forEach(season => {
+      let seasonString = "S" + season < 10 ? "0" + season : season;
+      if (affectedEntryEpisodesList[season]["season"]) {
+        affectedEntryEpisodes.push(seasonString);
+      } else {
+        let thisSeason = [];
+        Object.keys(affectedEntryEpisodesList[season]).forEach(episode => {
+          if (
+            affectedEntryEpisodesList[season][episode] &&
+            episode !== "season"
+          ) {
+            thisSeason.push(episode);
+          }
+        });
+        if (thisSeason.length > 0) {
+          affectedEntryEpisodes.push({ season: [...thisSeason] });
         }
-      })
-      if (thisSeason.length > 0) {
-        affectedEntryEpisodes.push({ season: [...thisSeason] })
       }
+    });
     }
-  })
 
-  let messageVar = {
-    messageType,
-    customMessageContent,
-    entryStatusUpdate,
-    usersVis,
-    affectedEntry,
-    affectedEntryEpisodes
-  };
-  setLoading(true);
-  const response = await fetch("/Admin/MsgCentre/New", {
-    method: "POST",
-    body: JSON.stringify(messageVar),
-    headers: { "Content-type": "application/json; charset=UTF-8" }
-  })
-    .then(res => res.json())
-    .then(data => data);
-  if (response["success"]) {
-    // popup with confirmation
-  } else {
-    // errorHandler
+    let messageVar = {
+      messageType,
+      customMessageContent,
+      entryStatusUpdate,
+      usersVis,
+      affectedEntry: affectedEntry === null ? "custom" : affectedEntry['name'],
+      affectedEntryEpisodes
+    };
+    console.log(messageVar)
+    try {
+      setLoading(true);
+    const response = await fetch("/Admin/MsgCentre/New", {
+      method: "POST",
+      body: JSON.stringify(messageVar),
+      headers: { "Content-type": "application/json; charset=UTF-8" }
+    })
+      .then(res => res.json())
+    if (response["success"]) {
+      alert(response['payload'])
+      reset()
+      // popup with confirmation
+    } else {
+      alert(response['payload'])
+    }
+    } catch (e) {
+      alert(e.message)
+      console.log('%cNewMessage.js line:198 error', 'color: #007acc;', e);
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
+  function reset() {
+    setMessageType('custom')
+    setCustomMessageContent('')
+    setEntryStatusUpdate('')
+    setUsersVis(() => {
+    let obj = {};
+    adminListUsers.forEach(user => {
+      obj[user["username"]] = false;
+    });
+    return obj;
+    });
+    setAffectedEntry(null)
+    setLoading(false)
+    setAffectedEntryEpisodesList(null)
+    setWishlistFilters({
+    addedBy: "reset",
+    mediaType: "reset",
+    status: "reset"
+    })
+    setFilteredWishlist(
+    sortWishlist([...adminListWishlist])
+  )
+  }
 
-  return loading ? <GIFLoader /> : (
+  return loading ? (
+    <GIFLoader />
+  ) : (
     <div className="MsgCentre--NewMessage">
-      <h2>New Message</h2>
+      <h3>New Message</h3>
+
       <div className="flexdr mar10px">
         <select
           value={messageType}
           name="messageType"
           id="manual_message_type_select"
-          onchange={(e) => {
+          onChange={e => {
             setMessageType(e.target.value);
           }}
         >
-          <option value="custom" default="">
-            custom
-          </option>
+          <option value="custom">custom</option>
           <option value="status">status</option>
         </select>
+        {messageType === "status" && (
+          <select
+            name="manual_message_status"
+            id="manual_message_status_select"
+            value={entryStatusUpdate}
+            onChange={e => {
+              setEntryStatusUpdate(e.target.value);
+            }}
+          >
+            <option value="" default="" hidden>
+              Status Update Options
+            </option>
+            {allPossibleStatuses.map(status => {
+              return (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              );
+            })}
+          </select>
+        )}
       </div>
 
-      <div className="flexdr w70perc" id="manual_message_custom_text_div">
-        <textarea
-          type="text"
-          id="admin_manual_message"
-          name="customMessageContent"
-          placeholder="Custom message"
-          value={customMessageContent}
-          onChange={(e) => setCustomMessageContent(e.target.value)}
-        />
-      </div>
+      {messageType === "custom" && (
+        <div className="flexdr w70perc" id="manual_message_custom_text_div">
+          <textarea
+            type="text"
+            id="admin_manual_message"
+            name="customMessageContent"
+            placeholder="Custom message"
+            value={customMessageContent}
+            onChange={e => setCustomMessageContent(e.target.value)}
+          />
+        </div>
+      )}
 
-      <div className="w70perc acc" id="manual_message_status_update_div">
-        <select
-          name="manual_message_status"
-          id="manual_message_status_select"
-          value={entryStatusUpdate}
-          onChange={(e) => {
-            setEntryStatusUpdate(e.target.value);
-          }}
-        >
-          <option value="" default="" hidden="">
-            Status Update Options
-          </option>
-          {allPossibleStatuses.map((status) => {
-            return (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            );
-          })}
-        </select>
-        <select
-          name="effectedEntry"
-          id="affectedEntry"
-          value={affectedEntry}
-          onChange={assignAffectedEntry}
-        >
-          <option value="" default="" hidden="">
-            Select a series
-          </option>
-          {wishlist.map((entry) => {
-            let titlestring = `${entry["title"]} - ${entry["imdbid"]} (Added by ${entry["addedBy"]})`;
-            return (
-              <option key={entry["id"]} value={entry["id"]}>
-                {titlestring}
-              </option>
-            );
-          })}
-        </select>
-        <div>
-          {affectedEntry !== null && <AffectedEntryEpisodeListCheckboxes
+      <div className="NewMessageEntrySelectRow">
+
+        <details className="FilterEntriesBy" open>
+          <summary>Filter Entries</summary>
+          <div>
+            <label>Owner</label>
+            <select
+              value={wishlistFilters["addedBy"]}
+              name="addedBy"
+              onChange={filterEntriesSelect}
+            >
+              <option value="reset">none</option>
+              {adminListUsers.map(user => {
+                return (
+                  <option value={user["username"]}>{user["username"]}</option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label>Media Type</label>
+            <select
+              value={wishlistFilters["mediaType"]}
+              name="mediaType"
+              onChange={filterEntriesSelect}
+            >
+              <option value="reset">none</option>
+              <option value="series">Series</option>
+              <option value="movie">Movie</option>
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select
+              value={wishlistFilters["status"]}
+              name="status"
+              onChange={filterEntriesSelect}
+            >
+              <option value="reset">none</option>
+              {allPossibleStatuses.map(status => {
+                return <option value={status}>{status}</option>;
+              })}
+            </select>
+          </div>
+        </details>
+        
+
+        {Array.isArray(filteredWishlist) && filteredWishlist.length > 0 && (
+          <select
+            name="affectedEntry"
+            id="affectedEntry"
+            value={affectedEntry !== null ? affectedEntry["id"] : ""}
+            onChange={assignAffectedEntry}
+          >
+            <option value="" hidden>
+              Select a series / movie
+            </option>
+            {filteredWishlist.map(entry => {
+              let titlestring = `${entry["name"]} - ${entry["imdbID"]} - (owner: ${entry["addedBy"]})`;
+              return (
+                <option key={entry["id"]} value={entry["id"]}>
+                  {titlestring}
+                </option>
+              );
+            })}
+          </select>
+        )}
+        {Array.isArray(filteredWishlist) && filteredWishlist.length === 0 && (
+          <div className="filtersFailed">
+            <p>
+              No{" "}
+              {wishlistFilters["mediaType"] === "reset"
+                ? "media"
+                : wishlistFilters["mediaType"] === "series" ? wishlistFilters["mediaType"] : "movies"}{" "}
+              owned by{" "}
+              {wishlistFilters["addedBy"] === "reset"
+                ? "any user"
+                : wishlistFilters["addedBy"]}{" "}
+              in{" "}
+              {wishlistFilters["status"] === "reset"
+                ? "any"
+                : wishlistFilters["status"]}{" "}
+              status.
+            </p>
+            <button
+              onClick={resetFilters}
+            >
+              Reset Filters?
+            </button>
+          </div>
+        )}
+      </div>
+      <div>
+        {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
+          <AffectedEntryEpisodeListCheckboxes
             affectedEntry={affectedEntry}
             affectedEntryCheckboxHandler={affectedEntryCheckboxHandler}
             affectedEntryEpisodesList={affectedEntryEpisodesList}
-           />}
-        </div>
+          />
+        )}
       </div>
 
-      <div className="w30perc flexdc">
+      <div className="usersVisTable">
         <table id="usertickboxes" className="usertickboxestable w60perc">
           <tbody>
             <tr>
-              <th colspan="2">
+              <th colSpan="2">
                 <h4>Visible to:</h4>
               </th>
             </tr>
-            {users.map((user) => {
+            {adminListUsers.map(user => {
               return (
                 <tr className="usersVisTableRow" key={user["username"]}>
                   <td>
@@ -255,7 +399,7 @@ function NewMessage({ wishlist, users, allPossibleStatuses }) {
                       type="checkbox"
                       name={user["username"]}
                       value={user["username"]}
-                      checked={usersVis[user]}
+                      checked={usersVis[user["username"]]}
                       onChange={usersTickboxChange}
                     />
                   </td>
@@ -270,7 +414,10 @@ function NewMessage({ wishlist, users, allPossibleStatuses }) {
       </div>
 
       <div className="jcc mar10px">
-        <button className="adminpagebutton" onclick={submit}>
+      <button className="adminButton--Cancel" onClick={reset}>
+          Reset Form
+        </button>
+        <button className="adminButton--Submit" onClick={createNewMessage}>
           Submit
         </button>
       </div>

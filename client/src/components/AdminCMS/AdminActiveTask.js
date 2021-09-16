@@ -1,14 +1,21 @@
-import AdminWishlist from "./AdminWishlist";
+import AdminWishlist from "./Wishlist/AdminWishlist";
 import WorkflowContent from "./Workflow/WorkflowContent";
 import MsgCentreContent from "./MsgCentre/MsgCentreContent"
 import UserManagerContent from "./UserManager/UserManagerContent"
 
 function AdminActiveTask({
   adminActiveTask,
+  adminActiveMode,
+  setAdminActiveMode,
   adminListWishlist,
-  adminListWorkflow,
+  setAdminListWishlist,
   adminListNotifications,
+  setAdminListNotifications,
+  adminListWorkflow,
   adminListUsers,
+  setAdminListUsers,
+  allPossibleStatuses,
+  refreshData
 }) {
   const TaskContent = ({
     adminActiveTask,
@@ -16,33 +23,57 @@ function AdminActiveTask({
     adminListWorkflow,
     adminListNotifications,
     adminListUsers,
+    allPossibleStatuses,
+    setAdminActiveMode,
+    refreshData
   }) => {
     switch (adminActiveTask) {
       case "WishlistCMS":
-        return <AdminWishlist adminListWishlist={adminListWishlist} />;
+        return (
+          <AdminWishlist
+            adminActiveMode={adminActiveMode}
+            adminListWishlist={adminListWishlist}
+            allPossibleStatuses={allPossibleStatuses}
+            setAdminListWishlist={setAdminListWishlist}
+            adminListUsers={adminListUsers}
+          />
+        );
       case "MsgCentre":
         return (
           <MsgCentreContent
             adminListNotifications={adminListNotifications}
+            setAdminListNotifications={setAdminListNotifications}
+            adminListUsers={adminListUsers}
+            adminListWishlist={adminListWishlist}
+            adminActiveMode={adminActiveMode}
+            allPossibleStatuses={allPossibleStatuses}
           />
         );
       case "Workflow":
         return (
           <WorkflowContent
+            refreshData={refreshData}
             adminListWishlist={adminListWishlist}
+            setAdminListWishlist={setAdminListWishlist}
+            adminActiveMode={adminActiveMode}
+            setAdminActiveMode={setAdminActiveMode}
           />
         );
       case "UserManager":
         return (
+          <div>
           <UserManagerContent
             adminListUsers={adminListUsers}
+            setAdminListUsers={setAdminListUsers}
+            adminActiveMode={adminActiveMode}
           />
+          </div>
         );
       default:
         return (
-          <div>
+          <div className="AdminCMSTitlePage--Welcome">
             <h4>Welcome to the</h4>
-            <h3>Alexandria Content Management System</h3>
+            <h3>Adminstrator Content Management System</h3>
             <h5>Created by Matthew Gird</h5>
           </div>
         );
@@ -50,13 +81,16 @@ function AdminActiveTask({
   };
 
   return (
-    <div>
+    <div className="AdminActiveTask">
       <TaskContent
         adminActiveTask={adminActiveTask}
         adminListWishlist={adminListWishlist}
         adminListWorkflow={adminListWorkflow}
         adminListNotifications={adminListNotifications}
         adminListUsers={adminListUsers}
+        allPossibleStatuses={allPossibleStatuses}
+        setAdminActiveMode={setAdminActiveMode}
+        refreshData={refreshData}
       />
     </div>
   );

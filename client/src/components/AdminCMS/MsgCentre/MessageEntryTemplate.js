@@ -8,7 +8,7 @@ function MessageEntryTemplate({
   setMessageList,
   adminListWishlist,
   allPossibleStatuses,
-  users
+  adminListUsers
 }) {
   const [clickDelete, setClickDelete] = useState(false);
   const [editable, setEditable] = useState(false);
@@ -20,7 +20,7 @@ function MessageEntryTemplate({
       setMessageList={setMessageList}
       adminListWishlist={adminListWishlist}
       allPossibleStatuses={allPossibleStatuses}
-      users={users}
+      adminListUsers={adminListUsers}
     />
   ) : (
     <tr>
@@ -34,35 +34,46 @@ function MessageEntryTemplate({
         />
       </td>
       <td>{message["id"]}</td>
-      <td>{message["affectedTitle"]}</td>
+      <td>{message["affectedEntry"]}</td>
       <td>{message["messageType"]}</td>
-      <td>{message["content"]}</td>
+      <td>{message["messageType"] === "custom" ? message["customMessageContent"] : message['entryStatusUpdate']}</td>
       <td>
-        <ul>
+        <details>
+          <summary>Visibility</summary>
+                  <ul className="usersVisUl">
         {Object.keys(message['usersVis']).map(user => {
-        return <li key={user}>{user} - {message['usersVis'][user] ? "No" : "Yes"}</li>
+        return (
+        <li key={user}>
+        <div>{user}
+        </div>
+        <div>
+         {message['usersVis'][user] ? "✅" : "❌"}
+        </div>
+        </li>
+        )
       })}
         </ul>
+        </details>
       </td>
       <td>
-        <button>Edit</button>
+        <button onClick={()=>setEditable(true)}>Edit</button>
       </td>
       {!clickDelete ? (
         <td>
-          <button name={message["id"]} onClick={() => setClickDelete(true)}>
+          <button className="adminButton--Danger" name={message["id"]} onClick={() => setClickDelete(true)}>
             Delete
           </button>
         </td>
       ) : (
         <td>
           <button
-            className="button_warning"
+            className="adminButton--Danger"
             name={message["id"]}
             onClick={deleteMessage}
           >
             Confirm
           </button>
-          <button name={message["id"]} onClick={() => setClickDelete(false)}>
+          <button className="adminButton--Cancel" name={message["id"]} onClick={() => setClickDelete(false)}>
             Cancel
           </button>
         </td>

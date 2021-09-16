@@ -1,35 +1,48 @@
-import { useEffect, useState } from "react";
 import "./App.css";
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  useHistory,
+  Link
+} from "react-router-dom";
 import Cookies from "js-cookie";
-import OldLoader from "./components/OldLoader";
-import AddNew from "./components/AddNew";
-import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
-import Wishlist from "./components/Wishlist";
-// import Report from "./components/Defunct/Report";
-import AdminCMS from "./components/AdminCMS";
-import Start from "./components/Start";
-import LogIn from "./components/LogIn";
-import Navbar from "./components/Navbar";
-import Logout from "./components/Logout";
+import AddNew from "./components/AddNew/AddNew";
+import Wishlist from "./components/Wishlist/Wishlist";
+import AdminCMS from "./components/AdminCMS/AdminCMS";
+import Start from "./components/Start/Start";
+import Navbar from "./components/Start/Navbar";
+import MobileNavbar from "./components/Start/MobileNavbar";
+import LogIn from "./components/Security/LogIn";
+import Logout from "./components/Security/Logout";
+import ForgottenPassword from "./components/Security/ForgottenPassword";
+import PasswordReset from "./components/Security/PasswordReset";
+import Register from "./components/Security/Register";
+import AlexOGLoader from "./components/Loaders/AlexOGLoader";
 
-async function getWishlistData() {
 
+
+function App() {
+  const [loading, setLoading] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(checkForJwtCookie());
+  const [wishlistData, setWishlistData] = useState(["init"]);
+  const [errorPageContent, setErrorPageContent] = useState("");
+  const [loadingStep, setLoadingStep] = useState('')
+  const history = useHistory();
+
+  async function getWishlistData() {
   const results = await fetch("/db/r", {
     method: "POST",
-    body: JSON.stringify({ plssendlist: "yas pls" }),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    body: JSON.stringify({ username: localStorage.getItem("username") }),
+    headers: { "Content-type": "application/json; charset=UTF-8" }
   })
-    .then((res) => res.json())
-    .then((data) => data);
-  // console.log(data);
-  // if (typeof data !== "string") {
-  //   console.log("Wishlistdata: ", data)
-
-  //   console.log(wishlistData)
-  // } else {
-  //   alert(data);
-  //   setWishlistData([]);
-  // }
+    .then(res => res.json())
+    .catch(e => {
+      console.log(e.message);
+      return "error";
+    });
+  console.log('%cApp.js line:39 results', 'color: #007acc;', results);
   return results;
 }
 
@@ -37,102 +50,140 @@ async function getNotifications() {
   return await fetch("/getNotifications", {
     method: "POST",
     body: JSON.stringify({
-      plssendUpdates: "yas plx",
-      username: localStorage.getItem("username"),
+      username: localStorage.getItem("username")
     }),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
+    headers: { "Content-type": "application/json; charset=UTF-8" }
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      if (typeof data !== "string") {
-        return data;
-      } else {
-        alert(data);
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("error");
       }
+      return res.json();
+    })
+    .catch(e => {
+      console.log(e.message);
+      return "error";
     });
 }
-
-function App() {
-  const [wishlistLoading, setWishlistLoading] = useState(false)
-  const history = useHistory();
-  const [notifications, setNotifications] = useState([]);
-  const [connectionTest, setConnectionTest] = useState(false);
-  const [connMsg, setConnMsg] = useState("Connecting");
-  const [isLoggedIn, setIsLoggedIn] = useState(checkForJwtCookie());
-  const [wishlistData, setWishlistData] = useState(["init"]);
-  const [errorPageContent, setErrorPageContent] = useState("");
-  const [isRestricted, setIsRestricted] = useState(false);
-
-  async function confirmConnection() {
-    const data = await fetch("/serverping");
-    setConnMsg(data["server"]);
-    return true;
-  }
 
   function checkForJwtCookie() {
     return Cookies.get("jwt") === null ? false : true;
   }
 
-  useEffect(() => {
-
-    async function dataSetup() {
-      setIsLoggedIn(checkForJwtCookie());
-
-      if (isLoggedIn && wishlistData[0] === "init" && !wishlistLoading) {
-        setWishlistLoading(true)
-        const dbdata = await getWishlistData();
-        setWishlistData(dbdata);
-        const notificantionsArr = await getNotifications();
-        setNotifications(notificantionsArr);
-        setWishlistLoading(false)
-      } else {
-        setWishlistData([]);
-        setNotifications([]);
+  async function dataSetup() {
+    console.log('%cApp.js line:89 DataSetup Trigger', 'color: #007acc;');
+    console.log('%cApp.js line:90 wishlistData[0]', 'color: #007acc;', wishlistData[0]);
+    console.log('%cApp.js line:91 isLoggedIn', 'color: #007acc;', isLoggedIn);
+    console.log('%cApp.js line:92 window.location.pathname', 'color: #007acc;', window.location.pathname);
+    if (wishlistData[0] === 'init' && isLoggedIn && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
+      console.log('Conditions have been met to initiate Data Setup TRY-block');
+      try {
+        setLoading(true);
+        setLoadingStep('Loading Wishlist')
+        let wishlistData = await getWishlistData();
+        console.log('%cApp.js line:93 wishlistData', 'color: #007acc;', wishlistData);
+        if (wishlistData === "error") {
+          throw new Error("database");
+        }
+        setWishlistData(wishlistData.sort(function(a, b) {
+      var x = a["name"];
+      var y = b["name"];
+      return x < y ? -1 : x > y ? 1 : 0;
+    }));
+        setLoadingStep('Getting status update')
+        let notifications = await getNotifications();
+        console.log('%cApp.js line:100 notifications', 'color: #007acc;', notifications);
+        if (notifications === "error") {
+          throw new Error("notifications");
+        }
+        setNotifications(notifications);
+        setLoadingStep('almost done...')
+      } catch (error) {
+        if (error.message === "database") {
+          setErrorPageContent(
+            "Unable to contact database. Please ensure you are logged in correctly."
+          );
+          history.push('/oops')
+        } else if (error.message === "notifications") {
+          setNotifications([]);
+        }
+      } finally {
+        setLoadingStep('')
+        setLoading(false);
       }
     }
-    dataSetup();
-  }, [isLoggedIn]);
+  }
+
+  useEffect(() => {
+    const InitData = async () => {
+      await dataSetup()
+    }
+    if (window.location.pathname !== "/admin") {
+      InitData();
+    }
+    console.log("init complete")
+  }, []);
 
   return (
     <Router>
-      <Navbar
-        connectionTest={connectionTest}
-        connMsg={connMsg}
-        setConnectionTest={setConnectionTest}
-        confirmConnection={confirmConnection}
-      />
+      {window.innerWidth < 600 ? <MobileNavbar isLoggedIn={isLoggedIn} /> : <Navbar isLoggedIn={isLoggedIn} /> }
 
       <Route exact path="/">
         <Start notifications={notifications} />
       </Route>
 
       <Route exact path="/oops">
-        <div>
+        <div className="ErrorPage">
           <h2>EIN FEHLER IST AUFGETRETEN</h2>
           <p>{errorPageContent}</p>
+          <Link to="/">Home Page</Link>
+          <Link to="/login">Login</Link>
+          <p>Should you experience further difficulties,</p>
+          <p>
+             please contact us directly at:{" "}
+          <b>quirinustech@gmail.com</b>
+          </p>
         </div>
       </Route>
 
       <Route exact path="/addnew">
-        <AddNew setWishlistData={setWishlistData} wishlistData={wishlistData} />;
+        <AddNew setWishlistData={setWishlistData} wishlistData={wishlistData} />
       </Route>
 
       <Route exact path="/list">
-        <Wishlist wishlistData={wishlistData} setWishlistData={setWishlistData} />;
+        {loading ? (
+          <div>
+            <span>{loadingStep}</span>
+            <AlexOGLoader />
+          </div>
+        ) : (
+          <Wishlist
+            wishlistData={wishlistData}
+            setWishlistData={setWishlistData}
+          />
+        )}
       </Route>
-
-      {/* <Route exact path="/report">
-        <Report wishlistData={wishlistData} />;
-      </Route> */}
 
       <Route exact path="/admin">
         <AdminCMS setErrorPageContent={setErrorPageContent} />;
       </Route>
 
       <Route exact path="/login">
-        <LogIn setIsLoggedIn={setIsLoggedIn} isRestricted={isRestricted} />;
+        <LogIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />;
       </Route>
+
+      <Route exact path="/register">
+        <Register />;
+      </Route>
+
+      <Route exact path="/forgottenPassword">
+        <ForgottenPassword />;
+      </Route>
+
+      <Route
+        path="/passwordReset/:uname?/:code?"
+        render={props => <PasswordReset {...props} />}
+      />
 
       <Route exact path="/logout">
         <Logout setIsLoggedIn={setIsLoggedIn} />

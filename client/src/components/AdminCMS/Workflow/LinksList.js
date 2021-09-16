@@ -1,7 +1,8 @@
-function LinksList({ currentEntry, sortBy, episodesObj }) {
-  function SingleLink({ season, episode, EorSorM }) {
+const LinksList = ({ currentEntry, sortBy }) => {
+  
+  const SingleLink = ({ season, episode, EorSorM }) => {
     let urlString = `https://rarbgtor.org/torrents.php?search=${
-      currentEntry["imdbID"]
+      currentEntry['imdbData']["imdbID"]
     }`;
 
     if (EorSorM !== "movie") {
@@ -17,7 +18,7 @@ function LinksList({ currentEntry, sortBy, episodesObj }) {
 
     let buttondesc =
       EorSorM === "movie"
-        ? currentEntry["imdbID"]
+        ? "Download Link"
         : EorSorM === "episode"
           ? "E" + episode < 10 ? "0" + episode : episode
           : "S" + season < 10 ? "0" + season : season;
@@ -30,26 +31,38 @@ function LinksList({ currentEntry, sortBy, episodesObj }) {
   }
 
   return currentEntry["mediaType"] === "movie" ? (
-    <div>
+    <div className="LinksList">
       <h4>movie</h4>
       <SingleLink season={null} episode={null} EorSorM="movie" />
     </div>
   ) : (
-    <div>
+    <div className="LinksList">
       <h4>Seasons</h4>
-      {Object.keys(episodesObj["fullList"]).map(season => {
+      <div className="LinksList--Seasons">
+      {Object.keys(currentEntry["outstanding"]).map(season => {
         return <SingleLink season={season} episode={null} EorSorM="season" />;
       })}
+      </div>
+      <details>
+        <summary>
       <h4>Episodes</h4>
-      {Object.keys(episodesObj["fullList"]).map(season => {
-        return Object.keys(
-          episodesObj["fullList"][season].map(episode => {
+        </summary>
+      <div className="LinksList--Episodes">
+      {Object.keys(currentEntry["outstanding"]).map(season => {
+        return (
+          <div  className="LinksList--Episodes--SeasonDiv">
+            <h5>{season}</h5>
+            <div>{currentEntry["outstanding"][season].map(episode => {
             return (
               <SingleLink season={season} episode={episode} EorSorM="episode" />
             );
-          })
-        );
+          })}</div>
+          </div>
+        )
       })}
+      </div>
+      </details>
+
     </div>
   );
 }

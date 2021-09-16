@@ -1,83 +1,79 @@
-function ModeSelect({
-  adminActiveTask,
-  adminActiveMode,
-  setAdminActiveMode
-}) {
+function ModeSelect({ adminActiveTask, adminActiveMode, setAdminActiveMode }) {
   const Content = () => {
     switch (adminActiveTask) {
       case "MsgCentre":
         return (
           <div>
-            <div
+            <button
               onClick={() => setAdminActiveMode("msgNew")}
               className="MsgCentreModeBlock"
             >
-              <p>Create New Notification</p>
-            </div>
-            <div
+              Create New Notification
+            </button>
+            <button
               onClick={() => setAdminActiveMode("msgCMS")}
               className="MsgCentreModeBlock"
             >
-              <p>Manage Existing Notifications</p>
-            </div>
-            <div
+              Manage Existing Notifications
+            </button>
+            <button
               onClick={() => setAdminActiveMode("msgPreview")}
               className="MsgCentreModeBlock"
             >
-              <p>Message Preview</p>
-            </div>
+              Message Preview
+            </button>
           </div>
         );
       case "Workflow":
         return (
           <div>
-            <div
+            <button
               onClick={() => setAdminActiveMode("wfDownload")}
               className="adminActiveModeBlock"
             >
-              <p>Download</p>
-            </div>
-            <div
+              Download
+            </button>
+            <button
               onClick={() => setAdminActiveMode("wfComplete")}
               className="adminActiveModeBlock"
             >
-              <p>Complete</p>
-            </div>
-            <div
+              Complete
+            </button>
+            <button
               onClick={() => setAdminActiveMode("wfCopy")}
               className="adminActiveModeBlock"
             >
-              <p>Copy</p>
-            </div>
+              Copy
+            </button>
           </div>
         );
       case "UserManager":
         return (
           <div>
-            <div
+            <button
               onClick={() => setAdminActiveMode("umActivation")}
               className="UserManagerModeBlock"
             >
-              <p>Account Activation</p>
-            </div>
-            <div
+              Account Activation
+            </button>
+            <button
               onClick={() => setAdminActiveMode("umPwReset")}
               className="UserManagerModeBlock"
             >
-              <p>Password Reset</p>
-            </div>
-            <div
+              Password Reset
+            </button>
+            <button
               onClick={() => setAdminActiveMode("umPreferences")}
               className="UserManagerModeBlock"
             >
-              <p>Manage Preferences</p>
-            </div>
-            <div
+              Manage Preferences
+            </button>
+            <button
               onClick={() => setAdminActiveMode("umDetails")}
               className="UserManagerModeBlock"
             >
-              <p>Detail Update</p>
-            </div>
+              Detail Update
+            </button>
           </div>
         );
       default:
