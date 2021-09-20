@@ -72,9 +72,9 @@ function AdminActiveTask({
       default:
         return (
           <div className="AdminCMSTitlePage--Welcome">
-            <h4>Welcome to the</h4>
-            <h3>Adminstrator Content Management System</h3>
-            <h5>Created by Matthew Gird</h5>
+            <h4 className="admin">Willkommen beim</h4>
+            <h3 className="admin">Content-Management-Tool für Administratoren</h3>
+            <h5 className="admin">Erstellt von Matthew Gird</h5>
           </div>
         );
     }

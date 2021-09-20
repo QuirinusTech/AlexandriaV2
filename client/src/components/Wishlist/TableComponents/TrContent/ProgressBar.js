@@ -20,9 +20,10 @@ function ProgressBar({ item }) {
       left = parseFloat(left) + parseFloat(item['progress'][statusName])
     })
 
-    const ProgressBarSection = ({status, valLeft, valWidth}) => {
+    const ProgressBarSection = ({status, valLeft, valWidth, keyText}) => {
       return (
         <div
+            key={keyText}
             style={{
               left: valLeft.toString() + "%",
               width: valWidth.toString() + "%"
@@ -40,12 +41,12 @@ function ProgressBar({ item }) {
       <div className="progressBar">
         {Object.keys(pattern).map(statusName => {
         return (
-          <ProgressBarSection key={item['id'] + "_progressBarSection_" + statusName + "_" + item['progress'][statusName]} status={statusName} valLeft={pattern[statusName]['valLeft']} valWidth={pattern[statusName]['valWidth']} />
+          <ProgressBarSection keyText={item['id'] + "_progressBarSection_" + statusName + "_" + item['progress'][statusName]} status={statusName} valLeft={pattern[statusName]['valLeft']} valWidth={pattern[statusName]['valWidth']} />
         )
       })}
       </div>
       {Object.keys(item['progress']).length > 1 && Object.keys(item['progress']).map(status => {
-        return (<p>{status} - {parseFloat(item['progress'][status].slice(-2)) === 0 ? parseInt(item['progress'][status]): item['progress'][status]}%</p>)
+        return (<p>{status} - {parseFloat(item['progress'][status]) === parseInt(item['progress'][status]) ? parseInt(item['progress'][status]): item['progress'][status]}%</p>)
       })}
       </>
     );

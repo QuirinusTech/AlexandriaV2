@@ -67,9 +67,9 @@ function MessageCMS({
     }
 
     return (
-      <table className="messageCMSTable">
+      <table className="adminTable">
         <thead>
-          <tr>
+          <tr className="adminTableHeadRow">
             <th>Select</th>
             <th>ID</th>
             <th>Title</th>
@@ -97,16 +97,16 @@ function MessageCMS({
           })}
           <tr>
             <th>
-              <button className="adminButton--Neutral" name="all" onClick={bulkFunctionSelect}>Select All</button>
+              <button className="adminButton adminButton--small" name="all" onClick={bulkFunctionSelect}>Select All</button>
             </th>
             <th>
-              <button className="adminButton--Neutral" name="none" onClick={bulkFunctionSelect}>Select None</button>
+              <button className="adminButton adminButton--small" name="none" onClick={bulkFunctionSelect}>Select None</button>
             </th>
             <th colSpan="4">
               
             </th>
             <th colSpan="2">
-              <button className="adminButton--Danger" onClick={bulkFunctionDelete}> Delete Selected</button>
+              <button className="adminButton adminButton--small adminButton--danger" onClick={bulkFunctionDelete}> Delete Selected</button>
             </th>
           </tr>
         </tbody>
@@ -115,9 +115,9 @@ function MessageCMS({
   }
 
   return (
-    <div>
+    <>
       <MsgTable adminListNotifications={adminListNotifications} />
-    </div>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@
     "messageType": "status || custom",
     "customMessageContent": "messageString",
     "entryStatusUpdate": "[...allPossibleStatuses]",
+    "mailed": "boolean",
     "usersVis": {
       "username1": "FALSE if this user will not see it",
       "username2": "TRUE if this user will see it"

@@ -3,7 +3,7 @@ import TrMovie from "./TrMovie";
 import EditableTr from "./EditableTr"
 import { useState } from "react";
 
-function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossibleStatuses, adminListUsers }) {
+function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossibleStatuses, adminListUsers, searchBoxValue }) {
   const [editableEntry, setEditableEntry] = useState(null);
 
   const headers = [
@@ -25,9 +25,9 @@ function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossib
   const Thead = ({headers}) => {
     return (
       <thead>
-        <tr>
+        <tr className="adminTableHeadRow">
           {headers.map(header => {
-            return <th key="header">{header}</th>;
+            return <th key={"adminTable" +header}>{header}</th>;
           })}
         </tr>
       </thead>
@@ -38,11 +38,35 @@ function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossib
     adminListWishlist,
     setEditableEntry,
     setAdminWishlist,
-    headers
+    headers,
+    searchBoxValue
   }) => {
     return (
       <tbody>
         {adminListWishlist.map(entry => {
+          let isFiltered = false
+          let searchValSimple = searchBoxValue.replace(/\s/g, '')
+          let thisimdbId = entry['imdbID']
+          let svl = searchValSimple.length
+          if (svl > 0) {
+            let thisMatchCheck = false
+            let titleSimple = entry['name'].replace(/\s/g, '')
+            let tsl = titleSimple.length
+            for (let index = 0; index <= tsl; index++) {
+              if (searchValSimple.toLowerCase() === titleSimple.slice(index,svl+index).toLowerCase()) {
+                thisMatchCheck = true
+                break;
+              }
+            }
+            for (let index = 0; index <= thisimdbId.length; index++) {
+              if (searchValSimple === thisimdbId.slice(index,svl+index)) {
+                thisMatchCheck = true
+                break;
+              }
+            }
+            isFiltered = !thisMatchCheck
+          }
+
           if (editableEntry !== null && entry["id"] === editableEntry) {
             return (
               <EditableTr
@@ -56,9 +80,9 @@ function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossib
               />
             );
           } else if (entry["mediaType"] === "movie") {
-            return <TrMovie key={entry['id'] + "_tr"} setEditableEntry={setEditableEntry} entry={entry} headers={headers} />;
+            return <TrMovie key={entry['id'] + "_tr"} isFiltered={isFiltered} setEditableEntry={setEditableEntry} entry={entry} headers={headers} />;
           } else {
-            return <TrSeries key={entry['id'] + "_tr"} setEditableEntry={setEditableEntry} entry={entry} headers={headers} />;
+            return <TrSeries isFiltered={isFiltered} key={entry['id'] + "_tr"} setEditableEntry={setEditableEntry} entry={entry} headers={headers} />;
           }
         })}
       </tbody>
@@ -66,13 +90,14 @@ function AdminWishlistTable({ adminListWishlist, setAdminListWishlist, allPossib
   };
 
   return (
-    <table>
+    <table className="adminTable">
       <Thead headers={headers} />
       <Tbody
         adminListWishlist={adminListWishlist}
         setAdminListWishlist={setAdminListWishlist}
         setEditableEntry={setEditableEntry}
         headers={headers}
+        searchBoxValue={searchBoxValue}
       />
     </table>
   );

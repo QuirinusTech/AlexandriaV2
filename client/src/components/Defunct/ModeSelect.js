@@ -29,19 +29,19 @@ function ModeSelect({ adminActiveTask, adminActiveMode, setAdminActiveMode }) {
           <div>
             <button
               onClick={() => setAdminActiveMode("wfDownload")}
-              className="adminActiveModeBlock"
+              className="adminActiveModeButton"
             >
               Download
             </button>
             <button
               onClick={() => setAdminActiveMode("wfComplete")}
-              className="adminActiveModeBlock"
+              className="adminActiveModeButton"
             >
               Complete
             </button>
             <button
               onClick={() => setAdminActiveMode("wfCopy")}
-              className="adminActiveModeBlock"
+              className="adminActiveModeButton"
             >
               Copy
             </button>

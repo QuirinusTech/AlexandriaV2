@@ -36,8 +36,11 @@ module.exports = {
   deleteDocFromWishlist,
   getUserNotifications,
   getSingleWishlistEntry,
-  notifyAdmin
+  notifyAdmin,
+  updateWishlistItem,
+  userUpdate
 }
+
 
 async function wishlistInterface(username, operation, data) {
   console.log('%cfirebase.js line:43 username, operation, data', 'color: #007acc;', username, operation, data);
@@ -149,7 +152,7 @@ async function blacklistInterface(username, operation, data) {
 async function addUserToDatabase(user) {
     console.log("USER: ", user)
     const response = await usersRef.doc(user['username']).set(user)
-    // createEmailNotification("admin", "new", "user")
+    await notifyAdmin("custom", "user", 'New User Account')
     return response['updateTime']
   }
 
@@ -170,8 +173,45 @@ async function getimdbidlist(username) {
       obj["imdbID"] = item.imdbID;
       imdbidlist.push(obj);
     });
-    console.log("imdbidlist: ", imdbidlist)
+    // console.log("imdbidlist: ", imdbidlist)
     return imdbidlist
+  }
+
+async function forgottenPassword(data) {
+    let success = false
+    let response = ''
+    try {
+      const identifierType = data['identifierType']
+      const identifierValue = data['identifierValue']
+      // console.log('forgottenPassword', data)
+      let snapshot = await usersRef.where(identifierType, "==", identifierValue).get()
+      
+      if (snapshot.empty) {
+        throw 'Invalid Details'
+      } else {
+        let userList = []
+        snapshot.forEach(doc => userList.push(doc.data()))
+        let userData = userList[0]
+        if (!userData['privileges']['is_active_user']) {
+          throw 'Account inactive. Please contact the administrator.'
+        }
+        let validationCode = generateValidationCode()
+        userData['passwordReset'] = {
+          requested: true,
+          timestamp: new Date(),
+          code: await User.set_password(validationCode),
+          attempts: 0
+        }
+        const username = userData['username']
+        const res = await usersRef.doc(username).update(userData)
+        success = await passwordResetMail(validationCode, username, userData['details']['email'])
+        response = success ? 'success' : 'Unable to send email.'
+      }
+      
+    } catch (error) {
+      response = error
+    }
+      return {success, response}
   }
 
 async function passwordResetAttempt(username, code, newpassword) {
@@ -207,42 +247,268 @@ async function passwordResetAttempt(username, code, newpassword) {
     return {success, response}
 }
 
-async function forgottenPassword(data) {
-    let success = false
-    let response = ''
-    try {
-      const identifierType = data['identifierType']
-      const identifierValue = data['identifierValue']
-      console.log('forgottenPassword', data)
-      let snapshot = await usersRef.where(identifierType, "==", identifierValue).get()
-      
-      if (snapshot.empty) {
-        throw 'Invalid Details'
-      } else {
-        let userList = []
-        snapshot.forEach(doc => userList.push(doc.data()))
-        let userData = userList[0]
-        if (!userData['privileges']['is_active_user']) {
-          throw 'Account inactive. Please contact the administrator.'
-        }
-        let validationCode = generateValidationCode()
-        userData['passwordReset'] = {
-          requested: true,
-          timestamp: new Date(),
-          code: await User.set_password(validationCode),
-          attempts: 0
-        }
-        const username = userData['username']
-        const res = await usersRef.doc(username).update(userData)
-        success = await passwordResetMail(validationCode, username, userData['details']['email'])
-        response = success ? 'success' : 'Unable to send email.'
-      }
-      
-    } catch (error) {
-      response = error
+async function userUpdate(dataObj) {
+  let payload, success;
+  try {
+    const formData = dataObj["formData"];
+    const username = dataObj["username"];
+    const { id, currentFunction, formEpisodes, userReportedError } = formData;
+    let wishlistItem = await getSingleWishlistEntry(id);
+    const { sf, ef, st, et } = formEpisodes;
+    const episodesObj = { ...wishlistItem["episodes"] };
+    const multiSeason = st - sf > 0;
+    const multiEpisode = et - ef > 0;
+    const { can_add, is_active_user } = dataObj["resLocals"];
+
+    // console.log(dataObj);
+
+    if (!can_add || !is_active_user) {
+      throw new Error("You're not authorised to do that.");
     }
-      return {success, response}
+    switch (currentFunction) {
+      case "Report Error":
+        if (wishlistItem["mediaType"] === "movie" || formdata['selectAll']) {
+          // set movie status to error
+          await updateWishlistItem(id, {
+            status: "error",
+            progress: { error: 100 }
+          });
+        } else {
+          if (!multiSeason && !multiEpisode) {
+            episodesObj[sf][ef] = "error";
+          } else if (multiEpisode && !multiSeason) {
+            Object.keys(episodesObj).forEach(season => {
+              Object.keys(episodesObj[season]).forEach(ep => {
+                if (ep >= ef && ep <= et) {
+                  episodesObj[season][ep] = "error";
+                }
+              });
+            });
+          } else if (multieEpisode && multiSeason) {
+            Object.keys(episodesObj).forEach(season => {
+              Object.keys(episodesObj[season]).forEach(ep => {
+                if (season === sf && ep >= ef) {
+                  episodesObj[season][ep] = "error";
+                } else if (season > sf && season < st) {
+                  episodesObj[season][ep] = "error";
+                } else if (season === st && ep < et) {
+                  episodesObj[season][ep] = "error";
+                }
+              });
+            });
+          }
+          payload = await updateEpisodesObj(id, episodesObj);
+        }
+        await notifyAdmin(
+          "error",
+          wishlistItem["name"],
+          "User reported error with media: " + userReportedError
+        );
+        break;
+      case "Edit Range":
+        let prepend = false;
+        let append = false;
+        let shrink = false;
+        if (sf < wishlistItem["sf"]) {
+          prepend = true;
+        }
+        if (sf <= wishlistItem["sf"] && ef < wishlistItem["ef"]) {
+          prepend = true;
+        }
+        if (sf < wishlistItem["sf"] || st > wishlistItem["st"]) {
+          shrink = true;
+        }
+        if (st > wishlistItem["st"]) {
+          append = true;
+        }
+        if (st >= wishlistItem["sf"] && et > wishlistItem["et"]) {
+          append = true;
+        }
+
+        if (prepend) {
+          wishlistItem["episodes"] = await WishlistItem.prependEpisodes(
+            wishlistItem["episodes"],
+            wishlistItem["sf"],
+            wishlistItem["ef"],
+            sf,
+            ef,
+            wishlistItem["imdbData"]["imdbID"]
+          );
+        }
+
+        if (shrink) {
+          wishlistItem[
+            "episodes"
+          ] = WishlistItem.shrinkEpisodesObj(wishlistItem["episodes"], {
+            sf,
+            ef,
+            st,
+            et
+          });
+        }
+        if (append) {
+          wishlistItem["episodes"] = WishlistItem.appendEpisodes(
+            { st, et, newEpisodes: et - wishlistItem["et"] },
+            wishlistItem["episodes"]
+          );
+        }
+
+        // parse formEpisodes to mark the affected episodes with NEW status or delete them entirely.
+        // add or remove episodes
+        // in the case of addition notify the admin
+        wishlistItem = { ...wishlistItem, sf, et, st, ef };
+        payload = await updateWishlistItem(wishlistItem["id"], wishlistItem);
+
+        if (prepend || append) {
+          await notifyAdmin(
+            "new",
+            wishlistItem["name"],
+            "New episodes added to existing entry."
+          );
+        }
+
+        break;
+      case "Add Missing":
+        let newEpisodes = await WishlistItem.parseEpisodeVars(
+          sf,
+          ef,
+          st,
+          et,
+          wishlistItem["imdbData"]["imdbID"]
+        );
+
+        // wishlistItem['episodes'] = {...wishlistItem['episodes'], ...newEpisodes}
+
+        Object.keys(wishlistItem["episodes"]).forEach(season => {
+          if (newEpisodes.hasOwnProperty(season.toString())) {
+            wishlistItem["episodes"][season] = {
+              ...wishlistItem["episodes"][season],
+              ...newEpisodes[season]
+            };
+          }
+        });
+
+        let newSf = Math.min(...Object.keys(wishlistItem["episodes"]));
+        let newSt = Math.max(...Object.keys(wishlistItem["episodes"]));
+        let newEf = Math.min(
+          ...Object.keys(wishlistItem["episodes"][newSf.toString()])
+        );
+        let newEt = Math.max(
+          ...Object.keys(wishlistItem["episodes"][newSt.toString()])
+        );
+        wishlistItem["sf"] = newSf;
+        wishlistItem["ef"] = newEf;
+        wishlistItem["st"] = newSt;
+        wishlistItem["et"] = newEt;
+
+        payload = await updateWishlistItem(wishlistItem["id"], wishlistItem);
+        await notifyAdmin(
+          "new",
+          wishlistItem["name"],
+          "New episodes added to existing entry."
+        );
+        break;
+      case "Delete":
+        if (wishlistItem["mediaType"] === "movie" || formdata['selectAll']) {
+          await deleteDocFromWishlist(wishlistItem["id"]);
+          payload = "removed";
+        } else {
+          // console.log("marco_1");
+          if (
+            sf == wishlistItem["sf"] &&
+            st == wishlistItem["st"] &&
+            ef == wishlistItem["ef"] &&
+            et == wishlistItem["et"]
+          ) {
+            await deleteDocFromWishlist(wishlistItem["id"]);
+            payload = "removed";
+          } else {
+            // console.log("marco_2");
+            Object.keys(wishlistItem["episodes"]).forEach(season => {
+              if (
+                parseInt(season) > parseInt(sf) &&
+                parseInt(season) < parseInt(st)
+              ) {
+                // console.log("marco_3");
+                delete wishlistItem["episodes"][season];
+              } else if (parseInt(season) === parseInt(sf)) {
+                // console.log("marco_4");
+                Object.keys(wishlistItem["episodes"][season]).forEach(ep => {
+                  if (
+                    !multiSeason &&
+                    parseInt(ep) >= parseInt(ef) &&
+                    parseInt(ep) <= parseInt(et)
+                  ) {
+                    // console.log("marco_5a");
+                    delete wishlistItem["episodes"][season][ep];
+                  } else if (
+                    multiSeason &&
+                    parseInt(ep) >= parseInt(ef) &&
+                    parseInt(season) < parseInt(st)
+                  ) {
+                    // console.log("marco_5b");
+                    delete wishlistItem["episodes"][season][ep];
+                  } else if (
+                    multiSeason &&
+                    parseInt(ep) <= parseInt(et) &&
+                    parseInt(season) === parseInt(st)
+                  ) {
+                    // console.log("marco_5c");
+                    delete wishlistItem["episodes"][season][ep];
+                  }
+                });
+              } else if (parseInt(season) === parseInt(st)) {
+                // console.log("marco_6");
+                Object.keys(wishlistItem["episodes"][season]).forEach(ep => {
+                  if (parseInt(ep) <= parseInt(et)) {
+                    // console.log("marco_7");
+                    delete wishlistItem["episodes"][season][ep];
+                  }
+                });
+              }
+            });
+
+            let newSf = Math.min(...Object.keys(wishlistItem["episodes"]));
+            let newSt = Math.max(...Object.keys(wishlistItem["episodes"]));
+            let newEf = Math.min(
+              ...Object.keys(wishlistItem["episodes"][newSf.toString()])
+            );
+            let newEt = Math.max(
+              ...Object.keys(wishlistItem["episodes"][newSt.toString()])
+            );
+
+            wishlistItem["sf"] = newSf;
+            wishlistItem["ef"] = newEf;
+            wishlistItem["st"] = newSt;
+            wishlistItem["et"] = newEt;
+
+            payload = await updateWishlistItem(
+              wishlistItem["id"],
+              wishlistItem
+            );
+          }
+        }
+        break;
+    }
+    success = true;
+  } catch (error) {
+    console.log(
+      "%cfirebase.js line:419 error.message",
+      "color: #007acc;",
+      error.message
+    );
+    // console.log(dataObj);
+    success = false;
+    payload = error.message;
+    await notifyAdmin("custom", error.message, {
+      error,
+      dataObj
+    });
+  } finally {
+    return { success, payload };
   }
+}
+
 
 function generateValidationCode() {
   let randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -276,7 +542,11 @@ async function unBlacklist(username, data) {
   const res = await blacklistRef.doc(username).set(currentUserBlacklist)
   return res
 }
-
+/**
+ * @param  {"status" || "custom"} status
+ * @param  {affectedEntry} title
+ * @param  {customMessageContent} event
+ */
 async function notifyAdmin(status, title, event) {
   const id = uuid.v4()
   let newMessage = {
@@ -287,13 +557,15 @@ async function notifyAdmin(status, title, event) {
     "usersVis": {
       "aegisthus": true
     },
-    "affectedEntry": title
+    "affectedEntry": title,
+    'mailed': false
   }
   const res = await notificationsRef.doc(id).set(newMessage).then(()=> "success").catch(err => err)
   return res
 }
 
 async function notifyUser(message) {
+  message['mailed'] = false;
   const res = await notificationsRef.doc(message['id']).set(data).then(()=> "success").catch(err => err)
   return res
 }
@@ -314,7 +586,7 @@ async function addToWishlist(username, data) {
       "isOngoing": data['isOngoing'],
       "dateAdded": d.toDateString()
   }
-  console.log('Addition to Database: ', obj)
+  // console.log('Addition to Database: ', obj)
   try {
     obj = await WishlistItem.setData(obj);
     if (!obj.hasOwnProperty("progress")) {
@@ -363,7 +635,7 @@ function setStatusAndProgress(item) {
 // READ
 async function getWishlistByUser(username) {
   const inventory = [];
-  console.log(`getWishlistByUser(${username})`)
+  // console.log(`getWishlistByUser(${username})`)
   const snapshot = await wishlistRef.where("addedBy", "==", username).get();
   if (snapshot.empty) {
     return "empty";
@@ -379,10 +651,10 @@ async function getSingleWishlistEntry(id) {
   const docRef = wishlistRef.doc(id);
   const doc = await docRef.get();
   if (!doc.exists) {
-    console.log('No such document!');
+    // console.log('No such document!');
     return 'error'
   } else {
-    console.log('Document data:', doc.data());
+    // console.log('Document data:', doc.data());
     return doc.data()
   }
 }
@@ -394,13 +666,13 @@ async function updateWishlistItem(id, data) {
   // THIS SHOULD NOT BE USED FOR UPDATES TO UPDATE EPISODES
   // TO UPDATE EPISODES ONLY, USE the function updateEpisodesObj(id, episodesObj)
   const docRef = wishlistRef.doc(id);
-  const doc = docRef.get()
-  const res = await docRef.update({...doc.data(), ...data});
-  console.log('Update: ', res);
+  const res = await docRef.update(data);
+  // console.log('Update: ', res);
   return res
 }
 
 async function updateEpisodesObj(id, episodesObj) {
+  // console.log('updateEpisodesObj', id);
   try {
     let wishlistEntry = await wishlistRef.doc(id).get().then(doc => doc.data())
     Object.keys(episodesObj).forEach(season => {
@@ -455,118 +727,146 @@ async function addEpisodesToWishlistItem(data) {
 
 async function deleteDocFromWishlist(id) {
     const res = await wishlistRef.doc(id).delete();
-    console.log('Delete: ', res);
+    // console.log('Delete: ', res);
 }
 
 // ADMIN Functions
 
 // adminNew
 async function adminNew(department, data) {
-  switch (department.toUpperCase()) {
-    case "WISHLIST":
-      if (data.hasOwnProperty('createNotification')) {
-        if (data['createNotification']) {
-          const id = uuid.v4()
-          let newMessage = {
-            "id": id,
-            "messageType": "status",
-            "customMessageContent": "New Addition to Wishlist",
-            "entryStatusUpdate": data["status"],
-            "usersVis": {
-              [data['addedBy']]: true
-            },
-            "affectedEntry": data['name']
+
+  try {
+    switch (department.toUpperCase()) {
+      case "WISHLIST":
+        if (data.hasOwnProperty('createNotification')) {
+          if (data['createNotification']) {
+            const id = uuid.v4()
+            let newMessage = {
+              "id": id,
+              "messageType": "status",
+              "customMessageContent": "New Addition to Wishlist",
+              "entryStatusUpdate": data["status"],
+              "usersVis": {
+                [data['addedBy']]: true
+              },
+              "affectedEntry": data['name']
+            }
+            await notifyUser(newMessage)
           }
-          await notifyUser(newMessage)
+          delete data['createNotification']
         }
-        delete data['createNotification']
-      }
-      let WISHLISTresult = await wishlistRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
-      console.log(err)
-      return "error"
-    })
-      let newMessage = {
-        id: uuid.v4(),
-        messageType: "status",
-        customMessageContent: "Entry added to wishlist",
-        entryStatusUpdate: "new",
-        usersVis: {
-          [data['addedBy']]: true
-        },
-        affectedEntry: data['name'],
-        affectedEntryEpisodes: []
-      }
-      await notifyUser(newMessage)
-      return WISHLISTresult
-    case "MSGCENTRE":
-      data['id'] = uuid.v4();
-      let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
-      console.log(err)})
-      return MSGCENTREresult
+        let WISHLISTresult = await wishlistRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
+        throw new Error(err)
+        return "error"
+      })
+        let newMessage = {
+          id: uuid.v4(),
+          messageType: "status",
+          customMessageContent: "Entry added to wishlist",
+          entryStatusUpdate: "new",
+          usersVis: {
+            [data['addedBy']]: true
+          },
+          affectedEntry: data['name'],
+          affectedEntryEpisodes: []
+        }
+        await notifyUser(newMessage)
+        return WISHLISTresult
+      case "MSGCENTRE":
+        data['id'] = uuid.v4();
+        data['mailed'] = false;
+        let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
+        throw new Error(err)})
+        return MSGCENTREresult
+    }
+  } catch (error) {
+    console.log('%cfirebase.js line:802 error', 'color: #007acc;', error.message);
+    return "error"
   }
 }
 
 // adminUpdate
 async function adminUpdate(department, data) {
-  switch (department.toUpperCase()) {
-    case "WISHLIST":
-      return await wishlistRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
-      console.log(err)})
-      break;
-    case "MSGCENTRE":
-      return await notificationsRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
-      console.log(err)})
-      break;
-    case "WORKFLOW":
-      // parse WfTicket
-    case "USERMANAGER":
-      return await usersRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
-      console.log(err)})
-      break;
+  try {
+    switch (department.toUpperCase()) {
+      case "WISHLIST":
+        await wishlistRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
+        throw new Error(err)})
+        break;
+      case "MSGCENTRE":
+        await notificationsRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
+        throw new Error(err)})
+        break;
+      case "WORKFLOW":
+        // parse WfTicket
+      case "USERMANAGER":
+        await usersRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
+        throw new Error(err)})
+        break;
+    }
+    return "success"
+  } catch (error) {
+    console.log('%cfirebase.js line:841 error', 'color: #007acc;', error.message);
+    return "error"
   }
 }
 
 async function adminDelete(deparment, data) {
-  switch (department.toUpperCase()) {
-    case "WISHLIST":
-      return await wishlistRef.doc(data['id']).delete().catch(err=>{
-      console.log(err)})
-      break;
-    case "MSGCENTRE":
-      return await notificationsRef.doc(data['id']).delete().catch(err=>{
-      console.log(err)})
-      break;
-    case "WORKFLOW":
-      // parse WfTicket
-    case "USERMANAGER":
-      return await usersRef.doc(data['id']).delete().catch(err=>{
-      console.log(err)})
-      break;
+  try {
+    switch (department.toUpperCase()) {
+      case "WISHLIST":
+        await wishlistRef.doc(data['id']).delete().catch(err=>{
+        throw new Error(err)})
+        break;
+      case "MSGCENTRE":
+        await notificationsRef.doc(data['id']).delete().catch(err=>{
+        throw new Error(err)})
+        break;
+      case "WORKFLOW":
+        // parse WfTicket
+      case "USERMANAGER":
+        await usersRef.doc(data['id']).delete().catch(err=>{
+        throw new Error(err)})
+        break;
+    }
+    return "success"
+  } catch (error) {
+    console.log('%cfirebase.js line:841 error', 'color: #007acc;', error.message);
+    return "error"
   }
 }
 
 async function adminBulkFunction(department, data, operation) {
-  const batch = db.batch();
-  let departmentString = () => {
-    switch (department.toUpperCase()) {
-      case "MSGCENTRE":
-        return "notifications"
-      case "USERMANAGER":
-        return "users"
-      default:
-        return "wishlist"
-      }
+  try {
+    const batch = db.batch();
+
+    const router = {
+      "MSGCENTRE": "notifications",
+      "USERMANAGER": "users",
+      "WISHLIST": "wishlist"
+    }
+
+
+    let operationString = operation.slice(0,6).toUpperCase()
+    let collectionString = router[department.toUpperCase()]
+    // console.log('%cfirebase.js line:852 operationString', 'color: #007acc;', operationString);
+    // console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
+
+    data.forEach(entry => {
+      const entryref = db.collection(collectionString).doc(entry['id'])
+        if (operationString === "UPDATE") {batch.update(entryref, entry)}
+        if (operationString === "DELETE") {batch.delete(entryref, entry)}
+      })
+    await batch.commit();
+    return "success"
+  } catch (error) {
+    console.log('%cfirebase.js line:876 error', 'color: #007acc;', error.message);
+    return error.message
   }
-  data.forEach(entry => {
-    const entryref = db.collection(departmentString).ref(entry['id'])
-      if (operation === "update") {batch.update(entryref, data)}
-      if (operation === "delete") {batch.delete(entryref, data)}
-    })
-  return await batch.commit();
 }
 
 async function adminListRetrieval(department) {
-  console.log('adminListRetrieval', department)
+  // console.log('adminListRetrieval', department)
   let requestedList = []
 
   const departmentCollectionRefs = {

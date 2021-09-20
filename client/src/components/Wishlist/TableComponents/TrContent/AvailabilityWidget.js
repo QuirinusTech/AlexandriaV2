@@ -198,7 +198,7 @@ function AvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
           </div>
         )
       default:
-        return <button className="btn_submit" onClick={CheckAvailability}>Search for episodes</button>;
+        return <button className="btn_submit" onClick={CheckAvailability}>Search for new episodes</button>;
     }
   }
 

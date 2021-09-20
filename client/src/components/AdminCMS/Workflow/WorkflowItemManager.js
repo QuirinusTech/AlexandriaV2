@@ -5,7 +5,7 @@ import MediaDetails from "./MediaDetails";
 import WfCompleteList from "./WfCompleteList"
 import AvailabilityWidget from "../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
 
-const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, getNextTicket, resolveTicketPartial }) => {
+const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, getNextTicket, resolveTicketPartial, resetTicket }) => {
   const [fullListState, setFullListState] = useState(generateFullListSelectable(currentEntry['outstanding']))
 
   function generateFullListSelectable(fullListObj) {
@@ -47,30 +47,59 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
 
   return (
     <>
+      <h3>{adminActiveMode.slice(2)}</h3>
       <div className="MediaDetails">
-        <MediaDetails currentEntry={currentEntry} adminActiveMode={adminActiveMode}/>
+        <MediaDetails
+          currentEntry={currentEntry}
+          adminActiveMode={adminActiveMode}
+        />
       </div>
-      {currentEntry['category'] === 'ongoing' && <div>
-        <AvailabilityWidget
-        imdbID={currentEntry['imdbData']['imdbID']}
-        st={currentEntry['st']}
-        et={currentEntry['et']}
-        id={currentEntry['id']}
-        setWishlistData
-         />
-      </div>}
+      {currentEntry["category"] === "ongoing" && (
+        <div>
+          <AvailabilityWidget
+            imdbID={currentEntry["imdbData"]["imdbID"]}
+            st={currentEntry["st"]}
+            et={currentEntry["et"]}
+            id={currentEntry["id"]}
+            setWishlistData
+          />
+        </div>
+      )}
 
-      <div className="ActionData">
-        {currentEntry['resolved'] && <p>This entry has been marked as <span className="currentEntryActionType">{currentEntry['actionType']}</span></p>}
-        {adminActiveMode === "wfDownload" && !currentEntry['resolved'] && (
+      <div className="actionData">
+        {currentEntry["resolved"] && (
+        <div className="currentEntryResolved">
+          <div>
+
+            <p>
+              This entry has been marked as{" "}
+              <span className="currentEntryActionType">
+                {currentEntry["actionType"]}
+              </span>
+            </p>
+            <button className="adminButton adminButton--cancel" onClick={() => resetTicket(currentEntry["id"])}>Reset</button>
+          </div>
+        </div>
+        )} 
+        {adminActiveMode === "wfDownload" && !currentEntry["resolved"] && (
           <LinkGenerator currentEntry={currentEntry} />
         )}
-        {currentEntry['mediaType'] === 'series' && <WfCompleteList fullList={fullListState} handleTick={handleTick} />}
+        {currentEntry["mediaType"] === "series" && (
+          <WfCompleteList fullList={fullListState} disabled={currentEntry["resolved"]} handleTick={handleTick} />
+        )}
       </div>
 
-      <Actions disabled={currentEntry['resolved']} fullListState={fullListState} resolveTicket={resolveTicket} resolveTicketPartial={resolveTicketPartial} adminActiveMode={adminActiveMode} markComplete={markComplete} />
+      <Actions
+        disabled={currentEntry["resolved"]}
+        fullListState={fullListState}
+        resolveTicket={resolveTicket}
+        resolveTicketPartial={resolveTicketPartial}
+        adminActiveMode={adminActiveMode}
+        markComplete={markComplete}
+      />
     </>
   );
+
 };
 
 export default WorkflowItemManager;

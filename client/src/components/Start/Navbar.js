@@ -74,7 +74,7 @@ function Navbar({isLoggedIn}) {
           </Link>
         )}
       </nav>
-      <div className="banner">
+      <div className="banner" style={window.location.pathname === "/admin" ? {height: "40vh", marginLeft: "12vw"} : {}}>
         <h1>
           <Link to="/">The Library of Alexandria</Link>
         </h1>

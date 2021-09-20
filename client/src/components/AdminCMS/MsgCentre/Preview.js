@@ -22,8 +22,8 @@ function Preview({ adminListUsers, adminListNotifications }) {
   return (
     <div className="MessageCentrePreview">
       <h3>Message Centre Preview</h3>
-      <div>
         <select
+          className="adminButton msgCentreUserSelect"
           onChange={updateList}
           value={selectedUser}
         >
@@ -36,20 +36,19 @@ function Preview({ adminListUsers, adminListNotifications }) {
             );
           })}
         </select>
-      </div>
-      <div className="SimulatedMessageCentre">
-        {selectedUser !== "" && (
-          <h4>Previewing messages for user: {selectedUser}</h4>
-        )}
-        {notificationListPreview === null && selectedUser !== null && (
-          <p>Select a user from the dropdown.</p>
-        )}
+      {selectedUser !== "" && (
+        <>
+        <h5>Previewing messages for user: </h5>
+        <h4>{selectedUser}</h4>
+        </>
+      )}
+      {selectedUser !== "" && <div className="SimulatedMessageCentre">
         {notificationListPreview !== null && notificationListPreview.length > 0  && 
         <MessageCentre
           notificationsList={notificationListPreview}
         />}
         {selectedUser !== "" && notificationListPreview !== null && notificationListPreview.length === 0  &&(<p>No messages for {selectedUser}</p>)}
-      </div>
+      </div>}
     </div>
   );
 }

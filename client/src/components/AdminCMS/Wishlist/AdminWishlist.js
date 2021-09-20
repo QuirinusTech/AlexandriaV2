@@ -1,5 +1,7 @@
 import AdminAddNew from "./AdminAddNew";
 import AdminWishlistTable from "./WishlistTable/AdminWishlistTable";
+import { useState } from 'react';
+
 
 const AdminWishlist = ({
   setAdminListWishlist,
@@ -15,47 +17,51 @@ const AdminWishlist = ({
     adminListUsers,
     adminActiveMode
   }) => {
+
+    const [searchBoxValue, setSearchBoxValue] = useState('')
+
     switch (adminActiveMode) {
       case "wishlistList":
         return (
-          <>
-            <h3>Wishlist</h3>
-
+          <div className="AdminWishlistMainDiv">
+            <h3 className="admin">Wishlist</h3>
+            <div className="adminSearchBoxContainer">
+          <input className="adminSearchBox" type="search" placeholder="search" value={searchBoxValue} onChange={(e)=> {setSearchBoxValue(e.target.value)}} />
+        </div>
             <div className="AdminWishlistContent">
               <AdminWishlistTable
+                searchBoxValue={searchBoxValue}
                 adminListWishlist={adminListWishlist}
                 setAdminListWishlist={setAdminListWishlist}
                 allPossibleStatuses={allPossibleStatuses}
                 adminListUsers={adminListUsers}
               />
             </div>
-          </>
+          </div>
         );
       case "wishlistNew":
         return (
-          <>
-            <h3>Add New</h3>
-
+          <div className="AdminAddNewContainer">
             <AdminAddNew
               adminListUsers={adminListUsers}
               adminListWishlist={adminListWishlist}
               setAdminListWishlist={setAdminListWishlist}
               allPossibleStatuses={allPossibleStatuses}
             />
-          </>
+          </div>
         );
 
       default:
         return (
           <div className="wishlistContentWelcomePage">
-            <h3>Select a mode to begin</h3>
+            <h3 className="admin">Select a mode to begin</h3>
           </div>
         );
     }
   };
 
   return (
-    <div className="AdminWishlistMainDiv">
+    <div>
       <Content
         setAdminListWishlist={setAdminListWishlist}
         adminListWishlist={adminListWishlist}

@@ -27,5 +27,8 @@
     "react-dom": "^17.0.0",
     "react-hook-form": "^7.13.0",
     "react-scripts": "^4.0.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }

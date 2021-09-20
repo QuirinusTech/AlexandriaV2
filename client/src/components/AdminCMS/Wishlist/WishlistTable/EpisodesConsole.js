@@ -74,7 +74,7 @@ function EpisodesConsole({
         >
           <div className="EpisodesConsoleSeasonTitle">
             <p><b>Season {season}</b></p>
-            <select name={season} onChange={seasonChangeHandle}>
+            <select className='adminButton adminButton--small' name={season} onChange={seasonChangeHandle}>
               <option value="season">Set all</option>
               {allPossibleStatuses.map(status => {
                 return (
@@ -97,6 +97,7 @@ function EpisodesConsole({
                 >
                   <p>E{formatString(episode)}</p>
                   <select
+                    className="adminButton--small"
                     name={`S${formatString(season)}_E${formatString(episode)}`}
                     value={episodes[season][episode]}
                     onChange={e =>
@@ -146,15 +147,15 @@ function EpisodesConsole({
       />
       <div>
         <button
-        className="adminButton--Cancel"
+        className="adminButton adminButton--cancel"
           onClick={() => {
             setShowEpisodesConsole(false);
           }}
         >
           CANCEL
         </button>
-        <button className="adminButton--Danger" onClick={reset}>RESET</button>
-        <button className="adminButton--Submit" onClick={commitChanges}>DONE</button>
+        <button className="adminButton adminButton--danger" onClick={reset}>RESET</button>
+        <button className="adminButton adminButton--submit" onClick={commitChanges}>DONE</button>
       </div>
     </div>
   );

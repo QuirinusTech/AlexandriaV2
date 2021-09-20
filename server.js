@@ -10,9 +10,10 @@ const {
   passwordResetAttempt,
   getUserNotifications,
   getSingleWishlistEntry,
-  notifyAdmin
+  notifyAdmin,
+  userUpdate
 } = require("./firebase");
-
+const morgan = require('morgan')
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
 const path = require('path')
@@ -31,6 +32,7 @@ const https = require('https')
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(express.static('public'));
 app.use(express.json())
+app.use(morgan('combined'))
 
 /** [App, ResultsTable, AvailabilityWidget] */
 app.post('/db/:operation', verifyToken, async (req, res) => {
@@ -61,155 +63,21 @@ app.post('/globals/:variableName', verifyToken, async (req, res) => {
 
 /** [OptionsWidget] */
 app.post('/userUpdate', verifyToken, async (req, res) => {
+
   const formData = req.body
-  const {id, currentFunction, formEpisodes, userReportedError} = formData
   let username = res.locals.username
-  let wishlistItem = await getSingleWishlistEntry(id)
-  const {sf, ef, st, et} = formEpisodes
-  const episodesObj = {...wishlistItem['episodes']}
-  let multiSeason = st-sf > 0
-  let multiEpisode = et-ef > 0
-
-  let payload, success
-  try {
-    switch(currentFunction) {
-      case "Report Error":
-        if (wishlistItem['mediaType'] === "movie") {
-          // set movie status to error
-          await updateWishlistItem(id, {status: 'error', progress: {error: 100}})
-        } else {
-
-          if (!multiSeason && !multiEpisode) {
-            episodesObj[sf][ef] = 'error'
-          } else if (multiEpisode && !multiSeason) {
-            Object.keys(episodesObj).forEach(season => {
-              Object.keys(episodesObj[season]).forEach(ep => {
-                if (ep >= ef && ep <= et) {
-                  episodesObj[season][ep] = "error"
-                }
-              })
-            })
-          } else if (multieEpisode && multiSeason) {
-            Object.keys(episodesObj).forEach(season => {
-              Object.keys(episodesObj[season]).forEach(ep => {
-                if (season === sf && ep >= ef) {
-                  episodesObj[season][ep] = "error"
-                } else if (season > sf && season < st) {
-                  episodesObj[season][ep] = "error"
-                } else if (season === st && ep < et) {
-                  episodesObj[season][ep] = "error"
-                }
-              })
-            })
-          }
-          payload = await updateEpisodesObj(id, episodesObj)
-        }
-        await notifyAdmin("error", wishlistEntry['name'], "User reported error with media: " + userReportedError)
-        break;
-      case "Edit Range":
-        let prepend = false
-        let append = false
-        let shrink = false
-        if (sf < wishlistItem['sf']) {
-          prepend = true
-        }
-        if (sf <= wishlistItem['sf'] && ef < wishlistItem['ef']) {
-          prepend = true
-        }
-        if (sf < wishlistItem['sf'] || st > wishlistItem['st']) {
-          shrink = true
-        }
-        if (st > wishlistItem['st']) {
-          append = true
-        }
-        if (st >= wishlistItem['sf'] && et > wishlistItem['et']) {
-          append = true
-        }
-
-        if (prepend) {
-          wishlistItem["episodes"] = await WishlistItem.prependEpisodes(
-            wishlistItem["episodes"],
-            wishlistItem["sf"],
-            wishlistItem["ef"],
-            sf,
-            ef,
-            wishlistItem["imdbData"]["imdbID"]
-          );
-        }
-
-        if (shrink) {
-          wishlistItem["episodes"] = WishlistItem.shrinkEpisodesObj(wishlistItem["episodes"], {sf, ef, st, et})
-        }
-        if (append) {
-          wishlistItem['episodes'] = WishlistItem.appendEpisodes({st, et, newEpisodes: et-wishlistItem['et']}, wishlistItem['episodes'])
-        }
-
-        // parse formEpisodes to mark the affected episodes with NEW status or delete them entirely.
-        // add or remove episodes
-        // in the case of addition notify the admin
-        wishlistItem = {...wishlistItem, sf, et, st, ef}
-        payload = await updateWishlistItem(wishlistItem['id'], wishlistItem)
-
-        if (prepend || append) {
-          await notifyAdmin("new", wishlistEntry['name'], "New episodes added to existing entry.")
-        }
-
-        break;
-      case "Add Missing":
-        let newEpisodes = await WishlistItem.parseEpisodeVars(sf, ef, st, et, wishlistItem["imdbData"]["imdbID"])
-
-        wishlistItem['episodes'] = {...wishlistItem['episodes'], ...newEpisodes}
-        wishlistItem['sf'] = Math.min(wishlistItem['sf'], sf)
-        wishlistItem['ef'] = Math.min(Object.keys(wishlistItem['episodes'][wishlistItem['sf']]))
-        wishlistItem['st'] = Math.max(wishlistItem['st'], st)
-        wishlistItem['et'] = Math.max(Object.keys(wishlistItem['episodes'][wishlistItem['st']]))
-
-        payload = await updateWishlistItem(wishlistItem['id'], wishlistItem)
-        await notifyAdmin("new", wishlistEntry['name'], "New episodes added to existing entry.")
-        break;
-      case "Delete":
-        if (wishlistItem['mediaType'] === "movie") {
-          await deleteDocFromWishlist(wishlistItem['id'])
-          payload = 'removed'
-        } else {
-          if (sf === wishlistItem['sf'] && st === wishlistItem['st'] && ef === wishlistItem['ef'] && et === wishlistItem['et']) {
-            await deleteDocFromWishlist(wishlistItem['id'])
-            payload = 'removed'
-          } else {
-            Object.keys(wishlistItem['episodes']).forEach(season => {
-              if (season > sf && season < st) {
-                delete wishlistItem['episodes'][season]
-              } else if (season === sf) {
-                Object.keys(wishlistItem['episodes'][season]).forEach(ep => {
-                  if (ep >= ef) {
-                    delete wishlistItem['episodes'][season][ep]
-                  }
-                })
-              } else if (season === st) {
-                Object.keys(wishlistItem['episodes'][season]).forEach(ep => {
-                  if (ep <= et) {
-                    delete wishlistItem['episodes'][season][ep]
-                  }
-                })
-              }
-            })       
-            wishlistItem['sf'] = Math.min(Object.keys(wishlistItem['episodes']))
-            wishlistItem['ef'] = Math.min(Object.keys(wishlistItem['episodes'][wishlistItem['sf']]))
-            wishlistItem['st'] = Math.max(Object.keys(wishlistItem['episodes']))
-            wishlistItem['et'] = Math.max(Object.keys(wishlistItem['episodes'][wishlistItem['st']]))
-
-            payload = await updateWishlistItem(wishlistItem['id'], wishlistItem)
-          }
-        }
-        break;
-    }
-    success = true
-  } catch (error) {
-    success = false
-    payload = error.message
-  } finally {
-    res.json({success, payload})
-  }
+  let response = await userUpdate({
+    formData,
+    username,
+    resLocals: res.locals
+  })
+  // const {id, currentFunction, formEpisodes, userReportedError} = formData
+  // let wishlistItem = await getSingleWishlistEntry(id)
+  // const {sf, ef, st, et} = formEpisodes
+  // const episodesObj = {...wishlistItem['episodes']}
+  // let multiSeason = st-sf > 0
+  // let multiEpisode = et-ef > 0
+  res.json(response)
 })
 
 app.post('/imdbidlist', verifyToken, async (req, res) => {
@@ -222,11 +90,15 @@ app.post('/imdbidlist', verifyToken, async (req, res) => {
 
 /** [App] */
 app.post('/getnotifications', verifyToken, async (req, res) => {
-  const newObj = req.body;
-  console.log(newObj)
-  const { username } = newObj;
-  const notifications = await getUserNotifications(username)
-  res.json(notifications)
+  const username = req.body.username;
+
+  if (process.env.test === 'true') {
+      console.log("Sending test data")
+      res.json(fakeData['messages'])
+    } else {
+      const notifications = await getUserNotifications(username)
+      res.json(notifications)
+    }
 })
 
 /** [Register] */
@@ -417,8 +289,23 @@ app.post('/logout', (_req, res) => {
 app.post('/Admin/:department/:operation', verifyTokenAdmin, async function (req, res) {
   const {department, operation} = req.params
   const data = req.body
-  let response = await adminDatabaseInterface(department, operation, data)
-  res.json(response)
+  if (process.env.test === 'true') {
+    if (department === 'List' && operation === "Alllists") {
+      res.json({success: true, payload: fakeData})
+    } else {
+      const router = {
+        MSGCENTRE: "messages",
+        USERMANAGER: "users",
+        WISHLIST: "wishlist",
+        allPossibleStatuses: 'allPossibleStatuses'
+      }
+      let payload = fakeData[router[department.toUpperCase()]]
+      res.json({success: true, payload})
+    }
+  } else {
+    let response = await adminDatabaseInterface(department, operation, data)
+    res.json(response)
+  }
 })
 
 /** [Addnew, OptionsWidget] */

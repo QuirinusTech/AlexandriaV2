@@ -93,7 +93,7 @@ function EditableTr({
     };
 
     // contact DB to update
-    const response = await fetch("/Admin/Wishlist/update", {
+    await fetch("/Admin/Wishlist/update", {
       method: "POST",
       body: JSON.stringify(newData),
       headers: { "Content-type": "application/json; charset=UTF-8" }
@@ -114,27 +114,27 @@ function EditableTr({
 
   return (
     <tr className="editableTr">
-    
+    <div>    <h4>Currently editing: </h4>
+    <h3>{entry['name']}</h3></div>
     <div className="editableTrDeleteButtons">
     {areyousure && (
-      <>
-      <h4 className="editableTrDeleteButtons">BESTAETIGEN</h4>
-      <span>
+      <div className="modalBackground">
+      <div className="modalContent">
+      <h3 className="h3--warning">ACHTUNG!</h3>
       <p>Sie stehen davor den Eintrag </p><h4 className="editableTrDeleteButtons">{entryValues['name']}</h4><p> komplett zu loeschen.</p>
-      </span>
 <span>
-            <p className="warning">Diese Aktion ist unwiderruflich!</p>
+            <p className="boldRedText">Diese Aktion ist unwiderruflich!</p>
             </span>
-<div>
-    <button onClick={deleteWlEntry} className="adminButton--Danger">ZERSCHMETTERT DEN SCHEISS!</button>
-</div>
-<div>
-    <button onClick={()=>setAreYouSure(false)} className="adminButton--Cancel">ACH OK, DANN, LASS ES SEIN</button>
+<div className="modalContentButtons">
+    <button onClick={deleteWlEntry} className="adminButton adminButton--submit">ZERSCHMETTERT DEN SCHEISS!</button>
+    <button onClick={()=>setAreYouSure(false)} className="adminButton adminButton--cancel">ACH OK, DANN, LASS ES SEIN</button>
 </div>
 
-      </>)}
+      </div>
+      </div>)}
     </div>
       <table>
+      
         {headers.map(entryKey => {
           switch (entryKey) {
             case "edit":
@@ -142,7 +142,7 @@ function EditableTr({
                 <tr key={entryKey} className="NotEditable">
                   <th>
                     <button
-                      className="adminButton--Cancel"
+                      className="adminButton adminButton--cancel"
                       onClick={() => {
                         setEditableEntry(null);
                       }}
@@ -151,29 +151,26 @@ function EditableTr({
                     </button>
                   </th>
                   <th>
-                    <button className="adminButton--Neutral" onClick={reset}>RESET</button>
+                    <button className="adminButton" onClick={reset}>RESET</button>
                   </th>
                   
                   <th>
-                    <button className="adminButton--Submit" onClick={commit}>UPDATE</button>
+                    <button className="adminButton adminButton--submit" onClick={commit}>UPDATE</button>
                   </th>
                 </tr>
               );
 
             case "imdbData":
               return (
-                <tr key={entryKey} className="NotEditable">
-                  <td colSpan="2">
-                    <IMDBDataDetails imdbData={entry["imdbData"]} />
-                  </td>
-                </tr>
+                <>
+                </>
               );
             case "id":
               return (
                 <tr key={entryKey} className="NotEditable">
                   {!areyousure && 
                 <th>
-    <button onClick={()=>setAreYouSure(true)} className="adminButton--Danger">DELETE</button>
+    <button onClick={()=>setAreYouSure(true)} className="adminButton adminButton--submit">DELETE</button>
                 </th>}
                 <td colSpan={areyousure ? "2" : "1"}>
                   {entry[entryKey]}
@@ -216,6 +213,7 @@ function EditableTr({
                       />
                     ) : (
                       <button
+                        className="adminButton"
                         onClick={() => {
                           setShowEpisodesConsole(true);
                         }}

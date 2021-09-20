@@ -3,7 +3,7 @@ import AvailabilityWidget from "./TrContent/AvailabilityWidget";
 import ProgressBar from "./TrContent/ProgressBar";
 import SeriesEpisodes from "./SeriesEpisodes";
 
-function TableRows({
+const TableRows = ({
   wishlistData,
   statusFilters,
   WishlistItemTemplate,
@@ -12,8 +12,8 @@ function TableRows({
   setAllPossibleStatuses,
   searchMatches,
   searchBoxValue
-}) {
-  return wishlistData.map(item => {
+}) => {
+  return wishlistData.length === 0 ? <h5>There are no entries in your wishlist.</h5> : wishlistData.map(item => {
 
     let isFiltered = !statusFilters[item["status"]]
     let searchValSimple = searchBoxValue.replace(/\s/g, '')
@@ -34,12 +34,19 @@ function TableRows({
     }
 
     let recentlyViewedBool = localStorage.getItem("recentlyViewed") === item["imdbID"];
-    let trClassNameVar = "dynamicContent wishlisttabletr" + item["status"] + " " + item['name'].replace(/\s/g, '');
+    
+    let thisSimpleTitle = item['name']
+    try {
+      thisSimpleTitle = thisSimpleTitle.replace(/\s/g, '')
+    } catch (error) {
+      console.log('%cTableRows.js line:42 error.message', 'color: #007acc;', error.message);
+    }
+    let trClassNameVar = "dynamicContent wishlisttabletr" + item["status"] + " " + thisSimpleTitle;
 
     return (
       <>
       <tr
-        key={item["id"]}
+        key={item["id"] + "_tr"}
         style={{
           display: isFiltered ? "none" : 'table-row',
           border: recentlyViewedBool && "1px solid green"
@@ -55,7 +62,7 @@ function TableRows({
           }}
         ><h4>{item["name"]}</h4>
           <span>
-          <p> ({`${item["mediaType"]}: ${item["imdbData"]["Year"]})`}</p>
+          <p> ({`${item["mediaType"]}: ${item["imdbData"]["Year"] || ''})`}</p>
           </span>
 
           {item["isOngoing"] && <p>Ongoing</p>}
@@ -64,22 +71,21 @@ function TableRows({
             <br />
             {item["mediaType"] === "series" && <SeriesEpisodes item={item} />}
             <details>
-              <summary>Options</summary>
-              <AvailabilityWidget
+              <summary>Options for {item["name"]}</summary>
+              {item["mediaType"] === 'series' && <AvailabilityWidget
                 setWishlistData={setWishlistData}
                 imdbID={item["imdbID"]}
                 st={item["st"]}
                 et={item["et"]}
                 id={item["id"]}
-              />
+              />}
               <OptionsWidget setWishlistData={setWishlistData} item={item} />
             </details>
           </div>
         </td>
       </tr>
-      </>
-    );
-  });
+      </>)
+  })
 }
 
 export default TableRows;

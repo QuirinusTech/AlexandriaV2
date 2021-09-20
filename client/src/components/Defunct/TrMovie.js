@@ -15,7 +15,7 @@ return (
       let classnamevar = "colhead_" + heading;
       return (
         <td
-          key={heading}
+          key={classnamevar}
           className={classnamevar}
           style={{ width: "50%", border: recentlyViewedBool && "1px solid green"  }}
         >

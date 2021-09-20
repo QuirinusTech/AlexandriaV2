@@ -76,7 +76,7 @@ function EditableMessageEntry({
     return <LoadingBar />
   } else if (messageType === "custom") {
     return (
-      <tr key={message["id"]}>
+      <tr className="editableMsgTr" key={message["id"]}>
         <td>-</td>
         <td>{message["id"]}</td>
         <td>
@@ -116,15 +116,14 @@ function EditableMessageEntry({
           />
         </td>
         <td>
-          <table className="usersVisTable">
-            <tbody>
+          <div className="usersVisTable" style={{flexDirection: "column", border: "1px solid white"}}>
+          <h4>Visibility</h4>
               {Object.keys(usersVis).map(user => {
                 return (
-                  <tr
+                  <div
                     className="usersVisTableRow"
                     key={user}
                   >
-                    <td>
                       <input
                         className="checkbox_uservis"
                         type="checkbox"
@@ -133,24 +132,20 @@ function EditableMessageEntry({
                         checked={usersVis[user]}
                         onChange={usersTickboxChange}
                       />
-                    </td>
-                    <td>
                       <label>{user}</label>
-                    </td>
-                  </tr>
+                  </div>
                 );
               })}
-            </tbody>
-          </table>
+          </div>
         </td>
         <td>
-          <button className="adminButton--Submit" onClick={editDone}>
+          <button className="adminButton adminButton--submit" onClick={editDone}>
             Update
           </button>
         </td>
         <td>
           <button
-            className="adminButton--Cancel"
+            className="adminButton adminButton--cancel"
             onClick={() => setEditable(false)}
           >
             Cancel
@@ -160,7 +155,7 @@ function EditableMessageEntry({
     );
   } else {
     return (
-      <tr key={message["id"]}>
+      <tr className="editableMsgTr" key={message["id"]}>
         <td>-</td>
         <td>{message["id"]}</td>
         <td>
@@ -228,13 +223,13 @@ function EditableMessageEntry({
           </table>
         </td>
         <td>
-          <button className="adminButton--Submit" onClick={editDone}>
+          <button className="adminButton adminButton--submit" onClick={editDone}>
             Update
           </button>
         </td>
         <td>
           <button
-            className="adminButton--Cancel"
+            className="adminButton adminButton--cancel"
             onClick={() => setEditable(false)}
           >
             Cancel

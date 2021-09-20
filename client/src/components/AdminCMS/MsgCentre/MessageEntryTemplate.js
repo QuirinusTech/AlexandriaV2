@@ -23,7 +23,7 @@ function MessageEntryTemplate({
       adminListUsers={adminListUsers}
     />
   ) : (
-    <tr>
+    <tr className="adminTableTr">
       <td>
         <input
           value={message["id"]}
@@ -38,8 +38,8 @@ function MessageEntryTemplate({
       <td>{message["messageType"]}</td>
       <td>{message["messageType"] === "custom" ? message["customMessageContent"] : message['entryStatusUpdate']}</td>
       <td>
-        <details>
-          <summary>Visibility</summary>
+        <details className="darkDetails">
+          <summary className="adminButton adminButton--small">Visibility</summary>
                   <ul className="usersVisUl">
         {Object.keys(message['usersVis']).map(user => {
         return (
@@ -56,24 +56,24 @@ function MessageEntryTemplate({
         </details>
       </td>
       <td>
-        <button onClick={()=>setEditable(true)}>Edit</button>
+        <button className="adminButton adminButton--small" onClick={()=>setEditable(true)}>Edit</button>
       </td>
       {!clickDelete ? (
         <td>
-          <button className="adminButton--Danger" name={message["id"]} onClick={() => setClickDelete(true)}>
+          <button className="adminButton adminButton--small adminButton--danger" name={message["id"]} onClick={() => setClickDelete(true)}>
             Delete
           </button>
         </td>
       ) : (
         <td>
           <button
-            className="adminButton--Danger"
+            className="adminButton adminButton--small adminButton--danger"
             name={message["id"]}
             onClick={deleteMessage}
           >
             Confirm
           </button>
-          <button className="adminButton--Cancel" name={message["id"]} onClick={() => setClickDelete(false)}>
+          <button className="adminButton adminButton--small adminButton--cancel" name={message["id"]} onClick={() => setClickDelete(false)}>
             Cancel
           </button>
         </td>

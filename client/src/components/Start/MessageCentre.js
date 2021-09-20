@@ -29,7 +29,7 @@ const MessageCentre = ({ notificationsList }) => {
 
     let MessagesDiv = statuses.map(status => {
       return (
-        <div className="msgCentrePreview--statusMessages">
+        <div className="msgCentrePreview--statusMessages" key={status}>
           <h4>{status}</h4>
           <ul>
             {statusMessages

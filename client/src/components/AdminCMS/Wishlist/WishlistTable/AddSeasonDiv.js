@@ -31,7 +31,7 @@ const AddSeasonDiv = ({addSeasonVariables, addSeasonChangeHandler, allPossibleSt
       
       </div>
       <div>
-      <button className="adminButton--Submit" name="add" onClick={addSeason}>Add</button>
+      <button className="adminButton adminButton--submit" name="add" onClick={addSeason}>Add</button>
 
       </div>
       

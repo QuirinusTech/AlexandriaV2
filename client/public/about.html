@@ -26,7 +26,6 @@
               Wikipedia
           </a>]
       </blockquote>
-      <button onclick="showmore()" id="showmorebutton" class="morelink">[More...]</button>
       <br>
       <h3>This site</h3>
       <p>In 2020, an aspiring crepologist by the name of Matthew Gird decided to get his shit together and get a real job.</p>
@@ -38,80 +37,30 @@
   </div>
 
   <div class="about_row">
-      <button style="width: auto;" onclick="Redirect('/contactus')">Contact the administrator</button>
+      <h2>Aknowlegments & Sources</h2>
+      <p>Styling and occasional ass-kicking by Allison Gird.</p>
+      <p>UI Feedback, testing, swatches and Couch-Potatoing by Tje Anne.</p>
+      <blockquote>
+          "Proof of that Couch-Potatoing can be beneficial." -Tje
+      </blockquote>
+      <p>Code review, mentoring and cheerleading by Shaun Matthysen.</p>
+      <p>The creator of the site would also like to extend their thanks to:</p>
+      <ul>
+          <li><a class="purplelink" href="https://www.w3schools.com/default.asp">w3schools.com</a> for their amazing tutorials and cheatsheets</li>
+          <li><a class="purplelink" href="https://www.edx.org/course/cs50s-introduction-to-computer-science">David J. Malan and CS50</a> for being a solid foundation</li>
+          <li><a class="purplelink" href="https://www.youtube.com/c/TraversyMedia/about">Traversy Media</a> for getting us started</li>
+          <li><a class="purplelink" href="https://www.youtube.com/c/AngularFirebase/about">Fireship.io</a> for proving that there are real wizards (Javascript wizards)</li>
+          <li><a class="purplelink" href="https://stackoverflow.com/questions/63654924/user-authentification-failure-despite-successful-login">Stack Overflow</a> for answering my inane questions</li>
+          <li><a class="purplelink" href="https://www.freecodecamp.org/">freecodecamp.org</a> for their tutorials</li>
+          <li>The <a class="purplelink" href="http://www.omdbapi.com/">OMDB API</a> for providing free access to their easy-to-use API</li>
+          <li><a class="purplelink" href="https://firebase.google.com/">Firebase</a> and <a class="purplelink" href="https://www.heroku.com/">Heroku</a> for providing free Database and Server Hosting.</li>
+          <li><a class="purplelink" href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Miguel Grinberg</a> for his amazing Flask tutorial.</li>
+      </ul>
+      <p>If you have not been credited for something on this site, please get in touch <a class="purplelink" href="{{ url_for('contactus', subject='Missing attribution')}}">here</a>.</p>
+      <p>TV information and images are provided by omdbapi.com.</p>
+      <p>This site is neither endorsed nor certified by IMDB.com and/or its affiliates.</p>
+      <br>
+      <blockquote><img class="quirinuslogo" src="/static/img/QuirinusTech.png">Quirinus Technologies &#169; 2020</blockquote>
   </div>
-  <div id="infotablediv">
-    <table id="info_table" className="info_table">
-      <tbody>
-        <tr>
-          <td colSpan="2">STATUSES</td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">New</td>
-          <td>
-            Your request has been added to the wishlist, but no action
-            has been taken yet.
-          </td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">Downloading</td>
-          <td>The media is currently being downloaded.</td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">Complete</td>
-          <td>
-            The media has finished downloading and is ready to be copied over.
-          </td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">Copied</td>
-          <td>The media has been copied over to your external hard drive.</td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">Failed</td>
-          <td>
-            Something went wrong while downloading this media or we were unable to complete the download.
-          </td>
-        </tr>
-        <tr>
-          <td className="info_table_td_left">Postponed</td>
-          <td>
-            This media isn't available yet. Once it's available, we'll get it for you.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-      <div class="about_row">
-          <h2>Aknowlegments & Sources</h2>
-          <p>Styling and occasional ass-kicking by Allison Gird.</p>
-          <p>UI Feedback, testing, swatches and Couch-Potatoing by Tje Anne.</p>
-          <blockquote>
-              "Proof of that Couch-Potatoing can be beneficial." -Tje
-          </blockquote>
-          <p>Code review, mentoring and cheerleading by Shaun Matthysen.</p>
-          <p>The creator of the site would also like to extend their thanks to:</p>
-          <ul>
-              <li><a class="purplelink" href="https://www.w3schools.com/default.asp">w3schools.com</a> for their amazing tutorials and cheatsheets</li>
-              <li><a class="purplelink" href="https://www.edx.org/course/cs50s-introduction-to-computer-science">David J. Malan and CS50</a> for being a solid foundation</li>
-              <li><a class="purplelink" href="https://www.youtube.com/c/TraversyMedia/about">Traversy Media</a> for getting us started</li>
-              <li><a class="purplelink" href="https://www.youtube.com/c/AngularFirebase/about">Fireship.io</a> for proving that there are real wizards (Javascript wizards)</li>
-              <li><a class="purplelink" href="https://stackoverflow.com/questions/63654924/user-authentification-failure-despite-successful-login">Stack Overflow</a> for answering my inane questions</li>
-              <li><a class="purplelink" href="https://www.freecodecamp.org/">freecodecamp.org</a> for their tutorials</li>
-              <li>The <a class="purplelink" href="http://www.omdbapi.com/">OMDB API</a> for providing free access to their easy-to-use API</li>
-              <li><a class="purplelink" href="https://firebase.google.com/">Firebase</a> and <a class="purplelink" href="https://www.heroku.com/">Heroku</a> for providing free Database and Server Hosting.</li>
-              <li><a class="purplelink" href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Miguel Grinberg</a> for his amazing Flask tutorial.</li>
-          </ul>
-          <p>If you have not been credited for something on this site, please get in touch <a class="purplelink" href="{{ url_for('contactus', subject='Missing attribution')}}">here</a>.</p>
-          <p>TV information and images are provided by omdbapi.com.</p>
-          <p>This site is neither endorsed nor certified by IMDB.com and/or its affiliates.</p>
-          <br>
-          <blockquote><img class="quirinuslogo" src="/static/img/QuirinusTech.png">Quirinus Technologies &#169; 2020</blockquote>
-      </div>
-      <button onclick="togglehide('changelog_div')">Show Changelog</button>
-      <div class="about_row hidden" id="changelog_div">
-          {% include "changelog.html" %}
-      </div>
   </div>
 </div>

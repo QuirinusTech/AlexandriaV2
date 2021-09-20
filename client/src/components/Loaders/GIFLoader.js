@@ -1,4 +1,4 @@
-function GIFLoader() {
+const GIFLoader = () => {
   return (
     <div>
       <div className="GIFLoader" id="GifLoader">

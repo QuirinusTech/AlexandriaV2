@@ -3,15 +3,16 @@ import PNGLoader from "../../../Loaders/PNGLoader";
 
 function OptionsWidget({ item, setWishlistData }) {
   const [currentFunction, setCurrentFunction] = useState(null);
-  const [userReportedError, setUserReportedError] = useState('Optional')
+  const [userReportedError, setUserReportedError] = useState('')
+  const [showHelpStrings, setShowHelpStrings] = useState(false)
   const [formEpisodes, setFormEpisodes] = useState(
     item["mediaType"] === "movie"
       ? "movie"
       : {
-          sf: item["sf"],
-          ef: item["ef"],
-          st: item["st"],
-          et: item["et"]
+          sf: parseInt(item["sf"]),
+          ef: parseInt(item["ef"]),
+          st: parseInt(item["st"]),
+          et: parseInt(item["et"])
         }
   );
   const [invalidValueFlags, setInvalidValueFlags] = useState(
@@ -25,59 +26,142 @@ function OptionsWidget({ item, setWishlistData }) {
         }
   );
   const [valuesInvalid, setValuesInvalid] = useState(false);
+  const [selectAll, setSelectAll] = useState(false)
+
+  const optionsWidgetStringRouterEN = {
+    movie: {
+      "Report Error": "This Movie will be re-downloaded for you.",
+      "Edit Range": "",
+      "Add Missing": "",
+      "Delete": "Are you sure you want to delete this movie from the list?",
+      "Blacklist": "Are you sure you want to blacklist this entry?"
+    },
+    series: {
+      "Report Error": "These episodes will be re-downloaded for you.",
+      "Edit Range": "This will amend the range of seasons & episodes for this entry. Proceed?",
+      "Add Missing": "This will add the specified range of seasons & episodes to this item. Proceed?",
+      "Delete": "Are you sure you want to delete these seasons & episodes?",
+      "Blacklist": "Are you sure you want to blacklist this entry?"
+    }
+  }
+
+  const optionsWidgetStringsEN = {
+    report: {
+      help: "Use this to report faulty media. You can also an include an optional message for the admin.",
+      label: "Report error",
+      fn: "Report Error",
+      applicable: {
+        movie: true,
+        series: true
+      }
+    },
+    edit: {
+      help: "You can specify from which season and episode the season should start and up until where it will end.",
+      label: "Edit Range",
+      fn: "Edit Range",
+      applicable: {
+        movie: false,
+        series: true
+      }
+    },
+    add: {
+      help: "This will add the specified range of seasons & episodes to this item, even if they fall outside the current range.",
+      label: "Manually add episodes",
+      fn: "Add Missing",
+      applicable: {
+        movie: false,
+        series: true
+      }     
+    },
+    del: {
+      help: "Use this to delete specific episodes, seasons or an entire entry.",
+      label: "Delete",
+      fn: "Delete",
+      applicable: {
+        movie: true,
+        series: true
+      }
+    },
+    blist: {
+      help: "Blacklisting deletes an item from the wishlist and prevents you from being able to request it for download again.",
+      label: "Blacklist",
+      fn: "Blacklist",
+      applicable: {
+        movie: true,
+        series: true
+      }
+    }
+  };
+
+
+  function selectAllCheckbox(e) {
+    const {checked} = e.target
+    setSelectAll(checked)
+    if (checked) {
+      setFormEpisodes({
+          sf: parseInt(item["sf"]),
+          ef: parseInt(item["ef"]),
+          st: parseInt(item["st"]),
+          et: parseInt(item["et"])
+        })
+    }
+  }
 
   function handleChange(e) {
     const { name, value } = e.target;
     let formEpisodesObj = { ...formEpisodes };
-    formEpisodesObj[name] = value;
+    formEpisodesObj[name] = value === '' ? '' : parseInt(value);
+    setFormEpisodes(formEpisodesObj);
     if (currentFunction === "Delete") {
-      let valueFlags = { ...invalidValueFlags };
-      let invalid = false;
-      if (formEpisodesObj["sf"] < item["sf"] || formEpisodesObj["sf"] < 1) {
-        valueFlags["sf"] = true;
-        invalid = true;
-      } else {
-        valueFlags["sf"] = false;
-      }
-      if (
-        formEpisodesObj["sf"] === item["sf"] &&
-        formEpisodes["ef"] < item["ef"]
-      ) {
+      validate(formEpisodesObj)
+    }
+  }
+
+  function validate(formEpisodesObj) {
+    let valueFlags = { ...invalidValueFlags };
+    let invalid = false;
+    if (formEpisodesObj["sf"] < item["sf"] || formEpisodesObj["sf"] < 1) {
+      valueFlags["sf"] = true;
+      invalid = true;
+    } else {
+      valueFlags["sf"] = false;
+    }
+    if (
+      formEpisodesObj["sf"] === item["sf"] &&
+      parseInt(formEpisodesObj["ef"]) < parseInt(item["ef"])
+    ) {
+      valueFlags["ef"] = true;
+      invalid = true;
+    } else {
+      if (formEpisodesObj["ef"] < 1) {
         valueFlags["ef"] = true;
         invalid = true;
       } else {
-        if (formEpisodes["ef"] < 1) {
-          valueFlags["ef"] = true;
-          invalid = true;
-        } else {
-          valueFlags["ef"] = false;
-        }
-      }
-      if (formEpisodesObj["st"] > item["st"]) {
-        valueFlags["st"] = true;
-        invalid = true;
-      } else {
-        valueFlags["st"] = false;
-      }
-      if (
-        formEpisodesObj["st"] === item["st"] &&
-        formEpisodes["et"] > item["et"]
-      ) {
-        valueFlags["et"] = true;
-        invalid = true;
-      } else {
-        valueFlags["et"] = false;
-      }
-      setInvalidValueFlags(valueFlags);
-      if (invalid) {
-        setValuesInvalid(true);
-      } else {
-        setValuesInvalid(false);
+        valueFlags["ef"] = false;
       }
     }
-    setFormEpisodes(formEpisodesObj);
+    if (formEpisodesObj["st"] > item["st"]) {
+      valueFlags["st"] = true;
+      invalid = true;
+    } else {
+      valueFlags["st"] = false;
+    }
+    if (
+      formEpisodesObj["st"] === item["st"] &&
+      formEpisodes["et"] > item["et"]
+    ) {
+      valueFlags["et"] = true;
+      invalid = true;
+    } else {
+      valueFlags["et"] = false;
+    }
+    setInvalidValueFlags(valueFlags);
+    if (invalid) {
+      setValuesInvalid(true);
+    } else {
+      setValuesInvalid(false);
+    }
   }
-
 
   async function SubmitForm() {
     try {
@@ -89,7 +173,8 @@ function OptionsWidget({ item, setWishlistData }) {
         id: item["id"],
         currentFunction,
         formEpisodes,
-        userReportedError
+        userReportedError,
+        selectAll
       };
       let query = "/userUpdate";
       if (currentFunction === "Blacklist") {
@@ -106,6 +191,7 @@ function OptionsWidget({ item, setWishlistData }) {
       }
 
       setCurrentFunction("Loading");
+      console.log('%cOptionsWidget.js line:109 formData', 'color: #007acc;', formData);
       let result = await fetch(query, {
         method: "POST",
         body: JSON.stringify(formData),
@@ -139,24 +225,28 @@ function OptionsWidget({ item, setWishlistData }) {
 
 
 
-  const UtilityForm = () => {
+  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags}) => {
     return (
-      <div key={item["id"]} className="wishListWidgetButtonRow">
-        <br />
+      <div key={item["id"]} className="wishListWidgetContent">
+      
         <h4>{currentFunction}</h4>
         {currentFunction !== "Blacklist" &&
           item["mediaType"] === "series" && (
-            <div>
+            <div className="optionsWidget__rangePickerForm">
+            {currentFunction !== "Add Missing" && currentFunction !== "Edit Range" && <span><input type="checkbox" checked={selectAll} onChange={selectAllCheckbox} /><b>Select All</b></span>}
+            {!selectAll && 
+            <>
               {valuesInvalid && (
-                <div>
+                <span>
                   <p>Please ensure that you have specified seasons / episodes between</p>
                   <p><b>S {item["sf"]} E {item["ef"]}</b> and <b>S {item["st"]} E{item["et"]}</b></p>
-                </div>
+                </span>
               )}
-              <label>Affected seasons / episodes:</label>
-              <p>FROM</p>
-              <label className={invalidValueFlags['sf'] ? 'invalidValue' : ''}>
+              <div>
+              <p><b>FROM</b></p>
+              <label className={invalidValueFlags['sf'] ? 'invalidValue' : ''}>Season
               <input
+                disabled={selectAll}
                 type="number"
                 name="sf"
                 
@@ -164,9 +254,10 @@ function OptionsWidget({ item, setWishlistData }) {
                 id={"formEpisodes_sf_" + item["id"]}
                 onChange={handleChange}
                 placeholder="From season"
-              />Season</label>
-              <label className={invalidValueFlags['ef'] ? 'invalidValue' : ''}>
+              /></label>
+              <label className={invalidValueFlags['ef'] ? 'invalidValue' : ''}>Episode
               <input
+                disabled={selectAll}
                 type="number"
                 name="ef"
                 
@@ -174,10 +265,13 @@ function OptionsWidget({ item, setWishlistData }) {
                 id={"formEpisodes_ef_" + item["id"]}
                 onChange={handleChange}
                 placeholder="from episode"
-              />Episode</label>
-              <p>TO</p>
-              <label className={invalidValueFlags['st'] ? 'invalidValue' : ''}>
+              /></label>
+              </div>
+              <div>
+              <p><b>TO</b></p>
+              <label className={invalidValueFlags['st'] ? 'invalidValue' : ''}>Season
               <input
+                disabled={selectAll}
                 type="number"
                 name="st"
                 
@@ -185,31 +279,31 @@ function OptionsWidget({ item, setWishlistData }) {
                 id={"formEpisodes_st_" + item["id"]}
                 onChange={handleChange}
                 placeholder="up to season"
-              />Season</label>
-              <label className={invalidValueFlags['et'] ? 'invalidValue' : ''}>
-              <input
+              /></label>
+              <label className={invalidValueFlags['et'] ? 'invalidValue' : ''}>Episode
+              <input  
+                disabled={selectAll}
                 type="number"
                 name="et"
                 value={formEpisodes['et']}
                 id={"formEpisodes_et_" + item["id"]}
                 onChange={handleChange}
                 placeholder="up to episode"
-              />Episode</label>
+              /></label>
+              </div>
+
+            </>
+            }
             </div>
           )}
-        {currentFunction === "Report Error" ? (
+        <div className="wishListWidgetButtonRowHorizontal">
+        {currentFunction === "Report Error" && (
           <>
             <p>You do not need to specify the issue. </p>
             <input type="text" placeholder="Optional Error Message" name='userReportedError' value={userReportedError} onChange={(e)=>setUserReportedError(e.target.value)} />
-            <p>
-            {item["mediaType"] === "series" ? "These episodes " : "This Movie "}
-            will be re-downloaded for you.
-          </p>
           </>
-        ) : (
-          <p>{currentFunction} this entry?</p>
         )}
-        <div className="wishListWidgetButtonRowHorizontal">
+          <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
           <button className="btn_submit" onClick={SubmitForm}>
             {
               currentFunction === "Edit Range"
@@ -234,57 +328,33 @@ function OptionsWidget({ item, setWishlistData }) {
     )
   };
 
-  const WidgetInsides = () => {
+  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags}) => {
+    
     switch (currentFunction) {
       case null:
         return (
-          <div className="wishListWidgetButtonRow">
-            <button
-              className="btn_submit"
-              onClick={() => {
-                setCurrentFunction("Report Error");
-              }}
-            >
-              Report error
-            </button>
-            {item["mediaType"] === "series" && (
+        <div className="wishListWidgetButtonRow">
+        {Object.keys(optionsWidgetStringsEN).map(stringName => {
+          if (!optionsWidgetStringsEN[stringName]['applicable'][ item['mediaType']]) {
+            return (<></>)
+          } else {
+            return (
+              <>
               <button
+                key={stringName + item['id']}
                 className="btn_submit"
                 onClick={() => {
-                  setCurrentFunction("Edit Range");
+                  setCurrentFunction(optionsWidgetStringsEN[stringName]['fn']);
                 }}
               >
-                Change Season / Episode Range
+                {optionsWidgetStringsEN[stringName]['label']}
               </button>
-            )}
-            {item["mediaType"] === "series" && (
-              <button
-                className="btn_submit"
-                onClick={() => {
-                  setCurrentFunction("Add Missing");
-                }}
-              >
-                Add specific seasons & episodes
-              </button>
-            )}
-            <button
-              className="btn_submit"
-              onClick={() => {
-                setCurrentFunction("Delete");
-              }}
-            >
-              Delete
-            </button>
-            <button
-              className="btn_submit"
-              onClick={() => {
-                setCurrentFunction("Blacklist");
-              }}
-            >
-              Blacklist
-            </button>
-          </div>
-        );
+              {showHelpStrings && <p>{optionsWidgetStringsEN[stringName]['help']}</p>}
+              </>
+            )
+          }
+        })}
+        </div>)
       case "Loading":
         return <PNGLoader />;
       case "Done":
@@ -310,7 +380,8 @@ function OptionsWidget({ item, setWishlistData }) {
             <p>An error report has been sent to the administrator.</p>
             <button
               onClick={() => {
-                window.location.reload(false);
+                // window.location.reload(false);
+                setCurrentFunction(null)
               }}
             >
               OK
@@ -318,15 +389,31 @@ function OptionsWidget({ item, setWishlistData }) {
           </div>
         );
       default:
-        return <UtilityForm />;
+        return <UtilityForm
+          currentFunction={currentFunction}
+          item={item}
+          formEpisodes={formEpisodes}
+          setFormEpisodes={setFormEpisodes}
+          handleChange={handleChange}
+          invalidValueFlags={invalidValueFlags}
+         />;
     }
   };
 
   return (
+    <>
     <div className="OptionsWidget">
-      <h4>Modify</h4>
-      <WidgetInsides />
+    <button className="optionsWidgetHelpButton" onClick={()=>setShowHelpStrings(!showHelpStrings)}>?</button>
+      <WidgetInsides
+          currentFunction={currentFunction}
+          item={item}
+          formEpisodes={formEpisodes}
+          setFormEpisodes={setFormEpisodes}
+          handleChange={handleChange}
+          invalidValueFlags={invalidValueFlags}
+         />
     </div>
+    </>
   );
 }
 

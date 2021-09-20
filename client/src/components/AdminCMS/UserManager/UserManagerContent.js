@@ -65,29 +65,18 @@ function UserManagerContent({ adminListUsers, setAdminListUsers, adminActiveMode
 
   const Content = ({ usersList, currentUser, setCurrentUser, commitChanges }) => {
     return loading ? (<div><GIFLoader /></div>) : (
-      <div className="UserManagerContent">
-      {currentUser === null ? (
-        <div className="UM--UsersList">
+      <div className="userManagerContent">
+
+        <div className="usersList">
           <UsersList
             usersList={usersList}
             selectUser={selectUser}
             currentUser={currentUser}
           />
         </div>
-          ) : (
-            <details>
-            <summary onClick={()=>setCurrentUser(null)}>Return to User List</summary>
-            <UsersList
-            usersList={usersList}
-            selectUser={selectUser}
-            currentUser={currentUser}
-          />
-            </details>
-          )}
 
-        {currentUser !== null &&
-          <div className="UM--UserDetailManager">
-          {detailsEditable ? 
+        {currentUser !== null && 
+          (<>{detailsEditable ? 
             <UserDetailManager
               currentUser={currentUser}
               setCurrentUser={setCurrentUser}
@@ -104,20 +93,22 @@ function UserManagerContent({ adminListUsers, setAdminListUsers, adminActiveMode
               setDetailsEditable={setDetailsEditable}
               passwordReset={passwordReset}
             />
-          }
-          </div>
+          }</>)
           }
       </div>
     )
   };
 
   return (
+    <div className="userManagerMain">
+    <h3>User Manager</h3>
     <Content
       usersList={adminListUsers}
       currentUser={currentUser}
       setCurrentUser={setCurrentUser}
       commitChanges={commitChanges}
     />
+    </div>
   );
 }
 

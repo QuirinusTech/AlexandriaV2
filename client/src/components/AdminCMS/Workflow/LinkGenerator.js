@@ -7,12 +7,13 @@ function LinkGenerator({ currentEntry }) {
   const [sortBy, setSortBy] = useState("seeds");
  
   return (<>
-    <div className="LinkGenerator">
-    <h4>Link Generator</h4>
-      <h5>Settings</h5>
-      <div>
-        <p>Sort by</p>
-        <label>
+    <div className="linkGenerator">
+    <h4 className="highlightH4">Link Generator</h4>
+      <div className="linkGenSettings">
+        <h4>Settings</h4>
+        <div>
+          <p style={{color: "white"}}>Sort by</p>
+        <label className={sortBy === "seeds" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
             name="sortBy"
@@ -22,7 +23,7 @@ function LinkGenerator({ currentEntry }) {
           />
           Number of Seeds
         </label>
-        <label>
+        <label className={sortBy === "size" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
             name="sortBy"
@@ -32,7 +33,7 @@ function LinkGenerator({ currentEntry }) {
           />
           Size
         </label>
-        <label>
+        <label className={sortBy === "name" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
             name="sortBy"
@@ -42,8 +43,8 @@ function LinkGenerator({ currentEntry }) {
           />
           Name
         </label>
+        </div>
       </div>
-      <h5>Link Buttons</h5>
       <LinksList
         currentEntry={currentEntry}
         sortBy={sortBy}

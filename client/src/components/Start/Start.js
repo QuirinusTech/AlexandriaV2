@@ -1,9 +1,6 @@
-import { useState } from "react";
-import Notifications from "./Notifications"
 import {Link} from 'react-router-dom'
 
-function Start({notifications}) {
-  const [showMsgCentre, setShowMsgCentre] = useState(true)
+const Start = ({notifications}) => {
   const displayName = localStorage.getItem('displayName') || "Guest"
   const can_add = localStorage.getItem('can_add') || false
   const is_admin = localStorage.getItem('is_admin') || false
@@ -13,7 +10,6 @@ function Start({notifications}) {
     <div>
     <div className="grid_main">
       <h2>Welcome, {displayName}!</h2>
-      {showMsgCentre && <Notifications notifications={notifications} setShowMsgCentre={setShowMsgCentre} />}
       
       {!is_active_user && <div className="grid5">
         <Link id="Go_Button_5" to="/login" className="go_button">

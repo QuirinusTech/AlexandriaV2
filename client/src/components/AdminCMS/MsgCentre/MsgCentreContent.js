@@ -22,10 +22,11 @@ function MsgCentreContent({
     switch (adminActiveMode) {
       case "msgPreview":
         return (
+          <div className="AdminCMSTitlePage">
           <Preview
             adminListNotifications={adminListNotifications}
             adminListUsers={adminListUsers}
-          />
+          /></div>
         );
       case "msgNew":
         return (
@@ -37,6 +38,7 @@ function MsgCentreContent({
         );
       case "msgCMS":
         return (
+        <div className="AdminCMSTitlePage">
           <MessageCMS
             adminListNotifications={adminListNotifications}
             adminListUsers={adminListUsers}
@@ -44,6 +46,7 @@ function MsgCentreContent({
             adminListWishlist={adminListWishlist}
             setAdminListNotifications={setAdminListNotifications}
           />
+          </div>
         );
       default:
         return (
@@ -55,7 +58,7 @@ function MsgCentreContent({
   };
 
   return (
-    <div className="AdminCMSTitlePage">
+
       <Content
         adminActiveMode={adminActiveMode}
         adminListUsers={adminListUsers}
@@ -64,7 +67,7 @@ function MsgCentreContent({
         setAdminListNotifications={setAdminListNotifications}
         allPossibleStatuses={allPossibleStatuses}
       />
-    </div>
+
   );
 }
 

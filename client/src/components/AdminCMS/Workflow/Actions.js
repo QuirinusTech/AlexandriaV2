@@ -1,35 +1,33 @@
 function Actions({ resolveTicket, resolveTicketPartial, adminActiveMode, fullListState, disabled }) {
   return (
-    <div className="Actions">
+    <div className="actions">
 
-      {disabled ? (<div className="Actions--disabled"><h4>No further action can be taken on a resolved ticket.</h4></div>) : <>
+      {disabled ? (<div className="actions--disabled"><h4>No further action can be taken on a resolved ticket.</h4></div>) : <>
       <div>
         <span>Ticket Action</span>
-        <button value="done" className="adminButton--Submit" onClick={()=> resolveTicket("done")}>
+        <button value="done" className="adminButton adminButton--submit" onClick={()=> resolveTicket("done")}>
           Done
         </button>
-        <button value="postpone" className="adminButton--Danger" onClick={()=> resolveTicket("postpone")}>
+        <button value="postpone" className="adminButton adminButton--cancel" onClick={()=> resolveTicket("postpone")}>
           Postpone
         </button>
-        <button value="fail" className="adminButton--Cancel" onClick={()=> resolveTicket("fail")}>
+        <button value="fail" className="adminButton adminButton--danger" onClick={()=> resolveTicket("fail")}>
           Failed
         </button>
       </div>
 
-      {fullListState !== false && (
-        <div>
+        <div className={!fullListState ? "disabled" : ""}>
           <span>Only selected</span>
-          <button value="done" className="adminButton--Submit" onClick={()=> resolveTicketPartial('done', fullListState)}>
+          <button value="done" disabled={!fullListState} className="adminButton adminButton--submit" onClick={()=> resolveTicketPartial('done', fullListState)}>
             Done
           </button>
-          <button value="postpone" className="adminButton--Danger" onClick={()=> resolveTicketPartial('postpone', fullListState)}>
+          <button value="postpone" disabled={!fullListState} className="adminButton adminButton--cancel" onClick={()=> resolveTicketPartial('postpone', fullListState)}>
             Postpone
           </button>
-          <button value="fail" className="adminButton--Cancel" onClick={()=> resolveTicketPartial('fail', fullListState)}>
+          <button value="fail" disabled={!fullListState} className="adminButton adminButton--danger" onClick={()=> resolveTicketPartial('fail', fullListState)}>
             Failed
           </button>
         </div>
-        )}
         </>}
     </div>
   );

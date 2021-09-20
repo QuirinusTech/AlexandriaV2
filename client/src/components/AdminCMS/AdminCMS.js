@@ -3,10 +3,10 @@ import LoadingBar from "../Loaders/LoadingBar";
 import AdminNav from "./AdminNav";
 import AdminActiveTask from "./AdminActiveTask";
 import RefreshButtons from "./RefreshButtons";
-import { useHistory } from "react-router-dom"
+import "./darkmode.css"
 
 function AdminCMS({setErrorPageContent}) {
-  let history = useHistory()
+
   const [adminActiveTask, setAdminActiveTask] = useState(null);
   const [adminListWishlist, setAdminListWishlist] = useState(null);
   const [adminListNotifications, setAdminListNotifications] = useState(null);
@@ -22,12 +22,13 @@ function AdminCMS({setErrorPageContent}) {
   const [loadingStep, setLoadingStep] = useState(null)
 
   async function refreshData(e) {
-    setAdminActiveTask(null)
-    setAdminActiveMode(null)
-    setLoading(true)
+    // setAdminActiveTask(null)
+    // setAdminActiveMode(null)
+    // setLoading(true)
     const { name } = e.target;
     switch (name) {
       case "wishlist":
+        setLoadingStep("Wishlist Data")
         setRefreshButtonsActivity({
           ...refreshButtonsActivity,
           wishlist: true
@@ -42,9 +43,10 @@ function AdminCMS({setErrorPageContent}) {
           ...refreshButtonsActivity,
           wishlist: false
         });
-        setLoading(false)
+        // setLoading(false)
         break;
       case "messages":
+        setLoadingStep("Notifications")
         setRefreshButtonsActivity({
           ...refreshButtonsActivity,
           messages: true
@@ -59,9 +61,10 @@ function AdminCMS({setErrorPageContent}) {
           ...refreshButtonsActivity,
           messages: false
         });
-        setLoading(false)
+        // setLoading(false)
         break;
       case "users":
+        setLoadingStep("User Database")
         setRefreshButtonsActivity({ ...refreshButtonsActivity, users: true });
         await fetch("/Admin/UserManager/List", {
           method: "POST",
@@ -70,12 +73,12 @@ function AdminCMS({setErrorPageContent}) {
           .then(res => res.json())
           .then(data => {console.log(data); setAdminListUsers(data['payload'])});
         setRefreshButtonsActivity({ ...refreshButtonsActivity, users: false });
-        setLoading(false)
+        // setLoading(false)
         break;
       default:
         return null;
     }
-
+  setLoadingStep(null)
   }
 
   async function PullAdminData() {
@@ -90,7 +93,7 @@ function AdminCMS({setErrorPageContent}) {
         .then(data => data['payload'])
         .catch(e => console.log(e))
       console.log('done calling db')
-      console.log(adminData)
+      console.log('%cAdminCMS.js line:94 adminData', 'color: #007acc;', adminData);
         setallPossibleStatuses(adminData['allPossibleStatuses'])
         setAdminListWishlist(adminData["wishlist"]);
         setAdminListNotifications(adminData["messages"]);
@@ -109,29 +112,27 @@ function AdminCMS({setErrorPageContent}) {
 
   return (
     <>
-      <h2>Admin</h2>
-      <div className="AdminCMSMainDiv">
+      <h2 className="admin">Admin</h2>
+      <div className="adminCMS">
         <AdminNav loading={loading} setAdminActiveTask={setAdminActiveTask} adminActiveTask={adminActiveTask} adminActiveMode={adminActiveMode} setAdminActiveMode={setAdminActiveMode} />
         {loading ? (
-          <div className="AdminCMSMainDiv--subdiv">
-          <div className="AdminActiveTask">
-          <div className="AdminCMSTitlePage--Welcome">
-            <h4>Welcome to the</h4>
-            <h3>Adminstrator Content Management System</h3>
-            <h5>Created by Matthew Gird</h5>
-            {loadingStep !== null && (<p className="loadingStep">{loadingStep}</p>)}
-            <LoadingBar />
-          </div>
+
+            <div className="AdminActiveTask">
+              <div className="AdminCMSTitlePage--Welcome">
+                <h4 className="admin">Willkommen beim</h4>
+                <h3 className="admin">Content-Management-Tool für Administratoren</h3>
+                <h5 className="admin">Erstellt von Matthew Gird</h5>
+                {loadingStep !== null && (<p className="loadingStep">{loadingStep}</p>)}
+                <LoadingBar />
+              </div>
             </div>
-          </div>
         ) : (
           <>
           
-          <div className="AdminCMSMainDiv--subdiv">
-            {adminActiveTask !== "Workflow" && <RefreshButtons
+            <RefreshButtons
               refreshButtonsActivity={refreshButtonsActivity}
               refreshData={refreshData}
-            />}
+            />
             {adminListWishlist !== null && adminListWishlist.length > 0 && <AdminActiveTask
               refreshData={refreshData}
               adminActiveTask={adminActiveTask}
@@ -143,7 +144,6 @@ function AdminCMS({setErrorPageContent}) {
               adminActiveMode={adminActiveMode}
               setAdminActiveMode={setAdminActiveMode}
             />}
-          </div>
           </>
         )}
       </div>

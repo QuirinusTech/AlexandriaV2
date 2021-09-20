@@ -37,7 +37,7 @@ function Notifications({ notifications, setShowMsgCentre }) {
     >
       {showNotification && <MessageCentre notificationsList={notifications} />}
       {!showNotification && <p>No new messages</p>}
-      <button onClick={() => setShowNotification(false)}>Got it!</button>
+      <button onClick={() => setShowMsgCentre(false)}>Got it!</button>
     </div>
   );
 }

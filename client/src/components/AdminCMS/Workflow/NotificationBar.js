@@ -1,7 +1,8 @@
 function NotificationBar({
   wfTicketList,
   getNextTicket,
-  setAdminActiveMode
+  adminActiveMode,
+  attemptChangeMode
 }) {
   const dataListCounts = setCounts();
   const catlist = ['Download', 'Complete', "Copy"]
@@ -26,10 +27,17 @@ function NotificationBar({
 
       <div className="Workflow--NotificationBar">
         {catlist.map(category => {
+          let classNameVar = "notificationBarTitle"
+          if (dataListCounts[category] === 0) {
+            classNameVar+="Inactive "
+          }
+          if ("wf"+category === adminActiveMode) {
+            classNameVar+= "Active"
+          }
           return (
             <div
               className="Workflow--NotificationBar--Block"
-              onClick={() => setAdminActiveMode("wf"+category)}
+              onClick={() => attemptChangeMode("wf"+category)}
             >
         {dataListCounts[category] !== null &&
                 dataListCounts[category] > 0 && (
@@ -38,11 +46,7 @@ function NotificationBar({
                   </span>
               )}
               <p
-                className={
-                  dataListCounts[category] > 0
-                    ? "notificationBarTitle"
-                    : "notificationBarTitleInactive"
-                }
+                className={classNameVar}
               >
                 {category}
               </p>

@@ -1,3 +1,5 @@
+import PNGLoader from "../Loaders/PNGLoader"
+
 function RefreshButtons({ refreshButtonsActivity, refreshData }) {
   return (
     <>
@@ -6,37 +8,37 @@ function RefreshButtons({ refreshButtonsActivity, refreshData }) {
         disabled={refreshButtonsActivity["wishlist"]}
         className={
           refreshButtonsActivity["wishlist"]
-            ? "adminRefreshButton loading"
-            : "adminRefreshButton"
+            ? "adminButton adminButton--refresh--loading"
+            : "adminButton adminButton--refresh"
         }
         name="wishlist"
         onClick={refreshData}
       >
-        Refresh Wishlist
+        {refreshButtonsActivity["wishlist"] ? (<><PNGLoader /><p>Wishlist</p></>) : "Refresh Wishlist"}
       </button>
       <button
         disabled={refreshButtonsActivity["messages"]}
         className={
           refreshButtonsActivity["messages"]
-            ? "adminRefreshButton loading"
-            : "adminRefreshButton"
+            ? "adminButton adminButton--refresh--loading"
+            : "adminButton adminButton--refresh"
         }
         name="messages"
         onClick={refreshData}
       >
-        Refresh Messages
+        {refreshButtonsActivity["messages"] ? (<><PNGLoader /><p>Messages</p></>) : "Refresh Messages"}
       </button>
       <button
         disabled={refreshButtonsActivity["users"]}
         className={
           refreshButtonsActivity["users"]
-            ? "adminRefreshButton loading"
-            : "adminRefreshButton"
+            ? "adminButton adminButton--refresh--loading"
+            : "adminButton adminButton--refresh"
         }
         name="users"
         onClick={refreshData}
       >
-        Refresh Users List
+        {refreshButtonsActivity["users"] ? (<><PNGLoader /><p>User List</p></>) : "Refresh User List"}
       </button>
     </div>
     </>

@@ -11,6 +11,7 @@ import AddNew from "./components/AddNew/AddNew";
 import Wishlist from "./components/Wishlist/Wishlist";
 import AdminCMS from "./components/AdminCMS/AdminCMS";
 import Start from "./components/Start/Start";
+import About from "./components/Start/About";
 import Navbar from "./components/Start/Navbar";
 import MobileNavbar from "./components/Start/MobileNavbar";
 import LogIn from "./components/Security/LogIn";
@@ -19,7 +20,7 @@ import ForgottenPassword from "./components/Security/ForgottenPassword";
 import PasswordReset from "./components/Security/PasswordReset";
 import Register from "./components/Security/Register";
 import AlexOGLoader from "./components/Loaders/AlexOGLoader";
-
+import NotificationsCentre from "./components/Start/NotificationsCentre"
 
 
 function App() {
@@ -128,8 +129,10 @@ async function getNotifications() {
     <Router>
       {window.innerWidth < 600 ? <MobileNavbar isLoggedIn={isLoggedIn} /> : <Navbar isLoggedIn={isLoggedIn} /> }
 
+
+
       <Route exact path="/">
-        <Start notifications={notifications} />
+        <Start />
       </Route>
 
       <Route exact path="/oops">
@@ -158,6 +161,7 @@ async function getNotifications() {
           </div>
         ) : (
           <Wishlist
+            dataSetup={dataSetup}
             wishlistData={wishlistData}
             setWishlistData={setWishlistData}
           />
@@ -166,6 +170,10 @@ async function getNotifications() {
 
       <Route exact path="/admin">
         <AdminCMS setErrorPageContent={setErrorPageContent} />;
+      </Route>
+
+      <Route exact path="/about">
+        <About />;
       </Route>
 
       <Route exact path="/login">
@@ -188,6 +196,11 @@ async function getNotifications() {
       <Route exact path="/logout">
         <Logout setIsLoggedIn={setIsLoggedIn} />
       </Route>
+
+      {notifications.length > 0 && (
+        <NotificationsCentre notifications={notifications} />
+      )}
+
     </Router>
   );
 }

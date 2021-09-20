@@ -393,7 +393,7 @@ function WorkflowContent({ adminListWishlist, adminActiveMode, setAdminActiveMod
   }
 
   const BulkActionButton = ({ bulkAction, setBulkAction, pendingChanges }) => {
-    <div className="bulkActionButtonDiv">
+    <div className="bulkActionButtonsContainer">
       <h5>Bulk Action</h5>
       <button
         className={

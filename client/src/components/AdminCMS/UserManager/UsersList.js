@@ -6,47 +6,47 @@ function returnEmoji(bool) {
 
 const UsersList = ({ usersList, selectUser, currentUser }) => {
   return (
-    <div className="usersList--MainDiv">
-      <div className="usersList--headRow">
-        <div>
-          <h5>User Id</h5>
-        </div>
-        <div>
-          <h5>Username</h5>
-        </div>
-        <div>
-          <h5>Can Add</h5>
-        </div>
-        <div>
-          <h5>Active</h5>
-        </div>
-        <div>
-          <h5>Admin</h5>
-        </div>
-      </div>
+    <table className="adminTable">
+      <tr className="adminTableHeadRow">
+        <th>
+          User Id
+        </th>
+        <th>
+          Username
+        </th>
+        <th>
+          Can Add
+        </th>
+        <th>
+          Active
+        </th>
+        <th>
+          Admin
+        </th>
+      </tr>
       {usersList.map(user => {
-        let classnameString = "usersList--user"
+        let classnameString = "adminTableTr"
         if (currentUser !== null) {
           if (currentUser["userId"] === user["userId"]) {
-            classnameString += " usersList--user--selected"
+            classnameString += " usersList--row--selected"
           }
         }
         return (
-          <div
+          <tr
             className={classnameString}
             key={user["userId"]}
             value={user["userId"]}
             onClick={() => selectUser(user["userId"])}
           >
-            <div>{user['userId']}</div>
-            <div>{user["username"]}</div>
-            <div>{returnEmoji(user["privileges"]["can_add"])}</div>
-            <div>{returnEmoji(user["privileges"]["is_active_user"])}</div>
-            <div>{returnEmoji(user["privileges"]["is_admin"])}</div>
-          </div>
+            <td>{user['userId']}</td>
+            <td>{user["username"]}</td>
+            <td>{returnEmoji(user["privileges"]["can_add"])}</td>
+            <td>{returnEmoji(user["privileges"]["is_active_user"])}</td>
+            <td>{returnEmoji(user["privileges"]["is_admin"])}</td>
+          </tr>
         );
       })}
-    </div>
+    </table>
   );
 };
 

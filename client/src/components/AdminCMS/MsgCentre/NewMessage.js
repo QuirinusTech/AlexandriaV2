@@ -236,6 +236,7 @@ function NewMessage({
         <select
           value={messageType}
           name="messageType"
+          // className="adminButton"
           id="manual_message_type_select"
           onChange={e => {
             setMessageType(e.target.value);
@@ -282,8 +283,8 @@ function NewMessage({
 
       <div className="NewMessageEntrySelectRow">
 
-        <details className="FilterEntriesBy" open>
-          <summary>Filter Entries</summary>
+        <details className="darkDetails FilterEntriesBy" open>
+          <summary className="adminButton">Filter Entries</summary>
           <div>
             <label>Owner</label>
             <select
@@ -383,41 +384,29 @@ function NewMessage({
       </div>
 
       <div className="usersVisTable">
-        <table id="usertickboxes" className="usertickboxestable w60perc">
-          <tbody>
-            <tr>
-              <th colSpan="2">
-                <h4>Visible to:</h4>
-              </th>
-            </tr>
-            {adminListUsers.map(user => {
-              return (
-                <tr className="usersVisTableRow" key={user["username"]}>
-                  <td>
-                    <input
-                      className="checkbox_uservis"
-                      type="checkbox"
-                      name={user["username"]}
-                      value={user["username"]}
-                      checked={usersVis[user["username"]]}
-                      onChange={usersTickboxChange}
-                    />
-                  </td>
-                  <td>
-                    <label>{user["username"]}</label>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <h4>Visible to:</h4>
+          {adminListUsers.map(user => {
+            return (
+              <div className="usersVisTableRow" key={user["username"]}>
+                  <input
+                    className="checkbox_uservis"
+                    type="checkbox"
+                    name={user["username"]}
+                    value={user["username"]}
+                    checked={usersVis[user["username"]]}
+                    onChange={usersTickboxChange}
+                  />
+                  <p>{user["username"]}</p>
+               </div>
+            );
+          })}
       </div>
 
       <div className="jcc mar10px">
-      <button className="adminButton--Cancel" onClick={reset}>
+      <button className="adminButton adminButton--cancel" onClick={reset}>
           Reset Form
         </button>
-        <button className="adminButton--Submit" onClick={createNewMessage}>
+        <button className="adminButton adminButton--submit" onClick={createNewMessage}>
           Submit
         </button>
       </div>

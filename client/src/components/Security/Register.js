@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function checkIfValidEmail(email) {
-  return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+  return /^[\w\.]+@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
 }
 
 function Register() {

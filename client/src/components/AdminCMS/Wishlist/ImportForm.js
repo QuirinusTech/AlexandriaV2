@@ -112,8 +112,8 @@ function ImportForm ({adminListWishlist, importData, setShowImportForm}) {
 
 
       <div>
-      <button className="adminButton--Cancel" onClick={()=>setShowImportForm(false)}>Cancel</button>
-      <button className="adminButton--Submit" onClick={parse}>Import</button>
+      <button className="adminButton adminButton--cancel" onClick={()=>setShowImportForm(false)}>Cancel</button>
+      <button className="adminButton adminButton--submit" onClick={parse}>{importType === 'JSON' ? "Parse JSON" : "Duplicate"}</button>
       </div>
     </div>
   )

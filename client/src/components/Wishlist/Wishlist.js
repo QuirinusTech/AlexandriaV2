@@ -1,9 +1,9 @@
 import ListFilters from "./ListFilters"
-import {useState } from "react"
+import {useState, useEffect } from "react"
 import TableLayout from "./TableComponents/TableLayout";
 import GIFLoader from "../Loaders/GIFLoader";
 
-function Wishlist({wishlistData, setWishlistData}) {
+function Wishlist({wishlistData, setWishlistData, dataSetup}) {
 
   let usedStatuses = Array.from(new Set(wishlistData.map(entry => entry['status'])))
 
@@ -14,6 +14,16 @@ function Wishlist({wishlistData, setWishlistData}) {
     })
     return stateobj
   })
+
+  useEffect(() => {
+    const InitData = async () => {
+      await dataSetup()
+    }
+    if (window.location.pathname !== "/admin" && wishlistData[0] === 'init') {
+      InitData();
+    }
+    console.log("init complete")
+  }, []);
 
   const [searchBoxValue, setSearchBoxValue] = useState('')
 
@@ -26,7 +36,7 @@ function Wishlist({wishlistData, setWishlistData}) {
           statusFilters={statusFilters}
         />
         <div className="SearchBox">
-          <input type="text" placeHolder="search by title..." value={searchBoxValue} onChange={(e)=> {setSearchBoxValue(e.target.value)}} />
+          <input type="text" placeholder="search by title..." value={searchBoxValue} onChange={(e)=> {setSearchBoxValue(e.target.value)}} />
           {searchBoxValue !== '' && <button onClick={()=>setSearchBoxValue('')}>Reset search</button>}
         </div>
         {wishlistData[0] === "init" && <GIFLoader />}

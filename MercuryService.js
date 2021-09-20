@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 
 module.exports = {
-  NotificationUpdateEmail: function NotificationUpdateEmail(notificationsList) {
+  NotificationUpdateEmail: async function NotificationUpdateEmail(notificationsList) {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -10,9 +10,9 @@ module.exports = {
       }
     });
     
-    let htmlstring = "<div><table><thead><tr><th>Creator</th><th>Entry</th><th>Update</th></tr></thead><tbody>"
-    notificationsList.forEach(element => {
-      let thisstring = `<tr><td>${element['username']}</td><td>${element['item']}</td><td>${element['update']}</td></tr>`
+    let htmlstring = `<div><table style="background-color:wheat;border-collapse: collapse; width:450px;margin:0;text-align: center;"><thead><tr style="height:40px; width:450px; margin:0;border: 1px solid black;"><th style="height:40px; width:40px; margin:0;">Type</th><th style="height:40px; width:40px; margin:0;">Entry</th><th style="height:40px; width:40px; margin:0;">Update</th></tr></thead><tbody>`
+    notificationsList.forEach(msg => {
+      let thisstring = `<tr style="height:40px; width:450px; margin:0;border: 1px solid black;"><td style="height:40px; width:40px; margin:0;">${msg['messageType']}</td><td style="height:40px; width:40px; margin:0;">${msg['affectedEntry']}</td><td style="height:40px; width:40px; margin:0;">${msg['messageType'] === 'custom' ? msg['customMessageContent'] :  msg['entryStatusUpdate'] }</td></tr>`
       htmlstring += thisstring
     });
     htmlstring += "</tbody></table></div>"

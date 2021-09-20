@@ -3,6 +3,7 @@ import MediaOptions from "./AdminAddNew/MediaOptions"
 import Episodes from './AdminAddNew/Episodes'
 import ImportForm from "./ImportForm"
 import PNGLoader from "../../Loaders/PNGLoader"
+import { motion } from "framer-motion"
 
 function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist }) {
   
@@ -203,11 +204,14 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 
 
   return (
-    <div className="AdminAddNewForm">
-      
+    <motion.div className="AdminAddNewForm"
+      initial={{ opacity: 0, y: -1000 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <h3>Add New</h3>
       <div className="AdminAddNewForm--Row--resetButton">
-        <button onClick={resetForm}>Clear Form</button>
-        <button onClick={()=>setShowImportForm(!showImportForm)}>Import</button>
+        <button className="adminButton adminButton--danger" onClick={resetForm}>Clear Form</button>
+        <button className={showImportForm ? "adminButton adminButton--hover" : "adminButton"} onClick={()=>setShowImportForm(!showImportForm)}>Import</button>
       </div>
       
       {showImportForm && <ImportForm importData={importData} setShowImportForm={setShowImportForm} adminListWishlist={adminListWishlist} />}
@@ -225,12 +229,12 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         <div>
           <label>imdbID</label>
           <input type="text" name="imdbID" placeholder="imdbID" onChange={handleChange} value={imdbInfo['imdbID']} />
-          <button className="adminButton--Neutral" onClick={getImdbData} name="imdbID">{imdbInfo['imdbData'] === null ? "Get IMDB info" : "Update IMDB info"}</button>
+          <button className="adminButton" onClick={getImdbData} name="imdbID">{imdbInfo['imdbData'] === null ? "Get IMDB info" : "Update IMDB info"}</button>
         </div>
         <div>
           <label>Title</label>
           <input type="text" name="title" placeholder="title" onChange={handleChange} value={imdbInfo['title']} />
-          <button className="adminButton--Neutral" onClick={getImdbData} name="title">Search by Title</button>
+          <button className="adminButton" onClick={getImdbData} name="title">Search by Title</button>
         </div>
       </div>
 
@@ -255,8 +259,8 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       )}
 
       {imdbInfo['imdbData'] !== null && <div>
-        <details className="AdminAddNewForm--Row--imdbInfo--imdbData">
-          <summary>Media Data</summary>
+        <details className="AdminAddNewForm--Row--imdbInfo--imdbData darkDetails">
+          <summary className="adminButton">Media Data</summary>
             {Object.keys(imdbInfo['imdbData']).map(field => {
               return (
                 <div key={field}>
@@ -265,7 +269,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
                 </div>
               )
             })}
-          <button onClick={()=>{resetImdbInfo()}}>
+          <button className="adminButton" onClick={()=>{resetImdbInfo()}}>
             Reset
           </button>
         </details>
@@ -276,9 +280,9 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       {mediaOptions['mediaType'] === "series" && !showImportForm && <Episodes episodes={episodes} setEpisodes={setEpisodes} />}
 
       {!showImportForm && <div className="AdminAddNewForm--Row--SubmitButton">
-        <button className="adminButton--Submit" onClick={createNewEntry}>Create</button>
+        <button className="adminButton adminButton--submit" onClick={createNewEntry}>Create</button>
       </div>}
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,0 +1,1843 @@
+:root {
+  --darkGrey: #23232e;
+  --grey: #18181f;
+  --lightGrey: #6c6c73;
+  --richGrey: #424247;
+  --transparentGrey: #5a5a6b82;
+  --transparentDarkGrey: #23232eab;
+  --transparentLightGrey: #3f3f46ab;
+  --accentBlue: #5ba7ff;
+  --accentRed: #e65834;
+  --accentRedDeep: #d44927;
+  --accentOrange: #f7a62d;
+  --accentOrangeLight: #ffb860;
+  --customBoxShadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
+  --customTextShadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
+}
+
+
+@media only screen and (min-width: 768px) {
+  body {
+    background-color: #18181f !important;
+  }
+
+  footer, nav, nav > a {
+    background-color: #23232e !important;
+  }
+
+  h2 {
+    background-color: #23232e;
+    text-shadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
+  }
+
+  .banner > h1 {
+    background-color: var(--transparentLightGrey);
+    height: fit-content;
+    place-self: center;
+    margin: unset;
+    padding: 1vh;
+    width: unset;
+}
+
+  .banner {
+    background-image: url("./library2.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+  h3 {
+    color: wheat;
+  }
+
+  h4, h5 {
+    color: white;
+  }
+}
+/* *************************************************New Admin Styles */
+
+.adminButton {
+  font-weight: bold;
+}
+
+.adminButton--small {
+  font-weight: unset;
+}
+
+.adminButton, .adminButton--small {
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-family: system-ui !important;
+  background-color: var(--lightGrey);
+  border: none;
+  border-radius: 5px;
+  transition: 1s;
+  /* padding: 0; */
+  cursor: pointer;
+  color: white;
+}
+
+.adminButton:disabled {
+  color: var(--lightGrey) !important;
+  background: var(--transparentLightGrey) !important;
+  cursor: no-drop;
+}
+
+.adminButton:hover, .adminButton--small:hover, .adminButton--refresh--loading, .adminButton--hover {
+  background-color: var(--richGrey);
+  color: wheat;
+  transition: 0.3s;
+  border: none;
+}
+
+summary.adminButton--small:hover {
+  background-color: var(--richGrey);
+}
+
+.adminButton--small {
+  font-size: small;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+
+
+.adminButton--submit {
+  background-color: var(--accentBlue);
+  color: white;
+  transition: 1s; 
+}
+
+.adminButton--submit:hover {
+  background-color: var(--accentRed);
+}
+
+.adminButton--danger {
+  background-color: red;
+  color: white;
+  transition: 1s;
+}
+
+.adminButton--danger:hover {
+  background-color: rgb(163, 0, 0);
+  color: white;
+  transition: 1s;
+}
+
+.adminButton--cancel {
+  background-color: var(--accentOrange);
+  color: white;
+  transition: 1s;
+}
+
+.adminButton--cancel:hover {
+  background-color: var(--accentOrangeLight);
+  color: white;
+  transition: 1s;
+}
+
+.loading {
+  background-color: grey;
+  color: black;
+}
+
+.adminCMS {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  height: 100vh;
+  width: 100vw;
+  transition: 0.5s;
+  font-family: system-ui !important;
+}
+
+/* .adminCMS > div:nth-child(2) {
+  width: 85vw;
+  margin-left: 12vw;
+} */
+
+.AdminCMSTitlePage {
+  width: 80vw;
+}
+
+.adminTable {
+  border: none;
+  width: 100%;
+  margin-left: 0;
+  font-size: medium;
+  font-family: system-ui;
+  font-weight: 400;
+  border-collapse: collapse;
+  color: ghostwhite;
+}
+
+.adminTableTr {
+  border: 1px solid darkgrey;
+  padding-left: 10px
+}
+
+.adminTableTr > td {
+  margin: 0;
+  padding: 0;
+}
+
+
+.adminTableTr:hover, .editableMsgTr, .usersList--row--selected {
+  border-bottom: var(--accentBlue) 1px solid;
+  background: #23232e;
+  border-top: var(--accentBlue) 1px solid;
+  color: var(--accentBlue);
+  transition: 0.2s;
+}
+.adminTableTr > td > p {
+  font-size: xx-small;
+  margin: 0;
+  transition: 0.5s;
+}
+
+.adminTableTr:hover > td > p {
+  padding: 5px;
+  font-size: medium;
+  transition: 0.25s;
+}
+
+.adminTableTr:hover > td > p:nth-last-child(1) {
+  padding-bottom: 20px;
+}
+
+.adminCMS--subdiv {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  align-items: center;
+  width: 100%;
+  margin-left: 6vh;
+}
+
+.AdminActiveTask {
+  width: 100%;
+  height: 100%;
+  margin-left: 10vw;
+}
+
+/* .AdminWishlistMainDiv {
+  max-width: 1080px;
+} */
+
+.AdminNavBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 10vw;
+  left: 0;
+  top: 0;
+  height: 110vh;
+  margin: 0;
+  position: fixed;
+  background-color: #1f1f25;
+  transition: 0.5s;
+  z-index: 1;
+}
+
+.AdminNavBar:hover {
+  width: 15vw;
+  transition: 0.5s;
+}
+
+
+.AdminNavBar:hover > .adminNavbarQuirinusLogo > p {
+  display: unset;
+  color: white;
+  margin-top: 20px;
+  font-size: unset;
+  transition: 0.7s;
+}
+
+.adminNavbarQuirinusLogo {
+  cursor: pointer;
+  height: 19%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-family: system-ui;
+  flex-wrap: nowrap;
+}
+.adminNavbarQuirinusLogo > p {
+  font-size: small;
+  transition: 0.7s;
+  margin-top: 10px;
+}
+
+.adminNavbarQuirinusLogo > h3 {
+  font-family: system-ui;
+  text-align: center;
+  font-size: 1rem;
+  text-shadow: unset;
+  font-weight: 400;
+  color: #516585;
+  margin: 0 auto;
+  margin-block-start: 0em;
+  margin-block-end: 0.5em;
+  border-radius: 15px;
+  padding: 5px 0;
+}
+.AdminNavBar:hover > div > h3 {
+  font-size: 2rem;
+  transition: 0.7s;
+  color: #7faefb;
+}
+
+.adminNavButton {
+  width: 100%;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  cursor: pointer;
+  transition: 1s;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  overflow: hidden;
+  padding: 20px 0;
+  min-height: 8%;
+}
+
+.adminNavButton > h2 {
+  
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.adminNavButton:hover > h2 {
+  opacity: 1;
+  transition: 1s;
+}
+
+
+
+
+.adminNavButton--active, .adminNavButton:hover {
+  transition: 1s;
+  align-items: center;
+  background-color: #5a5a6b82;
+  background-size: 40%;
+  transform: translateZ();
+}
+
+.adminNavbarQuirinusLogo:hover {
+  background-color: #5a5a6b82;
+  transition: 1s;
+}
+
+.adminNavButton--active {
+  animation-name: flashOnClick;
+  animation-iteration-count: 1;
+  animation-duration: 0.2s;
+}
+
+.adminNavButton:hover {
+  transition: 0.5s;
+  background-color: #30303b;
+  background-size: 40%;
+}
+
+
+
+.adminNavButton--active > h2 {
+  text-align: center;
+  width: 100%;
+  transition: 1s;
+  opacity: unset !important;
+  color: var(--accentBlue) !important;
+  place-self: flex-start;
+}
+
+.adminNavButton--active:not(:hover) > h2.shiftme {
+  transform: translateX(0px) translateY(-120%) translateZ(0px) !important;
+}
+
+.adminNavButton--active:not(:hover) > h2.doNotShift {
+  transform: translateX(0px) translateY(-4vh) translateZ(0px) !important;
+}
+
+.adminNavButton--active > div {
+  flex-direction: column;
+  width: 100%;
+  transition: 1s;
+}
+
+.AdminNavBar > div > h2 {
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Bungee', sans-serif;
+  font-size: 1.5vh;
+  margin: 0 auto;
+  margin-block-start: 0em;
+  margin-block-end: 0.5em;
+  width: 100%;
+  background: none;
+  padding-top: 20px;
+  transition: 1s;
+  text-shadow: none;
+  color: var(--lightGrey);
+}
+
+.AdminNavBar:hover > div > h2 {
+  
+  transition: 1s;
+  opacity: 1;
+}
+
+.adminNavButton:hover > h2 {
+  color: white;
+  transition: 1s;
+}
+
+.adminNavButton > div > button {
+  display: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1vh;
+  font-family: system-ui;
+  transition: 1s;
+  border: none;
+  box-shadow: none;
+  background-color: var(--transparentDarkGrey);
+  text-shadow: none;
+  margin-left: -20px;
+  padding-left: 40px;
+}
+
+.adminNavButton:hover > div > button {
+  display: unset;
+  transition: 1s;
+}
+
+.adminNavButton:hover > div > button {
+  font-size: medium;
+  width: 100%;
+  transition: 1s;
+}
+
+.adminNavButton:not(:hover) > div > .adminActiveModeButton--active {
+  margin-bottom: -7vh;
+}
+
+
+
+.adminNavButton > div > button:hover, .adminActiveModeButton--active {
+  background-color: var(--transparentLightGrey);
+  border-radius: 20px !important;
+  transform: scaleY(1.1);
+  transition: 0.5s;
+  display: unset !important;
+}
+
+.adminActiveModeButton--active {
+  border-bottom: 1px solid darkgray !important;
+  animation-name: flashOnClick;
+  animation-iteration-count: 1;
+  animation-duration: 0.1s;
+  transform: translateY(10px);
+}
+
+@keyframes flashOnClick {
+  0% {background-color: #23232e}
+  25% {background-color: #585861}
+  50% {background-color: #6c6c73}
+  75% {background-color: #585861}
+  100% {background-color: #23232e;}
+}
+
+.RefreshButtons {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  top: 10%;
+  right: 0;
+  transition: 1s;
+}
+
+.adminButton--refresh {
+  font-family: system-ui;
+  height: 40px;
+  font-size: small;
+  background-color: var(--transparentGrey);
+  border: none;
+  border-radius: 5px;
+  transition: 1s;
+  text-align: left;
+  transform: translateX(90%);
+  width: 300px;
+  box-shadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
+  text-shadow: none;
+}
+
+.adminButton--refresh:hover {
+  transition: .5s;
+  padding-left: 10px;
+  transform: translateX(45%);
+  border-bottom: 1px solid wheat;
+}
+
+.adminButton--refresh--loading {
+  transition: .5s;
+  transform: translate(50%, 0);
+}
+
+button.adminButton--refresh--loading > p, button.adminButton--refresh--loading > div > div > p {
+  font-size: smaller;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.AdminCMSTitlePage--Welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+  padding: 100px 300px;
+  justify-content: center;
+}
+
+.AdminCMSTitlePage--Welcome > h3, .AdminCMSTitlePage--Welcome > h4, .AdminCMSTitlePage--Welcome > h5 {
+  min-width: 600px;
+  margin: 20px 0px;
+  text-align: center;
+}
+
+.AdminWishlistMainDiv, .AdminCMSTitlePage, .userManagerMain {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 80vw;
+  /* height: 100%; */
+  flex-wrap: nowrap;
+  /* border: 1px solid black; */
+  background: #5a5a6b82;
+  color: white;
+  margin: 1vh;
+  border-radius: 12px;
+  padding: 1vh;
+}
+
+.AdminWishlistMainDiv > div {
+  /* border: 1px solid black; */
+  margin: 20px;
+}
+
+.editableTr {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: var(--transparentLightGrey);
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  /* border: 1px solid darkorchid; */
+  align-items: center;
+  justify-content: center;
+}
+
+.editableTr > div:nth-child(1) {
+  width: 50vw;
+  background-color: var(--darkGrey);
+  /* padding: 1vw 2vw; */
+  position: absolute;
+  top: 4vw;
+  border-radius: 15px;
+}
+
+h4.editableTrDeleteButtons  {
+  color: white;
+  font-size: xx-large;
+  width: 100%;
+}
+
+div.editableTrDeleteButtons {
+  z-index: 3;
+  position: fixed;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+display: flex;
+}
+
+.editableTrDeleteButtons > h4, .editableTrDeleteButtons > span {
+  color: white;
+  font-size: xx-large;
+  width: 100%;
+}
+
+.editableTrDeleteButtons > div > button {
+  margin: 20px 30px;
+  width: 600px;
+  justify-self: flex-end;
+  height: 100px;
+}
+
+.editableTr > table {
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  background: var(--darkGrey);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 15px;
+  max-width: 50%;
+  box-shadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
+}
+
+.editableTr > table > tr {
+  align-items: center;
+  display: flex;
+  align-content: space-evenly;
+  justify-content: space-evenly;
+}
+
+.editableTr > table > tr > th, .editableTr > table > tr > td {
+  align-content: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.editableTr > table > tr > th > button {
+  width: 90%;
+  padding: 10px;
+  font-size: x-large;
+}
+
+.EpisodesConsole {
+  position: fixed;
+  z-index: 4;
+  background: var(--darkGrey);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 90%;
+  height: 90%;
+  align-self: center;
+  margin: 5%;
+}
+
+.EpisodesConsoleSeasonDiv {
+  width: 90%;
+  margin: 1% 5%;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: space-between;
+  align-items: center;
+  /* border: 1px solid wheat; */
+  border-radius: 15px;
+  background-color: var(--transparentLightGrey);
+  padding: 2vw;
+}
+
+.EpisodesConsoleSeasonEpisodes > div {
+  /* width: 100px;
+  height: 100px; */
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 2vw; */
+  flex-grow: 1;
+}
+
+.EpisodesConsoleSeasonEpisodes {
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 1vw;
+}
+.EpisodesConsoleSeasonEpisodes > div {
+  flex: 0 0 20%;
+  padding: 0.5vw;
+  /* border-right: 1px solid wheat; */
+}
+
+.EpisodesConsoleSeasonTitle {
+  justify-content: space-between;
+  width: 10vw;
+}
+
+.EpisodesConsoleSeasonEpisodes > div > p, .EpisodesConsoleSeasonEpisodes > div > select {
+  flex-grow: 1;
+}
+
+.AddSeasonDiv {
+  width: 20vw;
+  /* border: 2px solid ; */
+  align-self: center;
+  /* padding: 20px; */
+  border-radius: 20px;
+  background-color: var(--transparentGrey);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AddSeasonDiv > div {
+  /* margin: 0px 10px; */
+  justify-content: space-evenly;
+  width: 100%;
+  flex-direction: column;
+}
+
+.AddSeasonDiv > div > label {
+  padding: 10px;
+}
+
+.AddSeasonDiv > div > label {
+  padding: 10px;
+  justify-content: space-between;
+  display: flex;
+}
+
+.AdminAddNewContainer {
+  justify-content: flex-start;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.AdminAddNewForm, .MsgCentre--NewMessage, .userDetailManager {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  min-height: 800px;
+  width: 1000px;
+  align-self: center;
+  align-items: center;
+  background: var(--transparentGrey);
+  margin: 1vh;
+  border-radius: 12px;
+  padding: 1vh;
+  color: white;
+}
+
+.AdminAddNewForm--Row--episodes > div > div > label, .AdminAddNewForm--Row--episodes > div > div > input {
+  width: 45%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 0;
+  height: 20px;
+  margin: 2px;
+}
+
+.AdminAddNewForm--Row--episodes > div > label {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+
+.ImportForm {
+  display: flex;
+  flex-direction: column !important;
+  flex-wrap: nowrap;
+  border-radius: 20px;
+  padding: 3%;
+  background: var(--transparentGrey);
+  align-items: center;
+}
+
+.ImportForm > div {
+  flex-direction: row !important;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.AdminAddNewForm > div {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  align-content: center;
+  width: 90%;
+}
+
+.AdminAddNewForm > div > div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.AdminAddNewForm > div > div > div {
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+  padding: 1vw;
+  margin: 0vw 1vw;
+  flex-grow: 1;
+}
+
+.AdminAddNewForm > div > div > div > input[type="date"], .AdminAddNewForm > div > div > div > select {
+  font-size: large;
+  align-self: center;
+  justify-self: center;
+  width: 50%;
+  text-align: center;
+}
+
+.AdminAddNewForm--Row--imdbInfo > div {
+  margin: 0px 10px;
+}
+
+.AdminAddNewForm--Row--imdbInfo > div > input, .AdminAddNewForm--Row--imdbInfo > div > label, .AdminAddNewForm--Row--imdbInfo > div > button {
+  width: 80%;
+  margin: 10px;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.MsgCentre--NewMessage {
+  flex-direction: column;
+  place-self: flex-start;
+}
+
+.MsgCentre--NewMessage > div {
+  width: 80%;
+  margin: 10px;
+  
+}
+
+.MsgCentre--NewMessage > div > select {
+  font-size: large;
+  margin: 10px;
+  width: 40%;
+  height: 90%;
+  font-size: x-large;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.MsgCentre--NewMessage > div > textarea {
+  margin: 10px;
+  min-height: 200px;
+}
+
+.FilterEntriesBy {
+  height: fit-content;
+  overflow: hidden !important;
+}
+
+.FilterEntriesBy > summary {
+  margin-top: 0;
+  width: 100%;
+  z-index: 2;
+  border-radius: 0px;
+}
+
+.FilterEntriesBy > div {
+  width: 100%;
+  justify-content: space-around;
+  display: flex;
+}
+
+.FilterEntriesBy > div > select, .FilterEntriesBy > div > label {
+  width: 40%;
+}
+
+.msgCentreUserSelect {
+  height: 3vw;
+    width: 20vw;
+    text-align: center;
+    font-size: large;
+    place-self: center;
+}
+
+.MessageCentrePreview, .SimulatedMessageCentre {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.SimulatedMessageCentre {
+  margin: 1vw;
+  padding: 1vw;
+  display: flex;
+  border: 1px solid white;
+  border-radius: 15px;
+  background-color: var(--transparentDarkGrey);
+  width: 50vw;
+  place-self: center;
+}
+
+.MessageCentrePreview > h5, .MessageCentrePreview > h4 {
+  text-align: center;
+  padding: 0;
+  margin: 1vw;
+}
+
+.MessageCentrePreview > h4 {
+  color: wheat;
+  font-size: larger;
+}
+
+td > table.usersVisTable {
+  width: 210px;
+}
+
+.usersVisTable {
+  align-self: center;
+  display: flex;
+  background: var(--transparentDarkGrey);
+  padding: 1vw;
+  border-radius: 15px;
+}
+
+.usersVisTable > h4 {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.usersVisTableRow {
+  color: white;
+  padding: 1vw;
+  flex: 0 0 30%;
+  flex-direction: row;
+  align-items: center;
+}
+
+.MessageCentre, .MessageCentre > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.AffectedEntryEpisodeListCheckboxes, .seasonCheckboxDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
+.AffectedEntryEpisodeListCheckboxes--DetailsElement {
+  width: 100%;
+}
+
+.FilterEntriesBy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.FilterEntriesBy > details {
+  justify-content: space-evenly;
+}
+
+.FilterEntriesBy > details > div {
+  width: 100px;
+  margin: 10px;
+}
+
+.FilterEntriesBy > div > label, .FilterEntriesBy > div > select {
+  margin: 10px;
+}
+
+.filtersFailed {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+}
+
+.filtersFailed > p {
+  color: red;
+}
+
+#affectedEntry {
+  font-size: large;
+  margin: 10px;
+  padding: 10px 0px;
+  max-height: 50px;
+  align-self: center;
+  justify-self: center;
+}
+
+.NewMessageEntrySelectRow {
+  display: flex;
+  flex-direction: row;
+  height: 200px;
+  flex-flow: nowrap;
+  justify-content: space-around;
+}
+
+.adminTableHeadRow > th {
+  border-bottom: 2px solid black;
+  font-size: medium;
+  background: #23232e;
+  color: wheat;
+  border-right: 1px solid black;
+}
+
+.darkDetails, .adminWlTableImdbData>details {
+  background: #555574;
+  color: white;
+  box-shadow: none;
+  max-height: unset;
+}
+
+.darkDetails[open], .adminWlTableImdbData>details[open] {
+  background: #2f2f35;
+  border: 1px solid wheat;
+  box-shadow: none;
+  max-height: unset;
+}
+
+.adminTableTr > td > details > div > div > details {
+  width: 10vw;
+  margin: 0;
+  /* border: 1px solid wheat; */
+}
+
+
+.adminTableTr > td > details[open] > summary, .darkDetails[open] > summary {
+  background-color: #424247;
+  color: wheat;
+  transition: 0.3s;
+  border: none;
+}
+
+.adminTableTr > td > details[open] {
+  position: absolute;
+  max-height: unset;
+  border: 1px solid white;
+}
+.r5vw {
+  right: 5vw;
+} 
+
+
+.adminTableTr > td > details > div {
+  flex-direction: row;
+  display: flex;
+  width: fit-content;
+  max-width: 50vw;
+}
+
+.adminTableTr > td > details > div > div {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  margin: 0 0.2vw;
+}
+
+.imdbPoster {
+  position: absolute;
+  left: 1vw;
+  height: 40vh;
+}
+
+.adminWlTableImdbData > details > p {
+  margin: 1vw 1vw 1vw 24vw;
+}
+
+.adminTableTr > td > button:hover, .adminTableTr > td > details > summary:hover {
+  background-color: #424247;
+  color: wheat;
+  transition: 0.3s;
+}
+
+.adminWlTableEpString {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+
+
+.adminWlTableEpString > p:nth-child(2) {
+  margin: 0 1vw 0 0;
+}
+
+.adminWlTableEpString > p:nth-child(1) {
+  margin: 0 0 0 1vw;
+}
+
+.adminWlTableEpisodes > details[open] > div > div > details > summary {
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-family: system-ui;
+  background-color: #6c6c73;
+  border: none;
+}
+
+.adminWlTableEpisodes > details[open] > div > div > details[open] > summary {
+  background-color: #424247;
+  color: wheat;
+  transition: 0.3s;
+  border: none;
+}
+
+.usersVisUl > li > div {
+  margin: 0px 30px;
+  padding: 0;
+  display: flex;
+  width: 40%;
+}
+
+.usersVisUl > li {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+}
+
+.usersVisUl {
+  display: flex;
+  flex-direction: column;
+}
+
+.WorkflowCardsList {
+  display: flex;
+  flex-direction: column !important;
+  /* border: 2px solid darkorchid; */
+  padding: 0px;
+  justify-content: unset !important;
+  height: 100%;
+  flex-wrap: nowrap !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 15vw !important;
+  background: var(--darkGrey);
+  margin-top: -0.5vw;
+}
+
+.WorkflowCardsList--Section {
+  height: unset !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  max-height: unset !important;
+  overflow-y: unset !important;
+  overflow-x: unset !important;
+  z-index: unset !important;
+  background-color: rgb(235, 235, 235);
+  padding-top: unset !important;
+  border-radius: 0px !important;
+  /* background: #f4dcff !important; */
+  /* box-shadow: 1px 1px 1px purple, 2px 2px 2px pink; */
+  margin: 0 !important;
+  border: none !important;
+}
+
+.WorkflowCardsList > details[open] {
+  padding-bottom: 0;
+}
+
+.WorkflowCardsList--Section > summary {
+  margin: 0px;
+}
+
+.wfCardText {
+  margin-left: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.WorkFlowContent {
+  margin: 10px;
+  justify-content: flex-start;
+  height: 100%;
+  width: 90vw;
+  flex-wrap: nowrap;
+}
+
+.workflowContentWelcomePage, .wishlistContentWelcomePage {
+  width: 70vw;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 500px;
+}
+
+.Workflow--NotificationBar {
+  width: 100%;
+  height: -moz-fit-content;
+  /* height: fit-content; */
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  /* border: 1px solid darkmagenta; */
+  background-color: var(--transparentGrey);
+  /* border-radius: 10px; */
+  color: white;
+  /* align-items: center !important; */
+  justify-content: space-evenly !important;
+  margin-top: -1vw;
+}
+
+.notificationBarTitleActive {
+  color: wheat;
+  text-shadow: var(--customTextShadow);
+}
+
+.notificationBarTitleInactive {
+  color: rgb(85, 83, 83);
+}
+
+.bulkActionButtonsContainer {
+  position: fixed;
+  left: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  /* border: 1px firebrick solid; */
+  border-radius: 15px;
+  padding: 15px;
+  background: var(--transparentGrey);
+  box-shadow: var(--customBoxShadow);
+  text-align: center;
+  font-size: small;
+  z-index: 3;
+  bottom: 0;
+  width: 10%;
+  color: white;
+  transition: 1s;
+}
+
+.bulkActionButtonsContainer > button {
+  margin: 0;
+}
+
+.bulkActionButtonsContainer--engaged {
+  background: var(--richGrey);
+  transition: 1s;
+  height: fit-content;
+}
+
+.bulkActionButtonEngaged {
+  transform: scaleZ(1);
+  background: var(--accentBlue) !important;
+}
+
+.bulkActionButtonInstant {
+  background: darkgrey !important;
+}
+
+.button--disabled {
+  background: grey !important;
+  box-shadow: none;
+}
+
+.pendingChangesText {
+  font-weight: bold;
+  place-self: center;
+  font-size: xx-large;
+}
+
+.boldRedText {
+  font-weight: bold;
+  color: red;
+}
+
+.h3--warning {
+  color: red;
+  font-weight: bold;
+  text-shadow: none;
+  font-size: 5vh;
+}
+
+.modalBackground {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  background: #000000a6;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background: #23232e;
+  z-index: 2;
+  position: fixed;
+  /* width: 50%; */
+  /* top: 40%; */
+  /* bottom: 0; */
+  /* top: 0; */
+  padding: 5vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  border: 1px solid wheat;
+}
+
+.modalContent > ol {
+  color: white;
+}
+
+.modalContent > p {
+  color: wheat;
+}
+
+.modalContent > h3 {
+  font-size: 3vh;
+}
+
+.modalContentButtons {
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 3vh;
+}
+
+.modalContentButtons > button {
+  width: 40%;
+}
+
+
+
+
+
+.form-switch {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-switch i {
+  position: relative;
+  display: inline-block;
+  margin-right: .5rem;
+  width: 46px;
+  height: 26px;
+  background-color: #e6e6e6;
+  border-radius: 23px;
+  vertical-align: text-bottom;
+  transition: all 1s linear;
+}
+
+.form-switch i::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 42px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
+  transition: all 1s linear;
+}
+
+.form-switch i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 11px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
+  transform: translate3d(2px, 2px, 0);
+  transition: all 1s ease-in-out;
+}
+
+.form-switch:active i::after {
+  width: 28px;
+  transform: translate3d(2px, 2px, 0);
+}
+
+.form-switch:active input:checked + i::after { transform: translate3d(16px, 2px, 0); }
+
+.form-switch input { display: none; }
+
+.form-switch input:checked + i { background-color: var(--accentBlue); }
+
+.form-switch input:checked + i::before { transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0); }
+
+.form-switch input:checked + i::after { transform: translate3d(22px, 2px, 0); }
+
+
+.bulkActionCommit > p {
+  place-self: center;
+  margin: 0 0.4vw;
+}
+
+.bulkActionCommit {
+  margin: 0.5vw 0px;
+  place-content: center;
+}
+
+.WorkflowItemStatusText > p {
+  color: var(--accentBlue);
+  font-weight: bold;
+}
+
+span.Workflow--NotificationBar--Block--Count {
+  position: absolute;
+  margin-left: -55px;
+  background: red;
+  border-radius: 15px;
+  margin-top: -6px;
+  color: white;
+  font-weight: bold;
+  padding: 3px;
+  height: 15px;
+  width: 15px;
+  text-align: center;
+  font-size: small;
+}
+
+.Workflow--NotificationBar--Block > p {
+  width: 53px;
+  white-space: nowrap;
+}
+
+.Workflow--NotificationBar--Block {
+  padding: 0.3vw;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.WorkflowCardsListCard {
+  cursor: pointer;
+  border-bottom: 1px solid var(--lightGrey);
+  padding-left: 15px;
+  transition: 1s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* border-bottom-right-radius: 15px; */
+  /* border-top-right-radius: 15px; */
+  background: var(--transparentLightGrey);
+}
+
+.WorkflowCardsListCard:hover, .activeTicket {
+  color: var(--accentBlue);
+  border-bottom: 1px solid var(--accentBlue);
+  padding-left: 20px;
+  transition: 0.5s;
+  /* border: var(--accentBlue); */
+  background: var(--transparentGrey);
+}
+
+.activeTicket {
+  animation-name: flashOnClick;
+  animation-iteration-count: 1;
+  animation-duration: 0.1s;
+}
+
+.cardTags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding-right: 0.5vw;
+}
+
+.cardTags > span {
+  width: 1vw;
+  margin: 4px;
+  text-align: center;
+}
+
+.Resolved, .Resolved:hover {
+  background-color: var(--transparentGrey);
+  color: var(--lightGrey);
+  padding-top: 1px;
+}
+
+.emptyCardList {
+  height: 100%;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+  text-align: center;
+}
+
+.currentEntryResolved, .currentEntryResolved > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  color: white;
+}
+
+.actionableContent {
+  flex-wrap: nowrap;
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  justify-content: space-between;
+  margin: 0vw 1vw;
+  width: 70vw;
+  background-color: var(--darkGrey);
+  border-radius: 15px;
+}
+
+.actionableContent > h3 {
+  margin: 1vw;
+}
+
+.actionableContent > h4 {
+  text-align: center;
+}
+
+.MediaDetails {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.MediaDetails > h3 {
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.workflow--download--mediaDetails {
+  padding: auto;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.workflow--download--mediaDetails > div {
+  flex-direction: column;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: center;
+  background: var(--transparentGrey);
+  /* border: 1px solid grey; */
+  border-radius: 10px;
+  padding: 0px 15px 15px 10px;
+  /* box-shadow: var(--customBoxShadow); */
+  margin: 20px;
+  color: white;
+}
+
+.highlightH4 {
+  color: wheat;
+}
+
+.workflow--download--mediaDetails > div > details, .workflow--download--mediaDetails > div > p, .workflow--download--mediaDetails > div > details > summary {
+  padding: 0;
+  margin: 0;
+}
+
+.linkGenerator {
+  width: 100%;
+  /* border: 2px solid crimson; */
+  border-radius: 15px;
+  background-color: var(--transparentGrey);
+  flex-direction: column;
+  align-content: stretch;
+  /* box-shadow: 1px 1px 1px red, 2px 2px 2px orange; */
+}
+
+.linkGenerator > h5 {
+  text-align: center;
+}
+
+.linkGenSettings {
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 10px;
+  padding: 1vw;
+  background-color: var(--darkGrey);
+  margin: 1vw;
+}
+
+.linkGenSettings > div {
+  margin: 0;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.linkGenSettings > div > label {
+  width: 10vw;
+  text-align: left;
+  justify-content: space-between;
+  align-items: stretch;
+  margin: 0.5vw;
+  padding-left: 0.4vw;
+}
+
+.linkstList {
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 1vw;
+  background-color: var(--darkGrey);
+  margin: 1vw;
+  text-align: center;
+  flex-wrap: nowrap;
+}
+
+.LinksList--Seasons > button {
+  flex: 0 0 22%;
+}
+
+.wfRequiredEpisodes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.wfRequiredEpisodes > div {
+  width: 30% !important;
+}
+
+.currentEntryActionType {
+  color: red;
+  font-weight: bold;
+}
+
+.wfCompleteList {
+  /* width: 90%; */
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid orange; */
+  border-radius: 15px;
+  background-color: var(--transparentGrey);
+  margin: 20px;
+  /* box-shadow: 1px 1px 1px red, 2px 2px 2px orange; */
+  align-self: center;
+}
+
+.wfCompleteListSeasonDiv {
+  /* width: 100%; */
+  flex-direction: row;
+  /* flex: 0 0 20%; */
+  align-items: center;
+  background: var(--darkGrey);
+  margin: 1vw;
+  border-radius: 15px;
+  color: white;
+  flex-wrap: nowrap;
+  padding-left: 1vw;
+}
+
+.wfCompleteListSeasonDiv > h4 {
+  width: 10vw;
+}
+
+.wfCompleteListEpisodeDiv {
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  /* flex: 0 0 20%; */
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background: var(--grey);
+  width: 100%;
+}
+
+.wfCompleteListEpisodeDiv > div:nth-child(1) {
+  width: 100%;
+}
+
+.wfCompleteListEpisodeDiv > label {
+  flex: 1 0 20%;
+}
+
+.LinksList {
+  flex-direction: column;
+}
+
+.LinksList > button, .LinksList > div > button {
+  padding: 10px;
+  width: unset !important;
+  border-radius: 5px;
+  background-color: firebrick;
+  min-width: 60px;
+  margin: 10px;
+}
+
+.LinksList > details {
+  width: 99%;
+}
+
+.LinksList--Seasons {
+  align-self: stretch;
+}
+
+.LinksList--Episodes--SeasonDiv > div > button {
+  flex: 0 0 30%;
+}
+
+.LinksList--Episodes--SeasonDiv {
+  flex-direction: column;
+  align-content: stretch;
+  padding-bottom: 30px;
+}
+
+.LinksList--Episodes--SeasonDiv > h5 {
+  text-align: center;
+}
+
+.actionData {
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.actionData > div {
+  width: 48% !important;
+  height: 60vh;
+  overflow: auto;
+  margin: 0 1vw;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.actionData > div > h4 {
+  width: 100%;
+  text-align: center;
+  /* text-shadow: 0 0 black; */
+  font-size: large;
+  color: wheat;
+}
+
+.actions > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 45%;
+  margin: 10px 0px;
+  /* border: 1px solid firebrick; */
+  border-radius: 10px;
+  padding: 5px 0px 5px 10px;
+  background: var(--grey);
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: 200ms;
+}
+
+.disabled {
+  background-color: var(--transparentLightGrey) !important;
+  color: var(--lightGrey) !important;
+}
+
+.userManagerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.userDetailManager > div > div > p, .userDetailManager > div > div > span {
+  width: 100%;
+  /* margin: 0; */
+  padding: 0.5vw;
+  text-align: center;
+  max-width: unset;
+  background: var(--richGrey);
+  margin: 0;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  /* border-bottom-left-radius: 15px; */
+  /* border-bottom-right-radius: 15px; */
+}
+.userDetailManager > div > div > p:nth-child(2), .userDetailManager > div > div > span {
+  background: var(--grey);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+
+.userDetailManager > div > h4 {
+  width: 100%;
+  text-align: center;
+  margin: 2vw;
+}
+
+.userDetailManager > div {
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+}
+
+.userDetailManager > div > div {
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0vw 3vw;
+  text-align: center;
+  border-radius: 0.5vw;
+  justify-content: center;
+  align-items: center;
+}
+.UMDetails--TopRow > div:nth-child(1) {
+  background-color: var(--transparentDarkGrey);
+}
+.adminButton--Neutral--small {
+  margin: 0px 10px;
+  padding: 0 !important;
+  font-size: small;
+  width: 80%;
+  align-self: center;
+  background-color: darkorchid !important;
+  border: 1px solid rgb(124, 0, 173) !important;
+  color: white !important;
+  border-radius: 15px !important;
+  transition: 1s;
+}
+
+.adminButton--Neutral--small:hover {
+  background-color: rgb(171, 86, 214) !important;
+  border: 1px solid rgb(78, 0, 109) !important;
+  color: white !important;
+  border-radius: 20px !important;
+  transition: 1s;
+}
+
+.adminButton--submit--small {
+  border: 1px solid white;
+  background-color: green !important;
+  color: white !important;
+  border-radius: 5px !important;
+  transition: 1s;
+  padding: 0px;
+  align-self: center;
+  font-size: larger;
+  margin: 2px 15px;
+}
+
+.adminButton--submit--small:hover {
+  -webkit-animation: borderBlink 1s step-end infinite;    
+  animation: borderBlink 1s step-end infinite;    
+  background-color: rgb(25, 195, 25) !important;
+  color: white !important;
+  border-radius: 0px !important;
+  transition: 1s;
+}

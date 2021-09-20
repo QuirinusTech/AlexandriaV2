@@ -1,17 +1,17 @@
-const WarningPopup = ({
+const modalContent = ({
   setDisplayWarning,
   messages
 }) => {
   return (
-    <div className="WarningPopup">
+    <div className="modalContent">
       <div>
         {messages.map(msg => {
           return <p>{msg}</p>
         })}
       </div>
-      <button className="adminButton--Neutral" onClick={()=>setDisplayWarning(false)}>Verstanden</button>
+      <button className="adminButton" onClick={()=>setDisplayWarning(false)}>Verstanden</button>
     </div>
   );
 };
 
-export default WarningPopup;
+export default modalContent;
