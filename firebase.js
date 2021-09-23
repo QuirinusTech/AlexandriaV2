@@ -41,7 +41,7 @@ module.exports = {
   userUpdate,
   adminPasswordReset,
   notifyUser,
-  uname
+  blacklistCleanup
 }
 
 
