@@ -1,6 +1,6 @@
-import PNGLoader from "../Loaders/PNGLoader"
+import PNGLoader from "../../Loaders/PNGLoader"
 
-const FormSearch = ({
+const AdminFormSearch = ({
   handleSubmit,
   field,
   handleChange,
@@ -17,7 +17,7 @@ const FormSearch = ({
           <p>Error from IMDB: </p>
           <p className="warning"><b>{errorMsg[0]}</b></p>
           </div>}
-        <label className={searchBy === "title" ? "formsearchRadioButtonChecked formsearchRadioButton" : "formsearchRadioButton"}>
+        <label className={searchBy === "title" ? "adminButton adminButton--hover adminFormSearch--radio" : "adminButton adminFormSearch--radio"}>
           <input
             className="max10px"
             id="sbTitle"
@@ -29,7 +29,7 @@ const FormSearch = ({
             />{" "}
             Title</label>
         
-        <label className={searchBy === "imdbId" ? "formsearchRadioButtonChecked formsearchRadioButton" : "formsearchRadioButton"}><input
+        <label className={searchBy === "imdbId" ? "adminButton adminButton--hover adminFormSearch--radio" : "adminButton adminFormSearch--radio"}><input
             className="max10px"
               id="sbImdbId"
               type="radio"
@@ -41,16 +41,16 @@ const FormSearch = ({
              IMDB ID</label>
 
         <input
-          className="formsearchFieldInput"
+          className="adminFormSearch--input--text"
           type="text"
           name="field"
           value={field}
           onChange={handleChange}
           placeholder={"Search by " + searchBy}
         />
-        <input className={isSearching ? "buttonload" : "formSearch__btn--submit"} type="submit" value={isSearching ? "searching..." : "Search!"} />
+        <input className={isSearching ? "buttonload" : "adminFormSearch--input--submit"} type="submit" value={isSearching ? "searching..." : "Search"} />
       </form>
   );
 }
 
-export default FormSearch;
+export default AdminFormSearch;

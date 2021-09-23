@@ -4,8 +4,9 @@ import UserDetailManager from "./UserDetailManager"
 import UsersList from "./UsersList"
 import GIFLoader from "../../Loaders/GIFLoader"
 import Popup from "../../Popup"
+import Blacklist from "./Blacklist"
 
-function UserManagerContent({ adminListUsers, adminActiveMode }) {
+function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBlacklist }) {
   const [localList, setLocalList] = useState(adminListUsers)
   const [currentUser, setCurrentUser] = useState(null);
   const [detailsEditable, setDetailsEditable] = useState(false)
@@ -149,21 +150,22 @@ function UserManagerContent({ adminListUsers, adminActiveMode }) {
     setCurrentUser(obj)
   }
 
-  const Content = ({ usersList, currentUser, setCurrentUser, commitChanges }) => {
+  const Content = ({ usersList, currentUser, setCurrentUser, commitChanges, blacklist, setBlacklist }) => {
     console.log(usersList);
+    console.log(blacklist)
     return loading ? (<div><GIFLoader /></div>) : !usersList ? (<div>Problem</div>) : (
       <div className="userManagerContent">
+        <div className="usersList">
+          <UsersList
+            usersList={usersList}
+            selectUser={selectUser}
+            currentUser={currentUser}
+          />
+        </div>
 
 
         {adminActiveMode === 'userCMS' ? (
           <>
-          <div className="usersList">
-            <UsersList
-              usersList={usersList}
-              selectUser={selectUser}
-              currentUser={currentUser}
-            />
-          </div>
           {currentUser !== null && 
             (<>{detailsEditable ? 
               <UserDetailManager
@@ -187,7 +189,13 @@ function UserManagerContent({ adminListUsers, adminActiveMode }) {
             }
           </>
         ) : (
-          adminActiveMode === 'blacklist' ? (<div>Blacklist CMS goes here.</div>) : (<></>)
+          adminActiveMode === 'blacklist' ? (
+            
+            <>
+          <Blacklist currentUser={currentUser} blacklist={blacklist} setBlacklist={setBlacklist} />
+          </>
+          
+          ) : (<></>)
         )}
 
       </div>
@@ -209,6 +217,8 @@ function UserManagerContent({ adminListUsers, adminActiveMode }) {
 
     <h3>User Manager</h3>
     <Content
+      blacklist={blacklist}
+      setBlacklist={setBlacklist}
       usersList={localList}
       currentUser={currentUser}
       setCurrentUser={setCurrentUser}

@@ -16,7 +16,9 @@ function AdminActiveTask({
   setAdminListUsers,
   allPossibleStatuses,
   refreshData,
-  activatePopup
+  activatePopup,
+  blacklist,
+  setBlacklist
 }) {
   const TaskContent = ({
     adminActiveTask,
@@ -29,7 +31,9 @@ function AdminActiveTask({
     allPossibleStatuses,
     setAdminActiveMode,
     refreshData,
-    activatePopup
+    activatePopup,
+    blacklist,
+    setBlacklist
   }) => {
     switch (adminActiveTask) {
       case "WishlistCMS":
@@ -74,6 +78,8 @@ function AdminActiveTask({
             setAdminListUsers={setAdminListUsers}
             adminActiveMode={adminActiveMode}
             activatePopup={activatePopup}
+            blacklist={blacklist}
+            setBlacklist={setBlacklist}
           />
           </div>
         );
@@ -102,6 +108,8 @@ function AdminActiveTask({
         setAdminActiveMode={setAdminActiveMode}
         refreshData={refreshData}
         activatePopup={activatePopup}
+        blacklist={blacklist}
+        setBlacklist={setBlacklist}
       />
     </div>
   );

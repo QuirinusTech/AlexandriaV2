@@ -12,7 +12,8 @@ const {
   getSingleWishlistEntry,
   notifyAdmin,
   userUpdate,
-  adminPasswordReset
+  adminPasswordReset,
+  uname
 } = require("./firebase");
 const morgan = require('morgan')
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
@@ -340,7 +341,13 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
   
   try {
     const data = req.body
-    const username = res.locals.username
+    let username = res.locals.username
+
+    if (data.hasOwnProperty('currentUserUserName')) {
+      username = data['currentUserUserName']
+      delete data['currentUserUserName']
+    }
+
     const operation = req.params.operation.toUpperCase()
     let blacklistObj = null
     if (operation !== "R") {
@@ -357,7 +364,7 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
     } else {
       if (operation === "C") {
         try {
-          let result = await dbProcess(username, "D", data['id']);
+          let result = await blacklistCleanup(username, data['imdbid']);
           console.log(result, "Deletion from wishlist")
         } catch (error) {
           console.log(error)
@@ -370,6 +377,7 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
     } 
   } catch (error) {
     console.log(error)
+    console.log(error.message)
     res.status(500).send('error')
   }
 

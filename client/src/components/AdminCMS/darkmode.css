@@ -45,6 +45,14 @@
     background-position: center;
   }
 
+  .bold {
+    font-weight: bold;
+  }
+
+  .centerText {
+    text-align: center;
+  }
+
   h3 {
     color: wheat;
   }
@@ -98,11 +106,23 @@
   text-shadow: none;
   font-family: system-ui !important;
   background-color: var(--lightGrey);
-  border: none;
   border-radius: 5px;
   transition: 1s;
   /* padding: 0; */
   cursor: pointer;
+  color: white;
+}
+
+.adminFormSearch--input--submit {
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  font-family: system-ui !important;
+  border-radius: 5px !important;
+  transition: 1s;
+  /* padding: 0; */
+  cursor: pointer;
+  background-color: var(--accentBlue) !important;
   color: white;
 }
 
@@ -117,6 +137,11 @@
   color: wheat;
   transition: 0.3s;
   border: none;
+}
+
+.adminFormSearch--input--text {
+  border-radius: 0 !important;
+  padding: 1.5vh 1vw !important;
 }
 
 summary.adminButton--small:hover {
@@ -2034,6 +2059,125 @@ span.Workflow--NotificationBar--Block--Count {
 .UMDetails--TopRow > div:nth-child(1) {
   background-color: var(--transparentDarkGrey);
 }
+
+.blacklistManager, .blacklistAddnew {
+  margin-top: 5vh;
+  width: 100%;
+  background: var(--darkGrey);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.blacklistAddnew {
+  background-color: var(--grey);
+  /* padding: 1vw; */
+  /* width: 100%; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 30vh;
+}
+
+.blacklistAddnew--addBy--search > .formSearch > h3 {
+  display: none;
+}
+
+.blacklistAddnew > div {
+  /* flex: 0 1 30%; */
+  background: var(--darkGrey);
+  padding: 1vw;
+  flex-direction: column;
+  height: 70%;
+}
+
+.adminFormSearch--radio, .adminFormSearch--input--text, .adminFormSearch--input--submit {
+  margin: 1vw !important;
+  padding: 1vh 1vw !important;
+  margin: 1vh 0;
+  width: 35% !important;
+  flex-grow: 1;
+}
+
+.searchSuccess {
+  color: var(--accentBlue) !important;
+  border: 1px solid var(--accentBlue) !important;
+}
+
+.searchSuccess--invertBlue {
+  color: var(--accentBlue) !important;
+  background: var(--transparentGrey);
+  border: 2px solid var(--accentBlue) !important;
+}
+
+.searchSuccess--bg {
+  background: var(--accentBlue) !important;
+  color: black;
+}
+
+.warningPopup {
+  position: fixed;
+  width: 20vw;
+  border-radius: 15px;
+  height: 20vh;
+  background: var(--darkGrey);
+  flex-direction: column;
+  border: 1px solid white;
+  left: 40vw;
+  top: 40vh;
+}
+
+.blacklistAddnew--addBy--manual, .blacklistAddnew--addBy--search {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 65%;
+  height: 50vh;
+}
+
+.blacklistAddnew--addBy--search > img {
+  flex: 1 1 20%;
+  height: 20vh;
+}
+
+.blacklistAddnew--addBy--search > h4, .blacklistAddnew--addBy--manual > h4, .blacklistAddnew > h4 {
+  width: 100%;
+  text-align: center;
+}
+
+.blacklistAddnew--addBy--manual > div {
+  flex-direction: row;
+}
+
+.blacklistAddnew--addBy--manual > div > div {
+  flex-direction: column;
+}
+
+.blacklistAddnew--addBy--manual > div > div > input, .blacklistAddnew--addBy--manual > div > div > select {
+  padding: 1vw;
+  margin: 1vh;
+  font-size: medium;
+  border-radius: 0;
+}
+
+
+.blacklistAddnew--addBy {
+  border-bottom-left-radius: 15px;
+  /* border-top-left-radius: 15px; */
+  width: 15%;
+}
+
+.blacklistAddnew--addButton {
+  border-bottom-right-radius: 15px;
+  /* border-top-right-radius: 15px; */
+  width: 10%;
+}
+
+.blacklistAddnew--addBy--search > form > input {
+  width: 45% !important;
+}
+
 .adminButton--Neutral--small {
   margin: 0px 10px;
   padding: 0 !important;

@@ -21,6 +21,7 @@ function AdminCMS({setErrorPageContent}) {
   });
   const [adminActiveMode, setAdminActiveMode] = useState(null)
   const [loadingStep, setLoadingStep] = useState(null)
+  const [blacklist, setBlacklist] = useState(null)
 
     const [popupContent, setPopupContent] = useState({
     isDismissable: false,
@@ -118,6 +119,7 @@ function AdminCMS({setErrorPageContent}) {
         setAdminListWishlist(adminData["wishlist"]);
         setAdminListNotifications(adminData["messages"]);
         setAdminListUsers(adminData["users"]);
+        setBlacklist(adminData['blacklist'])
     } catch (error) {
       console.log('%cAdminCMS.js line:97 error', 'color: #007acc;', error);
       console.log('%cAdminCMS.js line:98 error.message', 'color: #007acc;', error.message);
@@ -168,6 +170,8 @@ function AdminCMS({setErrorPageContent}) {
               refreshData={refreshData}
             />
             {adminListWishlist !== null && adminListWishlist.length > 0 && <AdminActiveTask
+              blacklist={blacklist}
+              setBlacklist={setBlacklist}
               activatePopup={activatePopup}
               refreshData={refreshData}
               adminActiveTask={adminActiveTask}

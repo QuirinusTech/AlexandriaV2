@@ -40,7 +40,8 @@ module.exports = {
   updateWishlistItem,
   userUpdate,
   adminPasswordReset,
-  notifyUser
+  notifyUser,
+  uname
 }
 
 
@@ -57,11 +58,31 @@ async function wishlistInterface(username, operation, data) {
       return await deleteDocFromWishlist(data);
     case "UE":
       return await addEpisodesToWishlistItem(data["readyobj"]);
+    // case "F":
+    //   return await findEntryByfield(username, data)
     default:
       break;
   }
 }
 
+async function blacklistCleanup(uname, imdbid) {
+  const snapshot = await wishlistRef.where("addedBy", "==", uname).get();
+  if (snapshot.empty) {
+    return "empty";
+  }
+  let idToDelete = ''
+  snapshot.forEach((doc) => {
+    let item = doc.data();
+    if (item.imdbData.imdbID === imdbid) {
+      flaggedfordeletion = item['id']
+    }
+  });
+
+  if (idToDelete !== '') {
+    await deleteDocFromWishlist(idToDelete)
+  }
+   return 'success'
+}
 
 async function getUserByUsername(username) {
     console.log(username)
@@ -545,19 +566,20 @@ function generateValidationCode() {
 
 async function readBlacklist(username) {
   let currentUserBlacklist = await blacklistRef.doc(username).get().then(doc => doc.data())
+  delete currentUserBlacklist['owner']
   return currentUserBlacklist
 }
 
 async function addToBlacklist(username, data) {
   // data in format {imdbid: {imdbid: title}
-  const res = await blacklistRef.doc(username).update(data)
+  const res = await blacklistRef.doc(username).update({...data, owner: username})
   return res
 }
 
 async function unBlacklist(username, data) {
   let currentUserBlacklist = await blacklistRef.doc(username).get().then(doc => doc.data())
   Object.keys(currentUserBlacklist).forEach(element => {
-    if (currentUserBlacklist[element]['title'] === data['title'] && currentUserBlacklist[element]['imdbid'] === data['imdbid']) {
+    if (element !== "owner" && currentUserBlacklist[element]['title'] === data['title'] && currentUserBlacklist[element]['imdbid'] === data['imdbid']) {
       delete currentUserBlacklist[element]
     }
   });
