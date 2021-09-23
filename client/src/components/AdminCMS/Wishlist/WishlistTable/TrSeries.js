@@ -36,8 +36,8 @@ const TrSeries = ({entry, headers, setEditableEntry, isFiltered}) => {
                   <div>
               {Object.keys(entry['episodes']).map(season => {
                 return (
-                <div>
-                <details key={entry['id'] + formatString(season)} open={Object.keys(entry['episodes']).length < 5} className="darkDetails">
+                <div key={entry['id'] + formatString(season) + 'div'}>
+                <details key={entry['id'] + formatString(season) + 'details'} open={Object.keys(entry['episodes']).length < 5} className="darkDetails">
                   <summary className="adminButton--small">{formatString(season,"S")}</summary>
                   <ul>
                   {Object.keys(entry['episodes'][season]).map(episode => {

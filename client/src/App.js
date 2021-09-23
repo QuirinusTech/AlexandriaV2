@@ -13,7 +13,6 @@ import AdminCMS from "./components/AdminCMS/AdminCMS";
 import Start from "./components/Start/Start";
 import About from "./components/Start/About";
 import Navbar from "./components/Start/Navbar";
-import MobileNavbar from "./components/Start/MobileNavbar";
 import LogIn from "./components/Security/LogIn";
 import Logout from "./components/Security/Logout";
 import ForgottenPassword from "./components/Security/ForgottenPassword";
@@ -117,17 +116,25 @@ async function getNotifications() {
 
   useEffect(() => {
     const InitData = async () => {
-      await dataSetup()
-    }
-    if (window.location.pathname !== "/admin") {
+      await dataSetup();
+    };
+    if (!checkForJwtCookie()) {
+      console.log(
+        '%cLogIn.js line:45 Cookies.get("jwt")',
+        "color: #007acc;",
+        Cookies.get()
+      );
+      setIsLoggedIn(false);
+    } else if (window.location.pathname !== "/admin") {
       InitData();
     }
-    console.log("init complete")
+    console.log("init complete");
   }, []);
+
 
   return (
     <Router>
-      {window.innerWidth < 600 ? <MobileNavbar isLoggedIn={isLoggedIn} /> : <Navbar isLoggedIn={isLoggedIn} /> }
+      <Navbar isLoggedIn={isLoggedIn} />
 
 
 

@@ -57,7 +57,6 @@ const TableRows = ({
         <td
           className="colhead_mediaDetails"
           style={{
-            width: "50%",
             border: recentlyViewedBool && "1px solid green"
           }}
         ><h4>{item["name"]}</h4>
@@ -79,7 +78,7 @@ const TableRows = ({
                 et={item["et"]}
                 id={item["id"]}
               />}
-              <OptionsWidget setWishlistData={setWishlistData} item={item} />
+              <OptionsWidget setWishlistData={setWishlistData} item={item} adminMode={false} />
             </details>
           </div>
         </td>

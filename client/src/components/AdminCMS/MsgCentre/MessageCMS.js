@@ -81,7 +81,7 @@ function MessageCMS({
           </tr>
         </thead>
         <tbody>
-          {messageList.map(message => {
+          {messageList.length > 0 ? messageList.map(message => {
             return (
               <MessageEntryTemplate
                 key={message["id"]}
@@ -94,7 +94,7 @@ function MessageCMS({
                 adminListUsers={adminListUsers}
               />
             );
-          })}
+          }) : <tr><td colspan="8">No messages.</td></tr>}
           <tr>
             <th>
               <button className="adminButton adminButton--small" name="all" onClick={bulkFunctionSelect}>Select All</button>

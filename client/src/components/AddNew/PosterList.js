@@ -2,8 +2,9 @@ const PosterList = ({ posterList, reset, posterClick }) => {
   
   // console.log(posterarr)
   return (
-    <div className="PosterList">
+    <div className="posterList">
       <button onClick={reset}>Cancel</button>
+      <h4>Select one of the posters below.</h4>
       <ul>
         {posterList.map(poster => {
           return (

@@ -31,13 +31,15 @@ const IMDBDataTable = ({ IMDBResults, isSeries }) => {
           }
           return (
             <tr key={keyName}>
-              <td>{keyName === "totalSeasons" ? "Seasons" : keyName}</td>
-              {keyName !== "Poster" ? (
-                <td>{keyValue}</td>
-              ) : (
-                <td>
+              {keyName === "Poster" ? (
+                <td  colSpan="2">
                   <img src={keyValue} alt="Poster" />
                 </td>
+              ) : (
+                <>
+                <td>{keyName === "totalSeasons" ? "Seasons" : keyName}</td>
+                <td>{keyValue}</td>
+                </>
               )}
             </tr>
           );

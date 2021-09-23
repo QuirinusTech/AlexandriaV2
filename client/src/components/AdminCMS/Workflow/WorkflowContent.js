@@ -153,7 +153,7 @@ function WorkflowContent({
     if (bulkAction) {
       markTicketResolved(action);
       getNextTicket();
-    } else if (adminActiveMode !== "WfDownload" && action === 'postpone') {
+    } else if (adminActiveMode !== "wfDownload" && action === 'postpone') {
       deleteCurrentTicket();
       getNextTicket();
     } else {
@@ -178,6 +178,7 @@ function WorkflowContent({
             deleteTicket(newEntry['id']);
             getNextTicket();
           } else {
+            console.log(data)
           // error handler
           }
         });
@@ -195,50 +196,64 @@ function WorkflowContent({
       actionType: action,
       ...currentEntry
       }
-    let outstandingResolved = {}
-    let outstandingUnresolved = {}
-    Object.keys(episodeList).forEach(season => {
-      if (episodeList['season']) {
-        outstandingResolved[season] = Object.keys(episodeList[season]).filter(episode => episode !== 'season')
-      } else {
-        outstandingResolved[season] = []
-        outstandingUnresolved[season] = []
-        Object.keys(episodeList[season]).forEach(episode => {
-          if (episodeList[season][episode]) {
-            outstandingResolved[season].push(episode)
-          } else if (episode !== "season") {
-            outstandingUnresolved[season].push(episode)
-          }
-        })
-        Object.keys(outstandingResolved).forEach(sea => {
-          if (outstandingResolved[sea].length === 0) {
-            delete outstandingResolved[sea]
-          }
-        })
-        Object.keys(outstandingUnresolved).forEach(sea => {
-          if (outstandingUnresolved[sea].length === 0) {
-            delete outstandingResolved[sea]
-          }
-        })
+    let newTicketOutstanding = {}
+    let resolvedObj = {} 
+    let seasonList = Object.keys(episodeList)
+
+    seasonList.forEach(season => {
+      delete episodeList[season]['season']
+      newTicketOutstanding[season] = []
+      resolvedObj[season] = []
+      Object.keys(episodeList[season]).forEach(episode => {
+        if (!episodeList[season][episode]) {
+          newTicketOutstanding[season].push(episode)
+        } else {
+          resolvedObj[season].push(episode)
+        }
+      })
+    })
+    seasonList.forEach(season => {
+      if (newTicketOutstanding[season].length === 0) {
+        delete newTicketOutstanding[season]
+      }
+      if (resolvedObj[season].length === 0) {
+        delete resolvedObj[season]
       }
     })
-    ticket['outstanding'] = outstandingResolved
+
+    ticket['outstanding'] = resolvedObj
+    ticket['resolved'] = true
     let newTicket = {
       ...currentEntry,
-      id: ticket['id']+"_"+Object.keys(outstandingUnresolved).length,
-      outstanding: outstandingUnresolved
+      id: ticket['id']+"_split_"+Object.keys(newTicketOutstanding).length,
+      outstanding: newTicketOutstanding
     }
     return {ticket, newTicket}
-  } 
+  }
+
+  function checkIfNotPartial(eppListObj) {
+    let isNotPartial = false
+    if (currentEntry['mediaType'] === 'movie' || !eppListObj) {
+      isNotPartial = true
+      return isNotPartial
+    } else {
+      Object.keys(eppListObj).forEach(season => {
+        isNotPartial = Object.keys(eppListObj[season]).every(ep => {
+          return eppListObj[season][ep]
+        })
+      })
+    }
+    return isNotPartial
+  }
 
   async function resolveTicketPartial(action, episodeList) {
 
-    const {ticket, newTicket} = splitTickets(action, episodeList)
-
-    if (Object.keys(ticket['outstanding']).length === 0) {
-      alert('You are attempting to perform a PARTIAL action on a ticket, but you have selected all available episodes for action. Either complete the entire ticket or de-select some of the selected entries under the COMPLETE LIST dialog.')
-      return false
+    if (checkIfNotPartial(episodeList)) {
+      await resolveTicket(action)
     } else {
+      const {ticket, newTicket} = splitTickets(action, episodeList)
+      // console.log(ticket)
+      // console.log(newTicket);
       if (bulkAction) {
         markTicketResolved(action, ticket)
         ticket['resolved'] = true
@@ -260,18 +275,20 @@ function WorkflowContent({
         })
         getNextTicket();
       } else {
+        setLoading(true)
         await fetch("/Admin/Workflow/Update", {
           method: "POST",
-          body: JSON.stringify(pendingChanges['list']),
+          body: JSON.stringify(ticket),
           headers: { "Content-type": "application/json; charset=UTF-8" }
-        }).then(res => {
-          if (res.status === 200) {
+        }).then(res => res.json()).then(data => {
+          if (data['success']) {
             // TODO: update wishlist
             refresh(newTicket)
           } else {
-            // error handler
+            alert(data['payload'])
           }
         });
+        setLoading(false)
       }
     }
   }
@@ -339,7 +356,7 @@ function WorkflowContent({
   async function bulkActionCommit(arg=false) {
 
     if (pendingChanges['count'] === 0) {
-      alert('No changes to commit. Operation aborted.')
+      alert('No changes to commit. \nOperation aborted.')
       return null
     } else {
       if (!arg) {

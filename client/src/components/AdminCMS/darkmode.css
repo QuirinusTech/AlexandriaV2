@@ -52,6 +52,35 @@
   h4, h5 {
     color: white;
   }
+
+  .progressBarnew {
+    background-color: var(--accentBlue) !important;
+  }
+  
+  .progressBardownloading {
+    background-color: var(--darkGrey) !important;
+  }
+  
+  .progressBardownloading > p, .progressBarcopied > p {
+    color: white !important;
+  }
+  
+  .progressBarcomplete, .progressBarpostponed {
+    background-color: var(--accentOrange) !important;
+  }
+  
+  .progressBarcopied {
+    background-color: var(--lightGrey) !important;
+  }
+  
+  .progressBarfailed {
+    background-color: var(--accentRedDeep) !important;
+  }
+  
+  .progressBarerror {
+    background-color: var(--accentRed) !important;
+  }
+
 }
 /* *************************************************New Admin Styles */
 
@@ -140,6 +169,98 @@ summary.adminButton--small:hover {
   background-color: grey;
   color: black;
 }
+
+.popupSmall {
+  z-index: 2020;
+  position: fixed;
+  left: 40vw;
+  width: 20vw;
+  bottom: 1vh;
+  height: fit-content;
+  background: var(--transparentDarkGrey);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  flex-wrap: nowrap;
+  border: 1px solid var(--accentBlue);
+  animation-name: fadeout;
+  animation-duration: 1.5s;
+  animation-delay: 8s;
+  animation-iteration-count: 1;
+  color: white;
+}
+
+.popupSmall > h5 {
+  padding: 0;
+  margin: 0.5vw;
+  font-size: medium;
+}
+
+@keyframes fadeout {
+  0% {transform: translateY(0); opacity: 1;}
+  100% {transform: translateY(10vw);  opacity: 0;}
+}
+
+.popupSmall--done {
+  display: none;
+  transform: translateY(10vw);
+  transition: 0;
+}
+
+
+.popupSmall--Messages {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  font-size: small;
+}
+
+.popupCounterText {
+  position: absolute;
+  top: 0;
+  right: 0vw;
+  margin: 0.5vw;
+  color: var(--accentBlue);
+}
+
+.popupDismissable {
+  z-index: 2020 !important;
+  left: unset;
+  width: 30vw;
+  top: unset;
+  bottom: unset;
+  height: fit-content;
+  position: fixed;
+  background: var(--transparentDarkGrey);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  flex-wrap: nowrap;
+  border: 1px solid var(--accentBlue);
+  padding: 1vw !important;
+}
+
+.popupDismissable > h4 {
+  color: wheat;
+  font-size: xx-large;
+  margin: 1vw;
+  padding: 0;
+}
+
+h4.warning, h5.warning {
+  color: var(--accentRed);
+}
+
+.popup--Messages {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5vw;
+  margin: 0.5vw;
+}
+
 
 .adminCMS {
   display: flex;
@@ -512,7 +633,7 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
 }
 
 .AdminCMSTitlePage--Welcome > h3, .AdminCMSTitlePage--Welcome > h4, .AdminCMSTitlePage--Welcome > h5 {
-  min-width: 600px;
+  min-width: 768px;
   margin: 20px 0px;
   text-align: center;
 }
@@ -537,6 +658,114 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   margin: 20px;
 }
 
+.adminWishlistUtilities {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 79vw;
+  padding: 1vh;
+  margin: 0 !important;
+}
+
+.adminFilterContainer > select, .adminFilterContainer > button {
+  margin: 0vw 0.5vw;
+}
+
+.adminWishlistUtility {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 1vh;
+  flex-wrap: nowrap;
+}
+
+.adminSearchBox::placeholder {
+  color: white;
+}
+
+
+.adminSearchBox, .adminFilterContainer > select {
+  border-radius: 10px;
+  border: none;
+  /* height: 40px; */
+  width: 10vw;
+  box-shadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
+  flex-grow: 2;
+  padding: 10px 20px;
+  font-size: large;
+  background-color: #23232e;
+  color: white;
+  text-align: center;
+  height: 3vh;
+  padding: 0px 2vw;
+}
+
+.adminSearchBox:focus {
+  width: 20vw;
+  color: wheat;
+}
+
+.editableTr--OptionsWidget {
+  left: 25vw;
+  top: 20vh;
+  /* position: fixed; */
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background: var(--richGrey);
+  padding: 1vw;
+  width: 50vw;
+  place-self: center;
+  height: 60vh;
+}
+
+.editableTr--OptionsWidget--closeButton {
+  width: "fit-content";
+  position: "absolute";
+  top: "0px";
+  right: "0px";
+  height: "fit-content";
+  border-radius: "15px";
+}
+
+.editableTr--OptionsWidget > div > .optionsWidgetHelpButton {
+  display: none;
+}
+.editableTr--OptionsWidget > div > button, .editableTr--OptionsWidget > div > div > button {
+  width: 100%;
+  background: var(--richGrey);
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-family: system-ui !important;
+  background-color: var(--lightGrey);
+  border: none;
+  border-radius: 5px;
+  transition: 1s;
+  /* padding: 0; */
+  cursor: pointer;
+  color: white;
+}
+
+.editableTr--OptionsWidget > div > button:hover, .editableTr--OptionsWidget > div > div > button:hover {
+  background-color: var(--richGrey);
+  color: wheat;
+  transition: 0.3s;
+  border: none;
+}
+
+.editableTr--OptionsWidget > div > div {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.editableTr--OptionsWidget > div {
+  background: var(--transparentDarkGrey);
+  border: 1px solid wheat;
+}
+
+
 .editableTr {
   position: fixed;
   top: 0;
@@ -560,14 +789,18 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   background-color: var(--darkGrey);
   /* padding: 1vw 2vw; */
   position: absolute;
-  top: 4vw;
+  top: 1vh;
   border-radius: 15px;
 }
 
 h4.editableTrDeleteButtons  {
-  color: white;
+  color: wheat;
   font-size: xx-large;
-  width: 100%;
+  width: 30vw;
+}
+
+p.editableTrDeleteButtons {
+  color: white !important;
 }
 
 div.editableTrDeleteButtons {
@@ -998,6 +1231,7 @@ td > table.usersVisTable {
   background: #23232e;
   color: wheat;
   border-right: 1px solid black;
+  padding: 1vh 0.5vw;
 }
 
 .darkDetails, .adminWlTableImdbData>details {
@@ -1841,3 +2075,4 @@ span.Workflow--NotificationBar--Block--Count {
   border-radius: 0px !important;
   transition: 1s;
 }
+

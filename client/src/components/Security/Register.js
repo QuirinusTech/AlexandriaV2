@@ -117,7 +117,7 @@ function Register() {
         </>
       )}
       {isSuccess && (
-        <div>
+        <div className="registerResponseMessage">
           <p>Registration successful.</p>
           <p>
             Your account will need to be activated by the administrator before
@@ -130,7 +130,7 @@ function Register() {
           <p>The Administrator has already been notified.</p>
         </div>
       )}
-      {!isSuccess && <div>{responseMessage}</div>}
+      {!isSuccess && <div className="registerResponseMessage">{responseMessage}</div>}
     </div>
   );
 }

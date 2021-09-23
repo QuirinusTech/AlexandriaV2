@@ -78,6 +78,8 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
             User Details
           </summary>
           <table style={{width: "100%"}}>
+          <tbody>
+
             <tr>
             <th>Name</th>
             <td><input type="text" value={currentUser['details']['name']} onChange={(e)=>updateField('details', "name", e.target.value)} /></td>
@@ -85,6 +87,7 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
             <tr><th>Email</th>
             <td><input type="text" value={currentUser['details']['email']} onChange={(e)=>updateField('details', "email", e.target.value)} /></td>
             </tr>
+          </tbody>
           </table>
         </details>
       </div>

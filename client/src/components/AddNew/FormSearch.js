@@ -1,3 +1,5 @@
+import PNGLoader from "../Loaders/PNGLoader"
+
 const FormSearch = ({
   handleSubmit,
   field,
@@ -6,18 +8,16 @@ const FormSearch = ({
   isSearching,
   errorMsg
 }) => {
-  return (
-    <div className="FormSearch">
-      <form onSubmit={handleSubmit}>
-        <h2>Let's get some info first:</h2>
+  return isSearching ? <PNGLoader /> :  (
+      <form onSubmit={handleSubmit} className="formSearch">
+        <h3>Let's get some info first:</h3>
         {errorMsg !== null && <div className="FormSearch--NoResults">
           <p>No results found for <b>{errorMsg[1]}</b>. </p>
           <p>Please check your spelling and try again. </p>
           <p>Error from IMDB: </p>
           <p className="warning"><b>{errorMsg[0]}</b></p>
           </div>}
-        <div className="flex-left" id="left">
-        <label className="formsearchSearchByRadioButton">
+        <label className={searchBy === "title" ? "formsearchRadioButtonChecked formsearchRadioButton" : "formsearchRadioButton"}>
           <input
             className="max10px"
             id="sbTitle"
@@ -28,10 +28,8 @@ const FormSearch = ({
             onChange={handleChange}
             />{" "}
             Title</label>
-        </div>
         
-        <div className="flex-left" id="left">
-        <label className="formsearchSearchByRadioButton"><input
+        <label className={searchBy === "imdbId" ? "formsearchRadioButtonChecked formsearchRadioButton" : "formsearchRadioButton"}><input
             className="max10px"
               id="sbImdbId"
               type="radio"
@@ -41,7 +39,6 @@ const FormSearch = ({
               onChange={handleChange}
             />
              IMDB ID</label>
-        </div>
 
         <input
           className="formsearchFieldInput"
@@ -49,10 +46,10 @@ const FormSearch = ({
           name="field"
           value={field}
           onChange={handleChange}
+          placeholder={"Search by " + searchBy}
         />
-        <input className={isSearching ? "buttonload" : ""} type="submit" value={isSearching ? "searching..." : "Search!"} />
+        <input className={isSearching ? "buttonload" : "formSearch__btn--submit"} type="submit" value={isSearching ? "searching..." : "Search!"} />
       </form>
-    </div>
   );
 }
 

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import PNGLoader from "../../../Loaders/PNGLoader";
+import { motion, AnimatePresence } from "framer-motion"
 
-function OptionsWidget({ item, setWishlistData }) {
+
+function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   const [currentFunction, setCurrentFunction] = useState(null);
   const [userReportedError, setUserReportedError] = useState('')
   const [showHelpStrings, setShowHelpStrings] = useState(false)
@@ -225,11 +227,15 @@ function OptionsWidget({ item, setWishlistData }) {
 
 
 
-  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags}) => {
+  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN}) => {
+
+    let findStringProps = Object.keys(optionsWidgetStringsEN).filter(obj => optionsWidgetStringsEN[obj]['fn'] === currentFunction)[0]
+    let helpString = optionsWidgetStringsEN[findStringProps]['help']
+
     return (
-      <div key={item["id"]} className="wishListWidgetContent">
-      
+      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} key={item["id"]} className="wishListWidgetContent">
         <h4>{currentFunction}</h4>
+        <p className="helpString">{helpString}</p>
         {currentFunction !== "Blacklist" &&
           item["mediaType"] === "series" && (
             <div className="optionsWidget__rangePickerForm">
@@ -304,7 +310,7 @@ function OptionsWidget({ item, setWishlistData }) {
           </>
         )}
           <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
-          <button className="btn_submit" onClick={SubmitForm}>
+          <button className={adminMode ? "adminButton adminButton--submit" :"btn_submit"} onClick={SubmitForm}>
             {
               currentFunction === "Edit Range"
                 ? "Update"
@@ -316,7 +322,7 @@ function OptionsWidget({ item, setWishlistData }) {
             }
           </button>
           <button
-            className="btn_warning"
+            className={adminMode ? "adminButton adminButton--cancel" :"btn_warning"}
             onClick={() => {
               setCurrentFunction(null);
             }}
@@ -324,7 +330,7 @@ function OptionsWidget({ item, setWishlistData }) {
             Cancel
           </button>
         </div>
-      </div>
+      </motion.div>
     )
   };
 
@@ -334,27 +340,53 @@ function OptionsWidget({ item, setWishlistData }) {
       case null:
         return (
         <div className="wishListWidgetButtonRow">
-        {Object.keys(optionsWidgetStringsEN).map(stringName => {
-          if (!optionsWidgetStringsEN[stringName]['applicable'][ item['mediaType']]) {
+        {Object.keys(optionsWidgetStringsEN).map((stringName, index) => {
+          
+          if (!optionsWidgetStringsEN[stringName]['applicable'][item['mediaType']]) {
             return (<></>)
-          } else {
+          } else if (showHelpStrings) {
             return (
-              <>
+                <AnimatePresence>
+                  <motion.label
+                  transition={{delay: index*0.2}}
+                  key={item['id'] + stringName + "_helpString"}
+                  initial={{ opacity: 0, y: 50}}
+                  animate={{opacity: 1, y: 0}}
+                  exit={{opacity: 0, y: 50}}
+                  className="helpString"
+                  >
+                  <button
+                    key={stringName + item['id']}
+                    className={adminMode ? "adminButton adminButton--submit" :"btn_submit"}
+                    onClick={() => {
+                      setCurrentFunction(optionsWidgetStringsEN[stringName]['fn']);
+                    }}
+                  >
+                    {optionsWidgetStringsEN[stringName]['label']}
+                  </button>
+
+                  <p>{optionsWidgetStringsEN[stringName]['help']}</p>
+
+                  </motion.label>
+
+                </AnimatePresence>
+            )
+           } else {
+             return (
               <button
                 key={stringName + item['id']}
-                className="btn_submit"
+                className={adminMode ? "adminButton adminButton--submit" : "btn_submit"}
                 onClick={() => {
                   setCurrentFunction(optionsWidgetStringsEN[stringName]['fn']);
                 }}
               >
                 {optionsWidgetStringsEN[stringName]['label']}
               </button>
-              {showHelpStrings && <p>{optionsWidgetStringsEN[stringName]['help']}</p>}
-              </>
-            )
-          }
+              )
+            }
         })}
-        </div>)
+        </div>
+        )
       case "Loading":
         return <PNGLoader />;
       case "Done":
@@ -365,6 +397,7 @@ function OptionsWidget({ item, setWishlistData }) {
             </p>
             <br />
             <button
+              className={adminMode ? "adminButton" :""}
               onClick={() => {
                 setCurrentFunction(null);
               }}
@@ -379,6 +412,7 @@ function OptionsWidget({ item, setWishlistData }) {
             <p>Something went wrong.</p>
             <p>An error report has been sent to the administrator.</p>
             <button
+              className={adminMode ? "adminButton" :""}
               onClick={() => {
                 // window.location.reload(false);
                 setCurrentFunction(null)
@@ -390,6 +424,7 @@ function OptionsWidget({ item, setWishlistData }) {
         );
       default:
         return <UtilityForm
+          optionsWidgetStringsEN={optionsWidgetStringsEN}
           currentFunction={currentFunction}
           item={item}
           formEpisodes={formEpisodes}
@@ -403,7 +438,7 @@ function OptionsWidget({ item, setWishlistData }) {
   return (
     <>
     <div className="OptionsWidget">
-    <button className="optionsWidgetHelpButton" onClick={()=>setShowHelpStrings(!showHelpStrings)}>?</button>
+    {!adminMode && <button className="optionsWidgetHelpButton" onClick={()=>setShowHelpStrings(!showHelpStrings)}>?</button>}
       <WidgetInsides
           currentFunction={currentFunction}
           item={item}

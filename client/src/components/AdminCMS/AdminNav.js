@@ -12,41 +12,44 @@ function AdminNav({
 const adminNavBarVar = [
   {
     task: "WishlistCMS",
-    title: "Wunschliste",
+    title: "Wishlist",
     desc: "wishlist",
     modes: [
-      { modeName: "wishlistList", description: "Wunschliste bearbeiten" },
-      { modeName: "wishlistNew", description: "Neu Hinzufuegen" }
+      { modeName: "wishlistList", description: "Wishlist CMS" },
+      { modeName: "wishlistNew", description: "Add New" }
     ],
     id: "01"
   },
   {
     task: "MsgCentre",
-    title: "Nachrichten",
+    title: "Messages",
     desc: "msgCentre",
     modes: [
-      { modeName: "msgNew", description: "Neu Hinzufuegen" },
-      { modeName: "msgCMS", description: "Nachrichten Bearbeiten" },
-      { modeName: "msgPreview", description: "Nachrichtenvorschau" }
+      { modeName: "msgNew", description: "New Message" },
+      { modeName: "msgCMS", description: "Message CMS" },
+      { modeName: "msgPreview", description: "User Preview" }
     ],
     id: "02"
   },
   {
     task: "Workflow",
-    title: "Arbeitsablauf",
+    title: "Workflow",
     desc: 'workflow',
     modes: [
-      { modeName: "wfDownload", description: "Herunterladen" },
-      { modeName: "wfComplete", description: "Erledigen" },
-      { modeName: "wfCopy", description: "Kopieren" }
+      { modeName: "wfDownload", description: "Download" },
+      { modeName: "wfComplete", description: "Complete" },
+      { modeName: "wfCopy", description: "Copy" }
     ],
     id: "03"
   },
   {
     task: "UserManager",
-    title: "Benutzer Steuerung",
+    title: "User Management",
     desc: "userManager",
-    modes: [],
+    modes: [
+      { modeName: "userCMS", description: "User Manager" },
+      { modeName: "blacklist", description: "Blacklist" }
+    ],
     id: "04"
   }
 ];

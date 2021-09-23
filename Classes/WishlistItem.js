@@ -7,34 +7,56 @@ const {allPossibleStatuses} = require("./globals");
 class WishlistItem {
 
   static async setData(data) {
+
     let obj = {}
+    console.log('marco 1')
     obj.addedBy = data.addedBy;
+        console.log('marco 2')
+
     obj.id = v4();
     obj.mediaType = data.mediaType;
     let status = ''
+        console.log('marco 3')
+
     if (typeof(data['status']) === 'string') {
       obj.status = data['status']
     } else {
       obj.status = "new"
     }
+    
     obj.imdbID = data.imdbID;
     obj.name = data.name;
     obj.dateAdded = data.dateAdded;
+    
     obj.imdbData = data.imdbData;
     obj.isPriority = data['isPriority'];
+    
     if (data.mediaType !== "movie") {
       obj.sf = data.sf;
       obj.ef = data.ef;
       obj.st = data.st;
       obj.et = data.et;
+      
       obj.isOngoing = data['isOngoing'];
-      let episodes = await this.parseEpisodeVars(data.sf, data.ef, data.st, data.et, data.imdbID);
+      let episodes = await this.parseEpisodeVars(data.sf, data.ef, data.st, data.et, data.imdbID, data.status);
       obj.episodes = episodes
-      if (typeof data.et !== "number") {
-        let keysarr = Object.keys(episodes[data['st']])
-        obj.et = Math.max(...keysarr)
+      
+      try {
+        if (typeof data.et !== "number") {
+          
+          ;
+          let keysarr = Object.keys(episodes[data.st])
+          
+          obj.et = Math.max(...keysarr)
+          
+        }
+      } catch (error) {
+        ;        
       }
+      
     }
+    
+    ;
     return obj
   }
 
@@ -60,7 +82,7 @@ class WishlistItem {
    * @param {string} imdbID imdbID
    * @return {object} episodesvar
    */
-  static async parseEpisodeVars(sf, ef, st, et, imdbID) {
+  static async parseEpisodeVars(sf, ef, st, et, imdbID, status='new') {
     sf = parseInt(sf)
     ef = parseInt(ef)
     st = parseInt(st)
@@ -85,9 +107,17 @@ class WishlistItem {
         }
         // console.log(episodesvar)
         for (let j = sf; j <= st; j++) {
-          const maxEpisodes = await this.GetMaxEpisodes(j, imdbID)
-          // console.log(maxEpisodes)
-          episodesvar[j] = this.addSeason(j, ef, maxEpisodes)
+          let maxEpisodes = 0
+          if (j === st && et !== 'all' && !isNaN(parseInt(et))) {
+            maxEpisodes = et
+          } else {
+            maxEpisodes = await this.GetMaxEpisodes(j, imdbID)
+          }
+          if (j !== sf) {
+            episodesvar[j] = this.addSeason(j, 1, maxEpisodes, status)
+          } else {
+            episodesvar[j] = this.addSeason(j, ef, maxEpisodes, status)
+          }
         }
         return episodesvar;
       }
@@ -116,12 +146,12 @@ class WishlistItem {
    * @param {int} et int: end of range for this season
    * @returns {object} Season object which is nested inside the 'episodes' key of the wishlist item.
    */
-  static addSeason(season, ef, et) {
+  static addSeason(season, ef, et, status='new') {
    // console.log("Add Episodes ", season, ef, et)
     let obj = {};
     obj[season] = {}
     for (let i = ef; i <= et; i++) {
-      obj[season][i] = "new";
+      obj[season][i] = status;
     }
     return obj[season]
   }

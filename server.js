@@ -11,7 +11,8 @@ const {
   getUserNotifications,
   getSingleWishlistEntry,
   notifyAdmin,
-  userUpdate
+  userUpdate,
+  adminPasswordReset
 } = require("./firebase");
 const morgan = require('morgan')
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
@@ -111,7 +112,9 @@ app.post('/register', async (req, res) => {
     const newObj = req.body
     console.log(req.body)
     const {firstname, username, password, email} = newObj
-    if (getUserByUsername(username) !== false) {
+    let checkFirst = await getUserByUsername(username)
+    console.log('%cserver.js line:116 checkFirst', 'color: #007acc;', checkFirst);
+    if (!!checkFirst) {
       throw JSON.stringify(createErrorResponseObject("prometheus"))
     }
     
@@ -134,8 +137,10 @@ app.post('/register', async (req, res) => {
 /** [LogIn] */
 app.post('/login', async (req, res) => {
   const newObj = req.body;
+  let expirationMultiplier = 1
   if (process.env.test === true) {
     console.log(newObj)
+    expirationMultiplier = 30
   }
   const { username, password } = newObj;
   try {
@@ -148,6 +153,9 @@ app.post('/login', async (req, res) => {
     } 
     const passwordValidation = await User.check_password(password, dbUserData.password)
     console.log("Password Validation: ", passwordValidation)
+
+
+
     if (passwordValidation) {
       const token = jwt.sign({
           "iss": "alexandriav2",
@@ -156,7 +164,7 @@ app.post('/login', async (req, res) => {
           can_add: dbUserData.privileges["can_add"],
           is_active_user: dbUserData.privileges["is_active_user"]
       }, process.env.JWT_SECRET_KEY, {
-        expiresIn: (24 * 60 * 60 * 1000)
+        expiresIn: (24 * 60 * 60 * expirationMultiplier)
       });
     
       res.cookie("jwt", token, { httpOnly: true, maxAge: 60 * 60 * 24 });
@@ -208,15 +216,33 @@ app.post('/passwordReset', async (req, res) => {
 
   const {username, validationCode, passwordNewFirst} = req.body
   const response = await passwordResetAttempt(username, validationCode, passwordNewFirst)
-  // PASSWORD RESET
-  // enter username
-  // enter code from email
-  // enter new password
-  // repeat password
-  // in DB: check requestAge < 30min & validate code
-  // update password in db
-  // redirect to login page
   res.json(response)
+  
+    // PASSWORD RESET
+    // enter username
+    // enter code from email
+
+    // enter new password
+    // repeat password
+    // in DB: check requestAge < 30min & validate code
+    // update password in db
+    // redirect to login page
+})
+
+app.post('/adminpasswordreset', verifyTokenAdmin, async (req, res) => {
+  try {
+    const {username, newPassword} = req.body
+    if (!res.locals.is_admin) {
+      throw new Error('tantalus')
+    }
+    let response = await adminPasswordReset(username, newPassword)
+    console.log('%cserver.js line:237 response', 'color: #007acc;', response);
+    res.json(response)
+    } catch (error) {
+      console.log('%cserver.js line:244 error', 'color: #007acc;', error);
+      let resObj = createErrorResponseObject(error.message)
+      res.status(resObj['responsecode']).json(resObj)
+    }
 })
 
 /** [AddNew, AvailabilityWidget] */
@@ -289,6 +315,7 @@ app.post('/logout', (_req, res) => {
 app.post('/Admin/:department/:operation', verifyTokenAdmin, async function (req, res) {
   const {department, operation} = req.params
   const data = req.body
+  console.log('%cserver.js line:314 req.body', 'color: #007acc;', req.body);
   if (process.env.test === 'true') {
     if (department === 'List' && operation === "Alllists") {
       res.json({success: true, payload: fakeData})

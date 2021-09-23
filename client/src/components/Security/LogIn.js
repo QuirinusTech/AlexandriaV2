@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory, Link } from "react-router-dom"
 import AlexOGLoader from "../Loaders/AlexOGLoader"
 
+
 function LogIn({setIsLoggedIn, isRestricted, isLoggedIn}) {
   const [pleaseWait, setPleasewait] = useState(false)
   const passwordWasReset = localStorage.getItem('passwordReset');

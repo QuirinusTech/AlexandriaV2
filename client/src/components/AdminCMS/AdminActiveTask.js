@@ -15,17 +15,21 @@ function AdminActiveTask({
   adminListUsers,
   setAdminListUsers,
   allPossibleStatuses,
-  refreshData
+  refreshData,
+  activatePopup
 }) {
   const TaskContent = ({
     adminActiveTask,
     adminListWishlist,
+    setAdminListWishlist,
     adminListWorkflow,
     adminListNotifications,
     adminListUsers,
+    setAdminListUsers,
     allPossibleStatuses,
     setAdminActiveMode,
-    refreshData
+    refreshData,
+    activatePopup
   }) => {
     switch (adminActiveTask) {
       case "WishlistCMS":
@@ -36,6 +40,7 @@ function AdminActiveTask({
             allPossibleStatuses={allPossibleStatuses}
             setAdminListWishlist={setAdminListWishlist}
             adminListUsers={adminListUsers}
+            activatePopup={activatePopup}
           />
         );
       case "MsgCentre":
@@ -47,6 +52,7 @@ function AdminActiveTask({
             adminListWishlist={adminListWishlist}
             adminActiveMode={adminActiveMode}
             allPossibleStatuses={allPossibleStatuses}
+            activatePopup={activatePopup}
           />
         );
       case "Workflow":
@@ -57,6 +63,7 @@ function AdminActiveTask({
             setAdminListWishlist={setAdminListWishlist}
             adminActiveMode={adminActiveMode}
             setAdminActiveMode={setAdminActiveMode}
+            activatePopup={activatePopup}
           />
         );
       case "UserManager":
@@ -66,6 +73,7 @@ function AdminActiveTask({
             adminListUsers={adminListUsers}
             setAdminListUsers={setAdminListUsers}
             adminActiveMode={adminActiveMode}
+            activatePopup={activatePopup}
           />
           </div>
         );
@@ -85,12 +93,15 @@ function AdminActiveTask({
       <TaskContent
         adminActiveTask={adminActiveTask}
         adminListWishlist={adminListWishlist}
+        setAdminListWishlist={setAdminListWishlist}
         adminListWorkflow={adminListWorkflow}
         adminListNotifications={adminListNotifications}
         adminListUsers={adminListUsers}
+        setAdminListUsers={setAdminListUsers}
         allPossibleStatuses={allPossibleStatuses}
         setAdminActiveMode={setAdminActiveMode}
         refreshData={refreshData}
+        activatePopup={activatePopup}
       />
     </div>
   );

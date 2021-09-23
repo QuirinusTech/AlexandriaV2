@@ -4,7 +4,8 @@ const UserDetailDashboard = ({
   currentUser,
   setCurrentUser,
   setDetailsEditable,
-  passwordReset
+  passwordReset,
+  activateAccount
 }) => {
   function returnEmoji(bool) {
     return bool ? "✔️" : "❌";
@@ -85,11 +86,18 @@ const UserDetailDashboard = ({
           </details>
 
           <div className="UserManagerButtonsRow">
+{/* <button
+  className="adminButton adminButton--cancel"
+  onClick={() => setCurrentUser(null)}
+>
+  Close
+</button>; */}
+
             <button
-              className="adminButton adminButton--cancel"
-              onClick={() => setCurrentUser(null)}
+              className="adminButton adminButton--submit"
+              onClick={activateAccount}
             >
-              Close
+              {currentUser["privileges"]["is_active_user"] ? "Deactivate":"Activate"}
             </button>
             <button className="adminButton adminButton--danger" onClick={passwordReset}>
               Password Reset

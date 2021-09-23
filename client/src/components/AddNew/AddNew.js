@@ -163,7 +163,7 @@ function AddNew({ wishlistData, setWishlistData }) {
 
 
   return (
-    <div>
+    <div className="addNewContainer">
       <h2>Add New</h2>
       {loading && <AlexOGLoader />}
       {progress === "JustAdded" && <Completed />}
@@ -195,7 +195,8 @@ function AddNew({ wishlistData, setWishlistData }) {
           SetProgress={SetProgress}
         />
       )}
-      <button onClick={reset}>{isSearching ? "Cancel" : "Reset"}</button>
+      <div className="spacer1"></div>
+      <button className="btn_warning" onClick={reset}>{isSearching ? "Cancel" : "Reset"}</button>
     </div>
   );
 }

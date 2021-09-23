@@ -1,5 +1,5 @@
 const globalvars = require('./Classes/globals')
-const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem} = require('./firebase')
+const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem, notifyuser} = require('./firebase')
 
 async function workFlowTicketParser(entry) {
   // console.log('%cAdminDatabaseInterface.js line:5 entry', 'color: #007acc;', entry);
@@ -24,6 +24,20 @@ async function workFlowTicketParser(entry) {
   }
 
   let newStatus = newStatusRouter[entry['adminmode']][entry['actionType']]
+  if (newStatus !== null) {
+      await notifyuser({
+      "id": entry['id'] + "_notification",
+      "messageType": "status",
+      "customMessageContent": '',
+      "entryStatusUpdate": newStatus,
+      "usersVis": {
+        [entry['owner']]: true
+      },
+      "affectedEntry": entry['affectedEntry'],
+      'mailed': false
+    })
+  }
+
   if (newStatus !== null && entry['mediaType'] === 'series') {
     let episodesListObj = entry['outstanding']
     let episodesObj = {}
@@ -50,10 +64,14 @@ async function workFlowTicketParser(entry) {
 
 
 
+
+
 async function adminDatabaseInterface(department, operation, data) {
-  // console.log('adminDatabaseInterface', 'department', department, 'operation', operation, 'data', data)
-  // console.log('%cAdminDatabaseInterface.js line:55 deparment', 'color: #007acc;', department);
-  // console.log('%cAdminDatabaseInterface.js line:56 operation', 'color: #007acc;', operation);
+  // if (process.env.test === 'true') {
+    console.log('adminDatabaseInterface', 'department', department, 'operation', operation, 'data', data)
+    console.log('%cAdminDatabaseInterface.js line:55 deparment', 'color: #007acc;', department);
+    console.log('%cAdminDatabaseInterface.js line:56 operation', 'color: #007acc;', operation);
+  // }
 
     let success = false
     let payload = null
@@ -100,7 +118,8 @@ async function adminDatabaseInterface(department, operation, data) {
             // delete entry
             let {id} = data
             outcome = await deleteDocFromWishlist(id)
-            if (outcome === "success") {
+            if (outcome !== "fail") {
+              payload = outcome
               success = true
             }
             break;
@@ -138,6 +157,7 @@ async function adminDatabaseInterface(department, operation, data) {
         console.log(error, error.message)
         payload = error.message
       } finally {
+        console.log('%cAdminDatabaseInterface.js line:143 success', 'color: #007acc;', success);
         return {success, payload, outcome}
       }
 }

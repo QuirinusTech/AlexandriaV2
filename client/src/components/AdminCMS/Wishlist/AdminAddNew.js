@@ -5,7 +5,7 @@ import ImportForm from "./ImportForm"
 import PNGLoader from "../../Loaders/PNGLoader"
 import { motion } from "framer-motion"
 
-function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist }) {
+function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist, activatePopup }) {
   
   let dateObj = new Date()
   let month = dateObj.getMonth() + 1
@@ -18,7 +18,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   const [mediaOptions, setMediaOptions] = useState({
     addedBy: 'addedBy',
     mediaType: 'mediaType',
-    status: 'status',
+    status: 'new',
     dateAdded: dateString,
     isOngoing: false,
     isPriority: false,
@@ -52,13 +52,18 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       .then(res => res.json())
       .then(data => {
         console.log('%cAdminAddNew.js line:47 data', 'color: #007acc;', data);
-        if (e.target.name === "title") {
+        if (e.target.name === "title" && data['Response'] !== "False") {
           setPosterList(data['Search'])
+        } else if (e.target.name === "title" && data['Response'] === "False") {
+          activatePopup('Failed', [data['Error']], false, true)
         } else {
+          if (data['Type'] === 'series') {
+            setEpisodes({sf: 1, ef: 1, st: data['totalSeasons'], et: 'all'})
+          }
           setImdbInfo(prevState => {
-            return { ...prevState, imdbID: data['imdbID'], imdbData: data };
+            return { ...prevState, imdbID: data['imdbID'], imdbData: data, title: data['Title'] };
           });
-          setMediaOptions({...mediaOptions, mediaType: data['type']})
+          setMediaOptions({...mediaOptions, mediaType: data['Type']})
         }
         setLoading(false)
       });
@@ -166,32 +171,47 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 
 
   async function createNewEntry() {
-    const newEntry = {
+    setLoading(true)
+    let newEntry = {
       ...mediaOptions,
       ...imdbInfo,
      };
 
+    newEntry['name'] = newEntry['title']
+
     if (mediaOptions['mediaType'] === "series") {
-      newEntry['episodes'] = {...episodes}
+      newEntry = {...newEntry, ...episodes}
     }
 
     // post newEntry to DB + retrieve new addition
     const response = await fetch("/Admin/Wishlist/new", {
       method: "POST",
       body: JSON.stringify(newEntry),
-      headers: { "Content-Type": "application/json" }
+      headers: { 'Content-type': 'application/json; charset=UTF-8' }
     })
       .then(res => res.json())
       .then(data => data);
-
+    console.log('%cAdminAddNew.js line:188 response', 'color: #007acc;', response);
+    if (response['success']) {
+      activatePopup('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false, false)
+      setAdminListWishlist(prevState => {
+        return prevState.map(entry => {
+          if (entry['id'] === response['payload']['id']) {
+            return response['payload']
+          } else {
+            return entry
+          }
+        })
+      });
+    } else {
+      activatePopup('Warning', [response['payload']], false, true)
+    }
     // add new addition to the master wishlist
 
-    setAdminListWishlist(prevState => {
-      return [...prevState, response];
-    });
 
     // reset form
     resetForm();
+    setLoading(false)
   }
 
 

@@ -1,6 +1,6 @@
 const BufferingLoader = () => {
   return (
-    <div>
+    <div className="modalBackground">
       <div className="BufferingLoader" id="BufferingLoader">
       </div>
     </div>

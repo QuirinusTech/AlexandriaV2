@@ -36,6 +36,10 @@ const MediaOptions = ({
             name="addedBy"
             onChange={handleChange}
             value={mediaOptions["addedBy"]}
+            style={mediaOptions["addedBy"] === 'addedBy' ? {
+                border: "1px solid red",
+                color: "red"
+            } : {}}
           >
             <option value="addedBy" hidden="hidden">
               Select user
@@ -55,6 +59,10 @@ const MediaOptions = ({
             name="status"
             onChange={handleChange}
             value={mediaOptions["status"]}
+            style={mediaOptions["status"] === 'status' ? {
+                border: "1px solid red",
+                color: "red"
+            } : {}}
           >
             <option value="status" hidden>
               Status
@@ -83,6 +91,10 @@ const MediaOptions = ({
             name="mediaType"
             onChange={handleChange}
             value={mediaOptions["mediaType"]}
+            style={mediaOptions["mediaType"] === 'mediaType' ? {
+                border: "1px solid red",
+                color: "red"
+            } : {}}
           >
             <option value="mediaType" hidden>
               Media Type

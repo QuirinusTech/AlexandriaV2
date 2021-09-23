@@ -132,11 +132,12 @@ function ResultsTable({
     isOngoing,
     handleChange,
     readyToAdd,
-    AddToList
+    AddToList,
+    isSeries
   }) => {
     return (
       <>
-        <div className="EpisodesPickTickboxesRow">
+        {isSeries && <div className="EpisodesPickTickboxesRow">
           <label>
             Is there a new episode due to release within the next month?
           </label>
@@ -147,7 +148,7 @@ function ResultsTable({
             checked={isOngoing}
             onChange={handleChange}
           />
-        </div>
+        </div>}
         <div className="IMDBResultsTablePriorityCheckboxRow">
           <label>Is this priority request? </label>
           <input
@@ -214,8 +215,9 @@ function ResultsTable({
     <GIFLoader />
   ) : (
     <div className="ResultsTable">
-      <button onClick={reset}> Back / Cancel </button>
-      <h3>Summary: </h3>
+      {window.innerWidth < 768 && <><button className="btn_warning" onClick={reset}> Back / Cancel </button>
+      <div className="spacer1 spacer2"></div></>}
+      <h3>Summary</h3>
       <IMDBDataTable IMDBResults={IMDBResults} isSeries={isSeries} />
       {errorPopupContent === null ? (
         <>
@@ -226,7 +228,7 @@ function ResultsTable({
                   <>
                     {field === "sf" && <label>From</label>}
                     {field === "st" && <label>To</label>}
-                    <div className="EpisodesPickFormRowColumn">
+                    <div className="EpisodesPickFormRowColumn" key={field}>
                       <label>Season </label>
                       <input
                         type="text"
@@ -246,6 +248,7 @@ function ResultsTable({
             </div>
           )}
           <StandardPreferences
+            isSeries={isSeries}
             isOngoing={isOngoing}
             isPriority={isPriority}
             handleChange={handleChange}

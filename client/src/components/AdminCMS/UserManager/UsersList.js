@@ -7,6 +7,8 @@ function returnEmoji(bool) {
 const UsersList = ({ usersList, selectUser, currentUser }) => {
   return (
     <table className="adminTable">
+    <thead>
+
       <tr className="adminTableHeadRow">
         <th>
           User Id
@@ -24,6 +26,9 @@ const UsersList = ({ usersList, selectUser, currentUser }) => {
           Admin
         </th>
       </tr>
+    </thead>
+    <tbody>
+
       {usersList.map(user => {
         let classnameString = "adminTableTr"
         if (currentUser !== null) {
@@ -46,6 +51,7 @@ const UsersList = ({ usersList, selectUser, currentUser }) => {
           </tr>
         );
       })}
+    </tbody>
     </table>
   );
 };

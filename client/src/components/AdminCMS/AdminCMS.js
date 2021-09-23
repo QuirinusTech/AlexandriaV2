@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import LoadingBar from "../Loaders/LoadingBar";
+import BufferingLoader from "../Loaders/BufferingLoader";
 import AdminNav from "./AdminNav";
 import AdminActiveTask from "./AdminActiveTask";
 import RefreshButtons from "./RefreshButtons";
 import "./darkmode.css"
+import Popup from "../Popup"
 
 function AdminCMS({setErrorPageContent}) {
 
@@ -20,6 +21,25 @@ function AdminCMS({setErrorPageContent}) {
   });
   const [adminActiveMode, setAdminActiveMode] = useState(null)
   const [loadingStep, setLoadingStep] = useState(null)
+
+    const [popupContent, setPopupContent] = useState({
+    isDismissable: false,
+    isWarning: false,
+    heading: "",
+    messages: []
+  });
+  const [popupIsVisible, setPopupIsVisible] = useState(false);
+
+  function activatePopup(heading, msgs, showOk, warn = false) {
+    setPopupIsVisible(false)
+    setPopupContent({
+      isDismissable: showOk,
+      heading: heading,
+      messages: msgs,
+      isWarning: warn
+    });
+    setPopupIsVisible(true);
+  }
 
   async function refreshData(e) {
     // setAdminActiveTask(null)
@@ -112,7 +132,21 @@ function AdminCMS({setErrorPageContent}) {
 
   return (
     <>
+      {popupIsVisible && <Popup
+      isDismissable={popupContent['isDismissable']}
+      heading={popupContent['heading']}
+      messages={popupContent['messages']}
+      isWarning={popupContent['isWarning']}
+      popupIsVisible={popupIsVisible}
+      setPopupIsVisible={setPopupIsVisible}
+    />}
       <h2 className="admin">Admin</h2>
+             {/* <button className="adminButton" onClick={()=> {
+      activatePopup(' DismissableTest', ['Dismissable Message 1', 'Dismissable Message2'], true)
+    }}>Dismissable Test</button>
+    <button className="adminButton" onClick={()=> {
+      activatePopup('Undismissable Test', ['Undismissable Message 1'], false)
+    }}>Not Dismissable Test</button> */}
       <div className="adminCMS">
         <AdminNav loading={loading} setAdminActiveTask={setAdminActiveTask} adminActiveTask={adminActiveTask} adminActiveMode={adminActiveMode} setAdminActiveMode={setAdminActiveMode} />
         {loading ? (
@@ -123,7 +157,7 @@ function AdminCMS({setErrorPageContent}) {
                 <h3 className="admin">Content-Management-Tool für Administratoren</h3>
                 <h5 className="admin">Erstellt von Matthew Gird</h5>
                 {loadingStep !== null && (<p className="loadingStep">{loadingStep}</p>)}
-                <LoadingBar />
+                <BufferingLoader />
               </div>
             </div>
         ) : (
@@ -134,6 +168,7 @@ function AdminCMS({setErrorPageContent}) {
               refreshData={refreshData}
             />
             {adminListWishlist !== null && adminListWishlist.length > 0 && <AdminActiveTask
+              activatePopup={activatePopup}
               refreshData={refreshData}
               adminActiveTask={adminActiveTask}
               adminListWishlist={adminListWishlist}

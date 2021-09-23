@@ -38,7 +38,9 @@ module.exports = {
   getSingleWishlistEntry,
   notifyAdmin,
   updateWishlistItem,
-  userUpdate
+  userUpdate,
+  adminPasswordReset,
+  notifyUser
 }
 
 
@@ -245,6 +247,26 @@ async function passwordResetAttempt(username, code, newpassword) {
     }
 
     return {success, response}
+}
+
+async function adminPasswordReset(username, newpassword) {
+    let successbool = false
+    let response = ''
+    try {
+      let userData = await usersRef.doc(username).get().then(doc => doc.data())
+     
+      if (userData.hasOwnProperty('passwordReset')) {
+        delete userData['passwordReset']
+      }
+      userData['password'] = await User.set_password(newpassword)
+      response = await usersRef.doc(username).set(userData)
+      console.log('%cfirebase.js line:265 response', 'color: #007acc;', response);
+      successbool = true
+    } catch (e) {
+      response = e
+    } finally {
+      return {success: successbool, response}
+    }
 }
 
 async function userUpdate(dataObj) {
@@ -726,7 +748,11 @@ async function addEpisodesToWishlistItem(data) {
 // DELETE
 
 async function deleteDocFromWishlist(id) {
-    const res = await wishlistRef.doc(id).delete();
+    const res = await wishlistRef.doc(id).delete().catch(err=>{
+      console.log(err)
+      return "fail"
+    });
+    return res === "fail" ? "error" : res
     // console.log('Delete: ', res);
 }
 
@@ -736,48 +762,36 @@ async function deleteDocFromWishlist(id) {
 async function adminNew(department, data) {
 
   try {
-    switch (department.toUpperCase()) {
-      case "WISHLIST":
-        if (data.hasOwnProperty('createNotification')) {
-          if (data['createNotification']) {
-            const id = uuid.v4()
-            let newMessage = {
-              "id": id,
-              "messageType": "status",
-              "customMessageContent": "New Addition to Wishlist",
-              "entryStatusUpdate": data["status"],
-              "usersVis": {
-                [data['addedBy']]: true
-              },
-              "affectedEntry": data['name']
-            }
-            await notifyUser(newMessage)
+    if (department.toUpperCase() === 'WISHLIST') {
+      if (data.hasOwnProperty('createNotification')) {
+        if (data['createNotification']) {
+          const id = uuid.v4()
+          let newMessage = {
+            "id": id,
+            "messageType": "status",
+            "customMessageContent": "New Addition to Wishlist",
+            "entryStatusUpdate": data["status"],
+            "usersVis": {
+              [data['addedBy']]: true
+            },
+            "affectedEntry": data['name']
           }
-          delete data['createNotification']
+          await notifyUser(newMessage)
         }
-        let WISHLISTresult = await wishlistRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
-        throw new Error(err)
-        return "error"
-      })
-        let newMessage = {
-          id: uuid.v4(),
-          messageType: "status",
-          customMessageContent: "Entry added to wishlist",
-          entryStatusUpdate: "new",
-          usersVis: {
-            [data['addedBy']]: true
-          },
-          affectedEntry: data['name'],
-          affectedEntryEpisodes: []
-        }
-        await notifyUser(newMessage)
-        return WISHLISTresult
-      case "MSGCENTRE":
-        data['id'] = uuid.v4();
-        data['mailed'] = false;
-        let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
-        throw new Error(err)})
-        return MSGCENTREresult
+        delete data['createNotification']
+      }
+      let newDoc = await WishlistItem.setData(data)
+      let WISHLISTresult = await wishlistRef.doc(newDoc['id']).set(newDoc).then(()=>"success").catch(err=>{
+      throw new Error(err)
+      return "error"
+    })
+      return WISHLISTresult === 'success' ? newDoc : 'error'
+    } else if (department.toUpperCase() === 'MSGCENTRE') {
+      data['id'] = uuid.v4();
+      data['mailed'] = false;
+      let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
+      throw new Error(err)})
+      return MSGCENTREresult
     }
   } catch (error) {
     console.log('%cfirebase.js line:802 error', 'color: #007acc;', error.message);
@@ -790,9 +804,10 @@ async function adminUpdate(department, data) {
   try {
     switch (department.toUpperCase()) {
       case "WISHLIST":
+        data = setStatusAndProgress(data) 
         await wishlistRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
         throw new Error(err)})
-        break;
+        return data
       case "MSGCENTRE":
         await notificationsRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
         throw new Error(err)})
@@ -800,7 +815,7 @@ async function adminUpdate(department, data) {
       case "WORKFLOW":
         // parse WfTicket
       case "USERMANAGER":
-        await usersRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
+        await usersRef.doc(data['username']).update(data).then(()=>"success").catch(err=>{
         throw new Error(err)})
         break;
     }

@@ -65,6 +65,8 @@ function EpisodesConsole({
 
   const Content = ({ episodes, handleChange, allPossibleStatuses }) => {
     return Object.keys(episodes).map(season => {
+      console.log(episodes);
+      console.log(season);
       return (
         <div
           className={
@@ -127,7 +129,7 @@ function EpisodesConsole({
   };
 
   return (
-    <div className="EpisodesConsole">
+    <div className="EpisodesConsole" onClick={(e)=>e.stopPropagation()}>
       <h3>{title}</h3>
       <h4>{`S${formatString(episodeRange["sf"])}E${formatString(
         episodeRange["ef"]

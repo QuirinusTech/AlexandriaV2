@@ -57,92 +57,105 @@ color: #08FFC8;
 transition: 1s;
 }
 
-.MobileNavBar > a {
-    border: 1px solid white;
-    padding: 20px 50px;
-    font-size: xx-large;
-    width: 53%;
-    /* justify-self: center; */
-    text-align: center;
-    background: linear-gradient(
-        45deg
-        , black, #00000073);
+
+
+
+
+@media only screen and (max-width: 768px) {
+    .closeNavButton {
+        position: fixed;
+        top: 1%;
+        right: 4%;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        text-align: center;
+        width: fit-content;
+        text-shadow: none;
+        background-color: #0000009c;
+        border-radius: 25px;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+    }
+    
+    .showNavButton {
+        background-image: url(img/icon-pack.png);
+        background-repeat: no-repeat;
+        /* background-position-x: center; */
+        background-position: -3% 102%;
+        background-size: 360%;
+        width: 75px;
+        border: 9px solid black;
+        background-color: transparent;
+        height: 75px;
+        border-radius: 15px;
+        box-shadow: none;
+        position: fixed;
+        top: 0%;
+        right: 3%;
+        margin: 1px 2px;
+        font-size: medium;
+        text-align: center;
+        padding: inherit;
+        background-color: #00f8ff;
+        z-index: 1;
+    }
+    .desktopNavBar {
+        background-color: #4b4b4b;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 100%;
+        min-width: 360px;
+        position: fixed;
+        height: 100%;
+        align-items: center;
+        justify-content: space-evenly;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        background-image: url(img/banner.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .desktopNavBar > a {
+        border: 1px solid white;
+        padding: 20px 50px;
+        font-size: xx-large;
+        width: 53%;
+        /* justify-self: center; */
+        text-align: center;
+        background: linear-gradient(
+            45deg
+            , black, #00000073);
+        }
+}
+
+@media only screen and (min-width: 768px) {
+    .desktopNavBar {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        display: flex !important;
+        justify-content: space-evenly;
+        background-color: #414141;
     }
 
-.MobileNavBar {
-    background-color: #4b4b4b;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 100%;
-    min-width: 360px;
-    position: fixed;
-    height: 100%;
-    align-items: center;
-    justify-content: space-evenly;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    background-image: url(img/banner.png);
-    background-size: cover;
-    background-repeat: no-repeat;
+    .showNavButton, .closeNavButton {
+        display: none
+    }
+
+    .desktopNavBar > a {
+        font-size: x-large;
+    }
 }
 
-#closeNavButton {
-    position: fixed;
-    top: 1%;
-    right: 4%;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    text-align: center;
-    width: fit-content;
-    text-shadow: none;
-    background-color: #0000009c;
-    border-radius: 25px;
-    width: 50px;
-    height: 50px;
-}
 
-#showNavButton {
-    background-image: url(img/icon-pack.png);
-    background-repeat: no-repeat;
-    /* background-position-x: center; */
-    background-position: -3% 102%;
-    background-size: 360%;
-    width: 75px;
-    border: 9px solid black;
-    background-color: transparent;
-    height: 75px;
-    border-radius: 15px;
-    box-shadow: none;
-    position: fixed;
-    top: 0%;
-    right: 3%;
-    margin: 1px 2px;
-    font-size: medium;
-    text-align: center;
-    padding: inherit;
-    background-color: #00f8ff;
-    z-index: 1;
-}
-
-.desktopNavBar > a {
-    font-size: x-large;
-}
-
-.desktopNavBar {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: space-evenly;
-    background-color: #414141;
-}
 
 /*BANNER******************************************************BANNER*/
 
@@ -370,8 +383,8 @@ div > div.grid7{
 
 .BufferingLoader {
     background-image: url('/img/buffering.gif');
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
     min-height: 140px;
     min-width: 140px;
     background-repeat: no-repeat;
@@ -425,35 +438,41 @@ div > div.grid7{
     height: 10vh;
     width: 10vh;
     top: 0.5vh;
-    right: 0.5vw;
+    left: 0.5vw;
     background-size: 100%;
     background-repeat: no-repeat;
-    border: 3px solid darkorange;
+    border: 3px solid red;
     padding: 0;
     border-radius: 50%;
     transition: 1s;
 }
+
+.notificationsCentre--popup--small {
+    position: fixed;
+    background: url('/img/inbox.png');
+    background-position: center;
+    height: 5vh;
+    width: 5vh;
+    top: 0.2vh;
+    left: 0.2vw;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border: 1px solid darkorange;
+    padding: 0;
+    border-radius: 50%;
+    transition: 1s;
+}
+
 .notificationsCentre--popup > span > p {
     position: absolute;
     top: 0;
     margin: 0.3vh;
 }
 
-.notificationsCentre--fullscreen__close {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    width: fit-content;
-    background: #0000004a;
-    text-shadow: none;
-    box-shadow: none;
-    border: none;
-}
 @media only screen and (max-width: 768px) {
 
     .notificationsCentre--popup {
-        left: 0.5vw;
+        right: 0.5vw;
     }
 
     .notificationsCentre--popup > span {
@@ -821,6 +840,45 @@ footer > div > a, a:visited {
     flex-wrap: nowrap;
 }
 
+@media only screen and (min-width: 768px) {
+    .ResultsTable > table, .ResultsTable > div {
+        background: #3f3f46ab;
+    }
+
+    .EpisodesPickTickboxesRow, .IMDBResultsTablePriorityCheckboxRow {
+        display: flex;
+        padding: 1vw !important;
+        flex-grow: 1;
+        justify-content: space-between !important;
+        margin-top: 11px;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 768px !important;
+        margin: 1vw !important;
+    }
+
+    .IMDBDataTable > tbody > tr > td:nth-child(1) {
+        padding: 0 2vw;
+    }
+    
+    .ResultsTable > table, .ResultsTable > div {
+        width: clamp(400px, 90vw, 800px);
+        border-radius: 15px;
+        border: none;
+        color: white;
+        margin: 1vw;
+        padding: 2vh 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.ResultsTable {
+    flex-direction: column;
+}
+
 label + input[type="checkbox"] {
     zoom: 2;
 }
@@ -854,58 +912,68 @@ h3 {
 }
 
 
+.addNewContainer {
+    width: 100vw;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 
+.addNewContainer > h2 {
+    margin-left: 0;
+}
 
 input[type=radio]{
 margin: 10px 5px 10px 2px;
 padding-bottom: 3px;
 }
 
-.formsearchSearchByRadioButton {
+.formSearch {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    max-width: 600px;
+}
+
+.formSearch > h3 {
+    width: 100%;
+}
+
+.formsearchRadioButton {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
     font-size: 1.6rem;
     text-shadow: 1px 1px 1px purple;
-    padding:3px 3px;
+    padding: 3px 3px;
     font-weight: 300;
     text-transform: uppercase;
+    flex: 1 1 40%;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    display: inline-flex;
+    justify-content: center;
+    border-left: #DADADA solid 2px;
+    border-right: #DADADA solid 2px;
+    border-radius: 20px;
+    text-align: center;
+    margin: 0.5vh 1vw;
+    color: darkgrey;
+    cursor: pointer;
 }
 
-input[type=radio]:checked + label{
-background-color: rgba(195, 85, 245, 0.5);
-border-radius: 20px;
-padding:5px 5px 10px 5px;
+.formsearchRadioButtonChecked {
+    border: 1px solid rgba(195, 85, 245, 0.5);
+    border-radius: 20px;
+    padding: 5px 5px 10px 5px;
+    /* border-right: 4px solid rgb(131 47 169 / 50%); */
+    color: black;
+    background: #fae7fb5e;
 }
-
-div.radios{
-width:100%;
-display: inline-flex;
-flex-direction: row;
-flex-wrap: nowrap;
-justify-content: space-around;
-}
-
-div.flex-left{
-display: inline-flex;
-justify-content: center;
-width:100%;
-border-left: #DADADA solid 2px;
-border-right: #DADADA solid 2px;
-border-radius: 20px;
-text-align: center;
-margin-bottom:15px; 
-}
-
-#left{
-margin-left: 8px;
-width:40%;
-
-}
-#right{
-margin-right: 8px;
-width:40%;
-}
-
 
 
 input[type=text], input[type=password], input[type=email], textarea, .formsearchFieldInput {
@@ -924,9 +992,9 @@ color: #414141;
 font-size: 1rem;
 }
 
-.formsearchFieldInput {
-    margin-left: 8px;
-    width: 82% !important;
+.formsearchFieldInput, .formSearch__btn--submit {
+    margin: 0.5vh 1vw;
+    width: 100% !important;
 }
 
 .FormSearch--NoResults{
@@ -943,7 +1011,7 @@ input[type=text]:focus, input[type=password]:focus{
     outline: 1px solid rgba(195, 85, 245, 0.5);
 }
 
-table{
+table {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     text-align: center;
@@ -952,7 +1020,7 @@ table{
     width:100vw;
     border-top: #DADADA solid 1px;
     border-bottom: #DADADA solid 1px;
-
+    padding: 1vw;
 }
 
 td{
@@ -964,6 +1032,35 @@ td{
     text-align: center;
     text-transform: uppercase;
     font-size: 1.2rem;
+}
+
+.posterList {
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100vw;
+}
+
+.posterList > ul {
+    list-style: none;
+}
+
+.posterList > h4 {
+    text-align: center;
+    width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+    .posterList > ul {
+        list-style: none;
+        display: flex;
+        /* flex: 1 1 30%; */
+        overflow-x: scroll;
+    }
+    
+    .posterList > ul > li {
+        flex: 1 1 20%;
+        margin: 1vw;
+    }
 }
 
 
@@ -990,9 +1087,13 @@ div.spacer1{
     height: 50px;
 }
 
+div.spacer2{
+    width: 100%;
+}
+
 /***************************************WISHLIST******************************************/
 
-button, input[type=submit], .ErrorPage > a {
+button, input[type=submit], .ErrorPage > a, .buttonStyle {
     display: block;
     font-family: "Bungee";
     font-weight: 100;
@@ -1063,29 +1164,6 @@ button, input[type=submit], .ErrorPage > a {
 
 .listFilterTickboxDiv > input {
     margin: 0px 7px 0px 0px!important;
-}
-
-.adminSearchBoxContainer {
-    position: absolute;
-    width: 20%;
-}
-
-.adminSearchBox::placeholder {
-    color: wheat;
-}
-
-.adminSearchBox {
-    border-radius: 10px;
-    border: none;
-    height: 40px;
-    /* width: 100%; */
-    box-shadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
-    flex-grow: 2;
-    padding: 10px 20px;
-    font-size: large;
-    background-color: #5a5a6b82;
-    color: white;
-    text-align: center;
 }
 
 .SearchBox {
@@ -1262,6 +1340,8 @@ details {
     font-size: medium;
     padding: 10px;
     margin: 10px 0px 10px 0px;
+    transition: 1s;
+    transform: scale(1);
 }
 
 .wishListWidgetButtonRowHorizontal > button {
@@ -1302,7 +1382,18 @@ details {
     justify-content: center;
     align-items: center;
 }
+.optionsWidget__rangePickerForm > span, .wishListWidgetButtonRowHorizontal > p {
+    width: 100%;
+}
 
+@media only screen and (min-width: 768px) {
+    .OptionsWidget > button, .OptionsWidget > div > button {
+        width: 90%;
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
 .optionsWidget__rangePickerForm {
     background: white;
     border: 2px solid darkorange;
@@ -1312,9 +1403,6 @@ details {
     width: 100%;
 }
 
-.optionsWidget__rangePickerForm > span {
-    width: 100%;
-}
 
 .OptionsWidget {
     margin: 30px 0px 0px 0px;
@@ -1326,6 +1414,7 @@ details {
     text-align: center;
 }
 
+
 .optionsWidgetHelpButton {
     position: absolute;
     right: 3vw;
@@ -1336,13 +1425,15 @@ details {
     background: red;
     /* margin-top: 0vw; */
 }
-
-.wishListWidgetButtonRow > p {
+}
+.helpString {
     text-transform: none;
     background: #ffe3af;
     border: 1px solid black;
     font-weight: bold;
     padding: 3px;
+    margin-bottom: 1vh;
+    transition: 1s;
 }
 
 .optionsWidget__rangePickerForm > div > label {
@@ -1369,12 +1460,18 @@ details {
 }
 
 .availabilityWidget {
-    border: 1px solid purple;
+    border: 1px solid white;
     border-radius: 20px;
-    margin: 10px 0px 0px 0px;
     padding: 20px 0px;
-    background-color: rgb(187, 177, 253);
     padding: 10px 5px;
+}
+
+@media only screen and (max-width: 768px) {
+    .availabilityWidget {
+        margin: 10px 0px 0px 0px;
+        border: 1px solid purple;
+        background-color: rgb(187, 177, 253);
+    }
 }
 
 .availabilityWidget-FullScreen {
@@ -1555,6 +1652,12 @@ width:90%;
     width: 80%;
 }
 
+.registerResponseMessage {
+    padding: 1vw;
+    width: 100vw;
+    text-align: center;
+}
+
 .login_form_psw_div > p {
     margin-left: 30px;
 }
@@ -1634,6 +1737,10 @@ width:90%;
     display: flex;
     flex-direction: column;
     align-self: center;
+}
+
+.about_row > p, .about_row > ul > li {
+    padding: 1vw;
 }
 
 #contactUs_div {
@@ -1741,14 +1848,58 @@ div.about_div{
     font-size:1rem;
     text-align: center;
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 0;
 }
 
 
 
 
-
-
+@media only screen and (min-width: 768px) {
+    #wishlistTableBody {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        justify-content: stretch;
+        flex-direction: row;
+    }
+    
+    #wishlistTableBody > tr {
+        flex: 1 1 30%;
+        background-color: var(--transparentLightGrey);
+        margin: 1vw;
+        color: white;
+        border-radius: 15px;
+    transition: 0.7s
+    }
+    
+    #wishlistTableBody > tr:hover {
+        background-color: var(--richGrey);
+        transition: 0.4s;
+    }
+    
+    #wishlisttablediv > table > tbody > tr:nth-child(odd) > td {
+        background-color: unset;
+    }
+    
+    #wishlistTableBody > tr > td {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        height: 95%;
+        /* padding: 1vw; */
+    }
+    
+    #wishlistTableBody > tr > td > div > div {
+        width: 100%;
+        margin: 0;
+    }
+    
+    #wishlistTableBody > tr > td > div, #wishlistTableBody > tr > td > h4, #wishlistTableBody > tr > td > span {
+        width: 90%;
+    }
+}
 
 
 /**********************************MEDIA QUERIES***********************************************/
@@ -1761,7 +1912,7 @@ div.about_div{
 
 /* **************************SM 576 - 767 */
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 768px) {
     nav > a{
 
         font-size: 17px;
@@ -1827,6 +1978,10 @@ div.about_div{
         /* margin-left: -0.5px; */
         flex-direction: column;
         align-items: center !important;
+    }
+
+    .listFilterTickboxDiv > label {
+        margin: 1vw;
     }
 
     #wishlisttablediv > table {
@@ -1994,14 +2149,20 @@ div.about_div{
     overflow-y: auto;
     overflow-x: auto;
     z-index: 2;
-    background-color: rgb(235, 235, 235);
     padding-top: 0;
     border-radius: 10px;
-    background: #f4dcff;
-    box-shadow: 1px 1px 1px purple, 2px 2px 2px pink;
-    padding-bottom: 20px;
+padding-bottom: 20px;
   }
-  
+
+  @media only screen and (max-width: 768px) {
+
+    details[open] {
+
+        box-shadow: 1px 1px 1px purple, 2px 2px 2px pink;
+        background: #f4dcff;
+        background-color: rgb(235, 235, 235);
+      }
+
   details[open] > summary {
     background-color: #d781ff;
     border: 2px solid darkgrey;
@@ -2011,8 +2172,9 @@ div.about_div{
     background: #641b88;
     width: 80%;
   }
-  
-  details > ul {
+}
+
+details > ul {
     list-style: none;
     margin: auto;
     padding: 2px;
@@ -2026,3 +2188,53 @@ div.about_div{
     padding: 0;
     margin: 10px;
   }
+
+
+@media only screen and (min-width: 768px) { 
+
+    details, details > details {
+        background: #555574;
+        color: white;
+        box-shadow: none;
+        max-height: unset;
+    }
+
+    details > details, details > div {
+        width: 90%;
+        margin: 0 5%;
+    }
+    
+
+    .details[open] {
+        background: #2f2f35;
+        border: 1px solid wheat;
+        box-shadow: none;
+        max-height: unset;
+      }
+    
+    summary:hover, details[open] > summary {
+        background: #2f2f35 !important;
+        border: 1px solid wheat;
+        box-shadow: none;
+        max-height: unset;
+        color: wheat;
+        transition: 0.3s;
+    }
+
+      summary {
+        border: none;
+        box-shadow: none;
+        text-shadow: none;
+        font-family: system-ui !important;
+        background-color: #6c6c73;
+        border-radius: 5px;
+        transition: 1s;
+        /* padding: 0; */
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+
+      }
+
+
+}
