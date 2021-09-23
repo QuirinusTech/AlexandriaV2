@@ -4,19 +4,19 @@ function Logout({setIsLoggedIn}) {
   const [pleaseWait, setPleaseWait] = useState(true)
   
   useEffect(()=>{
+    const logoutfunction = async() => {
+      setPleaseWait(true)  
+      localStorage.clear() 
+      setIsLoggedIn(false)
+      await fetch('/logout', {
+        method: 'POST',
+        body: localStorage.getItem('username')
+      })
+      setPleaseWait(false)
+    }
     logoutfunction()
   }, [])
 
-  const logoutfunction = async() => {
-    setPleaseWait(true)  
-    localStorage.clear() 
-    setIsLoggedIn(false)
-    await fetch('/logout', {
-      method: 'POST',
-      body: localStorage.getItem('username')
-    })
-    setPleaseWait(false)
-  }
   
   return (
     <div>
