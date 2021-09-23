@@ -15,7 +15,6 @@ const {
   adminPasswordReset,
   uname
 } = require("./firebase");
-const morgan = require('morgan')
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
 const path = require('path')
@@ -34,7 +33,6 @@ const https = require('https')
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(express.static('public'));
 app.use(express.json())
-app.use(morgan('combined'))
 
 /** [App, ResultsTable, AvailabilityWidget] */
 app.post('/db/:operation', verifyToken, async (req, res) => {
