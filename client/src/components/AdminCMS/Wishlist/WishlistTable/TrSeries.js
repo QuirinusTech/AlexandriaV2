@@ -30,7 +30,7 @@ const TrSeries = ({entry, headers, setEditableEntry, isFiltered}) => {
               </td>
             )
           case "EPISODES":
-            return (<td className="adminWlTableEpisodes">
+            return (<td className="adminWlTableEpisodes" key={head + entry['id']}>
             <details className={Object.keys(entry['episodes']).length > 1 ? "r5vw darkDetails" : "darkDetails"}>
               <summary className="adminButton--small">{formatString(entry['sf'], "S")}{formatString(entry['ef'], "E")} - {formatString(entry['st'], "S")}{formatString(entry['et'], "E")}</summary>
                   <div>
@@ -75,25 +75,25 @@ const TrSeries = ({entry, headers, setEditableEntry, isFiltered}) => {
           case "PROGRESS":
             return (
 
-              <td style={{width: '200px'}}>
+              <td style={{width: '200px'}} key={head + entry['id']}>
                 <ProgressBar item={entry} />
               </td>
 
             )
           case "ID":
-            return <td key={head}>
+            return <td key={head + entry['id']}>
               <details className="r5vw darkDetails">
                 <summary className="adminButton--small">ID</summary>
                 {entry["id"]}
               </details>
             </td>;
           case "IMDBDATA":
-            return (<td className="adminWlTableImdbData">
+            return (<td className="adminWlTableImdbData" key={head + entry['id']}>
               <IMDBDataDetails imdbData={entry['imdbData']}/>
             </td>)
 
           default:
-            return <td>{typeof(entry[head]) === "boolean" ? entry[head] ? "✔️" : "❌" : entry[head]}</td>
+            return <td key={head + entry['id']}>{typeof(entry[head]) === "boolean" ? entry[head] ? "✔️" : "❌" : entry[head]}</td>
         }
       })}
     </motion.tr>

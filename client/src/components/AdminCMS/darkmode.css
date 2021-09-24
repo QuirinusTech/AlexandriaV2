@@ -7,10 +7,11 @@
   --transparentDarkGrey: #23232eab;
   --transparentLightGrey: #3f3f46ab;
   --accentBlue: #5ba7ff;
+  --accentBlueDeep: #1883ff;
   --accentRed: #e65834;
   --accentRedDeep: #d44927;
-  --accentOrange: #f7a62d;
-  --accentOrangeLight: #ffb860;
+  --accentOrange: #f8b044;
+  --accentOrangeDeep: #e2881a;
   --customBoxShadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
   --customTextShadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
 }
@@ -61,6 +62,7 @@
     color: white;
   }
 
+  
   .progressBarnew {
     background-color: var(--accentBlue) !important;
   }
@@ -88,7 +90,23 @@
   .progressBarerror {
     background-color: var(--accentRed) !important;
   }
+  
+}
 
+.boldRedText {
+  font-weight: bold;
+  color: red;
+}
+
+.h3--warning {
+  color: red;
+  font-weight: bold;
+  text-shadow: none;
+  font-size: 5vh;
+}
+
+.redBorder {
+  border: 1px solid red;
 }
 /* *************************************************New Admin Styles */
 
@@ -162,19 +180,30 @@ summary.adminButton--small:hover {
   transition: 1s; 
 }
 
-.adminButton--submit:hover {
-  background-color: var(--accentRed);
+.adminButton--submit:hover, .adminFormSearch--input--submit:hover {
+  background-color: var(--accentBlueDeep);
+  color: white;
+  transition: 0.4s;
+  animation-name: flash;
+  animation-iteration-count: infinite;
+  animation-duration: 3s;
+}
+
+@keyframes flash {
+  0% {background-color: var(--accentBlue) !important;}
+  50% {background-color: var(--accentBlueDeep)!important;}
+  100% {background-color: var(--accentBlue) !important;}
 }
 
 .adminButton--danger {
-  background-color: red;
+  background-color: var(--accentRed);
   color: white;
   transition: 1s;
 }
 
 .adminButton--danger:hover {
-  background-color: rgb(163, 0, 0);
-  color: white;
+  background-color: var(--accentRedDeep) !important;
+  color: white !important;
   transition: 1s;
 }
 
@@ -185,7 +214,7 @@ summary.adminButton--small:hover {
 }
 
 .adminButton--cancel:hover {
-  background-color: var(--accentOrangeLight);
+  background-color: var(--accentOrangeDeep);
   color: white;
   transition: 1s;
 }
@@ -716,18 +745,18 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   width: 10vw;
   box-shadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
   flex-grow: 2;
-  padding: 10px 20px;
   font-size: large;
   background-color: #23232e;
   color: white;
   text-align: center;
   height: 3vh;
-  padding: 0px 2vw;
+  transition:width 0.4s ease-in-out;
 }
 
 .adminSearchBox:focus {
   width: 20vw;
   color: wheat;
+  transition:width 0.4s ease-in-out;
 }
 
 .editableTr--OptionsWidget {
@@ -1040,6 +1069,12 @@ display: flex;
   width: 90%;
 }
 
+.ImportForm > div > label {
+  flex-grow: 1;
+  margin: 0 4vw;
+  padding: 0.5vh 1vw;
+}
+
 .AdminAddNewForm > div > div {
   display: flex;
   flex-direction: column;
@@ -1256,7 +1291,18 @@ td > table.usersVisTable {
   background: #23232e;
   color: wheat;
   border-right: 1px solid black;
-  padding: 1vh 0.5vw;
+  padding: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .adminTableHeadRow > th {
+    padding: 0.5vh 0.1vw;
+  }
+}
+@media only screen and (min-width: 1300px) {
+  .adminTableHeadRow > th {
+    padding: 1vh 0.5vw;
+  }
 }
 
 .darkDetails, .adminWlTableImdbData>details {
@@ -1267,6 +1313,7 @@ td > table.usersVisTable {
 }
 
 .darkDetails[open], .adminWlTableImdbData>details[open] {
+  padding-right: 2vw;
   background: #2f2f35;
   border: 1px solid wheat;
   box-shadow: none;
@@ -1359,11 +1406,19 @@ td > table.usersVisTable {
   border: none;
 }
 
+.usersVisUl > li > div:nth-child(1) {
+  text-align: left;
+  justify-content: flex-start;
+}
+
 .usersVisUl > li > div {
   margin: 0px 30px;
   padding: 0;
   display: flex;
-  width: 40%;
+  width: 3vw;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .usersVisUl > li {
@@ -1400,21 +1455,22 @@ td > table.usersVisTable {
   overflow-y: unset !important;
   overflow-x: unset !important;
   z-index: unset !important;
-  background-color: rgb(235, 235, 235);
   padding-top: unset !important;
   border-radius: 0px !important;
   /* background: #f4dcff !important; */
   /* box-shadow: 1px 1px 1px purple, 2px 2px 2px pink; */
   margin: 0 !important;
   border: none !important;
+  background: var(--darkGrey)
 }
 
-.WorkflowCardsList > details[open] {
-  padding-bottom: 0;
-}
-
-.WorkflowCardsList--Section > summary {
-  margin: 0px;
+.WorkflowCardsList--Section > h4 {
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  padding: 0.5vh 0;
+  border: 1px solid wheat;
+  background: var(--richGrey);
 }
 
 .wfCardText {
@@ -1514,17 +1570,7 @@ td > table.usersVisTable {
   font-size: xx-large;
 }
 
-.boldRedText {
-  font-weight: bold;
-  color: red;
-}
 
-.h3--warning {
-  color: red;
-  font-weight: bold;
-  text-shadow: none;
-  font-size: 5vh;
-}
 
 .modalBackground {
   position: fixed;
@@ -1694,6 +1740,10 @@ span.Workflow--NotificationBar--Block--Count {
   /* border-bottom-right-radius: 15px; */
   /* border-top-right-radius: 15px; */
   background: var(--transparentLightGrey);
+  width: 100%;
+  flex-wrap: nowrap;
+  padding: 1vh 0.5vw;
+  color: ghostwhite;
 }
 
 .WorkflowCardsListCard:hover, .activeTicket {

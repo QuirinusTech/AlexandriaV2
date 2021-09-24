@@ -46,7 +46,7 @@ const MediaOptions = ({
             </option>
             {adminListUsers.map(user => {
               return (
-                <option key={user["id"]} value={user["username"]}>
+                <option key={"addedBy"+user["userId"]} value={user["username"]}>
                   {user["username"]}
                 </option>
               );
@@ -69,7 +69,7 @@ const MediaOptions = ({
             </option>
             {allPossibleStatuses.map(status => {
               return (
-                <option key={status} value={status}>
+                <option key={'mediaOptions_stat'+status} value={status}>
                   {status}
                 </option>
               );
@@ -113,7 +113,7 @@ const MediaOptions = ({
             type="checkbox"
             name="isOngoing"
             onChange={handleChange}
-            value={mediaOptions["isOngoing"]}
+            checked={mediaOptions["mediaType"] === 'movie' ? false : mediaOptions["isOngoing"]}
           />
         </div>
         <div>
@@ -122,7 +122,7 @@ const MediaOptions = ({
             type="checkbox"
             name="isPriority"
             onChange={handleChange}
-            value={mediaOptions["isPriority"]}
+            checked={mediaOptions["isPriority"]}
           />
         </div>
         <div>
@@ -131,7 +131,7 @@ const MediaOptions = ({
             type="checkbox"
             name="createNotification"
             onChange={handleChange}
-            value={mediaOptions["createNotification"]}
+            checked={mediaOptions["createNotification"]}
           />
         </div>
       </div>

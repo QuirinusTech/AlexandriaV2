@@ -1152,6 +1152,7 @@ module.exports = {
   "downloading", //yellow
   "complete", //green
   "copied", // grey
-]
+],
+  blacklist: []
   },
 };

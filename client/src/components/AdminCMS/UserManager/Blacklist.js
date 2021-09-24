@@ -304,7 +304,7 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
         
         <div className="blacklistAddnew--addButton">
           <button className="adminButton adminButton--cancel" onClick={reset}>Reset</button>
-          loading ? <PNGLoader /> : <button disabled={loading} className={searchSuccess ? ("adminButton adminButton--submit searchSuccess--invertBlue") : (newTitle === '' || newImdbID.length < 7 || newImdbID.slice(0,2) !== "tt" || newMediaType === '') ? ("adminButton adminButton--danger") : ("adminButton adminButton--submit")} name="create" onClick={blacklistInterface}>Add</button>
+          {loading ? <PNGLoader /> : <button disabled={loading} className={searchSuccess ? ("adminButton adminButton--submit searchSuccess--invertBlue") : (newTitle === '' || newImdbID.length < 7 || newImdbID.slice(0,2) !== "tt" || newMediaType === '') ? ("adminButton adminButton--danger") : ("adminButton adminButton--submit")} name="create" onClick={blacklistInterface}>Add</button>}
         </div>
         
       </div>

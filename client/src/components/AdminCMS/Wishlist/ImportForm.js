@@ -8,12 +8,26 @@ function ImportForm ({adminListWishlist, importData, setShowImportForm}) {
   const [selectedEntry, setSelectedEntry] = useState({})
   const [invalidJsonString, setInvalidJsonString] = useState(false)
 
+  function checkJson(e) {
+    let newString = e.target.value
+    try {
+      console.log(JSON.parse(newString))
+      if (newString === '' || JSON.parse(newString) === null || Array.isArray(JSON.parse(newString))) {
+          throw new Error('invalid')
+        }
+      setInvalidJsonString(false)
+    } catch (error) {
+      setInvalidJsonString(true)
+    }
+    setJSONstring(newString)
+  }
+
   function parse() {
     if (importType === 'copy') {
       let newEntry = adminListWishlist.filter(entry => entry['id'] === selectedEntry)[0]
       importData(newEntry)
     } else {
-      if (JSON.parse(JSONstring) === null || Array.isArray(JSON.parse(JSONstring))) {
+      if (JSONstring === '' || JSON.parse(JSONstring) === null || Array.isArray(JSON.parse(JSONstring))) {
         setInvalidJsonString(true)
       } else {
         setInvalidJsonString(false)
@@ -94,14 +108,13 @@ function ImportForm ({adminListWishlist, importData, setShowImportForm}) {
       <h3>Import Info</h3>
 
       <div>
-      <label><input type="radio" value="JSON" onChange={(e)=>{setImportType(e.target.value)}} checked={importType === 'JSON'} />JSON</label>
-      <label><input type="radio" value="copy" onChange={(e)=>{setImportType(e.target.value)}}checked={importType === 'copy'} />Copy from existing entry</label>
+      <label className={importType === 'JSON' ? "adminButton adminButton--hover" : "adminButton"}><input type="radio" value="JSON" onChange={(e)=>{setImportType(e.target.value)}} checked={importType === 'JSON'} />JSON</label>
+      <label className={importType === 'copy' ? "adminButton adminButton--hover" : "adminButton"}><input type="radio" value="copy" onChange={(e)=>{setImportType(e.target.value)}}checked={importType === 'copy'} />Copy from existing entry</label>
       </div>
 
       <div>
-      {importType === 'JSON' ? (<><label className={invalidJsonString ? 'invalid' : ''}>JSON</label>
-      {invalidJsonString && <div>Invalid JSON</div>}
-      <textarea id="JSONimport" name="JSONimport" onChange={(e)=>setJSONstring(e.target.value)} value={JSONstring}/></>) : (
+      {importType === 'JSON' ? (<><label className={invalidJsonString ? 'boldRedText' : ''}>{invalidJsonString ? "Invalid JSON" : "JSON"}</label>
+      <textarea style={{minHeight: "10vh"}} id="JSONimport" name="JSONimport" onChange={checkJson} value={JSONstring}/></>) : (
         <select value={selectedEntry} onChange={(e)=> {setSelectedEntry(e.target.value)}}>
         {adminListWishlist.map(entry => {
           return <option key={entry['id']} value={entry['id']}>{entry['name']} - {entry['imdbData']['imdbID']}</option>
@@ -109,6 +122,7 @@ function ImportForm ({adminListWishlist, importData, setShowImportForm}) {
         </select>
       )}
       </div>
+      {importType === 'JSON' && !invalidJsonString && JSONstring !== '' && JSON.parse(JSONstring) !== null && !Array.isArray(JSON.parse(JSONstring)) ? <><h4>Keys found:</h4><ul>{Object.keys(JSON.parse(JSONstring)).map(keyName => <li key={"JSONKeysFound"+keyName}>{keyName}</li> )}</ul></> : <></>}
 
 
       <div>

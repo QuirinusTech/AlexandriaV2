@@ -1,4 +1,6 @@
-require('dotenv').config();
+const envs = require('./config');
+// console.log(envs)
+
 const {
   wishlistInterface,
   getUserByUsername,
@@ -19,7 +21,7 @@ const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
 const path = require('path')
 const app = express();
-const port = process.env.PORT || 5000;
+const port = envs.PORT || 5000;
 const verifyToken = require('./verifyToken')
 const verifyTokenAdmin = require('./verifyTokenAdmin')
 const User = require('./Classes/User')
@@ -42,7 +44,7 @@ app.post('/db/:operation', verifyToken, async (req, res) => {
     console.log(data);
     let username = res.locals.username
 
-    if (process.env.test === 'true') {
+    if (envs.test === 'true') {
       console.log("Sending test data")
       res.json(fakeData['wishlist'])
     } else {
@@ -92,7 +94,7 @@ app.post('/imdbidlist', verifyToken, async (req, res) => {
 app.post('/getnotifications', verifyToken, async (req, res) => {
   const username = req.body.username;
 
-  if (process.env.test === 'true') {
+  if (envs.test === 'true') {
       console.log("Sending test data")
       res.json(fakeData['messages'])
     } else {
@@ -135,14 +137,15 @@ app.post('/register', async (req, res) => {
 
 /** [LogIn] */
 app.post('/login', async (req, res) => {
+  try {
   const newObj = req.body;
   let expirationMultiplier = 1
-  if (process.env.test === true) {
+  console.log(envs.test)
+  if (envs.test === true) {
     console.log(newObj)
     expirationMultiplier = 30
   }
   const { username, password } = newObj;
-  try {
     const dbUserData = await getUserByUsername(username);
     if (!dbUserData) {
       throw new Error('database error')
@@ -162,7 +165,7 @@ app.post('/login', async (req, res) => {
           is_admin: dbUserData.privileges["is_admin"],
           can_add: dbUserData.privileges["can_add"],
           is_active_user: dbUserData.privileges["is_active_user"]
-      }, process.env.JWT_SECRET_KEY, {
+      }, envs.JWT_SECRET_KEY, {
         expiresIn: (24 * 60 * 60 * expirationMultiplier)
       });
     
@@ -248,7 +251,7 @@ app.post('/adminpasswordreset', verifyTokenAdmin, async (req, res) => {
 app.post("/imdbsearch/:searchBy/:field", async (req, res) => {
   let searchBy = req.params.searchBy.toUpperCase();
   const field = req.params.field;
-  const apikey = process.env.imdbAPI_key;
+  const apikey = envs.imdbAPI_key;
   let responseData = "";
   console.log("searchBy", searchBy, "field", field);
   const options = {
@@ -315,7 +318,7 @@ app.post('/Admin/:department/:operation', verifyTokenAdmin, async function (req,
   const {department, operation} = req.params
   const data = req.body
   console.log('%cserver.js line:314 req.body', 'color: #007acc;', req.body);
-  if (process.env.test === 'true') {
+  if (envs.test === 'true') {
     if (department === 'List' && operation === "Alllists") {
       res.json({success: true, payload: fakeData})
     } else {

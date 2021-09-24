@@ -23,14 +23,14 @@ function ProgressBar({ item }) {
     const ProgressBarSection = ({status, valLeft, valWidth}) => {
       return (
         <div
-            key={item['id'] + "_progressBarSection_" + status + "_" + item['progress'][status]}
+            key={item['id'] + "_progressBarSection_div" + status + "_" + item['progress'][status]}
             style={{
               left: valLeft.toString() + "%",
               width: valWidth.toString() + "%"
             }}
             className={"progressBar"+status+" progressBarSegment"}
           >
-            {parseInt(valWidth) > 5 && <p>{parseInt(valWidth) < 20 && status.length > 5 ? shortened[status] : status}</p>}
+            {parseInt(valWidth) > 5 && <p key={item['id'] + "_progressBarSection_div--p" + status + "_" + item['progress'][status]}>{parseInt(valWidth) < 20 && status.length > 5 ? shortened[status] : status}</p>}
             {parseInt(valWidth) > 5 && valWidth < 100 && <p>{parseInt(valWidth)}%</p>}
         </div>
       )
@@ -41,7 +41,7 @@ function ProgressBar({ item }) {
       <div className="progressBar">
         {Object.keys(pattern).map(statusName => {
         return (
-          <ProgressBarSection status={statusName} valLeft={pattern[statusName]['valLeft']} valWidth={pattern[statusName]['valWidth']} />
+          <ProgressBarSection key={item['id'] + "_progressBarSection_" + statusName + "_" + item['progress'][statusName]} status={statusName} valLeft={pattern[statusName]['valLeft']} valWidth={pattern[statusName]['valWidth']} />
         )
       })}
       </div>

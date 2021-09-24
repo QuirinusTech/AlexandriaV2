@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom"
 import AlexOGLoader from "../Loaders/AlexOGLoader"
+import Cookies from "js-cookie";
 
 
-function LogIn({setIsLoggedIn, isRestricted, isLoggedIn}) {
+function LogIn({setIsLoggedIn, isRestricted, isLoggedIn, errorEncountered, setErrorEncountered}) {
   const [pleaseWait, setPleasewait] = useState(false)
   const passwordWasReset = localStorage.getItem('passwordReset');
   let history = useHistory()
@@ -25,6 +26,7 @@ function LogIn({setIsLoggedIn, isRestricted, isLoggedIn}) {
         setErrorMessage(data['errormsg'])
         setPleasewait(false)
       } else {
+        setErrorEncountered(false)
         localStorage.setItem('username', data['username']);
         localStorage.setItem("displayName", data['displayName']);
         localStorage.setItem("is_admin", data['is_admin']);
@@ -36,6 +38,21 @@ function LogIn({setIsLoggedIn, isRestricted, isLoggedIn}) {
       
     })
   }
+
+  useEffect(() => {
+    function onemorecheck() {
+      console.log(isLoggedIn)
+      console.log(Cookies.get("jwt"))
+      console.log(errorEncountered)
+      if (Cookies.get("jwt") === null || Cookies.get("jwt") === undefined) {
+        setIsLoggedIn(false)
+      }
+      if (errorEncountered) {
+        setIsLoggedIn(false)
+      }
+    }
+    onemorecheck()
+  }, [])
 
   const [loginFormValues, setLoginFormValues] = useState({
     'username': '',

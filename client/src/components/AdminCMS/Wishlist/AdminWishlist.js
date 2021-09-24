@@ -120,9 +120,9 @@ const AdminWishlist = ({
                       <option key={x + "_fieldFilter"} value={x}>
                         {x}
                       </option>
-                    );
+                    )
                   })}
-                </select>;
+                </select>
                 <select disabled={filters['field'] === ''} className=' adminButton adminButton--smalladminFilterVal' name="val" value={filters['val']} onChange={filterChangeHandler} >
                 <option value ="" hidden>Filter by Value</option>
                 {filterValuesArr.map(x => {

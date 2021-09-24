@@ -11,7 +11,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   let month = dateObj.getMonth() + 1
   let day = dateObj.getDate()
   let dateString = `${dateObj.getFullYear()}-${month < 10 ? "0" + month : month}-${day < 10 ? "0" + day : day}`
-  console.log('%cAdminAddNew.js line:13 dateString', 'color: #007acc;', dateString);
+  // console.log('%cAdminAddNew.js line:13 dateString', 'color: #007acc;', dateString);
 
   const [loading, setLoading] = useState(false)
 
@@ -130,7 +130,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         if (keyName === 'isOngoing' || keyName === 'isPriority' || keyName === 'createNotification') {
           data[keyName] = false
         } else {
-          data[keyName] = null
+          data[keyName] = keyName
         }
       }
     })
@@ -230,7 +230,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
     >
       <h3>Add New</h3>
       <div className="AdminAddNewForm--Row--resetButton">
-        <button className="adminButton adminButton--danger" onClick={resetForm}>Clear Form</button>
+        {!showImportForm && <button className="adminButton adminButton--danger" onClick={resetForm}>Clear Form</button>}
         <button className={showImportForm ? "adminButton adminButton--hover" : "adminButton"} onClick={()=>setShowImportForm(!showImportForm)}>Import</button>
       </div>
       

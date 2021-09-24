@@ -2,8 +2,8 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const WorkflowCardsListSection = ({list, currentEntryId, category, cardClick}) => {
   
-  return (<details className="WorkflowCardsList--Section darkDetails" open>
-          <summary className="adminButton">{category} ({list.length})</summary>
+  return (<div className="WorkflowCardsList--Section" open>
+          <h4>{category} ({list.length})</h4>
           <AnimatePresence>
 
           {list.length > 0 &&
@@ -42,7 +42,7 @@ const WorkflowCardsListSection = ({list, currentEntryId, category, cardClick}) =
             })}
           {list.length === 0 && <div className="emptyCardList">None</div>}
           </AnimatePresence>
-        </details>)
+        </div>)
 };
 
       export default WorkflowCardsListSection

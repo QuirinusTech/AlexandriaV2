@@ -28,6 +28,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(checkForJwtCookie());
   const [wishlistData, setWishlistData] = useState(["init"]);
   const [errorPageContent, setErrorPageContent] = useState("");
+  const [errorEncountered, setErrorEncountered] = useState(false)
   const [loadingStep, setLoadingStep] = useState('')
   const history = useHistory();
 
@@ -47,19 +48,17 @@ function App() {
 }
 
 async function getNotifications() {
-  return await fetch("/getNotifications", {
+  let result = await fetch("/getNotifications", {
     method: "POST",
     body: JSON.stringify({
       username: localStorage.getItem("username")
     }),
     headers: { "Content-type": "application/json; charset=UTF-8" }
   })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("error");
-      }
-      return res.json();
-    })
+    .then(res => res.json())
+    return result
+
+
     .catch(e => {
       console.log(e.message);
       return "error";
@@ -75,21 +74,27 @@ async function getNotifications() {
     console.log('%cApp.js line:90 wishlistData[0]', 'color: #007acc;', wishlistData[0]);
     console.log('%cApp.js line:91 isLoggedIn', 'color: #007acc;', isLoggedIn);
     console.log('%cApp.js line:92 window.location.pathname', 'color: #007acc;', window.location.pathname);
-    if (wishlistData[0] === 'init' && isLoggedIn && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
+    if (!errorEncountered && wishlistData[0] === 'init' && isLoggedIn && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
       console.log('Conditions have been met to initiate Data Setup TRY-block');
       try {
         setLoading(true);
         setLoadingStep('Loading Wishlist')
         let wishlistData = await getWishlistData();
         console.log('%cApp.js line:93 wishlistData', 'color: #007acc;', wishlistData);
-        if (wishlistData === "error") {
-          throw new Error("database");
+        if (!Array.isArray(wishlistData) || wishlistData.response === 'error') {
+          console.log(wishlistData.responsecode)
+          if (parseInt(wishlistData.responsecode) === 403) {
+            throw new Error('403')
+          } else {
+            throw new Error("database");
+          }
+        } else {
+          setWishlistData(wishlistData.sort(function(a, b) {
+            var x = a["name"];
+            var y = b["name"];
+            return x < y ? -1 : x > y ? 1 : 0;
+          }));
         }
-        setWishlistData(wishlistData.sort(function(a, b) {
-      var x = a["name"];
-      var y = b["name"];
-      return x < y ? -1 : x > y ? 1 : 0;
-    }));
         setLoadingStep('Getting status update')
         let notifications = await getNotifications();
         console.log('%cApp.js line:100 notifications', 'color: #007acc;', notifications);
@@ -99,6 +104,7 @@ async function getNotifications() {
         setNotifications(notifications);
         setLoadingStep('almost done...')
       } catch (error) {
+        console.log(error.message)
         if (error.message === "database") {
           setErrorPageContent(
             "Unable to contact database. Please ensure you are logged in correctly."
@@ -106,6 +112,11 @@ async function getNotifications() {
           history.push('/oops')
         } else if (error.message === "notifications") {
           setNotifications([]);
+        } else if (parseInt(error.message) === 403) {
+            // alert(wishlistData.errormsg)
+            setErrorEncountered(true)
+            setIsLoggedIn(false)
+            history.push('/login')
         }
       } finally {
         setLoadingStep('')
@@ -184,7 +195,7 @@ async function getNotifications() {
       </Route>
 
       <Route exact path="/login">
-        <LogIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />;
+        <LogIn errorEncountered={errorEncountered} setErrorEncountered={setErrorEncountered} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />;
       </Route>
 
       <Route exact path="/register">

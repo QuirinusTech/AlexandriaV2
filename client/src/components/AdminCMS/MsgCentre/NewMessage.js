@@ -288,7 +288,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
             </option>
             {allPossibleStatuses.map(status => {
               return (
-                <option key={status} value={status}>
+                <option key={"statusUpdateOption"+status} value={status}>
                   {status}
                 </option>
               );
@@ -324,7 +324,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
               <option value="reset">none</option>
               {adminListUsers.map(user => {
                 return (
-                  <option value={user["username"]}>{user["username"]}</option>
+                  <option key={user["username"]+"wishlistFilters_addedBy"} value={user["username"]}>{user["username"]}</option>
                 );
               })}
             </select>
@@ -350,7 +350,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
             >
               <option value="reset">none</option>
               {allPossibleStatuses.map(status => {
-                return <option value={status}>{status}</option>;
+                return <option key={"wishlistFilters_status_"+status} value={status}>{status}</option>;
               })}
             </select>
           </div>
@@ -370,7 +370,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
             {filteredWishlist.map(entry => {
               let titlestring = `${entry["name"]} - ${entry["imdbID"]} - (owner: ${entry["addedBy"]})`;
               return (
-                <option key={entry["id"]} value={entry["id"]}>
+                <option key={titlestring} value={entry["id"]}>
                   {titlestring}
                 </option>
               );
@@ -416,7 +416,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
         <h4>Visible to:</h4>
           {adminListUsers.map(user => {
             return (
-              <div className="usersVisTableRow" key={user["username"]}>
+              <div className="usersVisTableRow" key={"usersVisTable"+user["username"]+"checkbox_uservis"}>
                   <input
                     className="checkbox_uservis"
                     type="checkbox"
