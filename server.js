@@ -21,6 +21,7 @@ const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
 const path = require('path')
 const app = express();
+console.log(envs.PORT)
 const port = envs.PORT || 5000;
 const verifyToken = require('./verifyToken')
 const verifyTokenAdmin = require('./verifyTokenAdmin')

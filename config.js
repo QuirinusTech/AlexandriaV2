@@ -1,7 +1,7 @@
 let envs = {};
 try { 
   envs = process.env
-  require('dotenv').config({path: '.env'});
+  // require('dotenv').config({path: '.env'});
   // if (!('error' in result)) {
   //   envs = result.parsed;
   // }
