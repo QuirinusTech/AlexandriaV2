@@ -14,7 +14,7 @@ const envs = require('./config');
 admin.initializeApp({
   credential: admin.credential.cert({
     "project_id": envs.FIREBASE_project_id,
-    "private_key": envs.FIREBASE_private_key,
+    "private_key": envs.FIREBASE_private_key.replace(/\\n/g, '\n'),
     "client_email": envs.FIREBASE_client_email,
   }),
   "client_id": "100546631593264286200",
