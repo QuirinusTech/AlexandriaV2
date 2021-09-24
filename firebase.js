@@ -4,7 +4,7 @@
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 const admin = require('firebase-admin');
-const serviceAccount = require("./alexandria-v2-89a5a-30e14e932b3d.json");
+// const serviceAccount = require("./alexandria-v2-89a5a-30e14e932b3d.json");
 const WishlistItem = require("./Classes/WishlistItem");
 const User = require('./Classes/User')
 const {NotificationUpdateEmail, passwordResetMail} = require('./MercuryService')
@@ -698,6 +698,7 @@ async function getWishlistByUser(username) {
   inventory.forEach((item) => {
     item = setStatusAndProgress(item)
   });
+  console.log('%cfirebase.js line:701 inventory.length', 'color: #007acc;', inventory.length);
   return inventory;
 }
 

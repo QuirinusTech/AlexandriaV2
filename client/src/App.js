@@ -39,10 +39,6 @@ function App() {
     headers: { "Content-type": "application/json; charset=UTF-8" }
   })
     .then(res => res.json())
-    .catch(e => {
-      console.log(e.message);
-      return "error";
-    });
   console.log('%cApp.js line:39 results', 'color: #007acc;', results);
   return results;
 }
@@ -80,20 +76,24 @@ async function getNotifications() {
         setLoading(true);
         setLoadingStep('Loading Wishlist')
         let wishlistData = await getWishlistData();
-        console.log('%cApp.js line:93 wishlistData', 'color: #007acc;', wishlistData);
-        if (!Array.isArray(wishlistData) || wishlistData.response === 'error') {
-          console.log(wishlistData.responsecode)
-          if (parseInt(wishlistData.responsecode) === 403) {
-            throw new Error('403')
-          } else {
-            throw new Error("database");
-          }
+        if (wishlistData === 'empty') {
+          setWishlistData([])
         } else {
-          setWishlistData(wishlistData.sort(function(a, b) {
-            var x = a["name"];
-            var y = b["name"];
-            return x < y ? -1 : x > y ? 1 : 0;
-          }));
+          console.log('%cApp.js line:93 wishlistData', 'color: #007acc;', wishlistData);
+          if (!Array.isArray(wishlistData) || wishlistData.response === 'error') {
+            console.log(wishlistData.responsecode)
+            if (parseInt(wishlistData.responsecode) === 403) {
+              throw new Error('403')
+            } else {
+              throw new Error("database");
+            }
+          } else {
+            setWishlistData(wishlistData.sort(function(a, b) {
+              var x = a["name"];
+              var y = b["name"];
+              return x < y ? -1 : x > y ? 1 : 0;
+            }));
+          }
         }
         setLoadingStep('Getting status update')
         let notifications = await getNotifications();
@@ -104,7 +104,8 @@ async function getNotifications() {
         setNotifications(notifications);
         setLoadingStep('almost done...')
       } catch (error) {
-        console.log(error.message)
+        setErrorEncountered(true)
+        console.log('%cApp.js line:107 error.message', 'color: #007acc;', error.message);
         if (error.message === "database") {
           setErrorPageContent(
             "Unable to contact database. Please ensure you are logged in correctly."
@@ -114,7 +115,6 @@ async function getNotifications() {
           setNotifications([]);
         } else if (parseInt(error.message) === 403) {
             // alert(wishlistData.errormsg)
-            setErrorEncountered(true)
             setIsLoggedIn(false)
             history.push('/login')
         }
