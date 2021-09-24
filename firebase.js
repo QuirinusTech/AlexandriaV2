@@ -9,9 +9,19 @@ const WishlistItem = require("./Classes/WishlistItem");
 const User = require('./Classes/User')
 const {NotificationUpdateEmail, passwordResetMail} = require('./MercuryService')
 const uuid = require('uuid')
+const envs = require('./config');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    "project_id": envs.FIREBASE_project_id,
+    "private_key": envs.FIREBASE_private_key,
+    "client_email": envs.FIREBASE_client_email,
+  }),
+  "client_id": "100546631593264286200",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-t9e38%40alexandria-v2-89a5a.iam.gserviceaccount.com"
 });
 
 const db = admin.firestore();
