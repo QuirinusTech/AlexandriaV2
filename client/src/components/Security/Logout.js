@@ -1,4 +1,6 @@
 import {useEffect, useState} from 'react'
+import { Link } from "react-router-dom"
+
 
 function Logout({setIsLoggedIn}) {
   const [pleaseWait, setPleaseWait] = useState(true)
@@ -26,9 +28,9 @@ function Logout({setIsLoggedIn}) {
         <p style={{width: "100%", maxWidth: "none"}}>You've been logged out.</p>
         <br />
         <div>
-        <p><a href="/login" className="purplelink">
+        <p><Link href="/login" className="purplelink">
         Log back in?
-      </a></p>
+      </Link></p>
         </div>
         </div>}
     </div>
