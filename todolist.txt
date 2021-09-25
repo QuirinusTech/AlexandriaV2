@@ -1,2 +1,6 @@
-workflow manager: 
-live database connection
+ // fix margin, padding and overflow on mobile version of the site
+ // remove env from git uploads
+ // database imports
+ // dark mode toggle switch
+ // user preferences page
+ // localisations & translation

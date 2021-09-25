@@ -718,6 +718,12 @@ a.forgottenPasswordLink {
     align-items: center;
 }
 
+@media only screen and (max-width: 768px) {
+    .login_page_form, .registration_form {
+        overflow-x: hidden;
+    }
+}
+
 .login_page_form > form {
     width: 60%;
     max-width: 400px;
@@ -895,6 +901,7 @@ h2{
     text-shadow: 1px 1px 1px purple, 1px 1px 2px white;
     color: white;
     width:100vw;
+    margin-left: 0;
 }
 
 h3 {
@@ -1681,7 +1688,7 @@ width:90%;
     margin: 0px;
 }
 
-.flash {
+/* .flash {
     -moz-animation: flash 1s ease-out;
     -moz-animation-iteration-count: 1;
   
@@ -1690,7 +1697,7 @@ width:90%;
   
     -ms-animation: flash 1s ease-out;
     -ms-animation-iteration-count: 1;
-  }
+  } */
   
   @keyframes flash {
       0% { background-color: transparent; }
@@ -1741,6 +1748,12 @@ width:90%;
 
 .about_row > p, .about_row > ul > li {
     padding: 1vw;
+}
+
+@media only screen and (min-width: 768px) {
+    .about_row, .about_row > p, .about_row > ul > li {
+        color: white;
+    }
 }
 
 #contactUs_div {

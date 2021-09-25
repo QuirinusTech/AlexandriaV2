@@ -2,10 +2,10 @@ import FormSearch from "./FormSearch";
 import PosterList from "./PosterList";
 import ResultsTable from "./ResultsTable";
 import AlexOGLoader from "../Loaders/AlexOGLoader"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-function AddNew({ wishlistData, setWishlistData }) {
+function AddNew({ wishlistData, setWishlistData, dataSetup }) {
   const [progress, SetProgress] = useState("FormSearch");
   const [IMDBResultsVar, SetIMDBResultsVar] = useState("");
   const [searchBy, setSearchBy] = useState("title");
@@ -16,6 +16,18 @@ function AddNew({ wishlistData, setWishlistData }) {
   const [warning, setWarning] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const InitData = async () => {
+      await dataSetup()
+      setLoading(false)
+    }
+    if (window.location.pathname !== "/admin" && wishlistData[0] === 'init' && !loading) {
+      setLoading(true)
+      InitData();
+    }
+    console.log("init complete")
+  }, []);
 
   async function posterClick(arg) {
     setLoading(true)

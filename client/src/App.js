@@ -168,7 +168,7 @@ async function getNotifications() {
       </Route>
 
       <Route exact path="/addnew">
-        <AddNew setWishlistData={setWishlistData} wishlistData={wishlistData} />
+        <AddNew setWishlistData={setWishlistData} wishlistData={wishlistData} dataSetup={dataSetup} />
       </Route>
 
       <Route exact path="/list">
