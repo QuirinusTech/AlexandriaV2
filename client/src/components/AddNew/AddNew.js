@@ -89,13 +89,15 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
       method: "POST"
       }).then(res => res.json());
       // console.log(blacklist);
-      Object.keys(blacklist).forEach(element => {
-        if (
-          blacklist[element][searchBy].toUpperCase() === field.toUpperCase()
-        ) {
-          isBlacklisted = true;
-        }
-      });
+      if (Array.isArray(blacklist) && blacklist.length > 0) {
+        Object.keys(blacklist).forEach(element => {
+          if (
+            blacklist[element][searchBy].toUpperCase() === field.toUpperCase()
+          ) {
+            isBlacklisted = true;
+          }
+        });
+      }
     } catch (error) {
       setErrorMsg([error.message, field])
     } finally {
