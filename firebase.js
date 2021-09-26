@@ -579,7 +579,7 @@ async function readBlacklist(username) {
   if (currentUserBlacklist.hasOwnProperty('owner')) {
     delete currentUserBlacklist['owner']
   }
-  if (!Array.isArray(currentUserBlacklist) || !currentUserBlacklist) {
+  if (!currentUserBlacklist || currentUserBlacklist === undefined || currentUserBlacklist === null || !Array.isArray(Object.keys(currentUserBlacklist)) || Object.keys(currentUserBlacklist).length === 0) {
     return []
   } else {
     return currentUserBlacklist

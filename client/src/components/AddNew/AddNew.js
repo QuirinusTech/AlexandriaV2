@@ -89,7 +89,7 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
       method: "POST"
       }).then(res => res.json());
       // console.log(blacklist);
-      if (Array.isArray(blacklist) && blacklist.length > 0) {
+      if (Array.isArray(Object.keys(blacklist)) && Object.keys(blacklist).length > 0) {
         Object.keys(blacklist).forEach(element => {
           if (
             blacklist[element][searchBy].toUpperCase() === field.toUpperCase()
