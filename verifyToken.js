@@ -4,6 +4,7 @@ const cookie = require('cookie')
 
 async function verifyToken(req, res, next) {
     var cookies = cookie.parse(req.headers.cookie || '');
+    console.log('%cverifyToken.js line:7 cookies', 'color: #007acc;', cookies);
     const token = cookies['jwt'] || null
     if (token === null) {
       const response = createErrorResponseObject("horse")

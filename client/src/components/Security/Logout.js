@@ -28,7 +28,7 @@ function Logout({setIsLoggedIn}) {
         <p style={{width: "100%", maxWidth: "none"}}>You've been logged out.</p>
         <br />
         <div>
-        <p><Link href="/login" className="purplelink">
+        <p><Link to="/login" className="purplelink">
         Log back in?
       </Link></p>
         </div>

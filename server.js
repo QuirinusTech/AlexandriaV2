@@ -42,10 +42,11 @@ app.post('/db/:operation', verifyToken, async (req, res) => {
   try {
     const data = req.body;
     const operation = req.params.operation.toUpperCase();
-    console.log(data);
+    console.log('%cserver.js line:44 req.body', 'color: #007acc;', data);
+    console.log('%cserver.js line:46 operation', 'color: #007acc;', operation);
     let username = res.locals.username
 
-    if (envs.test === 'true') {
+    if (envs.test === 'true' && operation === 'R') {
       console.log("Sending test data")
       res.json(fakeData['wishlist'])
     } else {
