@@ -30,6 +30,7 @@ function App() {
   const [errorPageContent, setErrorPageContent] = useState("");
   const [errorEncountered, setErrorEncountered] = useState(false)
   const [loadingStep, setLoadingStep] = useState('')
+  const [isRestricted, setIsRestricted] = useState(false)
   const history = useHistory();
 
   async function getWishlistData() {
@@ -136,6 +137,12 @@ async function getNotifications() {
         Cookies.get()
       );
       setIsLoggedIn(false);
+      localStorage.clear()
+      if (window.location.pathname === "/list" || window.location.pathname !== "/addnew") {
+        setErrorEncountered(true)
+        setIsRestricted(true)
+        history.push('/login')
+      }
     } else if (window.location.pathname !== "/admin") {
       InitData();
     }
@@ -195,7 +202,7 @@ async function getNotifications() {
       </Route>
 
       <Route exact path="/login">
-        <LogIn errorEncountered={errorEncountered} setErrorEncountered={setErrorEncountered} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />;
+        <LogIn errorEncountered={errorEncountered} setErrorEncountered={setErrorEncountered} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} isRestricted={isRestricted} setIsRestricted={setIsRestricted} />;
       </Route>
 
       <Route exact path="/register">

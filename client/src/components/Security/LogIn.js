@@ -4,7 +4,7 @@ import AlexOGLoader from "../Loaders/AlexOGLoader"
 import Cookies from "js-cookie";
 
 
-function LogIn({setIsLoggedIn, isRestricted, isLoggedIn, errorEncountered, setErrorEncountered}) {
+function LogIn({setIsLoggedIn, isRestricted, setIsRestricted, isLoggedIn, errorEncountered, setErrorEncountered}) {
   const [pleaseWait, setPleasewait] = useState(false)
   const passwordWasReset = localStorage.getItem('passwordReset');
   let history = useHistory()
@@ -72,7 +72,7 @@ function LogIn({setIsLoggedIn, isRestricted, isLoggedIn, errorEncountered, setEr
 
   return isLoggedIn ? (
     <div className="errorPopupContentBoxSmall">
-      <p>You're already logged In.</p>
+      <p className="flash">You're already logged In.</p>
       <p>
         Click <Link to="/">here</Link> to return to the home page.
       </p>
