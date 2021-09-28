@@ -66,7 +66,7 @@ function Navbar({isLoggedIn}) {
             Admin
           </Link>
         )}
-        {!cookiePresent (<>
+        {!cookiePresent && (<>
           <Link
             onClick={hideNav}
             id="navbar_button--login"
