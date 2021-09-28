@@ -132,7 +132,7 @@ const AdminWishlist = ({
                 <button className="adminButton adminButton--small adminButton--cancel" name="reset" onClick={filterChangeHandler}>Reset</button>
               </div>
             </div>
-            <div className="AdminWishlistContent">
+            <div className="AdminWishlistContent" style={{height: "90vh", "overflowY": "scroll"}}>
               <AdminWishlistTable
                 searchBoxValue={searchBoxValue}
                 localList={localList}

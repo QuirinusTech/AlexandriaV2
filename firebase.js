@@ -576,7 +576,7 @@ function generateValidationCode() {
 
 async function readBlacklist(username) {
   let currentUserBlacklist = await blacklistRef.doc(username).get().then(doc => doc.data())
-  if (currentUserBlacklist.hasOwnProperty('owner')) {
+  if (currentUserBlacklist === undefined && currentUserBlacklist.hasOwnProperty('owner')) {
     delete currentUserBlacklist['owner']
   }
   if (!currentUserBlacklist || currentUserBlacklist === undefined || currentUserBlacklist === null || !Array.isArray(Object.keys(currentUserBlacklist)) || Object.keys(currentUserBlacklist).length === 0) {

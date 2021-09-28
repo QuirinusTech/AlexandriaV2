@@ -4,6 +4,8 @@ import GIFLoader from "../Loaders/GIFLoader";
 import AvailabilityWidget from "../Wishlist/TableComponents/TrContent/AvailabilityWidget";
 import OptionsWidget from "../Wishlist/TableComponents/TrContent/OptionsWidget";
 import SeriesEpisodes from "../Wishlist/TableComponents/SeriesEpisodes"
+import { Link } from "react-router-dom"
+
 
 function ResultsTable({
   wishlistData,
@@ -98,7 +100,7 @@ function ResultsTable({
       }).then(res => res.json());
 
       // console.log(result);
-      if (!result["success"] || result["success"] !== "success") {
+      if (!result["success"]) {
         setErrorPopupContent(JSON.stringify(result));
         setReadyToAdd(false);
         throw new Error(JSON.stringify(result));
@@ -194,16 +196,16 @@ function ResultsTable({
           <ul>
             <p>Would you like to: </p>
             <li>
-              <a className="purplelink" href="/addnew">
+              <Link className="purplelink" to="/addnew">
                 ADD ANOTHER
-              </a>{" "}
+              </Link>{" "}
               item to the list
             </li>
             <li>
               Check on the{" "}
-              <a className="purplelink" href="/list">
+              <Link className="purplelink" to="/list">
                 EXISTING WISHLIST
-              </a>
+              </Link>
             </li>
           </ul>
         )}

@@ -16,6 +16,7 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
   const [warning, setWarning] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false)
+  const [blacklist, setBlacklist] = useState(null)
 
   useEffect(() => {
     const InitData = async () => {
@@ -84,15 +85,22 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
 
   async function checkIfOnBlacklist(searchBy, field) {
     let isBlacklisted = false;
-    try {
-      const blacklist = await fetch("/blacklist/r", {
+    let localBlacklistCopy = {}
+    if (blacklist === null) {
+      localBlacklistCopy = await fetch("/blacklist/r", {
       method: "POST"
       }).then(res => res.json());
+      setBlacklist(localBlacklistCopy)
+    } else {
+      localBlacklistCopy = {...blacklist}
+    }
+
+    try {
       // console.log(blacklist);
-      if (Array.isArray(Object.keys(blacklist)) && Object.keys(blacklist).length > 0) {
-        Object.keys(blacklist).forEach(element => {
+      if (Array.isArray(Object.keys(localBlacklistCopy)) && Object.keys(localBlacklistCopy).length > 0) {
+        Object.keys(localBlacklistCopy).forEach(element => {
           if (
-            blacklist[element][searchBy].toUpperCase() === field.toUpperCase()
+            localBlacklistCopy[element][searchBy].toUpperCase() === field.toUpperCase()
           ) {
             isBlacklisted = true;
           }
