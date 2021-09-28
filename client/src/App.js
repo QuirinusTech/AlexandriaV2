@@ -138,7 +138,7 @@ async function getNotifications() {
       );
       setIsLoggedIn(false);
       localStorage.clear()
-      if (window.location.pathname === "/list" || window.location.pathname !== "/addnew") {
+      if (window.location.pathname === "/list" || window.location.pathname === "/addnew") {
         setErrorEncountered(true)
         setIsRestricted(true)
         history.push('/login')
