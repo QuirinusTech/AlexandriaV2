@@ -575,14 +575,19 @@ function generateValidationCode() {
 }
 
 async function readBlacklist(username) {
-  let currentUserBlacklist = await blacklistRef.doc(username).get().then(doc => doc.data())
-  if (currentUserBlacklist === undefined && currentUserBlacklist.hasOwnProperty('owner')) {
-    delete currentUserBlacklist['owner']
-  }
-  if (!currentUserBlacklist || currentUserBlacklist === undefined || currentUserBlacklist === null || !Array.isArray(Object.keys(currentUserBlacklist)) || Object.keys(currentUserBlacklist).length === 0) {
+
+  try {
+    let currentUserBlacklist = await blacklistRef.doc(username).get().then(doc => doc.data())
+    
+    if (!currentUserBlacklist || currentUserBlacklist === undefined || currentUserBlacklist === null || !Array.isArray(Object.keys(currentUserBlacklist)) || Object.keys(currentUserBlacklist).length === 0) {
+      throw new Error('Error reading blacklist or blacklist empty. Value of Blacklist: ', currentUserBlacklist)
+    } else {
+      delete currentUserBlacklist['owner']
+      return currentUserBlacklist
+    }
+  } catch (error) {
+    console.log('%cfirebase.js line:589 error.message', 'color: #007acc;', error.message);
     return []
-  } else {
-    return currentUserBlacklist
   }
 }
 

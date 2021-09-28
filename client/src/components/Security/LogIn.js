@@ -41,9 +41,9 @@ function LogIn({setIsLoggedIn, isRestricted, isLoggedIn, errorEncountered, setEr
 
   useEffect(() => {
     function onemorecheck() {
-      console.log(isLoggedIn)
-      console.log(Cookies.get("jwt"))
-      console.log(errorEncountered)
+      console.log("isLoggedIn: ",isLoggedIn)
+      console.log('JWT: ', Cookies.get("jwt"))
+      console.log('errorEncountered: ', errorEncountered)
       if (Cookies.get("jwt") === null || Cookies.get("jwt") === undefined) {
         setIsLoggedIn(false)
       }

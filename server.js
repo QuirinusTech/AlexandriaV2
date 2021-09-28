@@ -141,7 +141,7 @@ app.post('/login', async (req, res) => {
   try {
   const newObj = req.body;
   let expirationMultiplier = 1
-  console.log(envs.test)
+  console.log("Test mode: ", envs.test)
   if (envs.test === true) {
     console.log(newObj)
     expirationMultiplier = 30
@@ -155,7 +155,7 @@ app.post('/login', async (req, res) => {
       throw Error("aergia")
     } 
     const passwordValidation = await User.check_password(password, dbUserData.password)
-    console.log("Password Validation: ", passwordValidation)
+    console.log("Password Validation: ", passwordValidation ? "PASS" : "FAIL")
 
 
 
