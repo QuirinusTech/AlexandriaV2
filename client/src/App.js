@@ -6,7 +6,6 @@ import {
   useHistory,
   Link
 } from "react-router-dom";
-import Cookies from "js-cookie";
 import AddNew from "./components/AddNew/AddNew";
 import Wishlist from "./components/Wishlist/Wishlist";
 import AdminCMS from "./components/AdminCMS/AdminCMS";
@@ -25,13 +24,53 @@ import NotificationsCentre from "./components/Start/NotificationsCentre"
 function App() {
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(checkForJwtCookie());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [wishlistData, setWishlistData] = useState(["init"]);
   const [errorPageContent, setErrorPageContent] = useState("");
   const [errorEncountered, setErrorEncountered] = useState(false)
   const [loadingStep, setLoadingStep] = useState('')
   const [isRestricted, setIsRestricted] = useState(false)
   const history = useHistory();
+
+  useEffect(() => {
+    const init = async () => {
+      await dataSetup();
+    };
+    const checkLoggedIn = async () => {
+      let res1 = await fetch("/verifyAuth", {
+        method: "POST",
+        body: JSON.stringify({
+          username: localStorage.getItem("username")
+        }),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+      })
+        .then(res => res.json())
+      console.log('%cApp.js line:49 res1', 'color: #007acc;', res1);
+      if (res1.hasOwnProperty('response') && res1['response'] === 'error') {
+        setIsLoggedIn(false);
+        localStorage.clear()
+        if (window.location.pathname === "/list" || window.location.pathname === "/addnew") {
+          setErrorEncountered(true)
+          setIsRestricted(true)
+          history.push('/login')
+        }
+      } else {
+        localStorage.setItem('username', res1['locals']['username']);
+        localStorage.setItem("displayName", res1['locals']['displayName']);
+        localStorage.setItem("is_admin", res1['locals']['is_admin']);
+        localStorage.setItem("can_add", res1['locals']["can_add"]);
+        localStorage.setItem("is_active_user", res1['locals']['is_active_user'])
+        setIsLoggedIn(true)
+      }
+    }
+    if (!isLoggedIn) {
+      checkLoggedIn()
+    }
+    if (window.location.pathname !== "/admin" && isLoggedIn) {
+      init();
+    }
+    console.log("init complete");
+  }, []);
 
   async function getWishlistData() {
   const results = await fetch("/db/r", {
@@ -62,16 +101,12 @@ async function getNotifications() {
     });
 }
 
-  function checkForJwtCookie() {
-    return Cookies.get("jwt") === null ? false : true;
-  }
-
   async function dataSetup() {
     console.log('%cApp.js line:89 DataSetup Trigger', 'color: #007acc;');
     console.log('%cApp.js line:90 wishlistData[0]', 'color: #007acc;', wishlistData[0]);
     console.log('%cApp.js line:91 isLoggedIn', 'color: #007acc;', isLoggedIn);
     console.log('%cApp.js line:92 window.location.pathname', 'color: #007acc;', window.location.pathname);
-    if (!errorEncountered && wishlistData[0] === 'init' && isLoggedIn && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
+    if (isLoggedIn && !loading && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
       console.log('Conditions have been met to initiate Data Setup TRY-block');
       try {
         setLoading(true);
@@ -126,28 +161,6 @@ async function getNotifications() {
     }
   }
 
-  useEffect(() => {
-    const InitData = async () => {
-      await dataSetup();
-    };
-    if (!checkForJwtCookie()) {
-      console.log(
-        '%cLogIn.js line:45 Cookies.get("jwt")',
-        "color: #007acc;",
-        Cookies.get()
-      );
-      setIsLoggedIn(false);
-      localStorage.clear()
-      if (window.location.pathname === "/list" || window.location.pathname === "/addnew") {
-        setErrorEncountered(true)
-        setIsRestricted(true)
-        history.push('/login')
-      }
-    } else if (window.location.pathname !== "/admin") {
-      InitData();
-    }
-    console.log("init complete");
-  }, []);
 
 
   return (

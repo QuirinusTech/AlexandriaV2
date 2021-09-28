@@ -1,12 +1,7 @@
 import {Link} from 'react-router-dom'
 import {useState} from 'react'
-import Cookies from "js-cookie";
-
 
 function Navbar({isLoggedIn}) {
-
-  const cookiePresent = Cookies.get("jwt") === null ? true : false
-
   const can_add = localStorage.getItem('can_add') || false
   const is_admin = localStorage.getItem('is_admin') || false
   const is_active_user = localStorage.getItem('is_active_user') || false
@@ -27,7 +22,7 @@ function Navbar({isLoggedIn}) {
         <Link onClick={hideNav} id="navbar_button--home" to="/" className="nav_menu_element">
           Home
         </Link>
-        {isLoggedIn && can_add && cookiePresent && (
+        {isLoggedIn && can_add && (
           <Link
             onClick={hideNav}
             id="navbar_button--addnew"
@@ -37,7 +32,7 @@ function Navbar({isLoggedIn}) {
             Add New
           </Link>
         )}
-        {isLoggedIn && is_active_user && cookiePresent && (
+        {isLoggedIn && is_active_user && (
           <Link
             onClick={hideNav}
             id="navbar_button--list"
@@ -56,7 +51,7 @@ function Navbar({isLoggedIn}) {
             Melden
           </Link>
         )} */}
-        {is_admin && isLoggedIn && cookiePresent && (
+        {is_admin && isLoggedIn && (
           <Link
             onClick={hideNav}
             id="navbar_button--admin"
@@ -66,7 +61,7 @@ function Navbar({isLoggedIn}) {
             Admin
           </Link>
         )}
-        {!cookiePresent && (<>
+        {!isLoggedIn && (<>
           <Link
             onClick={hideNav}
             id="navbar_button--login"
@@ -85,7 +80,7 @@ function Navbar({isLoggedIn}) {
             </Link>
           </>
         )}
-        {isLoggedIn && cookiePresent && (
+        {isLoggedIn && (
           <Link
             onClick={hideNav}
             id="navbar_button--addnew"

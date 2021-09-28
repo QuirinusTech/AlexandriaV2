@@ -51,7 +51,8 @@ module.exports = {
   userUpdate,
   adminPasswordReset,
   notifyUser,
-  blacklistCleanup
+  blacklistCleanup,
+  adminDelete
 }
 
 
@@ -631,7 +632,7 @@ async function notifyAdmin(status, title, event) {
 
 async function notifyUser(message) {
   message['mailed'] = false;
-  const res = await notificationsRef.doc(message['id']).set(data).then(()=> "success").catch(err => err)
+  const res = await notificationsRef.doc(message['id']).set(message).then(()=> "success").catch(err => err)
   return res
 }
 
@@ -870,7 +871,7 @@ async function adminUpdate(department, data) {
   }
 }
 
-async function adminDelete(deparment, data) {
+async function adminDelete(department, data) {
   try {
     switch (department.toUpperCase()) {
       case "WISHLIST":

@@ -21,8 +21,8 @@ function Wishlist({wishlistData, setWishlistData, dataSetup}) {
     }
     if (window.location.pathname !== "/admin" && wishlistData[0] === 'init') {
       InitData();
+      console.log("init complete")
     }
-    console.log("init complete")
   }, []);
 
   const [searchBoxValue, setSearchBoxValue] = useState('')

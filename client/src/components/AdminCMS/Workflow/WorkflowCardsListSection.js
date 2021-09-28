@@ -28,7 +28,7 @@ const WorkflowCardsListSection = ({list, currentEntryId, category, cardClick}) =
                     name={`wfCard--${category}`}
                     value={wfTicket["id"]}
                   >
-                    {wfTicket["affectedEntry"]}
+                    {wfTicket["affectedEntry"]} ({wfTicket["owner"]})
                   </p>
                   <div className="cardTags">
                     {!wfTicket['resolved'] && wfTicket['isPriority'] && <span>❗</span>}

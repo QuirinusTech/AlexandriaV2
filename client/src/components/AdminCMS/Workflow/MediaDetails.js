@@ -28,6 +28,10 @@ const MediaDetails = ({ currentEntry, adminActiveMode }) => {
           <h4 className="highlightH4">Current Entry</h4>
           <p>{currentEntry["affectedEntry"]}</p>
         </div>
+        <div>
+          <h4 className="highlightH4">Owner</h4>
+          <p>{currentEntry["owner"]}</p>
+        </div>
         <div className={
               currentEntry["resolved"]
                 ? "WorkflowItemStatusText Resolved"

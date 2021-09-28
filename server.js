@@ -84,6 +84,19 @@ app.post('/userUpdate', verifyToken, async (req, res) => {
   res.json(response)
 })
 
+app.post('/verifyAuth', verifyToken, async (req, res) => {
+  
+  console.log('%cserver.js line:89 req.body', 'color: #007acc;', req.body);
+  console.log('%cserver.js line:89 res.locals', 'color: #007acc;', res.locals);
+
+
+  if (req.body.username === res.locals.username) {
+    console.log('verifyAuth user: ', res.locals.username)
+  }
+  res.json({'response': 'success', locals: res.locals})
+
+})
+
 app.post('/imdbidlist', verifyToken, async (req, res) => {
   const newObj = req.body;
   console.log(newObj)

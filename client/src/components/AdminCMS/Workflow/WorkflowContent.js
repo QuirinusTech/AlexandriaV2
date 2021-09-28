@@ -166,15 +166,19 @@ function WorkflowContent({
         }).then(res => res.json()).then(data =>{
           if (data['success']) {
             let newEntry = data['payload']
-            setAdminListWishlist(prevState => {
-              return prevState.map(entry => {
-                if (entry['id'] !== newEntry['id']) {
-                  return entry
-                } else {
-                  return newEntry
-                }
+            try {
+              setAdminListWishlist(prevState => {
+                return prevState.map(entry => {
+                  if (entry['id'] !== newEntry['id']) {
+                    return entry
+                  } else {
+                    return newEntry
+                  }
+                })
               })
-            })
+            } catch (error) {
+              console.log(error.message);              
+            }
             deleteTicket(newEntry['id']);
             getNextTicket();
           } else {

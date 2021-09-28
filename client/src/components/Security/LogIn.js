@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom"
 import AlexOGLoader from "../Loaders/AlexOGLoader"
-import Cookies from "js-cookie";
 
 
 function LogIn({setIsLoggedIn, isRestricted, setIsRestricted, isLoggedIn, errorEncountered, setErrorEncountered}) {
@@ -41,12 +40,8 @@ function LogIn({setIsLoggedIn, isRestricted, setIsRestricted, isLoggedIn, errorE
 
   useEffect(() => {
     function onemorecheck() {
-      console.log("isLoggedIn: ",isLoggedIn)
-      console.log('JWT: ', Cookies.get("jwt"))
+      console.log("isLoggedIn: ", isLoggedIn)
       console.log('errorEncountered: ', errorEncountered)
-      if (Cookies.get("jwt") === null || Cookies.get("jwt") === undefined) {
-        setIsLoggedIn(false)
-      }
       if (errorEncountered) {
         setIsLoggedIn(false)
       }

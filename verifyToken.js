@@ -11,6 +11,7 @@ async function verifyToken(req, res, next) {
       res.status(response.responsecode).json(response).end()
     } else {
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        console.log('%cverifyToken.js line:14 err', 'color: #007acc;', err);
         if (err) {
           const response = createErrorResponseObject("horse")
           res.status(response.responsecode).json(response).end()

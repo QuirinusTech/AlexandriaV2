@@ -23,7 +23,7 @@ function ProgressBar({ item }) {
     const ProgressBarSection = ({status, valLeft, valWidth}) => {
       return (
         <div
-            key={item['id'] + "_progressBarSection_div" + status + "_" + item['progress'][status]}
+            key={item['id'] + "_progressBarSection_div" + status + "_" + item['progress'][status] + valLeft + valWidth}
             style={{
               left: valLeft.toString() + "%",
               width: valWidth.toString() + "%"

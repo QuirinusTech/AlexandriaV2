@@ -4,7 +4,7 @@ import LinksList from "./LinksList"
 function LinkGenerator({ currentEntry }) {
 
 
-  const [sortBy, setSortBy] = useState("seeds");
+  const [sortBy, setSortBy] = useState("seeders");
  
   return (<>
     <div className="linkGenerator">
@@ -13,7 +13,7 @@ function LinkGenerator({ currentEntry }) {
         <h4>Settings</h4>
         <div>
           <p style={{color: "white"}}>Sort by</p>
-        <label className={sortBy === "seeds" ? "adminButton adminButton--hover" : "adminButton"}>
+        <label className={sortBy === "seeders" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
             name="sortBy"
@@ -21,7 +21,7 @@ function LinkGenerator({ currentEntry }) {
             checked={sortBy === "seeds"}
             onChange={(e)=> {setSortBy(e.target.value)}}
           />
-          Number of Seeds
+          Number of Seeders
         </label>
         <label className={sortBy === "size" ? "adminButton adminButton--hover" : "adminButton"}>
           <input

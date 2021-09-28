@@ -1,5 +1,6 @@
 import MessageEntryTemplate from "./MessageEntryTemplate";
 import { useState } from "react";
+import BufferingLoader from "../../Loaders/BufferingLoader";
 
 function MessageCMS({
   adminListNotifications,
@@ -9,6 +10,7 @@ function MessageCMS({
   allPossibleStatuses
 }) {
   function MsgTable({ adminListNotifications }) {
+    const [loading, setLoading] = useState(false)
     const [messageList, setMessageList] = useState(() => {
       let newList = adminListNotifications.filter(message => message['id'] !== 'placeholder')
       newList.forEach(element => {
@@ -40,17 +42,35 @@ function MessageCMS({
       // delete from db
       const response = await fetch("/Admin/MsgCentre/deleteBulk", {
         method: "POST",
-        body: JSON.stringify(bulkDelete)
+        body: JSON.stringify(bulkDelete),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' }
       }).then(res => res.json());
 
       // delete from notificationsList
-      setAdminListNotifications(response);
-    }
+      setMessageList(response);
+    } 
 
-    function deleteMessage(e) {
-      setAdminListNotifications(prevState =>
-        prevState.filter(message => message["id"] !== e.target.name)
-      );
+    async function deleteMessage(e) {
+      setLoading(true)
+      const data = {id: e.target.name}
+      console.log('%cMessageCMS.js line:56 data', 'color: #007acc;', data);
+
+      const response = await fetch("/Admin/MsgCentre/delete", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+      }).then(res => res.json());
+
+      if (response['success']) {
+        try {
+          setMessageList(prevState =>
+            prevState.filter(message => message["id"] !== e.target.name)
+          );
+        } catch (error) {
+          console.log(error.message);          
+        }
+      }
+      setLoading(false)
     }
 
     function handleTick(e) {
@@ -66,7 +86,7 @@ function MessageCMS({
       setMessageList(obj);
     }
 
-    return (
+    return loading ? <BufferingLoader /> : (
       <table className="adminTable">
         <thead>
           <tr className="adminTableHeadRow">

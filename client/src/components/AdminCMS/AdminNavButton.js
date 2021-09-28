@@ -27,13 +27,13 @@ const AdminNavButton = ({
           <motion.h2 className={navBarSection.modes.length > 0 ? "shiftme" : 'doNotShift'} initial={{ x: 0, y: 0, duration: 0.1 }} animate={{ x: "-25px", y: "10px" }} exit={{ x: 0, y: "-" + navBarSection.modes.length * 100 + 100 + "%", duration: 0.1 }} key={navBarSection.title}>
             {navBarSection.title}
           </motion.h2>
-          <div key={navBarSection.task}>
+          <div key={navBarSection.task+"_navBarSection_div"}>
 
             {navBarSection.modes.length > 0 && <AnimatePresence initial={true}>
               {navBarSection.modes.map((mode, index) => {
                 return (
                   <motion.button
-                    key={mode.modeName}
+                    key={mode.modeName+"_navBarSection_btn"}
                     initial={{
                       opacity: 0,
                       x: "-" + ((index + 1) * 50).toString() + "px",

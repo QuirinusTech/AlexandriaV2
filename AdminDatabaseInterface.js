@@ -1,5 +1,5 @@
 const globalvars = require('./Classes/globals')
-const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem, notifyuser} = require('./firebase')
+const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem, notifyUser, adminDelete } = require('./firebase')
 
 async function workFlowTicketParser(entry) {
   // console.log('%cAdminDatabaseInterface.js line:5 entry', 'color: #007acc;', entry);
@@ -25,7 +25,7 @@ async function workFlowTicketParser(entry) {
 
   let newStatus = newStatusRouter[entry['adminmode']][entry['actionType']]
   if (newStatus !== null) {
-      await notifyuser({
+      await notifyUser({
       "id": entry['id'] + "_notification",
       "messageType": "status",
       "customMessageContent": '',
@@ -116,8 +116,8 @@ async function adminDatabaseInterface(department, operation, data) {
             break;
           case "DELETE":
             // delete entry
-            let {id} = data
-            outcome = await deleteDocFromWishlist(id)
+            console.log('%cAdminDatabaseInterface.js line:119 data', 'color: #007acc;', data);
+            outcome = await adminDelete(department, data)
             if (outcome !== "fail") {
               payload = outcome
               success = true
