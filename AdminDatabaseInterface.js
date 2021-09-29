@@ -24,38 +24,57 @@ async function workFlowTicketParser(entry) {
   }
 
   let newStatus = newStatusRouter[entry['adminmode']][entry['actionType']]
-  if (newStatus !== null) {
-      await notifyUser({
-      "id": entry['id'] + "_notification",
-      "messageType": "status",
-      "customMessageContent": '',
-      "entryStatusUpdate": newStatus,
-      "usersVis": {
-        [entry['owner']]: true
-      },
-      "affectedEntry": entry['affectedEntry'],
-      'mailed': false
-    })
-  }
 
-  if (newStatus !== null && entry['mediaType'] === 'series') {
-    let episodesListObj = entry['outstanding']
-    let episodesObj = {}
-    Object.keys(episodesListObj).forEach(season => {
-      episodesObj[season] = {}
-      episodesListObj[season].forEach(episode => {
-        episodesObj[season][episode] = newStatus
+  if (newStatus !== null) {
+    let titleString = entry['affectedEntry']
+    let newEntry = {}
+    if (entry['mediaType'] === 'movie') {
+      newEntry = await updateWishlistItem(entry['affectedEntryId'], {'status': newStatus})
+    } else if (entry['mediaType'] === 'series') {
+
+      let episodesListObj = entry['outstanding']
+      let episodesObj = {}
+      Object.keys(episodesListObj).forEach(season => {
+        episodesObj[season] = {}
+        episodesListObj[season].forEach(episode => {
+          episodesObj[season][episode] = newStatus
+        })
       })
-    })
-    // console.log('%cAdminDatabaseInterface.js line:37 episodesObj', 'color: #007acc;', episodesObj);
-    let newEntry = await updateEpisodesObj(entry['affectedEntryId'], episodesObj)
+      newEntry = await updateEpisodesObj(entry['affectedEntryId'], episodesObj)
+
+      let seasonsArr = Object.keys(outstanding)
+      let sf = Math.min(...seasonsArr)
+      let st = Math.max(...seasonsArr)
+      let sfEpArr = Object.keys(outstanding[sf.toString()])
+      let stEpArr = Object.keys(outstanding[st.toString()])
+      let ef = Math.min(...sfEpArr)
+      let et = Math.max(...stEpArr)
+
+      sf = parseInt(sf) < 10 ? "S0" + sf : "S" + sf
+      st = parseInt(st) < 10 ? "S0" + st : "S" + st
+      ef = parseInt(ef) < 10 ? "E0" + ef : "E" + ef
+      et = parseInt(et) < 10 ? "E0" + et : "E" + et
+
+      titleString += " (" + sf + ef + " " + st + et + ")"
+      titleString += ` (${sf+ef} ${st+et})`
+    }
+
     if (newEntry === 'error') {
       return 'error'
     } else {
+      await notifyUser({
+        "id": entry['id'] + "_notification",
+        "messageType": "status",
+        "customMessageContent": '',
+        "entryStatusUpdate": newStatus,
+        "usersVis": {
+          [entry['owner']]: true
+        },
+        "affectedEntry": titleString,
+        'mailed': false
+      })
       return newEntry
     }
-  } else if (entry['mediaType'] === 'movie') {
-    let newEntry = await updateWishlistItem(entry['affectedEntryId'], {'status': newStatus})
   } else {
     return null
   }

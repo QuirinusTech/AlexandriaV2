@@ -631,6 +631,25 @@ async function notifyAdmin(status, title, event) {
 }
 
 async function notifyUser(message) {
+  
+  // check for duplicates
+  let allMessages = []
+  const snapshot = await notificationsRef.get();
+  snapshot.forEach((doc) => allMessages.push(doc.data()))
+  
+  let flaggedId = ''
+  allMessages = allMessages.forEach(msg => {
+    if (msg['affectedEntry'] === message['affectedEntry']) {
+      flaggedId = msg['id']
+    }
+  })
+
+  // duplicate found: delete
+  if (flaggedId !== '') {
+    await notificationsRef.doc(flaggedId).delete()
+  }
+
+  // set new Message
   message['mailed'] = false;
   const res = await notificationsRef.doc(message['id']).set(message).then(()=> "success").catch(err => err)
   return res
@@ -909,13 +928,17 @@ async function adminBulkFunction(department, data, operation) {
 
     let operationString = operation.slice(0,6).toUpperCase()
     let collectionString = router[department.toUpperCase()]
-    // console.log('%cfirebase.js line:852 operationString', 'color: #007acc;', operationString);
-    // console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
+    console.log('%cfirebase.js line:852 operationString', 'color: #007acc;', operationString);
+    console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
 
     data.forEach(entry => {
-      const entryref = db.collection(collectionString).doc(entry['id'])
+      if (typeof entry === 'string') {
+        const entryref = db.collection(collectionString).doc(entry)
+      } else {
+        const entryref = db.collection(collectionString).doc(entry['id'])
+      }
         if (operationString === "UPDATE") {batch.update(entryref, entry)}
-        if (operationString === "DELETE") {batch.delete(entryref, entry)}
+        if (operationString === "DELETE") {batch.delete(entryref)}
       })
     await batch.commit();
     return "success"

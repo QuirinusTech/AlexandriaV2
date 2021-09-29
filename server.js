@@ -154,7 +154,7 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
   const newObj = req.body;
-  let expirationMultiplier = 1
+  let expirationMultiplier = 7
   console.log("Test mode: ", envs.test)
   if (envs.test === true) {
     console.log(newObj)
