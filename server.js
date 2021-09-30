@@ -179,7 +179,8 @@ app.post('/login', async (req, res) => {
           "username": dbUserData.username,
           is_admin: dbUserData.privileges["is_admin"],
           can_add: dbUserData.privileges["can_add"],
-          is_active_user: dbUserData.privileges["is_active_user"]
+          is_active_user: dbUserData.privileges["is_active_user"],
+          displayName: dbUserData.details.name
       }, envs.JWT_SECRET_KEY, {
         expiresIn: (24 * 60 * 60 * expirationMultiplier)
       });

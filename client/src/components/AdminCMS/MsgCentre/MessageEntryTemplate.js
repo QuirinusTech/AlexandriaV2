@@ -33,10 +33,17 @@ function MessageEntryTemplate({
           checked={message["checked"]}
         />
       </td>
-      <td>{message["id"]}</td>
+      <td>
+      
+      <details className="darkDetails">
+      <summary>ID</summary>
+      {message["id"]}
+      </details>
+      
+      </td>
       <td>{message["affectedEntry"]}</td>
-      <td>{message["messageType"]}</td>
-      <td>{message["messageType"] === "custom" ? message["customMessageContent"] : message['entryStatusUpdate']}</td>
+      <td>{message["messageType"] === "custom" ? "custom" : "Status: " + message['entryStatusUpdate']}</td>
+      <td>{message["customMessageContent"]}</td>
       <td>
         <details className="darkDetails">
           <summary className="adminButton adminButton--small">Visibility</summary>

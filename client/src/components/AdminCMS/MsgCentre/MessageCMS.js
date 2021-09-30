@@ -33,12 +33,16 @@ function MessageCMS({
 
     async function bulkFunctionDelete() {
       let bulkDelete = [];
+      let remaining = []
       messageList.forEach(message => {
         if (message["checked"]) {
           bulkDelete.push(message["id"]);
+        } else {
+          remaining.push(message)
         }
       });
 
+      setLoading(true)
       // delete from db
       const response = await fetch("/Admin/MsgCentre/deleteBulk", {
         method: "POST",
@@ -46,8 +50,13 @@ function MessageCMS({
         headers: { 'Content-type': 'application/json; charset=UTF-8' }
       }).then(res => res.json());
 
+      if (!response['success']) {
+        alert('fail')
+      }
+
       // delete from notificationsList
-      setMessageList(response);
+      setMessageList(remaining);
+      setLoading(false)
     } 
 
     async function deleteMessage(e) {
@@ -94,7 +103,7 @@ function MessageCMS({
             <th>ID</th>
             <th>Title</th>
             <th>Type</th>
-            <th>Content</th>
+            <th>Content / Affected Episodes</th>
             <th>Visibility</th>
             <th>Edit</th>
             <th>Delete</th>

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const TrMovie = ({ entry, headers, setEditableEntry, isFiltered }) => {
   return (
     <AnimatePresence initial={true} exitBeforeEnter={true}>
-    <motion.tr
+    <tr
       className={"adminTableTr adminTableTr_" + entry["status"]}
       style={isFiltered ? { display: "none" } : {}}
       key={entry["id"]}
@@ -63,7 +63,7 @@ const TrMovie = ({ entry, headers, setEditableEntry, isFiltered }) => {
             );
         }
       })}
-    </motion.tr>
+    </tr>
     </AnimatePresence>
   );
 };

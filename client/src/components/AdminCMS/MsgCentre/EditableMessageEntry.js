@@ -74,11 +74,18 @@ function EditableMessageEntry({
 
   if (loading) {
     return <LoadingBar />
-  } else if (messageType === "custom") {
+  } else {
     return (
       <tr className="editableMsgTr" key={message["id"]}>
         <td>-</td>
-        <td>{message["id"]}</td>
+        <td>
+      
+      <details className="darkDetails">
+      <summary>ID</summary>
+      {message["id"]}
+      </details>
+      
+      </td>
         <td>
           <select
             type="text"
@@ -86,6 +93,7 @@ function EditableMessageEntry({
             value={affectedTitle}
             onChange={handleChange}
           >
+            <option value="">None</option>
             {adminListWishlist.map(entry => {
               return (
                 <option key={entry["id"]} value={entry["name"]}>
@@ -106,6 +114,16 @@ function EditableMessageEntry({
             <option value="custom">custom</option>
             <option value="status">status</option>
           </select>
+          {messageType === 'status' &&
+          <select name="entryStatusUpdate" value={entryStatusUpdate} onChange={handleChange}>
+            {allPossibleStatuses.map(status => {
+              return (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              );
+            })}
+          </select>}
         </td>
         <td>
           <input
@@ -139,97 +157,13 @@ function EditableMessageEntry({
           </div>
         </td>
         <td>
-          <button className="adminButton adminButton--submit" onClick={editDone}>
+          <button className="adminButton adminButton--small adminButton--submit" onClick={editDone}>
             Update
           </button>
         </td>
         <td>
           <button
-            className="adminButton adminButton--cancel"
-            onClick={() => setEditable(false)}
-          >
-            Cancel
-          </button>
-        </td>
-      </tr>
-    );
-  } else {
-    return (
-      <tr className="editableMsgTr" key={message["id"]}>
-        <td>-</td>
-        <td>{message["id"]}</td>
-        <td>
-          <select
-            type="text"
-            name="affectedTitle"
-            value={affectedTitle}
-            onChange={handleChange}
-          >
-            {adminListWishlist.map(entry => {
-              return (
-                <option key={entry["id"]} value={entry["name"]}>
-                  {entry["name"]}
-                </option>
-              );
-            })}
-          </select>
-        </td>
-        <td>
-          <select
-            name="messageType"
-            value={messageType}
-            onChange={e => {
-              setMessageType(e.target.value);
-            }}
-          >
-            <option value="custom">custom</option>
-            <option value="status">status</option>
-          </select>
-        </td>
-        <td>
-          <select name="entryStatusUpdate" value={entryStatusUpdate} onChange={handleChange}>
-            {allPossibleStatuses.map(status => {
-              return (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              );
-            })}
-          </select>
-        </td>
-        <td>
-          <table className="usersVisTable">
-            <tbody>
-              {Object.keys(usersVis).map(user => {
-                return (
-                  <tr className="usersVisTableRow" key={user}>
-                    <td>
-                      <input
-                        className="checkbox_uservis"
-                        type="checkbox"
-                        name={user}
-                        value={usersVis[user]["username"]}
-                        checked={usersVis[user]}
-                        onChange={usersTickboxChange}
-                      />
-                    </td>
-                    <td>
-                      <label>{user}</label>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </td>
-        <td>
-          <button className="adminButton adminButton--submit" onClick={editDone}>
-            Update
-          </button>
-        </td>
-        <td>
-          <button
-            className="adminButton adminButton--cancel"
+            className="adminButton adminButton--small adminButton--cancel"
             onClick={() => setEditable(false)}
           >
             Cancel
@@ -238,5 +172,97 @@ function EditableMessageEntry({
       </tr>
     );
   }
+  //  else {
+  //   return (
+  //     <tr className="editableMsgTr" key={message["id"]}>
+  //       <td>-</td>
+  //       <td>
+      
+  //     <details className="darkDetails">
+  //     <summary>ID</summary>
+  //     {message["id"]}
+  //     </details>
+      
+  //     </td>
+  //       <td>
+  //         <select
+  //           type="text"
+  //           name="affectedTitle"
+  //           value={affectedTitle}
+  //           onChange={handleChange}
+  //         >
+  //           {adminListWishlist.map(entry => {
+  //             return (
+  //               <option key={entry["id"]} value={entry["name"]}>
+  //                 {entry["name"]}
+  //               </option>
+  //             );
+  //           })}
+  //         </select>
+  //       </td>
+  //       <td>
+  //         <select
+  //           name="messageType"
+  //           value={messageType}
+  //           onChange={e => {
+  //             setMessageType(e.target.value);
+  //           }}
+  //         >
+  //           <option value="custom">custom</option>
+  //           <option value="status">status</option>
+  //         </select>
+  //       </td>
+  //       <td>
+  //         <select name="entryStatusUpdate" value={entryStatusUpdate} onChange={handleChange}>
+  //           {allPossibleStatuses.map(status => {
+  //             return (
+  //               <option key={status} value={status}>
+  //                 {status}
+  //               </option>
+  //             );
+  //           })}
+  //         </select>
+  //       </td>
+  //       <td>
+  //         <table className="usersVisTable">
+  //           <tbody>
+  //             {Object.keys(usersVis).map(user => {
+  //               return (
+  //                 <tr className="usersVisTableRow" key={user}>
+  //                   <td>
+  //                     <input
+  //                       className="checkbox_uservis"
+  //                       type="checkbox"
+  //                       name={user}
+  //                       value={usersVis[user]["username"]}
+  //                       checked={usersVis[user]}
+  //                       onChange={usersTickboxChange}
+  //                     />
+  //                   </td>
+  //                   <td>
+  //                     <label>{user}</label>
+  //                   </td>
+  //                 </tr>
+  //               );
+  //             })}
+  //           </tbody>
+  //         </table>
+  //       </td>
+  //       <td>
+  //         <button className="adminButton adminButton--submit" onClick={editDone}>
+  //           Update
+  //         </button>
+  //       </td>
+  //       <td>
+  //         <button
+  //           className="adminButton adminButton--cancel"
+  //           onClick={() => setEditable(false)}
+  //         >
+  //           Cancel
+  //         </button>
+  //       </td>
+  //     </tr>
+  //   );
+  // }
 }
 export default EditableMessageEntry;

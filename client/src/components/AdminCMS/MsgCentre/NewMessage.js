@@ -297,18 +297,18 @@ function activatePopup(heading, msgs, showOk, warn = false) {
         )}
       </div>
 
-      {messageType === "custom" && (
+
         <div className="flexdr w70perc" id="manual_message_custom_text_div">
           <textarea
             type="text"
             id="admin_manual_message"
             name="customMessageContent"
-            placeholder="Custom message"
+            placeholder={messageType === "status" ? "Affected Episodes in format: (S01E01 - S01E01)" : "Custom message"}
             value={customMessageContent}
             onChange={e => setCustomMessageContent(e.target.value)}
           />
         </div>
-      )}
+
 
       <div className="NewMessageEntrySelectRow">
 
@@ -396,6 +396,7 @@ function activatePopup(heading, msgs, showOk, warn = false) {
             </p>
             <button
               onClick={resetFilters}
+              className="adminButton--small adminButton--cancel"
             >
               Reset Filters?
             </button>

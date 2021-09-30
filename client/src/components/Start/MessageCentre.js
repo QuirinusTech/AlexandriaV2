@@ -35,42 +35,16 @@ const MessageCentre = ({ notificationsList }) => {
             {statusMessages
               .filter(message => message["entryStatusUpdate"] === status)
               .map(message => {
-                if (
-                  message.hasOwnProperty("affectedEntryEpisodes") &&
-                  message["affectedEntryEpisodes"].length > 1
-                ) {
-                  let episodeListString = "(";
-                  message["affectedEntryEpisodes"].forEach((season, index) => {
-                    episodeListString += `${
-                      Object.keys(season)[0]
-                    } : E${Math.min(
-                      message["affectedEntryEpisodes"][season]
-                    )}-${Math.max(message["affectedEntryEpisodes"][season])}`;
-                    if (index !== message["affectedEntryEpisodes"].length - 1) {
-                      episodeListString += ", ";
-                    } else if (
-                      index ===
-                      message["affectedEntryEpisodes"].length - 1
-                    ) {
-                      episodeListString += ")";
-                    }
-                  });
-                  return (
-                    <li
-                      key={message["affectedEntry"]}
-                    >{`${message["affectedEntry"]} (${episodeListString})`}</li>
-                  );
-                } else {
-                  return (
+                return (
                     <li key={message["affectedEntry"]}>
-                      {message["affectedEntry"]}
+                      {message["affectedEntry"]} {message["customMessageContent"]}
                     </li>
                   );
                 }
-              })}
+              )}
           </ul>
         </div>
-      );
+      )
     });
     return MessagesDiv;
   };

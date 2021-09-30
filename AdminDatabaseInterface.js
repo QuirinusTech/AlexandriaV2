@@ -26,7 +26,7 @@ async function workFlowTicketParser(entry) {
   let newStatus = newStatusRouter[entry['adminmode']][entry['actionType']]
 
   if (newStatus !== null) {
-    let titleString = entry['affectedEntry']
+
     let newEntry = {}
     if (entry['mediaType'] === 'movie') {
       newEntry = await updateWishlistItem(entry['affectedEntryId'], {'status': newStatus})
@@ -42,11 +42,11 @@ async function workFlowTicketParser(entry) {
       })
       newEntry = await updateEpisodesObj(entry['affectedEntryId'], episodesObj)
 
-      let seasonsArr = Object.keys(outstanding)
+      let seasonsArr = Object.keys(entry['outstanding'])
       let sf = Math.min(...seasonsArr)
       let st = Math.max(...seasonsArr)
-      let sfEpArr = Object.keys(outstanding[sf.toString()])
-      let stEpArr = Object.keys(outstanding[st.toString()])
+      let sfEpArr = Object.keys(entry['outstanding'][sf.toString()])
+      let stEpArr = Object.keys(entry['outstanding'][st.toString()])
       let ef = Math.min(...sfEpArr)
       let et = Math.max(...stEpArr)
 
@@ -55,8 +55,7 @@ async function workFlowTicketParser(entry) {
       ef = parseInt(ef) < 10 ? "E0" + ef : "E" + ef
       et = parseInt(et) < 10 ? "E0" + et : "E" + et
 
-      titleString += " (" + sf + ef + " " + st + et + ")"
-      titleString += ` (${sf+ef} ${st+et})`
+      let affectedEntryEpisodesString = `(${sf+ef} - ${st+et})`
     }
 
     if (newEntry === 'error') {
@@ -65,12 +64,12 @@ async function workFlowTicketParser(entry) {
       await notifyUser({
         "id": entry['id'] + "_notification",
         "messageType": "status",
-        "customMessageContent": '',
+        "customMessageContent": affectedEntryEpisodesString,
         "entryStatusUpdate": newStatus,
         "usersVis": {
           [entry['owner']]: true
         },
-        "affectedEntry": titleString,
+        "affectedEntry": entry['affectedEntry'],
         'mailed': false
       })
       return newEntry

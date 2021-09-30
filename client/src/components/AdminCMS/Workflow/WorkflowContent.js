@@ -49,14 +49,15 @@ function WorkflowContent({
   function generateWfTicketEligibilityObj(entry) {
     let createTicket = false;
     let catlist = [];
-    if (entry['mediaType'] === "movie" && entry['status'] !== "complete") {
+    if (entry['mediaType'] === "movie") {
+      if (entry['status'] !== "copied") {
         catlist.push("movie");
         createTicket = true;
+      }
     } else if (entry["progress"] !== { copied: 100 }) {
       catlist.push("progress");
       createTicket = true;
-    }
-    if (entry["isOngoing"]) {
+    } else if (entry["isOngoing"]) {
       catlist.push("ongoing");
       createTicket = true;
     }

@@ -12,7 +12,7 @@ const TrSeries = ({entry, headers, setEditableEntry, isFiltered}) => {
 
   return (
     <AnimatePresence initial={true} exitBeforeEnter={true}>
-    <motion.tr
+    <tr
       className={"adminTableTr adminTableTr_"+entry['status']}
       style={isFiltered ? {display: "none"} : {}}
       key={entry["id"]}
@@ -96,7 +96,7 @@ const TrSeries = ({entry, headers, setEditableEntry, isFiltered}) => {
             return <td key={head + entry['id']}>{typeof(entry[head]) === "boolean" ? entry[head] ? "✔️" : "❌" : entry[head]}</td>
         }
       })}
-    </motion.tr>
+    </tr>
     </AnimatePresence>
   )
 

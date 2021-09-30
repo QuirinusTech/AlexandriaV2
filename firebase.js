@@ -932,14 +932,11 @@ async function adminBulkFunction(department, data, operation) {
     console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
 
     data.forEach(entry => {
-      if (typeof entry === 'string') {
-        const entryref = db.collection(collectionString).doc(entry)
-      } else {
-        const entryref = db.collection(collectionString).doc(entry['id'])
-      }
-        if (operationString === "UPDATE") {batch.update(entryref, entry)}
-        if (operationString === "DELETE") {batch.delete(entryref)}
-      })
+      let entryrefString = typeof entry === 'string' ? entry : entry['id']
+      const entryref = db.collection(collectionString).doc(entryrefString)
+      if (operationString === "UPDATE") {batch.update(entryref, entry)}
+      if (operationString === "DELETE") {batch.delete(entryref)}
+    })
     await batch.commit();
     return "success"
   } catch (error) {
