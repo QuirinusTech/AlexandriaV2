@@ -28,6 +28,7 @@ async function workFlowTicketParser(entry) {
   if (newStatus !== null) {
 
     let newEntry = {}
+    let affectedEntryEpisodesString = ''
     if (entry['mediaType'] === 'movie') {
       newEntry = await updateWishlistItem(entry['affectedEntryId'], {'status': newStatus})
     } else if (entry['mediaType'] === 'series') {
@@ -55,7 +56,7 @@ async function workFlowTicketParser(entry) {
       ef = parseInt(ef) < 10 ? "E0" + ef : "E" + ef
       et = parseInt(et) < 10 ? "E0" + et : "E" + et
 
-      let affectedEntryEpisodesString = `(${sf+ef} - ${st+et})`
+      affectedEntryEpisodesString = `(${sf+ef} - ${st+et})`
     }
 
     if (newEntry === 'error') {

@@ -21,7 +21,7 @@ const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
 const path = require('path')
 const app = express();
-console.log(envs.PORT)
+// console.log('PORT', envs.PORT)
 const port = envs.PORT || 5000;
 const verifyToken = require('./verifyToken')
 const verifyTokenAdmin = require('./verifyTokenAdmin')
@@ -369,7 +369,7 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
     let blacklistObj = null
     if (operation !== "R") {
       blacklistObj = {[data['blacklistData']['imdbid']] : data['blacklistData']}
-      console.log(blacklistObj)
+      console.log("blacklistObj", blacklistObj)
     }
     let response = await blacklistInterface(username, operation, blacklistObj)
     console.log('blacklistInterface', username, operation, data)
@@ -405,4 +405,14 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
   res.sendFile(path.join(__dirname, "../client/public/index.html"))
 }) */
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`Listening on port ${envs.test === 'true' ? port : '[redacted]'}`));
+
+app.get('/*', function(req, res) {
+  console.log('ping')
+  res.sendFile(path.join(__dirname, 'path/to/your/index.html'),
+  function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})

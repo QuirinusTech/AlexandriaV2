@@ -10,6 +10,7 @@ const Start = ({notifications}) => {
     <div>
     <div className="grid_main">
       <h2>Welcome, {displayName}!</h2>
+        
       
       {!is_active_user && <div className="grid5">
         <Link id="Go_Button_5" to="/login" className="go_button">

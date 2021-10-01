@@ -11,8 +11,8 @@ async function verifyToken(req, res, next) {
       res.status(response.responsecode).json(response).end()
     } else {
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-        console.log('%cverifyToken.js line:14 err', 'color: #007acc;', err);
         if (err) {
+          console.log('%cverifyToken.js line:14 err', 'color: #007acc;', err);
           const response = createErrorResponseObject("horse")
           res.status(response.responsecode).json(response).end()
         } else {
@@ -24,6 +24,7 @@ async function verifyToken(req, res, next) {
             res.locals.is_admin = decoded.is_admin;
             res.locals.can_add = decoded.can_add;
             res.locals.is_active_user = decoded.is_active_user;
+            res.locals.displayName = decoded.displayName;
             res.cookie('jwt', token, { httpOnly: true})
             next();
           }

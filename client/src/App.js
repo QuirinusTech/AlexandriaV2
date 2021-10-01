@@ -54,18 +54,18 @@ function App() {
           setIsRestricted(true)
           history.push('/login')
         }
-      } else {
+      } else if (res1.hasOwnProperty('response') && res1['response'] === 'success') {
         localStorage.setItem('username', res1['locals']['username']);
         localStorage.setItem("displayName", res1['locals']['displayName']);
         localStorage.setItem("is_admin", res1['locals']['is_admin']);
         localStorage.setItem("can_add", res1['locals']["can_add"]);
         localStorage.setItem("is_active_user", res1['locals']['is_active_user'])
         setIsLoggedIn(true)
+      } else {
+        console.log('%cApp.js line:65 kak', 'color: #007acc;');
       }
     }
-    if (!isLoggedIn) {
-      checkLoggedIn()
-    }
+    checkLoggedIn()
     if (window.location.pathname !== "/admin" && isLoggedIn) {
       init();
     }
@@ -95,10 +95,10 @@ async function getNotifications() {
     return result
 
 
-    .catch(e => {
-      console.log(e.message);
-      return "error";
-    });
+    // .catch(e => {
+    //   console.log(e.message);
+    //   return "error";
+    // });
 }
 
   async function dataSetup() {
@@ -134,7 +134,7 @@ async function getNotifications() {
         setLoadingStep('Getting status update')
         let notifications = await getNotifications();
         console.log('%cApp.js line:100 notifications', 'color: #007acc;', notifications);
-        if (notifications === "error") {
+        if (notifications === "error" || !Array.isArray(notifications)) {
           throw new Error("notifications");
         }
         setNotifications(notifications);
