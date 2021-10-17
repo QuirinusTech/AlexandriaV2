@@ -227,7 +227,13 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
 
 
 
-  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN}) => {
+  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN, setUserReportedError}) => {
+
+    const [inputFormVal, setInputFormVal] = useState(userReportedError)
+
+    function sync() {
+      setUserReportedError(inputFormVal)
+    }
 
     let findStringProps = Object.keys(optionsWidgetStringsEN).filter(obj => optionsWidgetStringsEN[obj]['fn'] === currentFunction)[0]
     let helpString = optionsWidgetStringsEN[findStringProps]['help']
@@ -306,7 +312,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
         {currentFunction === "Report Error" && (
           <>
             <p>You do not need to specify the issue. </p>
-            <input type="text" placeholder="Optional Error Message" name='userReportedError' value={userReportedError} onChange={(e)=>setUserReportedError(e.target.value)} />
+            <input type="text" placeholder="Optional Error Message" name='userReportedError' value={inputFormVal} onChange={(e)=>setInputFormVal(e.target.value)} onBlur={sync} />
           </>
         )}
           <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
@@ -334,12 +340,13 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
     )
   };
 
-  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags}) => {
+  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, setUserReportedError}) => {
     
     switch (currentFunction) {
       case null:
         return (
         <div className="wishListWidgetButtonRow">
+        {!adminMode && <button className="optionsWidgetHelpButton" onClick={()=>setShowHelpStrings(!showHelpStrings)}>?</button>}
         {Object.keys(optionsWidgetStringsEN).map((stringName, index) => {
           
           if (!optionsWidgetStringsEN[stringName]['applicable'][item['mediaType']]) {
@@ -431,6 +438,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
           setFormEpisodes={setFormEpisodes}
           handleChange={handleChange}
           invalidValueFlags={invalidValueFlags}
+          setUserReportedError={setUserReportedError}
          />;
     }
   };
@@ -438,7 +446,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   return (
     <>
     <div className="OptionsWidget">
-    {!adminMode && <button className="optionsWidgetHelpButton" onClick={()=>setShowHelpStrings(!showHelpStrings)}>?</button>}
+    
       <WidgetInsides
           currentFunction={currentFunction}
           item={item}
@@ -446,6 +454,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
           setFormEpisodes={setFormEpisodes}
           handleChange={handleChange}
           invalidValueFlags={invalidValueFlags}
+          setUserReportedError={setUserReportedError}
          />
     </div>
     </>

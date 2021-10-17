@@ -1,11 +1,20 @@
 import ListFilters from "./ListFilters"
-import {useState, useEffect } from "react"
+import {useState } from "react"
 import TableLayout from "./TableComponents/TableLayout";
 import GIFLoader from "../Loaders/GIFLoader";
 
 function Wishlist({wishlistData, setWishlistData, dataSetup}) {
+  console.log(wishlistData)
 
-  let usedStatuses = Array.from(new Set(wishlistData.map(entry => entry['status'])))
+
+  let usedStatuses = []
+  
+  try {
+    let localStatusCheck = Array.from(new Set(wishlistData.map(entry => entry['status'])))
+    usedStatuses = localStatusCheck
+  } catch (error) {
+    console.log(error.message)
+  }
 
   const [statusFilters, setStatusFilters] = useState(()=> {
     const stateobj = {}
@@ -15,18 +24,10 @@ function Wishlist({wishlistData, setWishlistData, dataSetup}) {
     return stateobj
   })
 
-  useEffect(() => {
-    const InitData = async () => {
-      await dataSetup()
-    }
-    if (window.location.pathname !== "/admin" && wishlistData[0] === 'init') {
-      InitData();
-      console.log("init complete")
-    }
-  }, []);
-
   const [searchBoxValue, setSearchBoxValue] = useState('')
-
+    if (!Array.isArray(wishlistData) || wishlistData[0] === 'init' || wishlistData[0] === undefined) {
+      return <><div className="noWishlistLoadedDiv"><span>If you do not see your wishlist, please click this button:</span> <button onClick={dataSetup}>Refresh</button></div></>
+    } else {
   return (
     <div>
       <h2>Wishlist</h2>
@@ -40,7 +41,7 @@ function Wishlist({wishlistData, setWishlistData, dataSetup}) {
           {searchBoxValue !== '' && <button onClick={()=>setSearchBoxValue('')}>Reset search</button>}
         </div>
         {wishlistData[0] === "init" && <GIFLoader />}
-        {wishlistData[0] !== "init" && (
+        {wishlistData[0] !== "init" && wishlistData[0] !== undefined && (
           <TableLayout
             searchBoxValue={searchBoxValue}
             setWishlistData={setWishlistData}
@@ -50,7 +51,7 @@ function Wishlist({wishlistData, setWishlistData, dataSetup}) {
         )}
       </div>
     </div>
-  );
+  )};
 }
 
 export default Wishlist

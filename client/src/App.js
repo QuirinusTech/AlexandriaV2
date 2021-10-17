@@ -36,6 +36,7 @@ function App() {
     const init = async () => {
       await dataSetup();
     };
+    let localLoginCheck = isLoggedIn
     const checkLoggedIn = async () => {
       let res1 = await fetch("/verifyAuth", {
         method: "POST",
@@ -55,6 +56,7 @@ function App() {
           history.push('/login')
         }
       } else if (res1.hasOwnProperty('response') && res1['response'] === 'success') {
+        localLoginCheck = true
         localStorage.setItem('username', res1['locals']['username']);
         localStorage.setItem("displayName", res1['locals']['displayName']);
         localStorage.setItem("is_admin", res1['locals']['is_admin']);
@@ -66,7 +68,7 @@ function App() {
       }
     }
     checkLoggedIn()
-    if (window.location.pathname !== "/admin" && isLoggedIn) {
+    if (window.location.pathname !== "/admin" && localLoginCheck) {
       init();
     }
     console.log("init complete");

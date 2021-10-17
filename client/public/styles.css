@@ -1410,6 +1410,15 @@ details {
     width: 100%;
 }
 
+.noWishlistLoadedDiv {
+    border: 2px solid darkorchid;
+    margin: 1vh;
+    padding: 2vh;
+    background: rgb(174 249 237 / 70%);
+    /* color: white; */
+    text-align: center;
+    border-radius: 2vh;
+}
 
 .OptionsWidget {
     margin: 30px 0px 0px 0px;
@@ -1430,7 +1439,7 @@ details {
     padding: 0;
     margin: 0;
     background: red;
-    /* margin-top: 0vw; */
+    margin-top: -24vh !important;
 }
 }
 .helpString {
