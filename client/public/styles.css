@@ -1454,6 +1454,9 @@ details {
 
 .optionsWidget__rangePickerForm > div > label {
     width: 100%;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
 }
 
 .optionsWidget__rangePickerForm > div > label > input {

@@ -305,6 +305,7 @@ async function userUpdate(dataObj) {
   let payload, success;
   try {
     const formData = dataObj["formData"];
+    console.log('%cfirebase.js line:308 formData', 'color: #007acc;', formData);
     const username = dataObj["username"];
     const { id, currentFunction, formEpisodes, userReportedError } = formData;
     let wishlistItem = await getSingleWishlistEntry(id);
@@ -321,7 +322,7 @@ async function userUpdate(dataObj) {
     }
     switch (currentFunction) {
       case "Report Error":
-        if (wishlistItem["mediaType"] === "movie" || formdata['selectAll']) {
+        if (wishlistItem["mediaType"] === "movie" || formData['selectAll']) {
           // set movie status to error
           await updateWishlistItem(id, {
             status: "error",
@@ -463,7 +464,7 @@ async function userUpdate(dataObj) {
         );
         break;
       case "Delete":
-        if (wishlistItem["mediaType"] === "movie" || formdata['selectAll']) {
+        if (wishlistItem["mediaType"] === "movie" || formData['selectAll']) {
           await deleteDocFromWishlist(wishlistItem["id"]);
           payload = "removed";
         } else {

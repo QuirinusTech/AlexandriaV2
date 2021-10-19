@@ -231,7 +231,7 @@ function ResultsTable({
                     {field === "sf" && <label>From</label>}
                     {field === "st" && <label>To</label>}
                     <div className="EpisodesPickFormRowColumn" key={field}>
-                      <label>Season </label>
+                      <label>{field[0] === "s" ? "Season" : "Episode"}</label>
                       <input
                         type="text"
                         name={field}

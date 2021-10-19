@@ -171,7 +171,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
         throw new Error("Invalid Values");
       }
 
-      var formData = {
+      let formData = {
         id: item["id"],
         currentFunction,
         formEpisodes,

@@ -48,16 +48,15 @@ const TableRows = ({
       <tr
         key={item["id"] + "_tr"}
         style={{
-          display: isFiltered ? "none" : 'table-row',
-          border: recentlyViewedBool && "1px solid green"
+          display: isFiltered ? "none" : 'table-row'
         }}
         id={item["id"]}
         className={trClassNameVar}
       >
         <td
-          className="colhead_mediaDetails"
+          className={recentlyViewedBool ? "colhead_mediaDetails flash" : "colhead_mediaDetails"}
           style={{
-            border: recentlyViewedBool && "1px solid green"
+            border: recentlyViewedBool && "2px solid #68ff68"
           }}
         ><h4>{item["name"]}</h4>
           <span>
