@@ -1,7 +1,4 @@
-CURRENT LOW-IMPACT ISSUES:
-// dataSetup on init
- - database isn't loaded until user manually clicks on Refresh.
- - Some text on the Admin Page is still in German
+Resolved Bugs:
 
 // Workflow
  - workflow message BulkMode on commit remove line "the page will reload after you commit". ✔️
@@ -21,8 +18,7 @@ CURRENT LOW-IMPACT ISSUES:
  - <button class="adminButton adminButton--small">Episode Management Console</button> Remove small button style ✔️
  - Episode Management Console scroll direction should be vertical, not horizontal ✔️
  - TR height should be consistent, regardless of the number of entries in the table. ✔️
-
-  - Fix OptionsWidget HelpString font colour in dark mode ✔️
+ - Fix OptionsWidget HelpString font colour in dark mode ✔️
 
 // Notification system overhaul.
  - usersvis => message recipient ✔️
