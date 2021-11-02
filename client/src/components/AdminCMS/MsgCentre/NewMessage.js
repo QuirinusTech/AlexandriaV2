@@ -155,7 +155,7 @@ function NewMessage({
     } else {
       setAffectedEpisodes([0, 0, 0, 0])
     }
-    setAffectedEntry(entry);
+    setAffectedEntry(entry['name']);
   }
 
   async function createNewMessage(e) {
@@ -164,25 +164,26 @@ function NewMessage({
       msgType,
       msgContent,
       msgRecipient,
-      affectedEntry: affectedEntry['name'],
+      affectedEntry,
       affectedEpisodes
     };
     console.log(messageVar)
     try {
-      setLoading(true);
-    const response = await fetch("/Admin/MsgCentre/New", {
-      method: "POST",
-      body: JSON.stringify(messageVar),
-      headers: { "Content-type": "application/json; charset=UTF-8" }
-    })
-      .then(res => res.json())
-    if (response["success"]) {
-      activatePopup('Success', [response['payload']], false, false)
-      reset()
-      // popup with confirmation
-    } else {
-      activatePopup('Failure', [response['payload']], false, true)
-    }
+        setLoading(true);
+      const response = await fetch("/Admin/MsgCentre/New", {
+        method: "POST",
+        body: JSON.stringify(messageVar),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+      })
+        .then(res => res.json())
+
+      if (response["success"]) {
+        activatePopup('Success', [response['payload']], false, false)
+        reset()
+        // popup with confirmation
+      } else {
+        activatePopup('Failure', [response['payload']], false, true)
+      }
     } catch (e) {
       activatePopup('Failure', [e.message], false, true)
       console.log('%cNewMessage.js line:198 error', 'color: #007acc;', e);
@@ -332,6 +333,9 @@ function NewMessage({
           >
             <option value="" hidden>
               Select a series / movie
+            </option>
+            <option value="">
+              None
             </option>
             {filteredWishlist.map(entry => {
               let titlestring = `${entry["name"]} - ${entry["imdbID"]} - (owner: ${entry["addedBy"]})`;

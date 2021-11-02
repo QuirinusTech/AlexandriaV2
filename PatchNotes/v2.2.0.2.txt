@@ -1,0 +1,7 @@
+Resolved bugs:
+ - Improved logging in Cronjob.js
+ - Fixed an issue preventing the creation of new messages due to incorrect population of values to the "affected Entry" field.
+ - corrected version numbers in index.html 
+
+Ongoing issues:
+ // Cronjob isn't deleting read messages correctly.

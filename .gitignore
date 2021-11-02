@@ -3,3 +3,4 @@ node_modules
 /client/src/components/Defunct
 .env
 alexandria-v2-89a5a-30e14e932b3d.json
+fakedata.js

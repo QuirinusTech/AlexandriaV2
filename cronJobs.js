@@ -19,8 +19,9 @@ async function assessOutstanding() {
       throw new Error('No unmailed or read messages. Task complete.')
     }
 
-    try {
-      if (unMailedNotifications.length > 0) {
+    if (unMailedNotifications.length > 0) {
+      console.log('Unmailed notifications subtask init')
+      try {
         let result = await NotificationUpdateEmail(unMailedNotifications)
         console.log('%ccronJobs.js NotificationUpdateEmail() result', result);
 
@@ -33,24 +34,36 @@ async function assessOutstanding() {
         if (!success) {
           throw new Error("Database interaction failure on adminDatabaseInterface('msgCentre', 'UPDATEBULK', unMailedNotifications).")
         }
+        } catch (error) {
+          console.log(error.message)
+        } finally {
+          console.log("unmailed notifications subtask complete")
+        }
       }
-      console.log("unmailed notifications subtask complete")
-    } catch (error) {
-      console.log(error.message)
-    }
 
-    try {
-      if (readMessages.length > 0) {
-        await adminDatabaseInterface("msgCentre", "BULKDELETE", readMessages.map(x => x['id']))
+    if (readMessages.length > 0) {
+      console.log('read notifications subtask init')
+        try {
+          const readMsgsTask = await adminDatabaseInterface("msgCentre", "BULKDELETE", readMessages.map(x => x['id']))
+          const { success2, payload2, outcome2} = readMsgsTask
+          if (!success2) {
+            throw new Error("Database interaction failure on adminDatabaseInterface(\"msgCentre\", \"BULKDELETE\", readMessages.map(x => x['id'])).")
+          }
+        } catch (error) {
+          console.log(error.message)
+        } finally {
+          console.log('read notifications purge subtask complete')
+        }
       }
-      console.log('read messages purged successfully')
-    } catch (error) {
-      console.log(error.message)
-    }
 
     console.log('%ccronJobs.js line:29 success', success);
     console.log('%ccronJobs.js line:30 payload', payload);
     console.log('%ccronJobs.js line:31 outcome', outcome);
+
+    console.log('%ccronJobs.js line:29 success2', success2);
+    console.log('%ccronJobs.js line:30 payload2', payload2);
+    console.log('%ccronJobs.js line:31 outcome2', outcome2);
+
   } catch (error) {
     console.log('%ccronJobs.js assessOutstanding() catch()', error.message);
   }
