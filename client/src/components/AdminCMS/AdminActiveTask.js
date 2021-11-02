@@ -18,7 +18,9 @@ function AdminActiveTask({
   refreshData,
   activatePopup,
   blacklist,
-  setBlacklist
+  setBlacklist,
+  PullAdminData,
+  dataLoadSuccess
 }) {
   const TaskContent = ({
     adminActiveTask,
@@ -33,7 +35,9 @@ function AdminActiveTask({
     refreshData,
     activatePopup,
     blacklist,
-    setBlacklist
+    setBlacklist,
+    PullAdminData,
+    dataLoadSuccess
   }) => {
     switch (adminActiveTask) {
       case "WishlistCMS":
@@ -68,6 +72,7 @@ function AdminActiveTask({
             adminActiveMode={adminActiveMode}
             setAdminActiveMode={setAdminActiveMode}
             activatePopup={activatePopup}
+            PullAdminData={PullAdminData}
           />
         );
       case "UserManager":
@@ -85,17 +90,18 @@ function AdminActiveTask({
         );
       default:
         return (
-          <div className="AdminCMSTitlePage--Welcome">
-            <h4 className="admin">Willkommen beim</h4>
-            <h3 className="admin">Content-Management-Tool für Administratoren</h3>
-            <h5 className="admin">Erstellt von Matthew Gird</h5>
+          <div className="adminCMSTitlePage--welcome">
+            <h4 className="admin">Welcome to the</h4>
+            <h3 className="admin">Administrator Content Management Tool</h3>
+            <h5 className="admin">Created by Matthew Gird</h5>
+            {adminActiveTask === null && <span>Data Load Status: {dataLoadSuccess ? "✔️" : "❌"}</span>}
           </div>
         );
     }
   };
 
   return (
-    <div className="AdminActiveTask">
+    <div className="adminActiveTask">
       <TaskContent
         adminActiveTask={adminActiveTask}
         adminListWishlist={adminListWishlist}
@@ -110,6 +116,8 @@ function AdminActiveTask({
         activatePopup={activatePopup}
         blacklist={blacklist}
         setBlacklist={setBlacklist}
+        PullAdminData={PullAdminData}
+        dataLoadSuccess={dataLoadSuccess}
       />
     </div>
   );

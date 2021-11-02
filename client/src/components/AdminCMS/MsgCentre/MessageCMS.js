@@ -101,10 +101,11 @@ function MessageCMS({
           <tr className="adminTableHeadRow">
             <th>Select</th>
             <th>ID</th>
-            <th>Title</th>
             <th>Type</th>
-            <th>Content / Affected Episodes</th>
-            <th>Visibility</th>
+            <th>Content</th>
+            <th>Affected Title</th>
+            <th>Affected Episodes</th>
+            <th>Recipient</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>

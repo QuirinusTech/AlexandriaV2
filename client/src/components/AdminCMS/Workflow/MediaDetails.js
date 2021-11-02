@@ -24,9 +24,13 @@ const MediaDetails = ({ currentEntry, adminActiveMode }) => {
           <h4 className="highlightH4">Category</h4>
           <p>{currentEntry["category"]}</p>
         </div>
+        {currentEntry['category'] === 'postponed' && <div>
+          <h4 className="highlightH4">Release Date</h4>
+          <p>{currentEntry["imdbData"]['Released']}</p>
+        </div>}
         <div>
           <h4 className="highlightH4">Current Entry</h4>
-          <p>{currentEntry["affectedEntry"]}</p>
+          <p className="imdbLinkExternal" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]}</p>
         </div>
         <div>
           <h4 className="highlightH4">Owner</h4>

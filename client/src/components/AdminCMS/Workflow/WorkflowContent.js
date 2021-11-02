@@ -10,22 +10,28 @@ function WorkflowContent({
   adminListWishlist,
   adminActiveMode,
   setAdminActiveMode,
-  setAdminListWishlist
+  setAdminListWishlist,
+  PullAdminData
 }) {
   const [wfTicketList, setWfTicketList] = useState(generateWfTicketList(adminListWishlist));
   const [currentEntry, setCurrentEntry] = useState(null);
   const [loading, setLoading] = useState(false);
   const [bulkAction, setBulkAction] = useState(localStorage.getItem('bulkAction') === 'true' ? true : false);
+  const [ignoreWarnings, setIgnoreWarnings] = useState(localStorage.getItem('ignoreWarnings') === 'true' ? true : false);
+
   const [pendingChanges, setPendingChanges] = useState({
     count: 0,
     list: []
   });
   const [displayWarning, setDisplayWarning] = useState(false)
   const [bulkCommitResults, setbulkCommitResults] = useState(null)
-  const [pendingWishlistChanges, setPendingWishlistChanges] = useState([])
-  if (localStorage.getItem('bulkAction') === null) {
-    localStorage.setItem('bulkAction', false)
-  }
+  // const [pendingWishlistChanges, setPendingWishlistChanges] = useState([])
+  // if (localStorage.getItem('bulkAction') === null) {
+  //   localStorage.setItem('bulkAction', false)
+  // }
+  // if (localStorage.getItem('ignoreWarnings') === null) {
+  //   localStorage.setItem('ignoreWarnings', false)
+  // }
 
   function cardClick(arg1) {
     let thisTicket = wfTicketList.filter(ticket => ticket["id"] === arg1)[0]
@@ -364,9 +370,9 @@ function WorkflowContent({
       alert('No changes to commit. \nOperation aborted.')
       return null
     } else {
-      if (!arg) {
+      if (!arg && !ignoreWarnings) {
         setDisplayWarning(true)
-      } else if (pendingChanges['count'] > 0 && arg) {
+      } else {
         setDisplayWarning(false)
         try {
           setLoading(true)
@@ -397,7 +403,7 @@ function WorkflowContent({
             successCount,
             pendingChangesList
           })
-          setPendingWishlistChanges(response['payload'])
+          // setPendingWishlistChanges(response['payload'])
         } catch (error) {
           console.log(error)
           alert(error.message)
@@ -409,20 +415,20 @@ function WorkflowContent({
     }
   }
 
-  function commitPendingWishlistChanges() {
-    setbulkCommitResults(null)
-    setLoading(true)
-    let currentWishlist = [...adminListWishlist]
-    pendingWishlistChanges.forEach(pendingItem => {
-      currentWishlist.forEach(currentItem => {
-        if (pendingItem['id'] === currentItem['id']) {
-          currentItem = pendingItem
-        }
-      })
-    })
-    setAdminListWishlist(currentWishlist)
-    setLoading(false)
-  }
+  // function commitPendingWishlistChanges() {
+  //   setbulkCommitResults(null)
+  //   setLoading(true)
+  //   let currentWishlist = [...adminListWishlist]
+  //   pendingWishlistChanges.forEach(pendingItem => {
+  //     currentWishlist.forEach(currentItem => {
+  //       if (pendingItem['id'] === currentItem['id']) {
+  //         currentItem = pendingItem
+  //       }
+  //     })
+  //   })
+  //   setAdminListWishlist(currentWishlist)
+  //   setLoading(false)
+  // }
 
   function resetTicket(id) {
     setPendingChanges(prevState => {
@@ -462,12 +468,22 @@ function WorkflowContent({
     }
   }
 
+  function ignoreWarningsToggleSwitch() {
+    localStorage.setItem('ignoreWarnings', !ignoreWarnings)
+    setIgnoreWarnings(!ignoreWarnings);
+  }
+
   const BulkActionWidget = ({ bulkAction, setBulkAction, pendingChanges }) => {
     return <div className={bulkAction ? "bulkActionButtonsContainer bulkActionButtonsContainer--engaged" : "bulkActionButtonsContainer"}>
       <label className="form-switch">
         <input type="checkbox" checked={bulkAction} onChange={bulkActionToggleSwitch} />
         <i></i>
         Bulk Action Mode
+      </label>
+      <label className="form-switch">
+        <input type="checkbox" checked={ignoreWarnings} onChange={ignoreWarningsToggleSwitch} />
+        <i></i>
+        Skip Warnings
       </label>
       {bulkAction && (
         <>
@@ -477,7 +493,7 @@ function WorkflowContent({
             <p>Pending Changes</p>
           
         </div>
-          <button disabled={pendingChanges["count"] === 0} className={pendingChanges["count"] === 0 ? "adminButton adminButton--small button--disabled" : "adminButton adminButton--small adminButton--submit"} onClick={()=>bulkActionCommit(false)} >Commit</button>
+          <button disabled={pendingChanges["count"] === 0} className={pendingChanges["count"] === 0 ? "adminButton adminButton--small button--disabled" : "adminButton adminButton--small adminButton--submit"} onClick={()=>bulkActionCommit()} >Commit</button>
           </>
       )}
     </div>;
@@ -559,10 +575,6 @@ function WorkflowContent({
               <span className="boldRedText">{count}</span> currently pending changes.
             </p>
             <p>
-              Once the reload is complete, it is possible that the Workflow Ticket
-              List may be reinitialised.
-            </p>
-            <p>
               It is highly recommended that you refresh the Wishlist after the commit.
             </p>
             <p className="boldRedText">
@@ -617,8 +629,8 @@ function WorkflowContent({
                 })}
               </ol>
             )}
-            <p>When you click on OK, the wishlist will update.</p>
-            <button onClick={commitPendingWishlistChanges}>Dismiss</button>
+            <p>Please click the below button to refresh the data.</p>
+            <button onClick={PullAdminData}>Refresh</button>
           </div>
         </div>
       )}
@@ -628,7 +640,7 @@ function WorkflowContent({
           setDisplayWarning={setDisplayWarning}
         />
       )}
-      <div className="WorkFlowContent">
+      <div className="workFlowContent">
         {adminActiveMode !== null && adminActiveMode.slice(0, 2) === "wf" && (
           <WorkflowCardsList
             wfTicketList={wfTicketList}

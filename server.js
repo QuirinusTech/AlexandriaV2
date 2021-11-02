@@ -12,7 +12,6 @@ const {
   passwordResetAttempt,
   getUserNotifications,
   getSingleWishlistEntry,
-  notifyAdmin,
   userUpdate,
   adminPasswordReset,
   uname
@@ -115,6 +114,22 @@ app.post('/getnotifications', verifyToken, async (req, res) => {
     } else {
       const notifications = await getUserNotifications(username)
       res.json(notifications)
+    }
+})
+
+app.post('/markread', verifyToken, async (req, res) => {
+  if (envs.test === 'true') {
+      console.log("markread")
+      res.status(200).json({"response": 'ok'})
+    } else {
+      if (req.body.username !== res.locals.username) {
+        const res1 = createErrorResponseObject(error.message)
+        res.status(403).json(res1)
+      } else {
+        const msgList = req.body.msgList;
+        const res2 = await markRead(msgList)
+        res.status(200).json(res2)
+      }
     }
 })
 

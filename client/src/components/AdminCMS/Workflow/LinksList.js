@@ -41,7 +41,7 @@ const LinksList = ({ currentEntry, sortBy }) => {
     ) : (
       <>
         <h4>Seasons</h4>
-        <div className="LinksList--Seasons">
+        <div className="linksList--seasons">
           {Object.keys(currentEntry["outstanding"]).map(season => {
             return <SingleLink season={season} episode={null} EorSorM="season" />;
           })}
@@ -51,10 +51,10 @@ const LinksList = ({ currentEntry, sortBy }) => {
           <summary className="adminButton">
             Episodes
           </summary>
-          <div className="LinksList--Episodes">
+          <div className="linksList--episodes">
           {Object.keys(currentEntry["outstanding"]).map(season => {
             return (
-              <div  className="LinksList--Episodes--SeasonDiv">
+              <div  className="linksList--episodes--seasonDiv">
                 <h5>{season}</h5>
                 <div>
                   {currentEntry["outstanding"][season].map(episode => {

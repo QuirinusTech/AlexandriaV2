@@ -52,7 +52,8 @@ module.exports = {
   adminPasswordReset,
   notifyUser,
   blacklistCleanup,
-  adminDelete
+  adminDelete,
+  markRead
 }
 
 
@@ -105,61 +106,28 @@ async function getUserByUsername(username) {
   }
 
 async function getUserNotifications(username) {
-  let allMessages = []
-  let thisUserMessages = []
-  let flaggedForDeletion = []
-  let serverUpdates = []
+  let messages = []
   try {
-    // load all messages
-    const snapshot = await notificationsRef.get();
-    snapshot.forEach((doc) => allMessages.push(doc.data()))
-    allMessages = allMessages.filter(msg => msg['id'] !== 'placeholder')
-
-    console.log('%cfirebase.js line:85 allMessages', 'color: #007acc;', allMessages);
-
-    allMessages.forEach(msg => {
-      if (msg !== null && msg !== undefined) {
-      // compile a list of all notifications relevant for this user
-        if (msg['usersVis'].hasOwnProperty(username) && msg['usersVis'][username]) {
-          thisUserMessages.push(msg)
-          msg['usersVis'][username] = false
-          serverUpdates.push(msg)
-        }
-        // identify messages that are no longer relevant (i.e. have been seen by all applicable users)
-        if (Object.keys(msg['usersVis']).filter(uname => msg['usersVis'][uname]).length < 1) {
-          flaggedForDeletion.push(msg)
-        }
-      }
-    })
-    try {
-      // clean up
-      if (flaggedForDeletion.length > 0 || serverUpdates.length > 0) {
-        const batch = db.batch();
-        if (flaggedForDeletion.length > 0) {
-          flaggedForDeletion.forEach(msg => {
-            const thisMsgRef = notificationsRef.doc(msg['id']);
-            batch.update(thisMsgRef, {usersVis: {...msg['usersVis'], [username]: false}});
-          })
-        }
-        if (serverUpdates.length > 0) {
-          serverUpdates.forEach(msg => {
-            const thisMsgRef = notificationsRef.doc(msg['id']);
-            batch.delete(thisMsgRef);
-          })
-        }
-        await batch.commit();
-        console.log('database notification cleanup successful')
-      }
-    } catch (error) {
-      console.log('%cfirebase.js line:100 error', 'color: #007acc;', error);      
-    }
-  } catch (error) {
-    console.log('%cfirebase.js line:103 error', 'color: #007acc;', error);
-  } finally {
-    // return finished listed
-    return thisUserMessages
+    const snapshot = await notificationsRef.where('msgRecipient', '=', username).get();
+    snapshot.forEach((doc) => messages.push(doc.data()))
+    console.log('%cfirebase.js line:85 messages', 'color: #007acc;', messages);
+    return messages
   }
+}
 
+async function markRead(msgList) {
+  try {
+    const batch = db.batch();
+    msgList.forEach(msgId => {
+      const entryref = notificationsRef.doc(msgId)
+      batch.update(entryref, {'read': true})
+    })
+    await batch.commit();
+    return {"success": true, "response": "success"}
+  } catch (error) {
+    console.log('%cfirebase.js line:128 error', 'color: #007acc;', error.message);
+    return error.message
+  }
 }
 
 async function blacklistInterface(username, operation, data) {
@@ -186,7 +154,7 @@ async function blacklistInterface(username, operation, data) {
 async function addUserToDatabase(user) {
     console.log("USER: ", user)
     const response = await usersRef.doc(user['username']).set(user)
-    await notifyAdmin("custom", "user", 'New User Account')
+    await notifyAdmin("custom", user['username'], 'New User Account @ ' + response['updateTime'])
     return response['updateTime']
   }
 
@@ -354,10 +322,20 @@ async function userUpdate(dataObj) {
           }
           payload = await updateEpisodesObj(id, episodesObj);
         }
+
+        let errorString = "User reported error with media"
+
+        if (userReportedError !== "") {
+          errorString += ": " + userReportedError
+        } else {
+          errorString += "."
+        }
+
         await notifyAdmin(
-          "error",
+          "custom",
           wishlistItem["name"],
-          "User reported error with media: " + userReportedError
+          errorString,
+          [sf, ef, st, et]
         );
         break;
       case "Edit Range":
@@ -416,9 +394,9 @@ async function userUpdate(dataObj) {
 
         if (prepend || append) {
           await notifyAdmin(
-            "new",
+            "status",
             wishlistItem["name"],
-            "New episodes added to existing entry."
+            "new"
           );
         }
 
@@ -458,9 +436,9 @@ async function userUpdate(dataObj) {
 
         payload = await updateWishlistItem(wishlistItem["id"], wishlistItem);
         await notifyAdmin(
-          "new",
+          "status",
           wishlistItem["name"],
-          "New episodes added to existing entry."
+          "new"
         );
         break;
       case "Delete":
@@ -555,10 +533,10 @@ async function userUpdate(dataObj) {
     // console.log(dataObj);
     success = false;
     payload = error.message;
-    await notifyAdmin("custom", error.message, {
+    await notifyAdmin("custom", error.message, JSON.stringify({
       error,
       dataObj
-    });
+    }));
   } finally {
     return { success, payload };
   }
@@ -612,20 +590,18 @@ async function unBlacklist(username, data) {
 /**
  * @param  {"status" || "custom"} status
  * @param  {affectedEntry} title
- * @param  {customMessageContent} event
+ * @param  {msgContent} event
  */
-async function notifyAdmin(status, title, event) {
-  const id = uuid.v4()
+async function notifyAdmin(msgType, title, contentOrStatus, episodes=[0,0,0,0]) {
   let newMessage = {
-    "id": id,
-    "messageType": status === "custom" ? "custom" : "status",
-    "customMessageContent": event,
-    "entryStatusUpdate": status,
-    "usersVis": {
-      "aegisthus": true
-    },
+    "id": uuid.v4(),
+    msgType,
+    "msgContent": contentOrStatus,
+    "msgRecipient": "aegisthus",
     "affectedEntry": title,
-    'mailed': false
+    "affectedEpisodes": episodes,
+    'mailed': false,
+    'read': false
   }
   const res = await notificationsRef.doc(id).set(newMessage).then(()=> "success").catch(err => err)
   return res
@@ -633,25 +609,30 @@ async function notifyAdmin(status, title, event) {
 
 async function notifyUser(message) {
   
-  // check for duplicates
-  let allMessages = []
-  const snapshot = await notificationsRef.get();
-  snapshot.forEach((doc) => allMessages.push(doc.data()))
-  
-  let flaggedId = ''
-  allMessages = allMessages.forEach(msg => {
-    if (msg['affectedEntry'] === message['affectedEntry']) {
-      flaggedId = msg['id']
-    }
-  })
+  // Duplicate checking of messages not necessary if msg originates from workflowTicketParser()
+  // for more info see final clause of WORKFLOWTICKETPARSER() in ADMINDATABASEINTERFACE module 
 
-  // duplicate found: delete
-  if (flaggedId !== '') {
-    await notificationsRef.doc(flaggedId).delete()
+  if (message.id.slice(-12) !== 'notification') {
+    // check for duplicates
+    let allMessages = []
+    const snapshot = await notificationsRef.get();
+    snapshot.forEach((doc) => allMessages.push(doc.data()))
+    
+    let flaggedId = ''
+    allMessages = allMessages.forEach(msg => {
+      if (msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient']) {
+        flaggedId = msg['id']
+      }
+    })
+
+    // duplicate found: delete
+    if (flaggedId !== '') {
+      await notificationsRef.doc(flaggedId).delete()
+    }
   }
 
+
   // set new Message
-  message['mailed'] = false;
   const res = await notificationsRef.doc(message['id']).set(message).then(()=> "success").catch(err => err)
   return res
 }
@@ -681,7 +662,7 @@ async function addToWishlist(username, data) {
     // createEmailNotification("admin", "new", "wishlistItem")
     const success = await db.collection("wishlist").doc(obj['id']).set(obj).then( ()=> { return "success" }  ).catch(err => {throw new Error(err)})
     if (success === "success") {
-      await notifyAdmin('new', obj['name'], 'New addition to wishlist')
+      await notifyAdmin('status', obj['name'], 'new')
       return {
         "success": true,
         "newEntry": obj
@@ -805,7 +786,7 @@ async function addEpisodesToWishlistItem(data) {
       return "fail"
     })
 
-    await notifyAdmin("new", wishlistEntry['name'], "Episodes added to existing entry.")
+    await notifyAdmin("status", wishlistEntry['name'], "new")
     return res === "success" ? {updated: wishlistEntry} : res
 }
 
@@ -828,23 +809,30 @@ async function adminNew(department, data) {
 
   try {
     if (department.toUpperCase() === 'WISHLIST') {
-      if (data.hasOwnProperty('createNotification')) {
-        if (data['createNotification']) {
-          const id = uuid.v4()
-          let newMessage = {
-            "id": id,
-            "messageType": "status",
-            "customMessageContent": "New Addition to Wishlist",
-            "entryStatusUpdate": data["status"],
-            "usersVis": {
-              [data['addedBy']]: true
-            },
-            "affectedEntry": data['name']
+      // check if user should be notified
+      try {
+        if (data.hasOwnProperty('createNotification')) {
+          if (data['createNotification']) {
+            let newMessage = {
+              id: uuid.v4(),
+              msgType: "status",
+              msgContent: data["status"],
+              msgRecipient: data['addedBy'],
+              affectedEntry: data['name'],
+              affectedEpisodes: data['mediaType'] === 'series' ? [data['sf'], data['ef'], data['st'], data['et']] : [0,0,0,0],
+              read: false,
+              mailed: false
+            }
+            await notifyUser(newMessage)
           }
-          await notifyUser(newMessage)
+          delete data['createNotification']
         }
-        delete data['createNotification']
+      } catch (error) {
+        console.log('Error creating notification for user: ', error.message)
+        let notifyAdminRes = await notifyAdmin('custom', 'internal', 'Error creating notification for user: ', error.message)
+        console.log('Admin notification status: ', notifyAdminRes)
       }
+
       let newDoc = await WishlistItem.setData(data)
       let WISHLISTresult = await wishlistRef.doc(newDoc['id']).set(newDoc).then(()=>"success").catch(err=>{
       throw new Error(err)
@@ -854,6 +842,7 @@ async function adminNew(department, data) {
     } else if (department.toUpperCase() === 'MSGCENTRE') {
       data['id'] = uuid.v4();
       data['mailed'] = false;
+      data['read'] = false;
       let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
       throw new Error(err)})
       return MSGCENTREresult

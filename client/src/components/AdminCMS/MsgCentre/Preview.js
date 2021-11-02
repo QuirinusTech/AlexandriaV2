@@ -7,20 +7,20 @@ function Preview({ adminListUsers, adminListNotifications }) {
 
   function updateList(e) {
     setSelectedUser(e.target.value);
-    let newList = []
-    adminListNotifications.forEach(notification => {
-      Object.keys(notification['usersVis']).forEach(user => {
-        if (user === e.target.value && notification['usersVis'][user] === true) {
-          newList.push(notification)
-        }
-      });
-    });
-    setNotificationListPreview(newList);
+    // let newList = []
+    // adminListNotifications.forEach(notification => {
+    //   Object.keys(notification['usersVis']).forEach(user => {
+    //     if (user === e.target.value && notification['usersVis'][user] === true) {
+    //       newList.push(notification)
+    //     }
+    //   });
+    // });
+    // setNotificationListPreview(newList);
+    setNotificationListPreview(adminListNotifications.filter(msg => msg['msgRecipient'] === e.target.value))
   }
 
-
   return (
-    <div className="MessageCentrePreview">
+    <div className="messageCentrePreview">
       <h3>Message Centre Preview</h3>
         <select
           className="adminButton msgCentreUserSelect"
@@ -42,7 +42,7 @@ function Preview({ adminListUsers, adminListNotifications }) {
         <h4>{selectedUser}</h4>
         </>
       )}
-      {selectedUser !== "" && <div className="SimulatedMessageCentre">
+      {selectedUser !== "" && <div className="simulatedMessageCentre">
         {notificationListPreview !== null && notificationListPreview.length > 0  && 
         <MessageCentre
           notificationsList={notificationListPreview}

@@ -3,7 +3,7 @@ import PNGLoader from "../Loaders/PNGLoader"
 function RefreshButtons({ refreshButtonsActivity, refreshData }) {
   return (
     <>
-    <div className="RefreshButtons">
+    <div className="refreshButtons">
       <button
         disabled={refreshButtonsActivity["wishlist"]}
         className={

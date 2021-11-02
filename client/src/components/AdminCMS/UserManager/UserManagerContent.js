@@ -35,18 +35,18 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
 
   async function passwordReset() {
     
-    let newPassword = window.prompt("Waehlen Sie ein neues Passwort fuer diesen Benutzer:")
-    let newPasswordConfirm = window.prompt("Bestaetigen Sie das Passwort:")
+    let newPassword = window.prompt("Choose a new password for this user:")
+    let newPasswordConfirm = window.prompt("Please confirm the password:")
 
     if (newPassword.length < 8) {
-      activatePopup('Achtung', ['Das neue Passwort ist zu kurz.', 'Es soll aus mindestens 8 Charakter bestehen.', 'Vorgang Abgebrochen.'], true, true)
+      activatePopup('Achtung', ['The new password is too short.', 'It should consist of at least 8 characters.', 'Aborted.'], true, true)
       return false
     }
 
     if (newPassword === '' || newPassword === null) {
-      activatePopup('', ['Vorgang Abgebrochen'], false, true)
+      activatePopup('', ['Aborted'], false, true)
     } else if (newPassword !== newPasswordConfirm) {
-      activatePopup('Achtung', ['Passwoerter stimmen nicht ueberein', 'Vorgang Abgebrochen'], false, true)
+      activatePopup('Warning', ['Passwords do not match.', 'Aborted'], false, true)
     } else {
       try {
         setLoading(true)
@@ -59,11 +59,11 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           console.log('%cUserManagerContent.js line:30 result', 'color: #007acc;', result);
           throw new Error(result['errormsg'])
         } else {
-          activatePopup('Erfolg', [`Das Passwort des Benutzer mit Benutzernamen "${currentUser['username']}" wurde erfolgreich geaendert.`], true)
+          activatePopup('Erfolg', [`The password of user "${currentUser['username']}" has been changed successfully.`], true)
         }
       } catch (error) {
         console.log('%cUserManagerContent.js line:41 error', 'color: #007acc;', error);
-        activatePopup('Achtung', [error.message], false, true)
+        activatePopup('Warning', [error.message], false, true)
       } finally {
         setLoading(false)
       }
@@ -95,9 +95,9 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           }
         })
         setLocalList(newUserList)
-        activatePopup('Erfolg', [`Das Konto wurde erfolgreich ${!user["privileges"]["is_active_user"] && "de"}aktiviert.`], false, false)
+        activatePopup('Erfolg', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false, false)
         } else {
-          throw new Error('Die beantragten Änderungen konnten nicht festgeschrieben werden.')
+          throw new Error('The requested changes could not be committed.')
         }
     } catch (error) {
       console.log('%cUserManagerContent.js line:51 error', 'color: #007acc;', error);
@@ -133,9 +133,9 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
         setLocalList(newList)
 
       } else {
-        throw new Error('Die beantragten Änderungen konnten nicht festgeschrieben werden.')
+        throw new Error('The requested changes could not be committed.')
       }
-      activatePopup('Erfolg', ['Die angeforderten Änderungen wurden erfolgreich in die Datenbank übernommen.'], false, false)
+      activatePopup('Erfolg', ['The requested changes could not be committed to the database.'], false, false)
       setDetailsEditable(false)
     } catch (err) {
       console.log('%c function commitChanges() err.message', 'color: #007acc;', err.message);
@@ -161,12 +161,12 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
             selectUser={selectUser}
             currentUser={currentUser}
           />
-        </div>
+        </div> 
 
-
+        {currentUser === null && (<h4 className="UMC-selectUserMessage">Select a user</h4>)}
         {adminActiveMode === 'userCMS' ? (
           <>
-          {currentUser !== null && 
+          {currentUser !== null &&
             (<>{detailsEditable ? 
               <UserDetailManager
                 currentUser={currentUser}
@@ -215,12 +215,12 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
 
 
 
-    <h3>User Manager</h3>
+    <h3>User Manager Console</h3>
     <Content
       blacklist={blacklist}
       setBlacklist={setBlacklist}
       usersList={localList}
-      currentUser={currentUser}
+      currentUser={currentUser} 
       setCurrentUser={setCurrentUser}
       commitChanges={commitChanges}
     />

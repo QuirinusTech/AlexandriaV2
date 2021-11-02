@@ -25,7 +25,7 @@ const UserDetailDashboard = ({
           exit={{ opacity: 0, x: 100 }}
         >
         <h4 className="highlightH4">Detail Dashboard</h4>
-          <div className="UMDetails--TopRow">
+          <div className="umDetails--topRow">
             <div>
               <details className="darkDetails">
                 <summary className="adminButton">User ID</summary>
@@ -38,7 +38,7 @@ const UserDetailDashboard = ({
             </div>
           </div>
 
-          <div className="UMDetails--Privileges">
+          <div className="umDetails--privileges">
             <h4>Privileges</h4>
             <div>
               <p>Can add</p>
@@ -56,7 +56,7 @@ const UserDetailDashboard = ({
             </div>
           </div>
 
-          <div className="UMDetails--Preferences">
+          <div className="umDetails--preferences">
             <h4>Preferences</h4>
             <div>
               <p>Language</p>
@@ -72,9 +72,9 @@ const UserDetailDashboard = ({
             </div>
           </div>
 
-          <details className="darkDetails" style={{ width: "100%" }}>
+          <details className="darkDetails" style={{ width: "90%" }}>
             <summary className="adminButton">User Details</summary>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "90%" }}>
               <div>
                 <p><b>Name:</b></p>
                 <p>{currentUser["details"]["name"]}</p>
@@ -85,7 +85,7 @@ const UserDetailDashboard = ({
             </div>
           </details>
 
-          <div className="UserManagerButtonsRow">
+          <div className="userManagerButtonsRow">
 {/* <button
   className="adminButton adminButton--cancel"
   onClick={() => setCurrentUser(null)}

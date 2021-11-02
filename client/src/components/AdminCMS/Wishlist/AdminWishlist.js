@@ -93,7 +93,7 @@ const AdminWishlist = ({
     switch (adminActiveMode) {
       case "wishlistList":
         return (
-          <div className="AdminWishlistMainDiv">
+          <div className="adminWishlistMainDiv">
             <h3 className="admin">Wishlist</h3>
             <div className="adminWishlistUtilities">
               <div className="adminSearchBoxContainer adminWishlistUtility">
@@ -132,7 +132,7 @@ const AdminWishlist = ({
                 <button className="adminButton adminButton--small adminButton--cancel" name="reset" onClick={filterChangeHandler}>Reset</button>
               </div>
             </div>
-            <div className="AdminWishlistContent" style={{height: "90vh", "overflowY": "scroll"}}>
+            <div className="adminWishlistContent" style={{maxHeight: "90vh", "overflowY": "scroll"}}>
               <AdminWishlistTable
                 searchBoxValue={searchBoxValue}
                 localList={localList}
@@ -148,7 +148,7 @@ const AdminWishlist = ({
         );
       case "wishlistNew":
         return (
-          <div className="AdminAddNewContainer">
+          <div className="adminAddNewContainer">
             <AdminAddNew
               adminListUsers={adminListUsers}
               adminListWishlist={adminListWishlist}

@@ -25,19 +25,19 @@ function WorkflowContent({ adminListWishlist, adminActiveMode, setAdminActiveMod
     console.log(arg1, arg2)
     let thisEntry = ""
     switch (arg1) {
-      case "wfCard--Error":
+      case "wfCard--error":
         thisEntry = wfListErrors.filter(wfObj => wfObj["id"] === arg2)[0];
         break;
-      case "wfCard--New":
+      case "wfCard--new":
         thisEntry = wfListNew.filter(wfObj => wfObj["id"] === arg2)[0];
         break;
-      case "wfCard--Postponed":
+      case "wfCard--postponed":
         thisEntry = wfListPostponed.filter(wfObj => wfObj["id"] === arg2)[0]
         break;
-      case "wfCard--Downloading":
+      case "wfCard--downloading":
         thisEntry = wfListDownloading.filter(wfObj => wfObj["id"] === arg2)[0]
         break;
-      case "wfCard--Complete":
+      case "wfCard--complete":
         thisEntry = wfListComplete.filter(wfObj => wfObj["id"] === arg2)[0]
         break;
       default:
@@ -440,7 +440,7 @@ function WorkflowContent({ adminListWishlist, adminActiveMode, setAdminActiveMod
         </div>
         <h4>- or -</h4>
                             <button
-        className="adminButton--Neutral"
+        className="adminButton--neutral"
         onClick={getNextTicket}
       >
         Get Next Entry
@@ -451,7 +451,7 @@ function WorkflowContent({ adminListWishlist, adminActiveMode, setAdminActiveMod
       )
     } else {
       return (
-        <div className="ActionableContent">
+        <div className="actionableContent">
             <WorkflowItemManager resolveTicket={resolveTicket} currentEntry={currentEntry} adminActiveMode={adminActiveMode} />
           </div>
       )
@@ -472,7 +472,7 @@ function WorkflowContent({ adminListWishlist, adminActiveMode, setAdminActiveMod
         getNextTicket={getNextTicket}
         setAdminActiveMode={setAdminActiveMode}
       />
-    <div className="WorkFlowContent">
+    <div className="workFlowContent">
 
 {adminActiveMode !== null && adminActiveMode.slice(0,2) === "wf" && (
       <WorkflowCardsList

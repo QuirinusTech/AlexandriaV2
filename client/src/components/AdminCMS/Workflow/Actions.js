@@ -1,6 +1,6 @@
 // function Actions({ resolveTicket, resolveTicketPartial, adminActiveMode, fullListState, disabled }) {
 
-function Actions({ resolveTicketPartial, fullListState, disabled }) {
+function Actions({ resolveTicketPartial, fullListState, disabled, adminActiveMode }) {
   // return (
   //   <div className="actions">
 
@@ -55,7 +55,7 @@ function Actions({ resolveTicketPartial, fullListState, disabled }) {
             className="adminButton adminButton--cancel"
             onClick={() => resolveTicketPartial("postpone", fullListState)}
           >
-            Postpone
+            {adminActiveMode === "wfDownload" ? "Postpone" : "Skip"}
           </button>
           <button
             value="fail"

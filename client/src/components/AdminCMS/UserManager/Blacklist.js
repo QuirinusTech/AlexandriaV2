@@ -160,7 +160,7 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
   }
 
 
-  return currentUser === null ? <h4>Select a user</h4> : (
+  return currentUser === null ? <></> : (
     <>
     <div className="blacklistManager">
       <h4 style={{textAlign: "center"}} className="highlightH4">Blacklist</h4>

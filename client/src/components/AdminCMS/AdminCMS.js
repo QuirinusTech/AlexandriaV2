@@ -5,8 +5,13 @@ import AdminActiveTask from "./AdminActiveTask";
 import RefreshButtons from "./RefreshButtons";
 import "./darkmode.css"
 import Popup from "../Popup"
+import {
+  useHistory
+} from "react-router-dom";
 
 function AdminCMS({setErrorPageContent}) {
+
+  const history = useHistory();
 
   const [adminActiveTask, setAdminActiveTask] = useState(null);
   const [adminListWishlist, setAdminListWishlist] = useState(null);
@@ -22,6 +27,7 @@ function AdminCMS({setErrorPageContent}) {
   const [adminActiveMode, setAdminActiveMode] = useState(null)
   const [loadingStep, setLoadingStep] = useState(null)
   const [blacklist, setBlacklist] = useState(null)
+  const [dataLoadSuccess, setDataLoadSuccess] = useState(false)
 
     const [popupContent, setPopupContent] = useState({
     isDismissable: false,
@@ -110,7 +116,17 @@ function AdminCMS({setErrorPageContent}) {
         method: "POST",
         body: 'quack'
       })
-        .then(res => res.json())
+        .then(res => {
+          console.log('%cAdminCMS.js line:119 res', 'color: #007acc;', res.status);
+          if (res.status === 403) {
+            history.push('/login')
+          } else {
+            if (res.status >= 200 && res.status <300) {
+              setDataLoadSuccess(true)
+            }
+            return res.json()
+          }
+          })
         .then(data => data['payload'])
         .catch(e => console.log(e))
       console.log('done calling db')
@@ -153,18 +169,18 @@ function AdminCMS({setErrorPageContent}) {
         <AdminNav loading={loading} setAdminActiveTask={setAdminActiveTask} adminActiveTask={adminActiveTask} adminActiveMode={adminActiveMode} setAdminActiveMode={setAdminActiveMode} />
         {loading ? (
 
-            <div className="AdminActiveTask">
-              <div className="AdminCMSTitlePage--Welcome">
-                <h4 className="admin">Willkommen beim</h4>
-                <h3 className="admin">Content-Management-Tool für Administratoren</h3>
-                <h5 className="admin">Erstellt von Matthew Gird</h5>
+            <div className="adminActiveTask">
+              <div className="adminCMSTitlePage--welcome">
+                <h4 className="admin">Welcome to the</h4>
+                <h3 className="admin">Admin Content Management Tool</h3>
+                <h5 className="admin">Created by Matthew Gird</h5>
                 {loadingStep !== null && (<p className="loadingStep">{loadingStep}</p>)}
                 <BufferingLoader />
               </div>
             </div>
         ) : (
           <>
-          
+
             <RefreshButtons
               refreshButtonsActivity={refreshButtonsActivity}
               refreshData={refreshData}
@@ -182,7 +198,10 @@ function AdminCMS({setErrorPageContent}) {
               allPossibleStatuses={allPossibleStatuses}
               adminActiveMode={adminActiveMode}
               setAdminActiveMode={setAdminActiveMode}
+              PullAdminData={PullAdminData}
+              dataLoadSuccess={dataLoadSuccess}
             />}
+            
           </>
         )}
       </div>

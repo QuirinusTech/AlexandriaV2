@@ -224,12 +224,12 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 
 
   return (
-    <motion.div className="AdminAddNewForm"
+    <motion.div className="adminAddNewForm"
       initial={{ opacity: 0, y: -1000 }}
       animate={{ opacity: 1, y: 0 }}
     >
       <h3>Add New</h3>
-      <div className="AdminAddNewForm--Row--resetButton">
+      <div className="adminAddNewForm--row--resetButton">
         {!showImportForm && <button className="adminButton adminButton--danger" onClick={resetForm}>Clear Form</button>}
         <button className={showImportForm ? "adminButton adminButton--hover" : "adminButton"} onClick={()=>setShowImportForm(!showImportForm)}>Import</button>
       </div>
@@ -245,7 +245,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       />
 
       <>
-      <div className="AdminAddNewForm--Row--imdbInfo">
+      <div className="adminAddNewForm--row--imdbInfo">
         <div>
           <label>imdbID</label>
           <input type="text" name="imdbID" placeholder="imdbID" onChange={handleChange} value={imdbInfo['imdbID']} />
@@ -279,7 +279,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       )}
 
       {imdbInfo['imdbData'] !== null && <div>
-        <details className="AdminAddNewForm--Row--imdbInfo--imdbData darkDetails">
+        <details className="adminAddNewForm--row--imdbInfo--imdbData darkDetails">
           <summary className="adminButton">Media Data</summary>
             {Object.keys(imdbInfo['imdbData']).map(field => {
               return (
@@ -299,7 +299,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 {loading && <PNGLoader />}
       {mediaOptions['mediaType'] === "series" && !showImportForm && <Episodes episodes={episodes} setEpisodes={setEpisodes} />}
 
-      {!showImportForm && <div className="AdminAddNewForm--Row--SubmitButton">
+      {!showImportForm && <div className="adminAddNewForm--row--submitButton">
         <button className="adminButton adminButton--submit" onClick={createNewEntry}>Create</button>
       </div>}
     </motion.div>

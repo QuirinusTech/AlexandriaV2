@@ -10,8 +10,21 @@ function MessageEntryTemplate({
   allPossibleStatuses,
   adminListUsers
 }) {
-  const [clickDelete, setClickDelete] = useState(false);
+  const [firstClickDelete, setFirstClickDelete] = useState(false);
   const [editable, setEditable] = useState(false);
+
+  function stringMod(val) {
+    return parseInt(val) >= 10 ? val : "0" + val
+  }
+
+  const AffectedEpisodesString = () => {
+    if (isNaN(message['affectedEpisodes'][0]) || message['affectedEpisodes'][0] === 0) {
+      return <>"N/A"</>
+      } else {
+        return (
+        <>`S${stringMod(message['affectedEpisodes'][0])}E${stringMod(message['affectedEpisodes'][1])} - S${stringMod(message['affectedEpisodes'][2])}E${stringMod(message['affectedEpisodes'][3])}`</>)
+    } 
+  }
 
   return editable ? (
     <EditableMessageEntry
@@ -37,37 +50,21 @@ function MessageEntryTemplate({
       
       <details className="darkDetails">
       <summary>ID</summary>
-      {message["id"]}
+      {message["id"]} 
       </details>
-      
+      Read: {message['read'] ? "✔️" : "❌"}
       </td>
+      <td>{message["msgType"]}</td>
+      <td>{message["msgContent"]}</td>
       <td>{message["affectedEntry"]}</td>
-      <td>{message["messageType"] === "custom" ? "custom" : "Status: " + message['entryStatusUpdate']}</td>
-      <td>{message["customMessageContent"]}</td>
-      <td>
-        <details className="darkDetails">
-          <summary className="adminButton adminButton--small">Visibility</summary>
-                  <ul className="usersVisUl">
-        {Object.keys(message['usersVis']).map(user => {
-        return (
-        <li key={user}>
-        <div>{user}
-        </div>
-        <div>
-         {message['usersVis'][user] ? "✅" : "❌"}
-        </div>
-        </li>
-        )
-      })}
-        </ul>
-        </details>
-      </td>
+      <td><AffectedEpisodesString /></td>
+      <td>{message["msgRecipient"]}</td>
       <td>
         <button className="adminButton adminButton--small" onClick={()=>setEditable(true)}>Edit</button>
       </td>
-      {!clickDelete ? (
+      {!firstClickDelete ? (
         <td>
-          <button className="adminButton adminButton--small adminButton--danger" name={message["id"]} onClick={() => setClickDelete(true)}>
+          <button className="adminButton adminButton--small adminButton--danger" name={message["id"]} onClick={() => setFirstClickDelete(true)}>
             Delete
           </button>
         </td>
@@ -80,7 +77,7 @@ function MessageEntryTemplate({
           >
             Confirm
           </button>
-          <button className="adminButton adminButton--small adminButton--cancel" name={message["id"]} onClick={() => setClickDelete(false)}>
+          <button className="adminButton adminButton--small adminButton--cancel" name={message["id"]} onClick={() => setFirstClickDelete(false)}>
             Cancel
           </button>
         </td>

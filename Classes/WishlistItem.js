@@ -60,8 +60,21 @@ class WishlistItem {
     return obj
   }
 
-  /** takes a status as an argument. return true if status is a valid option
+  /** formats episode/series values in standard convention e.g. S04 / E09 / S22
+    * @param {string} SorE a single char "s" or "e" denoting series or episode
+    * @param {int} val the number of the series
+    * @return {string} String in standard Series / Episode naming convention
+    */
+  static function epString(SorE, val) {
+    let resultString = SorE.toUpperCase()
+    resultString += parseInt(val) < 10 ? "0" + val : val
+    return resultString
+  }
+
+  /** takes a status as an argument. return true if status is a valid option.
+   * !!! WARNING: CASE SENSITIVE !!!
    * @param {string} status: status as a string
+   * @return {bool} confirmation whether the status is valid or not
    */
   static isValidStatusUpdate(status) {
     var checkvar = false

@@ -104,7 +104,7 @@ function ImportForm ({adminListWishlist, importData, setShowImportForm}) {
 
 
   return (
-    <div className="ImportForm">
+    <div className="importForm">
       <h3>Import Info</h3>
 
       <div>

@@ -9,22 +9,29 @@ function EditableMessageEntry({
   allPossibleStatuses,
   adminListUsers
 }) {
-  const [affectedTitle, setAffectedTitle] = useState(message["affectedEntry"]);
-  const [messageType, setMessageType] = useState(message["messageType"]);
-  const [customMessageContent, setCustomMessageContent] = useState(message["customMessageContent"]);
-  const [usersVis, setUsersVis] = useState(message["usersVis"]);
-  const [entryStatusUpdate, setEntryStatusUpdate] = useState(message['entryStatusUpdate'])
+  const [msgType, setMsgType] = useState(message["msgType"]);
+  const [msgContent, setMsgContent] = useState(message["msgContent"]);
+  const [msgRecipient, setMsgRecipient] = useState(message["msgRecipient"]);
+  const [affectedEntry, setAffectedEntry] = useState(message["affectedEntry"]);
+  const [affectedEpisodes, setAffectedEpisodes] = useState([message['affectedEpisodes'][0],message['affectedEpisodes'][1],message['affectedEpisodes'][2],message['affectedEpisodes'][3]])
+
   const [loading, setLoading] = useState(false)
+
+  function setAE(val,i) {
+    let copy = [...affectedEpisodes]
+    copy[i] = val
+    setAffectedEpisodes(copy)
+  }
 
   async function editDone() {
     setLoading(true)
     let obj = {
       id: message["id"],
-      affectedTitle,
-      messageType,
-      customMessageContent,
-      entryStatusUpdate,
-      usersVis
+      msgType,
+      msgContent,
+      msgRecipient,
+      affectedEntry,
+      affectedEpisodes
     };
     await fetch("/Admin/MsgCentre/Update", {
       method: "POST",
@@ -45,33 +52,6 @@ function EditableMessageEntry({
     setLoading(false)
   }
 
-  function usersTickboxChange(e) {
-    const { name, checked } = e.target;
-    let obj = { ...usersVis };
-    obj[name] = checked;
-    setUsersVis(obj);
-  }
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    switch (name) {
-      case "affectedTitle":
-        setAffectedTitle(value);
-        break;
-      case "messageType":
-        setMessageType(value);
-        break;
-      case "customMessageContent":
-        setCustomMessageContent(value);
-        break;
-      case "entryStatusUpdate":
-        setEntryStatusUpdate(value)
-        break;
-      default:
-        return null;
-    }
-  }
-
   if (loading) {
     return <LoadingBar />
   } else {
@@ -89,15 +69,15 @@ function EditableMessageEntry({
         <td>
           <select
             type="text"
-            name="affectedTitle"
-            value={affectedTitle}
-            onChange={handleChange}
+            name="affectedEntry"
+            value={affectedEntry}
+            onChange={(e) => setAffectedEntry(e.target.value)}
           >
             <option value="">None</option>
             {adminListWishlist.map(entry => {
               return (
                 <option key={entry["id"]} value={entry["name"]}>
-                  {entry["name"]}
+                  {`${entry["name"]} (${entry['addedBy']})`}
                 </option>
               );
             })}
@@ -105,17 +85,17 @@ function EditableMessageEntry({
         </td>
         <td>
           <select
-            name="messageType"
-            value={messageType}
+            name="msgType"
+            value={msgType}
             onChange={e => {
-              setMessageType(e.target.value);
+              setMsgType(e.target.value);
             }}
           >
             <option value="custom">custom</option>
             <option value="status">status</option>
           </select>
-          {messageType === 'status' &&
-          <select name="entryStatusUpdate" value={entryStatusUpdate} onChange={handleChange}>
+          {msgType === 'status' ?
+          <select name="msgContentStatus" value={msgContent} onChange={(e) => setMsgContent(e.target.value)}>
             {allPossibleStatuses.map(status => {
               return (
                 <option key={status} value={status}>
@@ -123,37 +103,38 @@ function EditableMessageEntry({
                 </option>
               );
             })}
-          </select>}
-        </td>
-        <td>
+          </select> : 
           <input
             type="text"
-            name="customMessageContent"
-            value={customMessageContent}
-            onChange={handleChange}
+            name="msgContentText"
+            value={msgContent}
+            onChange={(e) => setMsgContent(e.target.value)}
           />
+          }
         </td>
         <td>
-          <div className="usersVisTable" style={{flexDirection: "column", border: "1px solid white"}}>
-          <h4>Visibility</h4>
-              {Object.keys(usersVis).map(user => {
+          <div className="msgRecipient">
+          <h4>Recipient</h4>
+            <select value={msgRecipient} onChange={e=>setMsgRecipient(e.target.value)}>
+              {adminListUsers.map(user => {
                 return (
-                  <div
-                    className="usersVisTableRow"
-                    key={user}
+                  <option
+                    key={"msgRecipient" + user['userId']}
+                    value={user['username']}
                   >
-                      <input
-                        className="checkbox_uservis"
-                        type="checkbox"
-                        name={user}
-                        value={usersVis[user]["username"]}
-                        checked={usersVis[user]}
-                        onChange={usersTickboxChange}
-                      />
-                      <label>{user}</label>
-                  </div>
+                    {user['username']}
+                  </option>
                 );
               })}
+            </select>
+          </div>
+        </td>
+        <td>
+          <div className="affectedEpisodes">
+          <h4>Affected Episodes</h4>
+            {affectedEpisodes.map((x,i) => {
+              return <label>{i === 3 ? "ET" : i === 2 ? "ST" : i === 1 ? "EF" : "SF"}<input value={x} type="number" onChange={e => setAE(e.target.value,i)} /></label>
+            })}
           </div>
         </td>
         <td>
@@ -172,97 +153,5 @@ function EditableMessageEntry({
       </tr>
     );
   }
-  //  else {
-  //   return (
-  //     <tr className="editableMsgTr" key={message["id"]}>
-  //       <td>-</td>
-  //       <td>
-      
-  //     <details className="darkDetails">
-  //     <summary>ID</summary>
-  //     {message["id"]}
-  //     </details>
-      
-  //     </td>
-  //       <td>
-  //         <select
-  //           type="text"
-  //           name="affectedTitle"
-  //           value={affectedTitle}
-  //           onChange={handleChange}
-  //         >
-  //           {adminListWishlist.map(entry => {
-  //             return (
-  //               <option key={entry["id"]} value={entry["name"]}>
-  //                 {entry["name"]}
-  //               </option>
-  //             );
-  //           })}
-  //         </select>
-  //       </td>
-  //       <td>
-  //         <select
-  //           name="messageType"
-  //           value={messageType}
-  //           onChange={e => {
-  //             setMessageType(e.target.value);
-  //           }}
-  //         >
-  //           <option value="custom">custom</option>
-  //           <option value="status">status</option>
-  //         </select>
-  //       </td>
-  //       <td>
-  //         <select name="entryStatusUpdate" value={entryStatusUpdate} onChange={handleChange}>
-  //           {allPossibleStatuses.map(status => {
-  //             return (
-  //               <option key={status} value={status}>
-  //                 {status}
-  //               </option>
-  //             );
-  //           })}
-  //         </select>
-  //       </td>
-  //       <td>
-  //         <table className="usersVisTable">
-  //           <tbody>
-  //             {Object.keys(usersVis).map(user => {
-  //               return (
-  //                 <tr className="usersVisTableRow" key={user}>
-  //                   <td>
-  //                     <input
-  //                       className="checkbox_uservis"
-  //                       type="checkbox"
-  //                       name={user}
-  //                       value={usersVis[user]["username"]}
-  //                       checked={usersVis[user]}
-  //                       onChange={usersTickboxChange}
-  //                     />
-  //                   </td>
-  //                   <td>
-  //                     <label>{user}</label>
-  //                   </td>
-  //                 </tr>
-  //               );
-  //             })}
-  //           </tbody>
-  //         </table>
-  //       </td>
-  //       <td>
-  //         <button className="adminButton adminButton--submit" onClick={editDone}>
-  //           Update
-  //         </button>
-  //       </td>
-  //       <td>
-  //         <button
-  //           className="adminButton adminButton--cancel"
-  //           onClick={() => setEditable(false)}
-  //         >
-  //           Cancel
-  //         </button>
-  //       </td>
-  //     </tr>
-  //   );
-  // }
 }
 export default EditableMessageEntry;

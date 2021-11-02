@@ -28,7 +28,6 @@ async function workFlowTicketParser(entry) {
   if (newStatus !== null) {
 
     let newEntry = {}
-    let affectedEntryEpisodesString = ''
     if (entry['mediaType'] === 'movie') {
       newEntry = await updateWishlistItem(entry['affectedEntryId'], {'status': newStatus})
     } else if (entry['mediaType'] === 'series') {
@@ -50,28 +49,20 @@ async function workFlowTicketParser(entry) {
       let stEpArr = Object.keys(entry['outstanding'][st.toString()])
       let ef = Math.min(...sfEpArr)
       let et = Math.max(...stEpArr)
-
-      sf = parseInt(sf) < 10 ? "S0" + sf : "S" + sf
-      st = parseInt(st) < 10 ? "S0" + st : "S" + st
-      ef = parseInt(ef) < 10 ? "E0" + ef : "E" + ef
-      et = parseInt(et) < 10 ? "E0" + et : "E" + et
-
-      affectedEntryEpisodesString = `(${sf+ef} - ${st+et})`
     }
 
     if (newEntry === 'error') {
       return 'error'
     } else {
       await notifyUser({
-        "id": entry['id'] + "_notification",
-        "messageType": "status",
-        "customMessageContent": affectedEntryEpisodesString,
-        "entryStatusUpdate": newStatus,
-        "usersVis": {
-          [entry['owner']]: true
-        },
-        "affectedEntry": entry['affectedEntry'],
-        'mailed': false
+        id: entry['id'] + "_notification",
+        msgType: "status",
+        msgContent: newStatus,
+        msgRecipient: entry['owner'],
+        affectedEntry: entry['affectedEntry'],
+        affectedEpisodes: [sf, ef, st, et],
+        mailed: false,
+        read: false
       })
       return newEntry
     }

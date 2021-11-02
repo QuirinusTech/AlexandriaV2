@@ -22,7 +22,7 @@ function MsgCentreContent({
     switch (adminActiveMode) {
       case "msgPreview":
         return (
-          <div className="AdminCMSTitlePage">
+          <div className="adminCMSTitlePage">
           <Preview
             adminListNotifications={adminListNotifications}
             adminListUsers={adminListUsers}
@@ -38,7 +38,7 @@ function MsgCentreContent({
         );
       case "msgCMS":
         return (
-        <div className="AdminCMSTitlePage">
+        <div className="adminCMSTitlePage">
           <MessageCMS
             adminListNotifications={adminListNotifications}
             adminListUsers={adminListUsers}
@@ -50,7 +50,7 @@ function MsgCentreContent({
         );
       default:
         return (
-          <div className="AdminCMSTitlePage--Welcome">
+          <div className="adminCMSTitlePage--welcome">
             <h3>Select a mode to begin</h3>
           </div>
         );

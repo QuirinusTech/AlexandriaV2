@@ -44,14 +44,12 @@ const About = () => {
       <p>Code review, mentoring and cheerleading by Shaun Matthysen.</p>
       <p>I would also like to extends my thanks to:</p>
       <ul>
+          <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://www.freeiconspng.com">FreeIconsPng</a> for a number of PNG images used on this site.</li>
           <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://www.w3schools.com/default.asp">w3schools.com</a> on which I've come to rely heavily in addition to the official JS docs.</li>
           <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://www.edx.org/course/cs50s-introduction-to-computer-science">David J. Malan and CS50</a> I can never thank the people at Edx enough for the leg-up they gave me.</li>
           <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://www.youtube.com/c/TraversyMedia/about">Traversy Media</a> for getting us started years ago.</li>
-          <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://www.youtube.com/c/Fireship">Fireship.io</a> for proving that there are real wizards (Javascript wizards)</li>
-          <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://github.com/firebase/snippets-node/blob/f8236ac5cc5da66842f18cd127ba107ec5d38519/firestore/main/index.js#L556-L560">Craig Labenz</a> for his exceptional Firebase snippets on Github, without which, I would never have been able to write a single document to Firebase.</li>
           <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://firebase.google.com/">Firebase</a> and <a className="purplelink" href="https://www.heroku.com/">Heroku</a> for providing free Database and Server Hosting.</li>
           <li>The <a target="_blank" rel="noreferrer" className="purplelink" href="http://www.omdbapi.com/">OMDB API</a> for providing free access to their easy-to-use API.</li>
-          <li><a target="_blank" rel="noreferrer" className="purplelink" href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Miguel Grinberg</a> for his amazing Flask tutorial.</li>
       </ul>
       <br />
       <p>If you have not been credited for something on this site, please get in touch with me here: <a className="purplelink" href="mailto:quirinustech@gmail.com">quirinustech@gmail.com</a></p>

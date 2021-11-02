@@ -70,11 +70,11 @@ function EpisodesConsole({
       return (
         <div
           className={
-            "S" + formatString(season) + "_details EpisodesConsoleSeasonDiv"
+            "S" + formatString(season) + "_details episodesConsoleSeasonDiv"
           }
           key={formatString(season) + "_div"}
         >
-          <div className="EpisodesConsoleSeasonTitle">
+          <div className="episodesConsoleSeasonTitle">
             <p><b>Season {season}</b></p>
             <select className='adminButton adminButton--small' name={season} onChange={seasonChangeHandle}>
               <option value="season">Set all</option>
@@ -91,7 +91,7 @@ function EpisodesConsole({
               })}
             </select>
           </div>
-          <div className="EpisodesConsoleSeasonEpisodes">
+          <div className="episodesConsoleSeasonEpisodes">
             {Object.keys(episodes[season]).map(episode => {
               return (
                 <div
@@ -129,7 +129,7 @@ function EpisodesConsole({
   };
 
   return (
-    <div className="EpisodesConsole" onClick={(e)=>e.stopPropagation()}>
+    <div className="episodesConsole" onClick={(e)=>e.stopPropagation()}>
       <h3>{title}</h3>
       <h4>{`S${formatString(episodeRange["sf"])}E${formatString(
         episodeRange["ef"]
@@ -155,6 +155,14 @@ function EpisodesConsole({
           }}
         >
           CANCEL
+        </button>
+        <button
+        className="adminButton adminButton--cancel absoluteTopRight"
+          onClick={() => {
+            setShowEpisodesConsole(false);
+          }}
+        >
+          X
         </button>
         <button className="adminButton adminButton--danger" onClick={reset}>RESET</button>
         <button className="adminButton adminButton--submit" onClick={commitChanges}>DONE</button>

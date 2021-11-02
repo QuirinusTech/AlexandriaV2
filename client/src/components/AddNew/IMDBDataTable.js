@@ -15,7 +15,7 @@ const IMDBDataTable = ({ IMDBResults, isSeries }) => {
   isSeries && tablekeys.push("totalSeasons");
 
   return (
-    <table className="IMDBDataTable">
+    <table className="imdbDataTable">
       <tbody>
         {tablekeys.map(keyName => {
           let keyValue = IMDBResults[keyName];

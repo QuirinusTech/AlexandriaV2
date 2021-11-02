@@ -445,7 +445,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
 
   return (
     <>
-    <div className="OptionsWidget">
+    <div className="optionsWidget">
     
       <WidgetInsides
           currentFunction={currentFunction}

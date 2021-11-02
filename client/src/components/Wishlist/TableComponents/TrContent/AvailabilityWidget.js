@@ -152,11 +152,11 @@ function AvailabilityWidget({imdbID, st, et, id, setWishlistData}) {
                 return <></>
               } else {
                 return (
-                  <div className="foundMulti--RowCol">
-                    <div className="foundMulti--RowRowLeft">
+                  <div className="foundMulti--rowCol">
+                    <div className="foundMulti--rowRowLeft">
                       <input type="checkbox" onChange={newSeasonCheckboxChangeHandler} name={newSeasons[index]['season']} checked={newSeasons[index]['selected']} />
                     </div>
-                    <div className="foundMulti--RowRowRight">
+                    <div className="foundMulti--rowRowRight">
                       <p>Season {seasonObj['season']}: </p>
                       <p>{seasonObj['maxEpisodes']} episodes</p>
                     </div>

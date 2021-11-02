@@ -10,7 +10,7 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
      >
-      <div className="UMDetails--TopRow">
+      <div className="umDetails--topRow">
         <div>
           <p>User ID</p>
           <p>{currentUser['userId']}</p>
@@ -21,7 +21,7 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
         </div>
       </div>
 
-      <div className="UMDetails--Privileges">
+      <div className="umDetails--privileges">
         <h4>
           Privileges
         </h4>
@@ -48,7 +48,7 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
         </div>
       </div>
 
-      <div className="UMDetails--Preferences">
+      <div className="umDetails--preferences">
         <h4>
           Preferences
         </h4>
@@ -72,28 +72,26 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
         </div>
       </div>
 
-      <div className="UMDetails--Details">
+      <div className="umDetails--details">
         <details className="darkDetails" style={{width: "100%"}} open>
           <summary className="adminButton">
             User Details
           </summary>
-          <table style={{width: "100%"}}>
-          <tbody>
+          <div style={{width: "100%"}}>
 
-            <tr>
-            <th>Name</th>
-            <td><input type="text" value={currentUser['details']['name']} onChange={(e)=>updateField('details', "name", e.target.value)} /></td>
-            </tr>
-            <tr><th>Email</th>
-            <td><input type="text" value={currentUser['details']['email']} onChange={(e)=>updateField('details', "email", e.target.value)} /></td>
-            </tr>
-          </tbody>
-          </table>
+            <div>
+            <h4>Name</h4>
+            <><input type="text" value={currentUser['details']['name']} onChange={(e)=>updateField('details', "name", e.target.value)} /></>
+            </div>
+            <div><h4>Email</h4>
+            <><input type="text" value={currentUser['details']['email']} onChange={(e)=>updateField('details', "email", e.target.value)} /></>
+            </div>
+          </div>
         </details>
       </div>
 
       
-      <div className="UserManagerButtonsRow">
+      <div className="userManagerButtonsRow">
         <button className="adminButton adminButton--cancel" onClick={reset}>Cancel</button>
         <button className="adminButton adminButton--danger" onClick={passwordReset}>Password Reset</button>
         <button className="adminButton adminButton--submit" onClick={commitChanges}>Commit Changes</button>

@@ -8,21 +8,22 @@ function NewMessage({
   adminListUsers,
   allPossibleStatuses
 }) {
-  const [messageType, setMessageType] = useState("custom");
-  const [customMessageContent, setCustomMessageContent] = useState("");
-  const [entryStatusUpdate, setEntryStatusUpdate] = useState("");
-  const [usersVis, setUsersVis] = useState(() => {
-    let obj = {};
-    adminListUsers.forEach(user => {
-      obj[user["username"]] = false;
-    });
-    return obj;
-  });
+  const [msgType, setMsgType] = useState("custom");
+  const [msgContent, setMsgContent] = useState("");
+  const [msgRecipient, setMsgRecipient] = useState('');
   const [affectedEntry, setAffectedEntry] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [affectedEntryEpisodesList, setAffectedEntryEpisodesList] = useState(
-    null
+  const [affectedEpisodes, setAffectedEpisodes] = useState(
+    [0,0,0,0]
   );
+
+  function setAE(val,i) {
+    let copy = [...affectedEpisodes]
+    copy[i] = val
+    setAffectedEpisodes(copy)
+  }
+
+  const [loading, setLoading] = useState(false);
+
   const [wishlistFilters, setWishlistFilters] = useState({
     addedBy: "reset",
     mediaType: "reset",
@@ -33,22 +34,23 @@ function NewMessage({
   );
 
   const [popupContent, setPopupContent] = useState({
-  isDismissable: false,
-  isWarning: false,
-  heading: "",
-  messages: []
-});
-const [popupIsVisible, setPopupIsVisible] = useState(false);
-
-function activatePopup(heading, msgs, showOk, warn = false) {
-  setPopupContent({
-    isDismissable: showOk,
-    heading: heading,
-    messages: msgs,
-    isWarning: warn
+    isDismissable: false,
+    isWarning: false,
+    heading: "",
+    messages: []
   });
-  setPopupIsVisible(true);
-}
+
+  const [popupIsVisible, setPopupIsVisible] = useState(false);
+
+  function activatePopup(heading, msgs, showOk, warn = false) {
+    setPopupContent({
+      isDismissable: showOk,
+      heading: heading,
+      messages: msgs,
+      isWarning: warn
+    });
+    setPopupIsVisible(true);
+  }
 
 
 
@@ -96,10 +98,10 @@ function activatePopup(heading, msgs, showOk, warn = false) {
 
   function resetFilters() {
     setWishlistFilters({
-                  addedBy: "reset",
-                  mediaType: "reset",
-                  status: "reset"
-                });
+        addedBy: "reset",
+        mediaType: "reset",
+        status: "reset"
+      });
     setFilteredWishlist(sortWishlist([...adminListWishlist]))
   }
 
@@ -111,27 +113,27 @@ function activatePopup(heading, msgs, showOk, warn = false) {
     });
   }
 
-  function affectedEntryCheckboxHandler(e) {
-    const { name, value, checked } = e.target;
-    if (name === "seasonCheckbox") {
-      let season = parseInt(value.slice(1));
-      setAffectedEntryEpisodesList(prevState => {
-        let obj = { ...prevState };
-        Object.keys(obj[season]).forEach(episode => {
-          obj[season][episode] = checked;
-        });
-        return obj;
-      });
-    } else {
-      let season = parseInt(value.slice(1, 3));
-      let episode = parseInt(value.slice(4));
-      setAffectedEntryEpisodesList(prevState => {
-        let obj = { ...prevState };
-        obj[season][episode] = checked;
-        return obj;
-      });
-    }
-  }
+  // function affectedEntryCheckboxHandler(e) {
+  //   const { name, value, checked } = e.target;
+  //   if (name === "seasonCheckbox") {
+  //     let season = parseInt(value.slice(1));
+  //     setAffectedEntryEpisodesList(prevState => {
+  //       let obj = { ...prevState };
+  //       Object.keys(obj[season]).forEach(episode => {
+  //         obj[season][episode] = checked;
+  //       });
+  //       return obj;
+  //     });
+  //   } else {
+  //     let season = parseInt(value.slice(1, 3));
+  //     let episode = parseInt(value.slice(4));
+  //     setAffectedEntryEpisodesList(prevState => {
+  //       let obj = { ...prevState };
+  //       obj[season][episode] = checked;
+  //       return obj;
+  //     });
+  //   }
+  // }
 
   function assignAffectedEntry(e) {
     let entry = adminListWishlist.filter(
@@ -139,65 +141,31 @@ function activatePopup(heading, msgs, showOk, warn = false) {
     )[0];
 
     // set visibility for the owner
-    let usersVisobj = { ...usersVis };
-    usersVisobj[entry["addedBy"]] = true;
-    setUsersVis(usersVisobj);
+    setMsgRecipient(entry["addedBy"])
 
     if (entry["mediaType"] === "series") {
-      let obj = {};
-      Object.keys(entry["episodes"]).forEach(season => {
-        obj[season] = {
-          season: false
-        };
-        Object.keys(entry["episodes"][season]).forEach(episode => {
-          obj[season][episode] = false;
-        });
-      });
-      setAffectedEntryEpisodesList(obj);
+      let seasons = Object.keys(entry['episodes'])
+      let sf = Math.min(...seasons)
+      let st = Math.max(...seasons)
+      let sfEpArr = Object.keys(entry['episodes'][sf.toString()])
+      let stEpArr = Object.keys(entry['episodes'][st.toString()])
+      let ef = Math.min(...sfEpArr)
+      let et = Math.max(...stEpArr)
+      setAffectedEpisodes([sf, ef, st, et]);
+    } else {
+      setAffectedEpisodes([0, 0, 0, 0])
     }
     setAffectedEntry(entry);
   }
 
-  function usersTickboxChange(e) {
-    const { name, checked } = e.target;
-    let usersVisObj = { ...usersVis };
-    usersVisObj[name] = checked;
-    setUsersVis(usersVisObj);
-  }
-
   async function createNewMessage(e) {
-    let affectedEntryEpisodes = [];
-
-    if (affectedEntryEpisodesList !== null) {
-
-    Object.keys(affectedEntryEpisodesList).forEach(season => {
-      let seasonString = "S" + season < 10 ? "0" + season : season;
-      if (affectedEntryEpisodesList[season]["season"]) {
-        affectedEntryEpisodes.push(seasonString);
-      } else {
-        let thisSeason = [];
-        Object.keys(affectedEntryEpisodesList[season]).forEach(episode => {
-          if (
-            affectedEntryEpisodesList[season][episode] &&
-            episode !== "season"
-          ) {
-            thisSeason.push(episode);
-          }
-        });
-        if (thisSeason.length > 0) {
-          affectedEntryEpisodes.push({ season: [...thisSeason] });
-        }
-      }
-    });
-    }
 
     let messageVar = {
-      messageType,
-      customMessageContent,
-      entryStatusUpdate,
-      usersVis,
-      affectedEntry: affectedEntry === null ? "custom" : affectedEntry['name'],
-      affectedEntryEpisodes
+      msgType,
+      msgContent,
+      msgRecipient,
+      affectedEntry,
+      affectedEpisodes
     };
     console.log(messageVar)
     try {
@@ -224,33 +192,25 @@ function activatePopup(heading, msgs, showOk, warn = false) {
   }
 
   function reset() {
-    setMessageType('custom')
-    setCustomMessageContent('')
-    setEntryStatusUpdate('')
-    setUsersVis(() => {
-    let obj = {};
-    adminListUsers.forEach(user => {
-      obj[user["username"]] = false;
-    });
-    return obj;
-    });
+    setMsgType('custom')
+    setMsgContent('')
     setAffectedEntry(null)
+    setAffectedEpisodes(null)
     setLoading(false)
-    setAffectedEntryEpisodesList(null)
     setWishlistFilters({
-    addedBy: "reset",
-    mediaType: "reset",
-    status: "reset"
+      addedBy: "reset",
+      mediaType: "reset",
+      status: "reset"
     })
     setFilteredWishlist(
-    sortWishlist([...adminListWishlist])
-  )
+      sortWishlist([...adminListWishlist])
+    )
   }
 
   return loading ? (
     <GIFLoader />
   ) : (
-    <div className="MsgCentre--NewMessage">
+    <div className="msgCentre--newMessage">
       {popupIsVisible && <Popup
         isDismissable={popupContent['isDismissable']}
         heading={popupContent['heading']}
@@ -263,24 +223,27 @@ function activatePopup(heading, msgs, showOk, warn = false) {
 
       <div className="flexdr mar10px">
         <select
-          value={messageType}
-          name="messageType"
+          value={msgType}
+          name="msgType"
           // className="adminButton"
           id="manual_message_type_select"
           onChange={e => {
-            setMessageType(e.target.value);
+            setMsgType(e.target.value);
           }}
         >
           <option value="custom">custom</option>
           <option value="status">status</option>
         </select>
-        {messageType === "status" && (
+      </div>
+
+      <div className="flexdr w70perc" id="manual_message_custom_text_div">
+        {msgType === "status" ? (
           <select
             name="manual_message_status"
             id="manual_message_status_select"
-            value={entryStatusUpdate}
+            value={msgContent}
             onChange={e => {
-              setEntryStatusUpdate(e.target.value);
+              setMsgContent(e.target.value);
             }}
           >
             <option value="" default="" hidden>
@@ -294,23 +257,23 @@ function activatePopup(heading, msgs, showOk, warn = false) {
               );
             })}
           </select>
-        )}
-      </div>
-
-
-        <div className="flexdr w70perc" id="manual_message_custom_text_div">
-          <textarea
+        ) : 
+        
+        <textarea
             type="text"
             id="admin_manual_message"
-            name="customMessageContent"
-            placeholder={messageType === "status" ? "Affected Episodes in format: (S01E01 - S01E01)" : "Custom message"}
-            value={customMessageContent}
-            onChange={e => setCustomMessageContent(e.target.value)}
+            name="msgContent"
+            placeholder="Custom message"
+            value={msgContent}
+            onChange={e => setMsgContent(e.target.value)}
           />
+        }
         </div>
 
+          
 
-      <div className="NewMessageEntrySelectRow">
+
+      <div className="newMessageEntrySelectRow">
 
         <details className="darkDetails FilterEntriesBy" open>
           <summary className="adminButton">Filter Entries</summary>
@@ -403,33 +366,38 @@ function activatePopup(heading, msgs, showOk, warn = false) {
           </div>
         )}
       </div>
-      <div>
-        {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
+
+        {/* {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
           <AffectedEntryEpisodeListCheckboxes
             affectedEntry={affectedEntry}
             affectedEntryCheckboxHandler={affectedEntryCheckboxHandler}
             affectedEntryEpisodesList={affectedEntryEpisodesList}
           />
-        )}
-      </div>
+        )} */}
+      {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
+        <div className="affectedEpisodes">
+        <h4>Affected Episodes</h4>
+          {affectedEpisodes.map((x,i) => {
+            return <label>{i === 3 ? "ET" : i === 2 ? "ST" : i === 1 ? "EF" : "SF"}<input value={x} type="number" onChange={e => setAE(e.target.value,i)} /></label>
+          })}
+        </div>
+      )}
 
-      <div className="usersVisTable">
-        <h4>Visible to:</h4>
+
+      <div className="msgRecipient">
+        <h4>Recipient:</h4>
+        <select value={msgRecipient} onChange={e=>setMsgRecipient(e.target.value)}>
           {adminListUsers.map(user => {
             return (
-              <div className="usersVisTableRow" key={"usersVisTable"+user["username"]+"checkbox_uservis"}>
-                  <input
-                    className="checkbox_uservis"
-                    type="checkbox"
-                    name={user["username"]}
-                    value={user["username"]}
-                    checked={usersVis[user["username"]]}
-                    onChange={usersTickboxChange}
-                  />
-                  <p>{user["username"]}</p>
-               </div>
+              <option
+                key={"msgRecipient" + user['userId']}
+                value={user['username']}
+              >
+                {user['username']}
+              </option>
             );
           })}
+        </select>
       </div>
 
       <div className="jcc mar10px">

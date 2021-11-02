@@ -131,7 +131,7 @@ function EditableTr({
 {showOptionsWidget && (
   <div className="modalBackground">
 
-  <div onClick={e=>e.stopPropagation()} className="editableTr--OptionsWidget modalContent">
+  <div onClick={e=>e.stopPropagation()} className="editableTr--optionsWidget modalContent">
 
               {entry["mediaType"] === 'series' && <AvailabilityWidget
                 setWishlistData={setLocalList}
@@ -143,7 +143,7 @@ function EditableTr({
   <OptionsWidget item={entry} setWishlistData={setLocalList} adminMode={true} />
   <button
                       onClick={() => setShowOptionsWidget(false)}
-                      className="adminButton adminButton--danger editableTr--OptionsWidget--closeButton"
+                      className="adminButton adminButton--danger editableTr--optionsWidget--closeButton"
                     >
                       X
                     </button>
@@ -155,7 +155,7 @@ function EditableTr({
         switch (entryKey) {
           case "edit":
             return (
-              <tr key={entryKey} className="NotEditable">
+              <tr key={entryKey} className="notEditable">
                 <th>
                   <button
                     className="adminButton adminButton--cancel"
@@ -191,7 +191,7 @@ function EditableTr({
             return <></>;
           case "id":
             return (
-              <tr key={entryKey} className="NotEditable">
+              <tr key={entryKey} className="notEditable">
                 {!areyousure && (
                   <th>
                     <button
@@ -213,7 +213,7 @@ function EditableTr({
             );
           case "mediaType":
             return (
-              <tr key={entryKey} className="NotEditable">
+              <tr key={entryKey} className="notEditable">
                 <th>{entryKey}</th>
                 <td>{entry[entryKey]}</td>
               </tr>
@@ -246,7 +246,7 @@ function EditableTr({
                       </div>
                     ) : (
                       <button
-                        className="adminButton adminButton--small"
+                        className="adminButton"
                         onClick={() => {
                           setShowEpisodesConsole(true);
                         }}

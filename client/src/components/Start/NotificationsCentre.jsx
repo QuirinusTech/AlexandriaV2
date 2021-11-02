@@ -2,11 +2,31 @@ import React, { useState } from "react";
 import MessageCentre from "./MessageCentre";
 import { motion } from "framer-motion";
 
-const NotificationsCentre = ({ notifications }) => {
-  const [newMessages, setNewMessages] = useState(notifications.length);
+const NotificationsCentre = ({ notifications, setNotifications }) => {
+  const newMessages = notifications.filter(x => !x.read).length
   const [isShown, setIsShown] = useState(false);
 
-  // initially just a circle with a number
+  async function markMessageRead() {
+    await fetch("/markread", {
+      method: "POST",
+      body: JSON.stringify({
+        username: localStorage.getItem("username"),
+        msgList: notifications.filter(x => x['id'])
+      }),
+      headers: { "Content-type": "application/json; charset=UTF-8" }
+    }).then(res => {
+      if (res.status === 200) {
+        console.log('%c Msg purge', 'color: #00ff00;', 'SUCCESS')
+        let copy = [...notifications]
+        copy.forEach(x => x['read'] = true)
+        setNotifications(copy)
+      } else {
+        console.log('%c Msg purge', 'color: #ff0000;', 'FAIL')
+      }
+      console.log('%cNotifications.js line:22 res.json()', 'color: #007acc;', res.json());
+      setIsShown(false)
+    })
+  }
 
   if (notifications.length > 0) {
     return isShown ? (
@@ -18,7 +38,7 @@ const NotificationsCentre = ({ notifications }) => {
         <MessageCentre notificationsList={notifications} />
         <button
           className="notificationsCentre--fullscreen__dismiss"
-          onClick={() => {setNewMessages(0); setIsShown(false)}}
+          onClick={markMessageRead}
         >
           Done
         </button>

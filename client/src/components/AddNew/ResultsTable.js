@@ -139,7 +139,7 @@ function ResultsTable({
   }) => {
     return (
       <>
-        {isSeries && <div className="EpisodesPickTickboxesRow">
+        {isSeries && <div className="episodesPickTickboxesRow">
           <label>
             Is there a new episode due to release within the next month?
           </label>
@@ -151,7 +151,7 @@ function ResultsTable({
             onChange={handleChange}
           />
         </div>}
-        <div className="IMDBResultsTablePriorityCheckboxRow">
+        <div className="imdbResultsTablePriorityCheckboxRow">
           <label>Is this priority request? </label>
           <input
             type="checkbox"
@@ -163,7 +163,7 @@ function ResultsTable({
         </div>
         <button
           disabled={!readyToAdd}
-          className="AddToWishlist"
+          className="addToWishlist"
           onClick={AddToList}
         >
           Add to Wishlist
@@ -216,7 +216,7 @@ function ResultsTable({
   return loading ? (
     <GIFLoader />
   ) : (
-    <div className="ResultsTable">
+    <div className="resultsTable">
       {window.innerWidth < 768 && <><button className="btn_warning" onClick={reset}> Back / Cancel </button>
       <div className="spacer1 spacer2"></div></>}
       <h3>Summary</h3>
@@ -224,13 +224,13 @@ function ResultsTable({
       {errorPopupContent === null ? (
         <>
           {isSeries && (
-            <div className="EpisodesPickForm">
+            <div className="episodesPickForm">
               {Object.keys(episodes).map(field => {
                 return (
                   <>
                     {field === "sf" && <label>From</label>}
                     {field === "st" && <label>To</label>}
-                    <div className="EpisodesPickFormRowColumn" key={field}>
+                    <div className="episodesPickFormRowColumn" key={field}>
                       <label>{field[0] === "s" ? "Season" : "Episode"}</label>
                       <input
                         type="text"

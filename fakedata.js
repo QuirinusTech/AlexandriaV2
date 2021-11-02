@@ -1033,40 +1033,92 @@ module.exports = {
       name: "Black Books",
     }
   ],
+    // messages: [
+    //   {msgType: "custom",
+    //   custommsgContent: "This is a test message 1",
+    //   entryStatusUpdate: "custom",
+    //   id: "message4",
+    //   usersVis: {
+    //     guest: true,
+    //     aegisthus: true,
+    //     testuser1: true,
+    //     testuser2: false
+    //   },
+    //   affectedEntry: "Teen Wolf"},
+    //   {msgType: "status",
+    //   id: "message1",
+    //   custommsgContent: "This is a test message 1",
+    //   entryStatusUpdate: "downloading",
+    //   usersVis: {
+    //     guest: true,
+    //     aegisthus: true,
+    //     testuser1: true,
+    //     testuser2: false
+    //   },
+    //   affectedEntry: "Black Books"},
+    //   {msgType: "custom",
+    //   id: "message2",
+    //   custommsgContent: "This is a test message 2",
+    //   entryStatusUpdate: "custom",
+    //   usersVis: {
+    //     guest: true,
+    //     aegisthus: true,
+    //     testuser1: true,
+    //     testuser2: false
+    //   },
+    //   affectedEntry: "Tom Clancy"}
+    // ],
     messages: [
-      {messageType: "custom",
-      customMessageContent: "This is a test message 1",
-      entryStatusUpdate: "custom",
-      id: "message4",
-      usersVis: {
-        guest: true,
-        aegisthus: true,
-        testuser1: true,
-        testuser2: false
-      },
-      affectedEntry: "Teen Wolf"},
-      {messageType: "status",
-      id: "message1",
-      customMessageContent: "This is a test message 1",
-      entryStatusUpdate: "downloading",
-      usersVis: {
-        guest: true,
-        aegisthus: true,
-        testuser1: true,
-        testuser2: false
-      },
-      affectedEntry: "Black Books"},
-      {messageType: "custom",
-      id: "message2",
-      customMessageContent: "This is a test message 2",
-      entryStatusUpdate: "custom",
-      usersVis: {
-        guest: true,
-        aegisthus: true,
-        testuser1: true,
-        testuser2: false
-      },
-      affectedEntry: "Tom Clancy"}
+      {
+      "id": "12345",
+      "msgType": "status",
+      "msgContent": "new",
+      "mailed": false,
+      "read": false,
+      "msgRecipient": "aegisthus",
+      "affectedEntry": "Finding Nemo",
+      "affectedEpisodes": [0,0,0,0]
+    },
+    {
+      "id": "24246262",
+      "msgType": "custom",
+      "msgContent": "This is a custom test message.",
+      "mailed": false,
+      "read": false,
+      "msgRecipient": "testuser1",
+      "affectedEntry": "title",
+      "affectedEpisodes": ["sf", "ef", "st", "et"]
+    },
+    {
+      "id": "234567821",
+      "msgType": "status",
+      "msgContent": "downloading",
+      "mailed": false,
+      "read": false,
+      "msgRecipient": "testuser1",
+      "affectedEntry": "Teen Wolf",
+      "affectedEpisodes": [1,4,2,5]
+    },
+    {
+      "id": "29348766987423",
+      "msgType": "custom",
+      "msgContent": "text goes here",
+      "mailed": false,
+      "read": false,
+      "msgRecipient": "testuser1",
+      "affectedEntry": "Affected Entry",
+      "affectedEpisodes": [0,0,0,0]
+    },
+    {
+      "id": "29348766987423",
+      "msgType": "custom",
+      "msgContent": "This message has been read.",
+      "mailed": false,
+      "read": true,
+      "msgRecipient": "aegisthus",
+      "affectedEntry": "Affected Entry",
+      "affectedEpisodes": [0,0,0,0]
+    }
     ],
     users: [
       {

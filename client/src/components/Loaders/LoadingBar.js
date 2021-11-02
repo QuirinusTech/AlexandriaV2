@@ -1,8 +1,8 @@
 function LoadingBar() {
   return (
     <div>
-      <div className="LoadingBar" id="LoadingBar">
-        <p className="LoadingBar--Text"></p>
+      <div className="loadingBar" id="loadingBar">
+        <p className="loadingBar--text"></p>
       </div>
     </div>
   )

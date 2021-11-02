@@ -27,17 +27,6 @@ body.span{
 
 /*NAV******************************************************NAV*/
 
-
-.MobileNavBar {
-    background-color: #414141;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width:100%;
-    min-width: 360px;
-    position: absolute;  
-}
-
 nav > a{
 
     background-color: #414141;
@@ -56,10 +45,6 @@ nav > a:hover{
 color: #08FFC8;
 transition: 1s;
 }
-
-
-
-
 
 @media only screen and (max-width: 768px) {
     .closeNavButton {
@@ -247,42 +232,7 @@ div > div > a{
     text-decoration:none;
 }
 
-.ConnectivityTestBox {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(235, 235, 235);
-    width: fit-content;
-}
-
-.ConnectivityTestBox > button {
-    border: 1px solid Black;
-    color: black;
-    padding: 0px;
-    margin: 0px;
-    border-radius: 0px;
-    background-color: grey;
-    font-size: xx-small;
-    width: fit-content;
-}
-
-.connsuccess {
-    background-color: greenyellow !important;
-}
-
-.connfail {
-    background-color: red !important;
-}
-
-.ConnectivityTestBox > p {
-    font-size: xx-small;
-    padding: 0px;
-    margin: 0px;
-}
-
-.PopupBox {
+.popupBox {
     position: absolute;
     background: #fff;
     z-index: 2;
@@ -299,19 +249,19 @@ div > div > a{
     right: 0;
 }
 
-.PopupBox > div {
+.popupBox > div {
     display: flex;
     flex-direction: row;
     justify-content: stretch;
     width: 100%;
 }
 
-.PopupBox > div > button > a {
+.popupBox > div > button > a {
     text-decoration: none;
     color: white;
 }
 
-.PopupBox > p {
+.popupBox > p {
     align-self: center;
 }
 
@@ -371,7 +321,7 @@ div > div.grid7{
     font-size: 16px !important; /* Set a font size */
   }
 
-.GIFLoader {
+.gifLoader {
     background-image: url("/img/DoubleRing.gif");
     width: 100%;
     height: 100%;
@@ -381,7 +331,7 @@ div > div.grid7{
     background-position: center;
 }
 
-.BufferingLoader {
+.bufferingLoader {
     background-image: url('/img/buffering.gif');
     /* width: 100%;
     height: 100%; */
@@ -392,7 +342,7 @@ div > div.grid7{
     background-size: contain;
 }
 
-.PNGloader {
+.pngLoader {
     background-image: url("/img/339.gif");
     width: 100%;
     height: 100%;
@@ -402,7 +352,7 @@ div > div.grid7{
     background-position: center;
 }
 
-.GIFLoaderContainer {
+.gifLoaderContainer {
     background-color: white;
     position: fixed; /* Sit on top of the page content */
     width: 100%; /* Full width (cover the whole page) */
@@ -415,12 +365,12 @@ div > div.grid7{
     cursor: pointer; /* Add a pointer on hover */
 }
 
-.GIFLoaderText {
+.gifLoaderText {
     top: 30%;
     position: relative;
 }
 
-.LoadingBar {
+.loadingBar {
     background-image: url("/img/7pla.gif");
     width: 100%;
     height: 100%;
@@ -518,7 +468,7 @@ div > div.grid7{
         margin: 1vh;
         width: 96vw;
     }
-    .notificationsCentre--fullscreen > .MessageCentre {
+    .notificationsCentre--fullscreen > .messageCentre {
         margin: 4vh 1vh;
         /* border: 1px solid wheat; */
         /* background: white; */
@@ -793,11 +743,11 @@ footer > div > a, a:visited {
     border-radius: 20px;
   }
 
-  .ErrorPage > span {
+  .errorPage > span {
     color: red;
 }
 
-.ErrorPage {
+.errorPage {
     /* border: 1px solid grey; */
     display: flex;
     flex-direction: row;
@@ -807,35 +757,35 @@ footer > div > a, a:visited {
     justify-content: space-around;
 }
 
-.ErrorPage > p {
+.errorPage > p {
     width: 100%;
     text-align: center;
 }
 
-.EpisodesPickForm {
+.episodesPickForm {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.EpisodesPickForm > div {
+.episodesPickForm > div {
     width: 50%;
 }
 
-.EpisodesPickForm > label {
+.episodesPickForm > label {
     width: 100%;
     text-align: center;
     font-weight: bold;
     margin: 10px 0px;
 }
 
-.EpisodesPickFormRowColumn {
+.episodesPickFormRowColumn {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.EpisodesPickTickboxesRow, .IMDBResultsTablePriorityCheckboxRow {
+.episodesPickTickboxesRow, .imdbResultsTablePriorityCheckboxRow {
     display: flex;
     padding: 0px 10px;
     flex-grow: 1;
@@ -847,11 +797,11 @@ footer > div > a, a:visited {
 }
 
 @media only screen and (min-width: 768px) {
-    .ResultsTable > table, .ResultsTable > div {
+    .resultsTable > table, .resultsTable > div {
         background: #3f3f46ab;
     }
 
-    .EpisodesPickTickboxesRow, .IMDBResultsTablePriorityCheckboxRow {
+    .episodesPickTickboxesRow, .imdbResultsTablePriorityCheckboxRow {
         display: flex;
         padding: 1vw !important;
         flex-grow: 1;
@@ -868,7 +818,7 @@ footer > div > a, a:visited {
         padding: 0 2vw;
     }
     
-    .ResultsTable > table, .ResultsTable > div {
+    .resultsTable > table, .resultsTable > div {
         width: clamp(400px, 90vw, 800px);
         border-radius: 15px;
         border: none;
@@ -881,7 +831,7 @@ footer > div > a, a:visited {
     }
 }
 
-.ResultsTable {
+.resultsTable {
     flex-direction: column;
 }
 
@@ -1004,13 +954,13 @@ font-size: 1rem;
     width: 100% !important;
 }
 
-.FormSearch--NoResults{
+.formSearchNoResults{
     margin: 10px;
     padding: 10px;
     border: 1px solid red
 }
 
-.FormSearch--NoResults > p > b {
+.formSearchNoResults > p > b {
     color: red;
 }
 
@@ -1100,7 +1050,7 @@ div.spacer2{
 
 /***************************************WISHLIST******************************************/
 
-button, input[type=submit], .ErrorPage > a, .buttonStyle {
+button, input[type=submit], .errorPage > a, .buttonStyle {
     display: block;
     font-family: "Bungee";
     font-weight: 100;
@@ -1173,11 +1123,11 @@ button, input[type=submit], .ErrorPage > a, .buttonStyle {
     margin: 0px 7px 0px 0px!important;
 }
 
-.SearchBox {
+.searchBox {
     margin: 10px;
 }
 
-.SearchBox > input {
+.searchBox > input {
     width: 100%;
     /* border: solid; */
     border: 1px solid;
@@ -1394,7 +1344,7 @@ details {
 }
 
 @media only screen and (min-width: 768px) {
-    .OptionsWidget > button, .OptionsWidget > div > button {
+    .optionsWidget > button, .optionsWidget > div > button {
         width: 90%;
     }
 }
@@ -1420,7 +1370,7 @@ details {
     border-radius: 2vh;
 }
 
-.OptionsWidget {
+.optionsWidget {
     margin: 30px 0px 0px 0px;
     border: 1px solid orange;
     padding: 10px 5px 20px;
@@ -1735,7 +1685,7 @@ width:90%;
       100% { background-color: transparent; }
   }
 
-.ErrorPage > a {
+.errorPage > a {
     height: unset;
 }
 
@@ -2147,7 +2097,7 @@ div.about_div{
   }
   
   .adminNavButton--userManager {
-    background-image: url('/img/admin_imgs/manual_create.png');
+    background-image: url('/img/admin_imgs/umc.png');
     padding-top: 5vh;
   }
 
@@ -2262,4 +2212,13 @@ details > ul {
       }
 
 
+}
+
+.imdbLinkExternal {
+    cursor: pointer;
+    height: 2vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(/img/admin_imgs/link.png);
+    background-position: right;
 }

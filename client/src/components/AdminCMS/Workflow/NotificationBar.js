@@ -25,7 +25,7 @@ function NotificationBar({
 
   return (
 
-      <div className="Workflow--NotificationBar">
+      <div className="workflow--notificationBar">
         {catlist.map(category => {
           let classNameVar = "notificationBarTitle"
           if (dataListCounts[category] === 0) {
@@ -36,12 +36,12 @@ function NotificationBar({
           }
           return (
             <div
-              className="Workflow--NotificationBar--Block"
+              className="workflow--notificationBar--block"
               onClick={() => attemptChangeMode("wf"+category)}
             >
         {dataListCounts[category] !== null &&
                 dataListCounts[category] > 0 && (
-                  <span className="Workflow--NotificationBar--Block--Count">
+                  <span className="workflow--notificationBar--block--count">
                     {dataListCounts[category]}
                   </span>
               )}
@@ -53,107 +53,6 @@ function NotificationBar({
             </div>
           )
         })}
-
-
-        {/* <div
-          className="Workflow--NotificationBar--Block"
-          onClick={() => setAdminActiveMode("wfDownload")}
-        >
-          {loading ? (
-            <img src="../../../../public/img/339.gif" alt="loading" />
-          ) : (
-            dataListCounts["new"] !== null &&
-            dataListCounts["new"] > 0 && (
-              <span className="Workflow--NotificationBar--Block--Count">
-                {dataListCounts["new"]}
-              </span>
-            )
-          )}
-          <p
-            className={
-              dataListCounts["new"] > 0
-                ? "notificationBarTitle"
-                : "notificationBarTitleInactive"
-            }
-          >
-            New Entries
-          </p>
-        </div>
-
-        <div
-          className="Workflow--NotificationBar--Block"
-          onClick={() => setAdminActiveMode("wfComplete")}
-        >
-          {loading ? (
-            <img src="../../../../public/img/339.gif" alt="loading" />
-          ) : (
-            dataListCounts["downloading"] !== null &&
-            dataListCounts["downloading"] > 0 && (
-              <span className="Workflow--NotificationBar--Block--Count">
-                {dataListCounts["downloading"]}
-              </span>
-            )
-          )}
-          <p
-            className={
-              dataListCounts["downloading"] > 0
-                ? "notificationBarTitle"
-                : "notificationBarTitleInactive"
-            }
-          >
-            Downloading
-          </p>
-        </div>
-
-        <div
-          className="Workflow--NotificationBar--Block"
-          onClick={() => setAdminActiveMode("wfDownload")}
-        >
-          {loading ? (
-            <img src="../../../../public/img/339.gif" alt="loading" />
-          ) : (
-            dataListCounts["postponed"] !== null &&
-            dataListCounts["postponed"] > 0 && (
-              <span className="Workflow--NotificationBar--Block--Count">
-                {dataListCounts["postponed"]}
-              </span>
-            )
-          )}
-          <p
-            className={
-              dataListCounts["postponed"] > 0
-                ? "notificationBarTitle"
-                : "notificationBarTitleInactive"
-            }
-          >
-            Postponed
-          </p>
-        </div>
-
-        <div
-          className="Workflow--NotificationBar--Block"
-          onClick={() => setAdminActiveMode("wfCopy")}
-        >
-          {loading ? (
-            <img src="../../../../public/img/339.gif" alt="loading" />
-          ) : (
-            dataListCounts["complete"] !== null &&
-            dataListCounts["complete"] > 0 && (
-              <span className="Workflow--NotificationBar--Block--Count">
-                {dataListCounts["complete"]}
-              </span>
-            )
-          )}
-          <p
-            className={
-              dataListCounts["complete"] > 0
-                ? "notificationBarTitle"
-                : "notificationBarTitleInactive"
-            }
-          >
-            Complete
-          </p>
-        </div> */}
       </div>
   );
 }

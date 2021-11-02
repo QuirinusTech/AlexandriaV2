@@ -8,8 +8,8 @@ function Episodes({ episodes, setEpisodes }) {
     });
   }
 
-  return <div className="AdminAddNewForm--Row--episodes">
-    <div className="AdminAddNewForm--Row--episodes--from">
+  return <div className="adminAddNewForm--row--episodes">
+    <div className="adminAddNewForm--row--episodes--from">
       <label>From: </label>
       <div>
         <label>Season</label>
@@ -29,7 +29,7 @@ function Episodes({ episodes, setEpisodes }) {
       </div>
     </div>
 
-    <div className="AdminAddNewForm--Row--episodes--to">
+    <div className="adminAddNewForm--row--episodes--to">
       <label>To: </label>
       <div>
         <label>Season</label>

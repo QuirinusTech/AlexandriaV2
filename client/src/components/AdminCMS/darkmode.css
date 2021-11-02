@@ -38,7 +38,7 @@
     margin: unset;
     padding: 1vh;
     width: unset;
-}
+  }
 
   .banner {
     background-image: url("./library2.png");
@@ -91,6 +91,10 @@
     background-color: var(--accentRed) !important;
   }
   
+  .helpString {
+    background-color: var(--accentBlue)
+  }
+
 }
 
 .boldRedText {
@@ -219,6 +223,12 @@ summary.adminButton--small:hover {
   transition: 1s;
 }
 
+.absoluteTopRight {
+  position: absolute;
+  top: 3vh;
+  right: 1vw;
+}
+
 .loading {
   background-color: grey;
   color: black;
@@ -263,7 +273,7 @@ summary.adminButton--small:hover {
 }
 
 
-.popupSmall--Messages {
+.popupSmall--messages {
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -308,7 +318,7 @@ h4.warning, h5.warning {
   color: var(--accentRed);
 }
 
-.popup--Messages {
+.popup--messages {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
@@ -332,7 +342,7 @@ h4.warning, h5.warning {
   margin-left: 12vw;
 } */
 
-.AdminCMSTitlePage {
+.adminCMSTitlePage {
   width: 80vw;
 }
 
@@ -394,17 +404,13 @@ h4.warning, h5.warning {
   margin-left: 6vh;
 }
 
-.AdminActiveTask {
+.adminActiveTask {
   width: 100%;
   height: 100%;
   margin-left: 10vw;
 }
 
-/* .AdminWishlistMainDiv {
-  max-width: 1080px;
-} */
-
-.AdminNavBar {
+.adminNavBar {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -419,13 +425,13 @@ h4.warning, h5.warning {
   z-index: 1;
 }
 
-.AdminNavBar:hover {
+.adminNavBar:hover {
   width: 15vw;
   transition: 0.5s;
 }
 
 
-.AdminNavBar:hover > .adminNavbarQuirinusLogo > p {
+.adminNavBar:hover > .adminNavbarQuirinusLogo > p {
   display: unset;
   color: white;
   margin-top: 20px;
@@ -465,7 +471,7 @@ h4.warning, h5.warning {
   border-radius: 15px;
   padding: 5px 0;
 }
-.AdminNavBar:hover > div > h3 {
+.adminNavBar:hover > div > h3 {
   font-size: 2rem;
   transition: 0.7s;
   color: #7faefb;
@@ -553,7 +559,7 @@ h4.warning, h5.warning {
   transition: 1s;
 }
 
-.AdminNavBar > div > h2 {
+.adminNavBar > div > h2 {
   cursor: pointer;
   text-align: center;
   font-family: 'Bungee', sans-serif;
@@ -569,7 +575,7 @@ h4.warning, h5.warning {
   color: var(--lightGrey);
 }
 
-.AdminNavBar:hover > div > h2 {
+.adminNavBar:hover > div > h2 {
   
   transition: 1s;
   opacity: 1;
@@ -636,7 +642,7 @@ h4.warning, h5.warning {
   100% {background-color: #23232e;}
 }
 
-.RefreshButtons {
+.refreshButtons {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -681,7 +687,7 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
 
 
 
-.AdminCMSTitlePage--Welcome {
+.adminCMSTitlePage--welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -690,13 +696,13 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   justify-content: center;
 }
 
-.AdminCMSTitlePage--Welcome > h3, .AdminCMSTitlePage--Welcome > h4, .AdminCMSTitlePage--Welcome > h5 {
+.adminCMSTitlePage--welcome > h3, .adminCMSTitlePage--welcome > h4, .adminCMSTitlePage--welcome > h5 {
   min-width: 768px;
   margin: 20px 0px;
   text-align: center;
 }
 
-.AdminWishlistMainDiv, .AdminCMSTitlePage, .userManagerMain {
+.adminWishlistMainDiv, .adminCMSTitlePage, .userManagerMain {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
@@ -711,7 +717,7 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   padding: 1vh;
 }
 
-.AdminWishlistMainDiv > div {
+.adminWishlistMainDiv > div {
   /* border: 1px solid black; */
   margin: 20px;
 }
@@ -763,7 +769,7 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   transition:width 0.4s ease-in-out;
 }
 
-.editableTr--OptionsWidget {
+.editableTr--optionsWidget {
   left: 25vw;
   top: 20vh;
   /* position: fixed; */
@@ -777,19 +783,19 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   height: 60vh;
 }
 
-.editableTr--OptionsWidget--closeButton {
-  width: "fit-content";
-  position: "absolute";
-  top: "0px";
-  right: "0px";
-  height: "fit-content";
-  border-radius: "15px";
+.editableTr--optionsWidget--closeButton {
+  width: fit-content;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: fit-content;
+  border-radius: 15px;
 }
 
-.editableTr--OptionsWidget > div > .optionsWidgetHelpButton {
+.editableTr--optionsWidget > div > .optionsWidgetHelpButton {
   display: none;
 }
-.editableTr--OptionsWidget > div > button, .editableTr--OptionsWidget > div > div > button {
+.editableTr--optionsWidget > div > button, .editableTr--optionsWidget > div > div > button {
   width: 100%;
   background: var(--richGrey);
   border: none;
@@ -805,20 +811,20 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   color: white;
 }
 
-.editableTr--OptionsWidget > div > button:hover, .editableTr--OptionsWidget > div > div > button:hover {
+.editableTr--optionsWidget > div > button:hover, .editableTr--optionsWidget > div > div > button:hover {
   background-color: var(--richGrey);
   color: wheat;
   transition: 0.3s;
   border: none;
 }
 
-.editableTr--OptionsWidget > div > div {
+.editableTr--optionsWidget > div > div {
   display: flex;
   flex-direction: column;
   width: 90%;
 }
 
-.editableTr--OptionsWidget > div {
+.editableTr--optionsWidget > div {
   background: var(--transparentDarkGrey);
   border: 1px solid wheat;
 }
@@ -915,23 +921,25 @@ display: flex;
   font-size: x-large;
 }
 
-.EpisodesConsole {
-  position: fixed;
+.episodesConsole {
+  /* position: fixed; */
   z-index: 4;
   background: var(--darkGrey);
-  left: 0;
-  top: 0;
-  bottom: 0;
+  /* left: 0; */
+  /* top: 0; */
+  /* bottom: 0; */
   display: flex;
   flex-direction: column;
-  overflow: auto;
-  width: 90%;
+  overflow-y: scroll;
   height: 90%;
   align-self: center;
-  margin: 5%;
+  /* margin: 5%; */
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  padding-top: 3vh;
 }
 
-.EpisodesConsoleSeasonDiv {
+.episodesConsoleSeasonDiv {
   width: 90%;
   margin: 1% 5%;
   display: flex;
@@ -945,7 +953,7 @@ display: flex;
   padding: 2vw;
 }
 
-.EpisodesConsoleSeasonEpisodes > div {
+.episodesConsoleSeasonEpisodes > div {
   /* width: 100px;
   height: 100px; */
   flex-direction: row;
@@ -956,28 +964,28 @@ display: flex;
   flex-grow: 1;
 }
 
-.EpisodesConsoleSeasonEpisodes {
+.episodesConsoleSeasonEpisodes {
   width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
   margin-top: 1vw;
 }
-.EpisodesConsoleSeasonEpisodes > div {
+.episodesConsoleSeasonEpisodes > div {
   flex: 0 0 20%;
   padding: 0.5vw;
   /* border-right: 1px solid wheat; */
 }
 
-.EpisodesConsoleSeasonTitle {
+.episodesConsoleSeasonTitle {
   justify-content: space-between;
   width: 10vw;
 }
 
-.EpisodesConsoleSeasonEpisodes > div > p, .EpisodesConsoleSeasonEpisodes > div > select {
+.episodesConsoleSeasonEpisodes > div > p, .episodesConsoleSeasonEpisodes > div > select {
   flex-grow: 1;
 }
 
-.AddSeasonDiv {
+.addSeasonDiv {
   width: 20vw;
   /* border: 2px solid ; */
   align-self: center;
@@ -989,31 +997,31 @@ display: flex;
   align-items: center;
 }
 
-.AddSeasonDiv > div {
+.addSeasonDiv > div {
   /* margin: 0px 10px; */
   justify-content: space-evenly;
   width: 100%;
   flex-direction: column;
 }
 
-.AddSeasonDiv > div > label {
+.addSeasonDiv > div > label {
   padding: 10px;
 }
 
-.AddSeasonDiv > div > label {
+.addSeasonDiv > div > label {
   padding: 10px;
   justify-content: space-between;
   display: flex;
 }
 
-.AdminAddNewContainer {
+.adminAddNewContainer {
   justify-content: flex-start;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
 }
 
-.AdminAddNewForm, .MsgCentre--NewMessage, .userDetailManager {
+.adminAddNewForm, .msgCentre--newMessage, .userDetailManager {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -1028,7 +1036,7 @@ display: flex;
   color: white;
 }
 
-.AdminAddNewForm--Row--episodes > div > div > label, .AdminAddNewForm--Row--episodes > div > div > input {
+.adminAddNewForm--row--episodes > div > div > label, .adminAddNewForm--row--episodes > div > div > input {
   width: 45%;
   text-align: center;
   align-items: center;
@@ -1039,7 +1047,7 @@ display: flex;
   margin: 2px;
 }
 
-.AdminAddNewForm--Row--episodes > div > label {
+.adminAddNewForm--row--episodes > div > label {
   width: 100%;
   text-align: center;
   font-weight: bold;
@@ -1047,7 +1055,7 @@ display: flex;
 }
 
 
-.ImportForm {
+.importForm {
   display: flex;
   flex-direction: column !important;
   flex-wrap: nowrap;
@@ -1057,7 +1065,7 @@ display: flex;
   align-items: center;
 }
 
-.ImportForm > div {
+.importForm > div {
   flex-direction: row !important;
   justify-content: space-evenly;
   align-items: center;
@@ -1065,7 +1073,7 @@ display: flex;
   margin: 20px 0px;
 }
 
-.AdminAddNewForm > div {
+.adminAddNewForm > div {
   display: flex;
   flex-direction: row;
   margin: 10px;
@@ -1073,19 +1081,19 @@ display: flex;
   width: 90%;
 }
 
-.ImportForm > div > label {
+.importForm > div > label {
   flex-grow: 1;
   margin: 0 4vw;
   padding: 0.5vh 1vw;
 }
 
-.AdminAddNewForm > div > div {
+.adminAddNewForm > div > div {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.AdminAddNewForm > div > div > div {
+.adminAddNewForm > div > div > div {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid black;
@@ -1094,7 +1102,7 @@ display: flex;
   flex-grow: 1;
 }
 
-.AdminAddNewForm > div > div > div > input[type="date"], .AdminAddNewForm > div > div > div > select {
+.adminAddNewForm > div > div > div > input[type="date"], .adminAddNewForm > div > div > div > select {
   font-size: large;
   align-self: center;
   justify-self: center;
@@ -1102,11 +1110,11 @@ display: flex;
   text-align: center;
 }
 
-.AdminAddNewForm--Row--imdbInfo > div {
+.adminAddNewForm--row--imdbInfo > div {
   margin: 0px 10px;
 }
 
-.AdminAddNewForm--Row--imdbInfo > div > input, .AdminAddNewForm--Row--imdbInfo > div > label, .AdminAddNewForm--Row--imdbInfo > div > button {
+.adminAddNewForm--row--imdbInfo > div > input, .adminAddNewForm--row--imdbInfo > div > label, .adminAddNewForm--row--imdbInfo > div > button {
   width: 80%;
   margin: 10px;
   align-self: center;
@@ -1114,18 +1122,18 @@ display: flex;
   text-align: center;
 }
 
-.MsgCentre--NewMessage {
+.msgCentre--newMessage {
   flex-direction: column;
   place-self: flex-start;
 }
 
-.MsgCentre--NewMessage > div {
+.msgCentre--newMessage > div {
   width: 80%;
   margin: 10px;
   
 }
 
-.MsgCentre--NewMessage > div > select {
+.msgCentre--newMessage > div > select {
   font-size: large;
   margin: 10px;
   width: 40%;
@@ -1135,30 +1143,30 @@ display: flex;
   text-align: center;
 }
 
-.MsgCentre--NewMessage > div > textarea {
+.msgCentre--newMessage > div > textarea {
   margin: 10px;
   min-height: 200px;
 }
 
-.FilterEntriesBy {
+.filterEntriesBy {
   height: fit-content;
   overflow: hidden !important;
 }
 
-.FilterEntriesBy > summary {
+.filterEntriesBy > summary {
   margin-top: 0;
   width: 100%;
   z-index: 2;
   border-radius: 0px;
 }
 
-.FilterEntriesBy > div {
+.filterEntriesBy > div {
   width: 100%;
   justify-content: space-around;
   display: flex;
 }
 
-.FilterEntriesBy > div > select, .FilterEntriesBy > div > label {
+.filterEntriesBy > div > select, .filterEntriesBy > div > label {
   width: 40%;
 }
 
@@ -1170,13 +1178,13 @@ display: flex;
     place-self: center;
 }
 
-.MessageCentrePreview, .SimulatedMessageCentre {
+.messageCentrePreview, .simulatedMessageCentre {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
-.SimulatedMessageCentre {
+.simulatedMessageCentre {
   margin: 1vw;
   padding: 1vw;
   display: flex;
@@ -1187,13 +1195,13 @@ display: flex;
   place-self: center;
 }
 
-.MessageCentrePreview > h5, .MessageCentrePreview > h4 {
+.messageCentrePreview > h5, .messageCentrePreview > h4 {
   text-align: center;
   padding: 0;
   margin: 1vw;
 }
 
-.MessageCentrePreview > h4 {
+.messageCentrePreview > h4 {
   color: wheat;
   font-size: larger;
 }
@@ -1225,12 +1233,12 @@ td > table.usersVisTable {
   align-items: center;
 }
 
-.MessageCentre, .MessageCentre > div {
+.messageCentre, .messageCentre > div {
   display: flex;
   flex-direction: column;
 }
 
-.AffectedEntryEpisodeListCheckboxes, .seasonCheckboxDiv {
+.affectedEntryEpisodeListCheckboxes, .seasonCheckboxDiv {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1238,27 +1246,27 @@ td > table.usersVisTable {
 
 
 
-.AffectedEntryEpisodeListCheckboxes--DetailsElement {
+.affectedEntryEpisodeListCheckboxes--detailsElement {
   width: 100%;
 }
 
-.FilterEntriesBy {
+.filterEntriesBy {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 50%;
 }
 
-.FilterEntriesBy > details {
+.filterEntriesBy > details {
   justify-content: space-evenly;
 }
 
-.FilterEntriesBy > details > div {
+.filterEntriesBy > details > div {
   width: 100px;
   margin: 10px;
 }
 
-.FilterEntriesBy > div > label, .FilterEntriesBy > div > select {
+.filterEntriesBy > div > label, .filterEntriesBy > div > select {
   margin: 10px;
 }
 
@@ -1281,7 +1289,7 @@ td > table.usersVisTable {
   justify-self: center;
 }
 
-.NewMessageEntrySelectRow {
+.newMessageEntrySelectRow {
   display: flex;
   flex-direction: row;
   height: 200px;
@@ -1436,7 +1444,7 @@ td > table.usersVisTable {
   flex-direction: column;
 }
 
-.WorkflowCardsList {
+.workflowCardsList {
   display: flex;
   flex-direction: column !important;
   /* border: 2px solid darkorchid; */
@@ -1451,7 +1459,7 @@ td > table.usersVisTable {
   margin-top: -0.5vw;
 }
 
-.WorkflowCardsList--Section {
+.workflowCardsList--section {
   height: unset !important;
   min-width: unset !important;
   min-height: unset !important;
@@ -1468,7 +1476,7 @@ td > table.usersVisTable {
   background: var(--darkGrey)
 }
 
-.WorkflowCardsList--Section > h4 {
+.workflowCardsList--section > h4 {
   margin: 0;
   text-align: center;
   width: 100%;
@@ -1484,7 +1492,7 @@ td > table.usersVisTable {
   width: 90%;
 }
 
-.WorkFlowContent {
+.workflowContent {
   margin: 10px;
   justify-content: flex-start;
   height: 100%;
@@ -1500,7 +1508,7 @@ td > table.usersVisTable {
   min-height: 500px;
 }
 
-.Workflow--NotificationBar {
+.workflow--notificationBar {
   width: 100%;
   height: -moz-fit-content;
   /* height: fit-content; */
@@ -1628,14 +1636,11 @@ td > table.usersVisTable {
   width: 40%;
 }
 
-
-
-
-
 .form-switch {
-  display: inline-block;
+  display: flex;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  margin-top: 0.5vh;
 }
 
 .form-switch i {
@@ -1701,12 +1706,12 @@ td > table.usersVisTable {
   place-content: center;
 }
 
-.WorkflowItemStatusText > p {
+.workflowItemStatusText > p {
   color: var(--accentBlue);
   font-weight: bold;
 }
 
-span.Workflow--NotificationBar--Block--Count {
+span.workflow--notificationBar--block--count {
   position: absolute;
   margin-left: -55px;
   background: red;
@@ -1721,19 +1726,19 @@ span.Workflow--NotificationBar--Block--Count {
   font-size: small;
 }
 
-.Workflow--NotificationBar--Block > p {
+.workflow--notificationBar--block > p {
   width: 53px;
   white-space: nowrap;
 }
 
-.Workflow--NotificationBar--Block {
+.workflow--notificationBar--block {
   padding: 0.3vw;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
-.WorkflowCardsListCard {
+.workflowCardsListCard {
   cursor: pointer;
   border-bottom: 1px solid var(--lightGrey);
   padding-left: 15px;
@@ -1750,7 +1755,7 @@ span.Workflow--NotificationBar--Block--Count {
   color: ghostwhite;
 }
 
-.WorkflowCardsListCard:hover, .activeTicket {
+.workflowCardsListCard:hover, .activeTicket {
   color: var(--accentBlue);
   border-bottom: 1px solid var(--accentBlue);
   padding-left: 20px;
@@ -1778,7 +1783,7 @@ span.Workflow--NotificationBar--Block--Count {
   text-align: center;
 }
 
-.Resolved, .Resolved:hover {
+.resolved, .resolved:hover {
   background-color: var(--transparentGrey);
   color: var(--lightGrey);
   padding-top: 1px;
@@ -1819,12 +1824,12 @@ span.Workflow--NotificationBar--Block--Count {
   text-align: center;
 }
 
-.MediaDetails {
+.mediaDetails {
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.MediaDetails > h3 {
+.mediaDetails > h3 {
   width: 100%;
   text-transform: uppercase;
 }
@@ -1911,7 +1916,7 @@ span.Workflow--NotificationBar--Block--Count {
   flex-wrap: nowrap;
 }
 
-.LinksList--Seasons > button {
+.linksList--seasons > button {
   flex: 0 0 22%;
 }
 
@@ -1981,11 +1986,11 @@ span.Workflow--NotificationBar--Block--Count {
   flex: 1 0 20%;
 }
 
-.LinksList {
+.linksList {
   flex-direction: column;
 }
 
-.LinksList > button, .LinksList > div > button {
+.linksList > button, .linksList > div > button {
   padding: 10px;
   width: unset !important;
   border-radius: 5px;
@@ -1994,25 +1999,25 @@ span.Workflow--NotificationBar--Block--Count {
   margin: 10px;
 }
 
-.LinksList > details {
+.linksList > details {
   width: 99%;
 }
 
-.LinksList--Seasons {
+.linksList--seasons {
   align-self: stretch;
 }
 
-.LinksList--Episodes--SeasonDiv > div > button {
+.linksList--episodes--seasonDiv > div > button {
   flex: 0 0 30%;
 }
 
-.LinksList--Episodes--SeasonDiv {
+.linksList--episodes--seasonDiv {
   flex-direction: column;
   align-content: stretch;
   padding-bottom: 30px;
 }
 
-.LinksList--Episodes--SeasonDiv > h5 {
+.linksList--episodes--seasonDiv > h5 {
   text-align: center;
 }
 
@@ -2067,6 +2072,14 @@ span.Workflow--NotificationBar--Block--Count {
   justify-content: flex-start;
 }
 
+.UMC-selectUserMessage {
+  text-align: center;
+  margin: 4vh 0;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--transparentDarkGrey);
+}
+
 .userDetailManager > div > div > p, .userDetailManager > div > div > span {
   width: 100%;
   /* margin: 0; */
@@ -2088,6 +2101,9 @@ span.Workflow--NotificationBar--Block--Count {
   border-bottom-right-radius: 15px;
 }
 
+.userDetailManager > div > div > span > input[type="checkbox"] {
+  transform: scale(2);
+}
 
 .userDetailManager > div > h4 {
   width: 100%;
@@ -2110,7 +2126,16 @@ span.Workflow--NotificationBar--Block--Count {
   justify-content: center;
   align-items: center;
 }
-.UMDetails--TopRow > div:nth-child(1) {
+
+.umDetails--details > details > div > div {
+  margin: 1vh;
+}
+
+.userDetailManager > div > div > input[type="checkbox"] {
+  scale: 2;
+}
+
+.umDetails--topRow > div:nth-child(1) {
   background-color: var(--transparentDarkGrey);
 }
 
@@ -2232,7 +2257,7 @@ span.Workflow--NotificationBar--Block--Count {
   width: 45% !important;
 }
 
-.adminButton--Neutral--small {
+.adminButton--neutral--small {
   margin: 0px 10px;
   padding: 0 !important;
   font-size: small;
@@ -2245,7 +2270,7 @@ span.Workflow--NotificationBar--Block--Count {
   transition: 1s;
 }
 
-.adminButton--Neutral--small:hover {
+.adminButton--neutral--small:hover {
   background-color: rgb(171, 86, 214) !important;
   border: 1px solid rgb(78, 0, 109) !important;
   color: white !important;

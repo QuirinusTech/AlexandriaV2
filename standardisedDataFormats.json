@@ -1,5 +1,5 @@
 {"StandardisedDataFormats" : [
-  {"Notification / Message" :
+  {"Notification / Message (OLD)" :
   {
     "messageType": "status || custom",
     "customMessageContent": "messageString or episodes info",
@@ -11,6 +11,17 @@
     },
     "affectedEntry": "entry title"
   }},
+  {"Notification / Message (NEW)" :
+    {
+      "id": "12345",
+      "msgType": "status || custom",
+      "msgContent": "message text or status update",
+      "mailed": "boolean",
+      "read": "boolean",
+      "msgRecipient": "username",
+      "affectedEntry": "title",
+      "affectedEpisodes": ["sf", "ef", "st", "et"]
+    }},
   {"user": {
     "userId": "uuid",
     "username": "username",
@@ -25,7 +36,7 @@
     },
     "password": "hashed and salted",
     "preferences": {
-      "language": "'EN'",
+      "language": "EN",
       "display_message_centre": "bool"
       }
     }

@@ -176,7 +176,7 @@ async function getNotifications() {
       </Route>
 
       <Route exact path="/oops">
-        <div className="ErrorPage">
+        <div className="errorPage">
           <h2>EIN FEHLER IST AUFGETRETEN</h2>
           <p>{errorPageContent}</p>
           <Link to="/">Home Page</Link>
@@ -238,7 +238,7 @@ async function getNotifications() {
       </Route>
 
       {notifications.length > 0 && (
-        <NotificationsCentre notifications={notifications} />
+        <NotificationsCentre notifications={notifications} setNotifications={setNotifications} />
       )}
 
     </Router>

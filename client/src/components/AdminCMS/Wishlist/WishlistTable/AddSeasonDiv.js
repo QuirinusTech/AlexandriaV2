@@ -1,6 +1,6 @@
 const AddSeasonDiv = ({addSeasonVariables, addSeasonChangeHandler, allPossibleStatuses, addSeason}) => {
     return (
-    <div className="AddSeasonDiv">
+    <div className="addSeasonDiv">
       <div>
       <h5>Add Season</h5>
       </div>

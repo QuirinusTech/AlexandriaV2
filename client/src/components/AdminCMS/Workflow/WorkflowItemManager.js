@@ -48,7 +48,7 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
   return (
     <>
       <h3>{adminActiveMode.slice(2)}</h3>
-      <div className="MediaDetails">
+      <div className="mediaDetails">
         <MediaDetails
           currentEntry={currentEntry}
           adminActiveMode={adminActiveMode}

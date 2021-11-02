@@ -44,7 +44,7 @@ const adminNavBarVar = [
   },
   {
     task: "UserManager",
-    title: "User Management",
+    title: "UMC",
     desc: "userManager",
     modes: [
       { modeName: "userCMS", description: "User Manager" },
@@ -57,7 +57,7 @@ const adminNavBarVar = [
 
 
   return (
-    <div className="AdminNavBar">
+    <div className="adminNavBar">
       <div className="adminNavbarQuirinusLogo" onClick={()=> {setAdminActiveTask(null); setAdminActiveMode(null)}}>
         <p>Powered by</p>
         <h3>Quirinus Tech</h3>

@@ -56,8 +56,8 @@ const [counter, setCounter] = useState(10)
           </>
         )}
         <div
-          className={isDismissable ? "popup--Messages" : "popupSmall--Messages"}
-          key={isDismissable ? "popup--Messages" : "popupSmall--Messages"}
+          className={isDismissable ? "popup--messages" : "popupSmall--messages"}
+          key={isDismissable ? "popup--messages" : "popupSmall--messages"}
         >
           {messages.map((msg, index) => {
             return <p key={msg + index}>{msg}</p>;
@@ -65,7 +65,7 @@ const [counter, setCounter] = useState(10)
         </div>
         {isDismissable && (
           <button
-            key={isDismissable ? "popup--OKButton" : "popupSmall--OkButton"}
+            key={isDismissable ? "popup--okButton" : "popupSmall--okButton"}
             className="adminButton"
             onClick={() => setPopupIsVisible(false)}
           >

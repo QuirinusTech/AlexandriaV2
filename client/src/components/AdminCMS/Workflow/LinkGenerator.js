@@ -3,8 +3,13 @@ import LinksList from "./LinksList"
 
 function LinkGenerator({ currentEntry }) {
 
+  const [sortBy, setSortBy] = useState(localStorage.getItem('linkGenSortBy') === null ? 'seeds' : localStorage.getItem('linkGenSortBy'));
 
-  const [sortBy, setSortBy] = useState("seeders");
+
+  function sortSelect(arg) {
+    setSortBy(arg)
+    localStorage.setItem('linkGenSortBy', arg)
+  }
  
   return (<>
     <div className="linkGenerator">
@@ -19,7 +24,7 @@ function LinkGenerator({ currentEntry }) {
             name="sortBy"
             value="seeds"
             checked={sortBy === "seeds"}
-            onChange={(e)=> {setSortBy(e.target.value)}}
+            onChange={()=> {sortSelect('seeds')}}
           />
           Number of Seeders
         </label>
@@ -29,7 +34,7 @@ function LinkGenerator({ currentEntry }) {
             name="sortBy"
             value="size"
             checked={sortBy === "size"}
-            onChange={(e)=> {setSortBy(e.target.value)}}
+            onChange={()=> {sortSelect('size')}}
           />
           Size
         </label>
@@ -39,7 +44,7 @@ function LinkGenerator({ currentEntry }) {
             name="sortBy"
             value="name"
             checked={sortBy === "name"}
-            onChange={(e)=> {setSortBy(e.target.value)}}
+            onChange={()=> {sortSelect('name')}}
           />
           Name
         </label>

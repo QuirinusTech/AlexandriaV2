@@ -36,7 +36,7 @@ function Wishlist({wishlistData, setWishlistData, dataSetup}) {
           setStatusFilters={setStatusFilters}
           statusFilters={statusFilters}
         />
-        <div className="SearchBox">
+        <div className="searchBox">
           <input type="text" placeholder="search by title..." value={searchBoxValue} onChange={(e)=> {setSearchBoxValue(e.target.value)}} />
           {searchBoxValue !== '' && <button onClick={()=>setSearchBoxValue('')}>Reset search</button>}
         </div>

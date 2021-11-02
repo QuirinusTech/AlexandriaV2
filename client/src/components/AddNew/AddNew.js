@@ -162,7 +162,7 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
 
   const Completed = () => {
     return (
-      <div className="PopupBox">
+      <div className="popupBox">
         {recentlyadded !== "" && (
           <p>You've successfully added "{recentlyadded}" to the Wishlist.</p>
         )}

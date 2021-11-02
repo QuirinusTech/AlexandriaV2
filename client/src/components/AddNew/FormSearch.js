@@ -11,7 +11,7 @@ const FormSearch = ({
   return isSearching ? <PNGLoader /> :  (
       <form onSubmit={handleSubmit} className="formSearch">
         <h3>Let's get some info first:</h3>
-        {errorMsg !== null && <div className="FormSearch--NoResults">
+        {errorMsg !== null && <div className="formSearchNoResults">
           <p>No results found for <b>{errorMsg[1]}</b>. </p>
           <p>Please check your spelling and try again. </p>
           <p>Error from IMDB: </p>

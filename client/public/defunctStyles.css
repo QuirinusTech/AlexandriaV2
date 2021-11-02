@@ -1,0 +1,44 @@
+.ConnectivityTestBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(235, 235, 235);
+  width: fit-content;
+}
+
+.ConnectivityTestBox > button {
+  border: 1px solid Black;
+  color: black;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0px;
+  background-color: grey;
+  font-size: xx-small;
+  width: fit-content;
+}
+
+.connsuccess {
+  background-color: greenyellow !important;
+}
+
+.connfail {
+  background-color: red !important;
+}
+
+.ConnectivityTestBox > p {
+  font-size: xx-small;
+  padding: 0px;
+  margin: 0px;
+}
+
+.MobileNavBar {
+  background-color: #414141;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width:100%;
+  min-width: 360px;
+  position: absolute;  
+}

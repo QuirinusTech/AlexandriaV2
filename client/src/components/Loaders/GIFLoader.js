@@ -1,8 +1,8 @@
 const GIFLoader = () => {
   return (
     <div>
-      <div className="GIFLoader" id="GifLoader">
-        <p className="GIFLoaderText">Loading</p>
+      <div className="gifLoader" id="gifLoader">
+        <p className="gifLoaderText">Loading</p>
       </div>
     </div>
   )

@@ -28,8 +28,8 @@ const MediaOptions = ({
   }
 
   return (
-    <div className="AdminAddNewForm--Row--MediaOptions">
-      <div className="AdminAddNewForm--Row--MediaOptions--FirstRow">
+    <div className="adminAddNewForm--row--mediaOptions">
+      <div className="adminAddNewForm--row--mediaOptions--firstRow">
         <div>
           <label>User</label>
           <select
@@ -105,7 +105,7 @@ const MediaOptions = ({
         </div>
       </div>
 
-      <div className="AdminAddNewForm--Row--MediaOptions--Checkboxes">
+      <div className="adminAddNewForm--row--mediaOptions--checkboxes">
         <div>
           <label>Ongoing series</label>
           <input

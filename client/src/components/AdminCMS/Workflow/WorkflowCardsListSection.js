@@ -2,13 +2,13 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const WorkflowCardsListSection = ({list, currentEntryId, category, cardClick}) => {
   
-  return (<div className="WorkflowCardsList--Section" open>
+  return (<div className="workflowCardsList--section" open>
           <h4>{category} ({list.length})</h4>
           <AnimatePresence>
 
           {list.length > 0 &&
             list.map((wfTicket, index) => {
-              let classNameString = "WorkflowCardsListCard"
+              let classNameString = "workflowCardsListCard"
               if (wfTicket["id"] === currentEntryId) {classNameString+=" activeTicket"}
               if (wfTicket["resolved"]) {classNameString+=" Resolved"}
               return (
