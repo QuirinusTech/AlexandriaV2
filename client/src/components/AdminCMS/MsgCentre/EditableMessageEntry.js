@@ -57,17 +57,51 @@ function EditableMessageEntry({
   } else {
     return (
       <tr className="editableMsgTr" key={message["id"]}>
-        <td>-</td>
         <td>
-      
-      <details className="darkDetails">
-      <summary>ID</summary>
+
       {message["id"]}
-      </details>
+
+        </td>
+        <td>
+            {message['read'] ? "✔️" : "❌"}
       
       </td>
         <td>
-          <select
+                    <select
+            name="msgType"
+            value={msgType}
+            onChange={e => {
+              setMsgType(e.target.value);
+            }}
+          >
+            <option value="custom">custom</option>
+            <option value="status">status</option>
+          </select>
+
+        </td>
+        <td>
+
+          {msgType === 'status' ?
+          <select name="msgContentStatus" value={msgContent} onChange={(e) => setMsgContent(e.target.value)}>
+            {allPossibleStatuses.map(status => {
+              return (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              );
+            })}
+          </select> : 
+          <input
+            style={{padding: 0, borderRadius: 0}}
+            type="text"
+            name="msgContentText"
+            value={msgContent}
+            onChange={(e) => setMsgContent(e.target.value)}
+          />
+          }
+        </td>
+        <td>
+        <select
             type="text"
             name="affectedEntry"
             value={affectedEntry}
@@ -82,39 +116,16 @@ function EditableMessageEntry({
               );
             })}
           </select>
+
         </td>
-        <td>
-          <select
-            name="msgType"
-            value={msgType}
-            onChange={e => {
-              setMsgType(e.target.value);
-            }}
-          >
-            <option value="custom">custom</option>
-            <option value="status">status</option>
-          </select>
-          {msgType === 'status' ?
-          <select name="msgContentStatus" value={msgContent} onChange={(e) => setMsgContent(e.target.value)}>
-            {allPossibleStatuses.map(status => {
-              return (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              );
+        <td className="tdShrink">
+        <div  className="flexdr flexw">
+            {affectedEpisodes.map((x,i) => {
+              return <><label className="shrinkLabelInTd">{i === 3 ? "ET" : i === 2 ? "ST" : i === 1 ? "EF" : "SF"}</label><input className="shrinkLabelInTd" value={x} type="number" onChange={e => setAE(e.target.value,i)} /></>
             })}
-          </select> : 
-          <input
-            type="text"
-            name="msgContentText"
-            value={msgContent}
-            onChange={(e) => setMsgContent(e.target.value)}
-          />
-          }
+        </div>
         </td>
         <td>
-          <div className="msgRecipient">
-          <h4>Recipient</h4>
             <select value={msgRecipient} onChange={e=>setMsgRecipient(e.target.value)}>
               {adminListUsers.map(user => {
                 return (
@@ -127,15 +138,6 @@ function EditableMessageEntry({
                 );
               })}
             </select>
-          </div>
-        </td>
-        <td>
-          <div className="affectedEpisodes">
-          <h4>Affected Episodes</h4>
-            {affectedEpisodes.map((x,i) => {
-              return <label>{i === 3 ? "ET" : i === 2 ? "ST" : i === 1 ? "EF" : "SF"}<input value={x} type="number" onChange={e => setAE(e.target.value,i)} /></label>
-            })}
-          </div>
         </td>
         <td>
           <button className="adminButton adminButton--small adminButton--submit" onClick={editDone}>

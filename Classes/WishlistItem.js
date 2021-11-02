@@ -65,7 +65,7 @@ class WishlistItem {
     * @param {int} val the number of the series
     * @return {string} String in standard Series / Episode naming convention
     */
-  static function epString(SorE, val) {
+  static epString(SorE, val) {
     let resultString = SorE.toUpperCase()
     resultString += parseInt(val) < 10 ? "0" + val : val
     return resultString

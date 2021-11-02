@@ -98,7 +98,7 @@ function ResultsTable({
         body: JSON.stringify(readyObj),
         headers: { "Content-type": "application/json; charset=UTF-8" }
       }).then(res => res.json());
-
+      console.log('%cResultsTable.js line:101 result', 'color: #007acc;', result);
       // console.log(result);
       if (!result["success"]) {
         setErrorPopupContent(JSON.stringify(result));
@@ -113,7 +113,7 @@ function ResultsTable({
         SetProgress("JustAdded");
       }
     } catch (error) {
-      setErrorPopupContent("Something went wrong: " + error);
+      setErrorPopupContent("Something went wrong: " + error.message);
       setReadyToAdd(false);
     } finally {
       setLoading(false);
@@ -196,10 +196,10 @@ function ResultsTable({
           <ul>
             <p>Would you like to: </p>
             <li>
-              <Link className="purplelink" to="/addnew">
-                ADD ANOTHER
-              </Link>{" "}
-              item to the list
+              <p>
+                <b className="purplelink" onClick={reset}>ADD ANOTHER</b> item to the list
+              </p>
+              
             </li>
             <li>
               Check on the{" "}

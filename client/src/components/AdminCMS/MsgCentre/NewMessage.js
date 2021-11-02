@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GIFLoader from "../../Loaders/GIFLoader.js";
-import AffectedEntryEpisodeListCheckboxes from "./AffectedEntryEpisodesListCheckboxes";
+// import AffectedEntryEpisodeListCheckboxes from "./AffectedEntryEpisodesListCheckboxes";
 import Popup from "../../Popup"
 
 function NewMessage({
@@ -164,7 +164,7 @@ function NewMessage({
       msgType,
       msgContent,
       msgRecipient,
-      affectedEntry,
+      affectedEntry: affectedEntry['name'],
       affectedEpisodes
     };
     console.log(messageVar)
@@ -221,7 +221,8 @@ function NewMessage({
       />}
       <h3>New Message</h3>
 
-      <div className="flexdr mar10px">
+      <div className="flexdr mar10px newMessageSubsection">
+        <h4>Message Type</h4>
         <select
           value={msgType}
           name="msgType"
@@ -236,7 +237,8 @@ function NewMessage({
         </select>
       </div>
 
-      <div className="flexdr w70perc" id="manual_message_custom_text_div">
+      <div className="flexdr w70perc newMessageSubsection" id="manual_message_custom_text_div">
+      <h4>Content</h4>
         {msgType === "status" ? (
           <select
             name="manual_message_status"
@@ -273,9 +275,9 @@ function NewMessage({
           
 
 
-      <div className="newMessageEntrySelectRow">
-
-        <details className="darkDetails FilterEntriesBy" open>
+      <div className="newMessageEntrySelectRow newMessageSubsection">
+        <h4>Affected Entry</h4>
+        <details className="darkDetails filterEntriesBy" open>
           <summary className="adminButton">Filter Entries</summary>
           <div>
             <label>Owner</label>
@@ -319,6 +321,7 @@ function NewMessage({
           </div>
         </details>
         
+        <div className="affectedEntrySelect">
 
         {Array.isArray(filteredWishlist) && filteredWishlist.length > 0 && (
           <select
@@ -365,6 +368,8 @@ function NewMessage({
             </button>
           </div>
         )}
+        </div>
+
       </div>
 
         {/* {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
@@ -375,16 +380,67 @@ function NewMessage({
           />
         )} */}
       {affectedEntry !== null && affectedEntry["mediaType"] !== "movie" && (
-        <div className="affectedEpisodes">
+        <div className="affectedEpisodes newMessageSubsection">
         <h4>Affected Episodes</h4>
-          {affectedEpisodes.map((x,i) => {
-            return <label>{i === 3 ? "ET" : i === 2 ? "ST" : i === 1 ? "EF" : "SF"}<input value={x} type="number" onChange={e => setAE(e.target.value,i)} /></label>
-          })}
+          <div>
+            <span>From</span>
+            <div>
+
+            <div>
+
+            <label>
+              Season
+            </label>
+              <input  min="0" value={affectedEpisodes[0]} type="number" onChange={e => setAE(parseInt(e.target.value),0)} />
+            </div>
+
+<div>
+
+            <label>
+              Episode
+            </label>
+              <input  min="0" value={affectedEpisodes[1]} type="number" onChange={e => setAE(parseInt(e.target.value),1)} />
+</div>
+            </div>
+          </div>
+          <div>
+            <span>To</span>
+            <div>
+<div>
+
+            <label>
+              Season
+            </label>
+              <input min="0" value={affectedEpisodes[2]} type="number" onChange={e => setAE(parseInt(e.target.value),2)} />
+</div>
+<div>
+
+            <label>
+              Episode
+            </label>
+              <input  min="0" value={affectedEpisodes[3]} type="number" onChange={e => setAE(parseInt(e.target.value),3)} />
+</div>
+            </div>
+          </div>
+
+          {/* {affectedEpisodes.map((x,i) => {
+            return (
+              <>
+                {i === 2 ? <span>To</span> : i === 0 ? <span>From</span> : <></>}
+              <div>
+                <label>
+                  {i%2 === 0 ? "Season" : "Episode"}
+                  <input value={x} type="number" onChange={e => setAE(e.target.value,i)} />
+                </label>
+              </div>
+              </>
+              )
+          })} */}
         </div>
       )}
 
 
-      <div className="msgRecipient">
+      <div className="msgRecipient newMessageSubsection">
         <h4>Recipient:</h4>
         <select value={msgRecipient} onChange={e=>setMsgRecipient(e.target.value)}>
           {adminListUsers.map(user => {

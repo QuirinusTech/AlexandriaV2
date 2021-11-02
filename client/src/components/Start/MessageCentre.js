@@ -1,9 +1,9 @@
 const MessageCentre = ({ notificationsList }) => {
   const customMessages = notificationsList.filter(
-    x => x["messageType"] === "custom"
+    x => x["msgType"] === "custom"
   );
   const statusMessages = notificationsList.filter(
-    x => x["messageType"] === "status"
+    x => x["msgType"] === "status"
   );
 
   const CustomMessages = ({ customMessages }) => {
@@ -14,7 +14,7 @@ const MessageCentre = ({ notificationsList }) => {
           {customMessages.map(message => {
             return (
               <li key={message["affectedEntry"]}>
-                {message["msgContent"]} {message["affectedEntry"] !== "" && message["affectedEntry"]} {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
+                {message["msgContent"]} {message["affectedEntry"] !== "" && "(" + message["affectedEntry"] + ")"} {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
               </li>
             );
           })}
@@ -30,9 +30,9 @@ const MessageCentre = ({ notificationsList }) => {
     }
 
     if (isNaN(epList[0]) || epList[0] === 0) {
-      return (<>"N/A"</>) 
+      return (<></>) 
     } else {
-      return (<>{`S${stringMod(epList[0])}E${stringMod(epList[1])} - S${stringMod(epList[2])}E${stringMod(epList[3])}`}</>)
+      return (<>{`(S${stringMod(epList[0])}E${stringMod(epList[1])} - S${stringMod(epList[2])}E${stringMod(epList[3])})`}</>)
     }
   }
 
@@ -50,7 +50,7 @@ const MessageCentre = ({ notificationsList }) => {
               .map(message => {
                 return (
                     <li key={message["affectedEntry"]}>
-                      {message["affectedEntry"]} {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
+                      {message["affectedEntry"]}  {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
                     </li>
                   );
                 }

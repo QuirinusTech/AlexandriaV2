@@ -112,6 +112,8 @@ async function getUserNotifications(username) {
     snapshot.forEach((doc) => messages.push(doc.data()))
     console.log('%cfirebase.js line:85 messages', 'color: #007acc;', messages);
     return messages
+  } catch (e) {
+    console.log(e.message)
   }
 }
 
@@ -119,7 +121,7 @@ async function markRead(msgList) {
   try {
     const batch = db.batch();
     msgList.forEach(msgId => {
-      const entryref = notificationsRef.doc(msgId)
+      const entryref = db.collection('notifications').doc(msgId)
       batch.update(entryref, {'read': true})
     })
     await batch.commit();
@@ -593,8 +595,9 @@ async function unBlacklist(username, data) {
  * @param  {msgContent} event
  */
 async function notifyAdmin(msgType, title, contentOrStatus, episodes=[0,0,0,0]) {
+  let id = uuid.v4()
   let newMessage = {
-    "id": uuid.v4(),
+    id,
     msgType,
     "msgContent": contentOrStatus,
     "msgRecipient": "aegisthus",

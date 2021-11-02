@@ -7,25 +7,31 @@ const NotificationsCentre = ({ notifications, setNotifications }) => {
   const [isShown, setIsShown] = useState(false);
 
   async function markMessageRead() {
-    await fetch("/markread", {
-      method: "POST",
-      body: JSON.stringify({
-        username: localStorage.getItem("username"),
-        msgList: notifications.filter(x => x['id'])
-      }),
-      headers: { "Content-type": "application/json; charset=UTF-8" }
-    }).then(res => {
-      if (res.status === 200) {
-        console.log('%c Msg purge', 'color: #00ff00;', 'SUCCESS')
-        let copy = [...notifications]
-        copy.forEach(x => x['read'] = true)
-        setNotifications(copy)
-      } else {
-        console.log('%c Msg purge', 'color: #ff0000;', 'FAIL')
-      }
-      console.log('%cNotifications.js line:22 res.json()', 'color: #007acc;', res.json());
+    let unreadMessage = notifications.filter(x => !x['read'])
+    if (unreadMessage.length < 1) {
       setIsShown(false)
-    })
+    } else {
+      await fetch("/markread", {
+        method: "POST",
+        body: JSON.stringify({
+          username: localStorage.getItem("username"),
+          msgList: unreadMessage.map(x => x['id'])
+        }),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+      }).then(res => {
+        if (res.status === 200) {
+          console.log('%c Msg purge', 'color: #00ff00;', 'SUCCESS')
+          let copy = [...notifications]
+          copy.forEach(x => x['read'] = true)
+          setNotifications(copy)
+        } else {
+          console.log('%c Msg purge', 'color: #ff0000;', 'FAIL')
+        }
+        return res.json()}).then(data => {
+          console.log('%cNotifications.js line:22 data', 'color: #007acc;', data);
+          setIsShown(false)
+      })
+    }
   }
 
   if (notifications.length > 0) {

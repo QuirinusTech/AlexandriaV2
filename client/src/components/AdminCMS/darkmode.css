@@ -14,6 +14,7 @@
   --accentOrangeDeep: #e2881a;
   --customBoxShadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
   --customTextShadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
+  --darkDetailsBackground: #2f2f35;
 }
 
 
@@ -379,6 +380,19 @@ h4.warning, h5.warning {
   color: var(--accentBlue);
   transition: 0.2s;
 }
+
+.tdShrink {
+  max-width: 12vw;
+  padding: 1vh 0;
+  margin: 0;
+  justify-content: center;
+}
+
+.shrinkLabelInTd {
+  width: 25%;
+  flex: 1 1 20%;
+}
+
 .adminTableTr > td > p {
   font-size: xx-small;
   margin: 0;
@@ -700,6 +714,21 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   min-width: 768px;
   margin: 20px 0px;
   text-align: center;
+}
+
+.dataLoadStatus {
+  border: 1px solid var(--accentBlue);
+  padding: 1vh;
+  background: var(--darkGrey);
+  color: var(--accentBlueDeep);
+  border-radius: 1vh;
+  margin-top: 5vh;
+}
+
+.dataLoadStatus--fail {
+  border: 1px solid var(--accentRed) !important;
+  color: var(--accentRedDeep) !important;
+  background: var(--transparentLightGrey) !important;
 }
 
 .adminWishlistMainDiv, .adminCMSTitlePage, .userManagerMain {
@@ -1145,12 +1174,12 @@ display: flex;
 
 .msgCentre--newMessage > div > textarea {
   margin: 10px;
-  min-height: 200px;
 }
 
 .filterEntriesBy {
   height: fit-content;
   overflow: hidden !important;
+  flex: 1;
 }
 
 .filterEntriesBy > summary {
@@ -1244,11 +1273,11 @@ td > table.usersVisTable {
   width: 100%;
 }
 
-
-
 .affectedEntryEpisodeListCheckboxes--detailsElement {
   width: 100%;
 }
+
+
 
 .filterEntriesBy {
   display: flex;
@@ -1270,10 +1299,15 @@ td > table.usersVisTable {
   margin: 10px;
 }
 
+.affectedEntrySelect {
+  flex: 1;
+}
+
 .filtersFailed {
   display: flex;
   align-content: center;
   flex-direction: column;
+  flex: 1;
 }
 
 .filtersFailed > p {
@@ -1289,13 +1323,67 @@ td > table.usersVisTable {
   justify-self: center;
 }
 
-.newMessageEntrySelectRow {
+.newMessageSubsection {
   display: flex;
   flex-direction: row;
-  height: 200px;
   flex-flow: nowrap;
   justify-content: space-around;
+  background: var(--darkGrey);
+  /* border: 1px solid wheat; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 1vh 0;
+  border-radius: 1vh;
 }
+
+
+.newMessageSubsection > h4, .newMessageSubsection > span {
+  text-align: center;
+  width: 100%;
+  height: fit-content;
+  margin: 1.5vh 0;
+}
+
+.newMessageSubsection > h4, .newMessageSubsection > h4 {
+  color: wheat;
+  margin: 0.5vh 0 2vh 0;
+}
+
+.affectedEpisodes > div > span {
+  font-weight: bold;
+  height: 100%;
+  width: 35%;
+  text-align: center;
+}
+
+.affectedEpisodes > div {
+  flex: 1;
+  flex-direction: row;
+  flex-flow: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  align-self: center;
+  margin: 0 1vw;
+}
+
+.affectedEpisodes > div > div {
+  height: 100%;
+    width: 60%;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.affectedEpisodes > div > div > div > input, .affectedEpisodes > div > div > div > label {
+  width: 100%;
+  padding: 0.5vh;
+  font-size: large;
+  border-radius: 1vh;
+  text-align: center;
+  flex: 1 1 20%;
+}
+
 
 .adminTableHeadRow > th {
   border-bottom: 2px solid black;
@@ -1326,7 +1414,7 @@ td > table.usersVisTable {
 
 .darkDetails[open], .adminWlTableImdbData>details[open] {
   padding-right: 2vw;
-  background: #2f2f35;
+  background: var(--darkDetailsBackground);
   border: 1px solid wheat;
   box-shadow: none;
   max-height: unset;
@@ -1483,6 +1571,7 @@ td > table.usersVisTable {
   padding: 0.5vh 0;
   border: 1px solid wheat;
   background: var(--richGrey);
+  text-transform: uppercase;
 }
 
 .wfCardText {
@@ -1511,7 +1600,7 @@ td > table.usersVisTable {
 .workflow--notificationBar {
   width: 100%;
   height: -moz-fit-content;
-  /* height: fit-content; */
+  height: fit-content;
   display: flex;
   flex-direction: row;
   /* justify-content: center; */

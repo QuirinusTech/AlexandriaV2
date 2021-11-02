@@ -1782,6 +1782,7 @@ width:90%;
     color: #940dd5;
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .quirinuslogo {
@@ -1813,6 +1814,14 @@ width:90%;
 .flexdr {
     display: flex;
     flex-direction: row;
+}
+
+.flexw {
+    flex-wrap: wrap;
+}
+
+.flexnw {
+    flex-wrap: nowrap;
 }
 
 /**********************************ABOUT***********************************************/

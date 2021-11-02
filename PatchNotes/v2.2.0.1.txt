@@ -24,10 +24,15 @@ Resolved Bugs:
  - usersvis => message recipient ✔️
  - status message episode string values incorrect (using index instead of value). re-implement 'affectedEpisodes' feature properly. ✔️
   - If no userReported error, remove colon from message string ✔️
+  - Implemented sytem for marking messages as read ✔️
+  - Notification purge now hourly cronjob instead of on every read ✔️
 
 CLEANUP:
  // fix classnames of components that are PascalCase ✔️
  // stylesheet cleanup ✔️
+
+New Features:
+ // Added Data load confirmation on Admin CMS welcome page
 
 Known Ongoing Issues:
 // Adminwishlist

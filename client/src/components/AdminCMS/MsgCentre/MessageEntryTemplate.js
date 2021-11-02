@@ -22,7 +22,7 @@ function MessageEntryTemplate({
       return <>"N/A"</>
       } else {
         return (
-        <>`S${stringMod(message['affectedEpisodes'][0])}E${stringMod(message['affectedEpisodes'][1])} - S${stringMod(message['affectedEpisodes'][2])}E${stringMod(message['affectedEpisodes'][3])}`</>)
+        <>S{stringMod(message['affectedEpisodes'][0])}E{stringMod(message['affectedEpisodes'][1])} - S{stringMod(message['affectedEpisodes'][2])}E{stringMod(message['affectedEpisodes'][3])}</>)
     } 
   }
 
@@ -48,11 +48,11 @@ function MessageEntryTemplate({
       </td>
       <td>
       
-      <details className="darkDetails">
+      {/* <details className="darkDetails">
       <summary>ID</summary>
       {message["id"]} 
-      </details>
-      Read: {message['read'] ? "✔️" : "❌"}
+      </details> */}
+      {message['read'] ? "✔️" : "❌"}
       </td>
       <td>{message["msgType"]}</td>
       <td>{message["msgContent"]}</td>

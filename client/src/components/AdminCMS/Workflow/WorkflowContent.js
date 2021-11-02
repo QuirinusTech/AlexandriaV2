@@ -640,7 +640,7 @@ function WorkflowContent({
           setDisplayWarning={setDisplayWarning}
         />
       )}
-      <div className="workFlowContent">
+      <div className="workflowContent">
         {adminActiveMode !== null && adminActiveMode.slice(0, 2) === "wf" && (
           <WorkflowCardsList
             wfTicketList={wfTicketList}

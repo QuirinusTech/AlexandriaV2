@@ -94,7 +94,7 @@ function AdminActiveTask({
             <h4 className="admin">Welcome to the</h4>
             <h3 className="admin">Administrator Content Management Tool</h3>
             <h5 className="admin">Created by Matthew Gird</h5>
-            {adminActiveTask === null && <span>Data Load Status: {dataLoadSuccess ? "✔️" : "❌"}</span>}
+            {adminActiveTask === null && <span className={dataLoadSuccess ? "dataLoadStatus" : "dataLoadStatus dataLoadStatus--fail"}>Data Load Status: {dataLoadSuccess ? "✔️" : "❌"}</span>}
           </div>
         );
     }

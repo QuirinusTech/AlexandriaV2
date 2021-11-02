@@ -10,9 +10,9 @@ module.exports = {
       }
     });
     
-    let htmlstring = `<div><table style="background-color:wheat;border-collapse: collapse; width:450px;margin:0;text-align: center;"><thead><tr style="height:40px; width:450px; margin:0;border: 1px solid black;"><th style="height:40px; width:40px; margin:0;">Type</th><th style="height:40px; width:40px; margin:0;">Entry</th><th style="height:40px; width:40px; margin:0;">Update</th></tr></thead><tbody>`
+    let htmlstring = `<div><table style="background-color:#23232e;border-collapse: collapse; width:450px;margin:0;text-align: center;"><thead><tr style="height:40px;margin:0;border: 1px solid wheat;"><th style="margin:0;">Type</th><th style="margin:0;">Update</th><th style="margin:0;">Affected Entry</th></tr></thead><tbody>`
     notificationsList.forEach(msg => {
-      let thisstring = `<tr style="height:40px; width:450px; margin:0;border: 1px solid black;"><td style="height:40px; width:40px; margin:0;">${msg['messageType']}</td><td style="height:40px; width:40px; margin:0;">${msg['affectedEntry']}</td><td style="height:40px; width:40px; margin:0;">${msg['messageType'] === 'custom' ? msg['customMessageContent'] :  msg['entryStatusUpdate'] }</td></tr>`
+      let thisstring = `<tr style="height:40px; margin:0;border: 1px solid wheat;"><td style="margin:0;">${msg['msgType']}</td><td style="margin:0;">${msg['msgContent']}</td><td style="margin:0;">${msg['affectedEntry']}</td></tr>`
       htmlstring += thisstring
     });
     htmlstring += "</tbody></table></div>"

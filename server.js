@@ -14,7 +14,8 @@ const {
   getSingleWishlistEntry,
   userUpdate,
   adminPasswordReset,
-  uname
+  uname,
+  markRead
 } = require("./firebase");
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
@@ -50,7 +51,12 @@ app.post('/db/:operation', verifyToken, async (req, res) => {
       res.json(fakeData['wishlist'])
     } else {
       let result = await wishlistInterface(username, operation, data);
-      console.log('DB result length: ', result.length)
+      if (operation === "R") {
+        console.log('DB result length: ', result.length)
+      } else {
+        console.log(result)
+      }
+
       res.json(result);
     }  
   } catch (error) {
