@@ -5,7 +5,12 @@ CURRENT ISSUES:
  - database isn't loaded until user manually clicks on Refresh.
  - Some text on the Admin Page is still in German
 
+// MessageCentre
+ - Custom messages show (null) in bracked for affectedEntry where its value is NULL. This has already been fixed and will be included in the nex deployment.
+
 FUTURE FEATURES:
+ // multi-field filtering for Admin Wishlist Table
+ // Search + Filter for MsgCentre Table
  // user email updates subscription option
  // Qbittorrent log parsing
  // dark mode toggle switch

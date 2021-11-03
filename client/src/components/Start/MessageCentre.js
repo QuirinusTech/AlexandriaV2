@@ -14,7 +14,9 @@ const MessageCentre = ({ notificationsList }) => {
           {customMessages.map(message => {
             return (
               <li key={message["affectedEntry"]}>
-                {message["msgContent"]} {message["affectedEntry"] !== "" && "(" + message["affectedEntry"] + ")"} {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
+                {message["msgContent"]}
+                {message['affectedEntry'] !== null && message["affectedEntry"] !== "" && "(" + message["affectedEntry"] + ")"}
+                {message['affectedEntry'] !== null && !isNaN(message['affectedEpisodes'][0]) && parseInt(message['affectedEpisodes'][0]) !== 0 &&  <AffectedEpisodesString epList={message['affectedEpisodes']} />}
               </li>
             );
           })}
@@ -50,7 +52,8 @@ const MessageCentre = ({ notificationsList }) => {
               .map(message => {
                 return (
                     <li key={message["affectedEntry"]}>
-                      {message["affectedEntry"]}  {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
+                      {message["affectedEntry"]}
+                      {!isNaN(message['affectedEpisodes'][0]) && parseInt(message['affectedEpisodes'][0]) !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
                     </li>
                   );
                 }
