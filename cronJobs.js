@@ -31,6 +31,9 @@ async function assessOutstanding() {
         console.log("Running task: adminDatabaseInterface('msgCentre', 'UPDATEBULK', unMailedNotifications)")
         const bulkUpdateOutcome = await adminDatabaseInterface('MSGCENTRE', 'UPDATEBULK', unMailedNotifications)
         const { success, payload, outcome} = bulkUpdateOutcome
+        console.log('unMailedNotificationsTask success: ', success);
+        console.log('unMailedNotificationsTask payload: ', payload);
+        console.log('unMailedNotificationsTask outcome: ', outcome);
         if (!success) {
           throw new Error("Database interaction failure on adminDatabaseInterface('msgCentre', 'UPDATEBULK', unMailedNotifications).")
         }
@@ -43,11 +46,16 @@ async function assessOutstanding() {
 
     if (readMessages.length > 0) {
       console.log('read notifications subtask init')
+      let idList = readMessages.map(x => x['id'])
+      console.log(idList)
         try {
-          const readMsgsTask = await adminDatabaseInterface("msgCentre", "BULKDELETE", readMessages.map(x => x['id']))
-          const { success2, payload2, outcome2} = readMsgsTask
-          if (!success2) {
-            throw new Error("Database interaction failure on adminDatabaseInterface(\"msgCentre\", \"BULKDELETE\", readMessages.map(x => x['id'])).")
+          const readMsgsTask = await adminDatabaseInterface("msgCentre", "DELETEBULK", idList)
+          const { success, payload, outcome} = readMsgsTask
+          console.log('readMessagesTask success: ', success);
+          console.log('readMessagesTask payload: ', payload);
+          console.log('readMessagesTask outcome: ', outcome);
+          if (!success) {
+            throw new Error("Database interaction failure on adminDatabaseInterface(\"msgCentre\", \"DELETEBULK\", readMessages.map(x => x['id'])).")
           }
         } catch (error) {
           console.log(error.message)
@@ -55,15 +63,6 @@ async function assessOutstanding() {
           console.log('read notifications purge subtask complete')
         }
       }
-
-    console.log('%ccronJobs.js line:29 success', success);
-    console.log('%ccronJobs.js line:30 payload', payload);
-    console.log('%ccronJobs.js line:31 outcome', outcome);
-
-    console.log('%ccronJobs.js line:29 success2', success2);
-    console.log('%ccronJobs.js line:30 payload2', payload2);
-    console.log('%ccronJobs.js line:31 outcome2', outcome2);
-
   } catch (error) {
     console.log('%ccronJobs.js assessOutstanding() catch()', error.message);
   }

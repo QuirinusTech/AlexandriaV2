@@ -1,0 +1,3 @@
+Resolved:
+ - Cronjobs read message purge fix. (Amended AdminDatabaseInterface operation to DELETEBULK (was 'bulkdelete'))
+ Read messages will now be deleted correctly.
