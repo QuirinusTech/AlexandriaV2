@@ -55,7 +55,7 @@ async function workFlowTicketParser(entry) {
       return 'error'
     } else {
       await notifyUser({
-        id: entry['id'] + "_notification",
+        id: entry['affectedEntryId'] + "_notification",
         msgType: "status",
         msgContent: newStatus,
         msgRecipient: entry['owner'],

@@ -1,0 +1,3 @@
+Resolved:
+ - Improved Data Loading on init: mnoved dataSetup() function inside the login check in the useEffect funcs for App.js.
+ - Fixed an issue where creating new notifications wouldn't replace older ones for the same entries.

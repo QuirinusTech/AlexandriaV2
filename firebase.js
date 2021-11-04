@@ -614,8 +614,9 @@ async function notifyUser(message) {
   
   // Duplicate checking of messages not necessary if msg originates from workflowTicketParser()
   // for more info see final clause of WORKFLOWTICKETPARSER() in ADMINDATABASEINTERFACE module 
-
-  if (message.id.slice(-12) !== 'notification') {
+  
+  // this duplicate check is just a backup
+  if (message.id.slice(-13) === '_notification') {
     // check for duplicates
     let allMessages = []
     const snapshot = await notificationsRef.get();

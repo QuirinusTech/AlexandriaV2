@@ -22,7 +22,7 @@ import NotificationsCentre from "./components/Start/NotificationsCentre"
 
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [wishlistData, setWishlistData] = useState(["init"]);
@@ -36,7 +36,6 @@ function App() {
     const init = async () => {
       await dataSetup();
     };
-    let localLoginCheck = isLoggedIn
     const checkLoggedIn = async () => {
       let res1 = await fetch("/verifyAuth", {
         method: "POST",
@@ -56,21 +55,22 @@ function App() {
           history.push('/login')
         }
       } else if (res1.hasOwnProperty('response') && res1['response'] === 'success') {
-        localLoginCheck = true
+        console.log('%cApp.js line:58 validation successful, loading data', 'color: #007acc;');
         localStorage.setItem('username', res1['locals']['username']);
         localStorage.setItem("displayName", res1['locals']['displayName']);
         localStorage.setItem("is_admin", res1['locals']['is_admin']);
         localStorage.setItem("can_add", res1['locals']["can_add"]);
         localStorage.setItem("is_active_user", res1['locals']['is_active_user'])
         setIsLoggedIn(true)
+        if (window.location.pathname !== "/admin") {
+          init(); 
+        }
       } else {
         console.log('%cApp.js line:65 kak', 'color: #007acc;');
       }
+      setLoading(false)
     }
     checkLoggedIn()
-    if (window.location.pathname !== "/admin" && localLoginCheck) {
-      init();
-    }
     console.log("init complete");
   }, []);
 
@@ -108,7 +108,7 @@ async function getNotifications() {
     console.log('%cApp.js line:90 wishlistData[0]', 'color: #007acc;', wishlistData[0]);
     console.log('%cApp.js line:91 isLoggedIn', 'color: #007acc;', isLoggedIn);
     console.log('%cApp.js line:92 window.location.pathname', 'color: #007acc;', window.location.pathname);
-    if (isLoggedIn && !loading && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
+    if (!loading && window.location.pathname !== "/login" && window.location.pathname !== "/logout") {
       console.log('Conditions have been met to initiate Data Setup TRY-block');
       try {
         setLoading(true);
