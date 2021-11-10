@@ -1,0 +1,7 @@
+Undocumented fix from 2.2.0.4b (r38):
+fixed typo in Conjobs proc that prevented email alerts
+
+Fixed for 2.2.0.5 (r39)
+Fixed table styling for mail messages; text colour should now be white and legible
+Implemented Hashrouter to prevent failed /[route] calls. Testing is ongoing.
+updated release date on about page

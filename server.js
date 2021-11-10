@@ -124,6 +124,7 @@ app.post('/getnotifications', verifyToken, async (req, res) => {
 })
 
 app.post('/markread', verifyToken, async (req, res) => {
+  console.log('%cserver.js line:127 markRead', 'color: #007acc;');
   if (envs.test === 'true') {
       console.log("markread")
       res.status(200).json({"response": 'ok'})
@@ -428,9 +429,9 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
 
 app.listen(port, () => console.log(`Listening on port ${envs.test === 'true' ? port : '[redacted]'}`));
 
-app.get('/*', function(req, res) {
+app.get('*', function(req, res) {
   console.log('ping')
-  res.sendFile(path.join(__dirname, 'path/to/your/index.html'),
+  res.sendFile(path.join(__dirname, '/client/public/index.html'),
   function(err) {
     if (err) {
       res.status(500).send(err)

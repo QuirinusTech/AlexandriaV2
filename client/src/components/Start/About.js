@@ -24,13 +24,15 @@ const About = () => {
       <p>This site was the creator's first foray into the realm of back-end development in Python using the Flask framework.</p>
       <br />
       <p>Later he would find out that it was both more fun and significantly more painful to do this in React instead, so, in early April 2021 he started to do just that and rewrote the server in NodeJS.</p>
-      <p>It would be months before Alexandria V2 would finally launch on [TBD].</p>
+      <p>It would be months before Alexandria V2 would finally launch later that year in October.</p>
       <br />
       <p>Alexandria V2 has been an ongoing cycle of iteration, improvement, fiddling, review, critique and refactoring: It represents the culmination of years of learning, countless hours of work and over 50'000 lines of code.</p>
       <br />
       
       <br />
-      <blockquote><b>Let this site be testament to the inevitable triumph of determination and hard work over chaos.</b></blockquote>
+      <blockquote><b style={{color:"var(--accentBlueDeep)"}}>Let this site be testament to the inevitable triumph of determination and hard work over chaos.</b></blockquote>
+      
+      <br />
     </div>
 
     <div className="about_row">
