@@ -76,14 +76,15 @@ function filterAdminMessage(msgArray) {
       if (!msg.hasOwnProperty('mailed')) {
         msg['mailed'] = false
       }
-      if (msg['recipient'] === 'aegisthus' && !msg['mailed']) {
+      if (msg['msgRecipient'] === 'aegisthus' && !msg['mailed'] && !msg['read']) {
         filteredMessages.push(msg)
       }
     })
   } catch (error) {
     console.log('%ccronJobs.js filterAdminMessage() error.message', error.message);   
   } finally {
-    console.log('%ccronJobs.js line:41 filteredMessages', filteredMessages);
+    console.log('%ccronJobs.js line:41 filteredMessages')
+    console.log(filteredMessages);
     return filteredMessages
   }
 }
@@ -103,7 +104,8 @@ function filterReadMessage(msgArray) {
   } catch (error) {
     console.log('%ccronJobs.js filterReadMessage() error.message', error.message);   
   } finally {
-    console.log('%ccronJobs.js line:94 readMessages', readMessages);
+    console.log('%ccronJobs.js line:94 readMessages')
+    console.log(readMessages);
     return readMessages
   }
 }
