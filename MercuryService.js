@@ -10,9 +10,9 @@ module.exports = {
       }
     });
     
-    let htmlstring = `<div><table style="background-color:#23232e;color:white;border-collapse: collapse; width:450px;margin:0;text-align: center;"><thead><tr style="height:40px;margin:0;border: 1px solid wheat;background-color:#23232e;color:white;"><th style="margin:0;">Type</th><th style="margin:0;">Update</th><th style="margin:0;">Affected Entry</th></tr></thead><tbody>`
+    let htmlstring = `<div><table style="background-color:#23232e;color:white;border-collapse: collapse; width:450px;margin:0;text-align: center;"><thead><tr style="height:40px;margin:0;border: 1px solid wheat;background-color:#23232e;color:white;"><th style="margin:0;">Owner</th><th style="margin:0;">Type</th><th style="margin:0;">Update</th><th style="margin:0;">Affected Entry</th></tr></thead><tbody>`
     notificationsList.forEach(msg => {
-      let thisstring = `<tr style="height:40px; margin:0;border: 1px solid wheat;background-color:#23232e;color:white;"><td style="margin:0;">${msg['msgType']}</td><td style="margin:0;">${msg['msgContent']}</td><td style="margin:0;">${msg['affectedEntry']}</td></tr>`
+      let thisstring = `<tr style="height:40px; margin:0;border: 1px solid wheat;background-color:#23232e;color:white;"><td style="margin:0;">${msg['msgRecipient']}</td><td style="margin:0;">${msg['msgType']}</td><td style="margin:0;">${msg['msgContent']}</td><td style="margin:0;">${msg['affectedEntry']}</td></tr>`
       htmlstring += thisstring
     });
     htmlstring += "</tbody></table></div>"
@@ -46,12 +46,12 @@ module.exports = {
     });
 
     let htmlstring = `<div><div><img src="cid:quirinusLogo"/></div><p>You requested a password reset.</p><p>To reset your password, please use the following link:</p><p>`
-    htmlstring += `<a href="https://quirinus-alexandriav2.herokuapp.com/passwordReset/${username}/${validationCode}">Reset Password.</a></p>`
-    htmlstring += "<p>If this doesn't work please visit https://quirinus-alexandriav2.herokuapp.com/passwordReset/ and enter your username and validation code manually.</p>"
+    htmlstring += `<a href="https://alexandriav2.herokuapp.com/#/passwordReset/${username}/${validationCode}">Reset Password.</a></p>`
+    htmlstring += "<p>If this doesn't work please visit https://alexandriav2.herokuapp.com/#/passwordReset/ and enter your username and validation code manually.</p>"
     htmlstring += "<p>Your username is: <b>" + username + "</b></p>"
     htmlstring += "<p>Your code is: <b>" + validationCode + "</b></p></div>"
 
-    let textmessage = `Please visit https://quirinus-alexandriav2.herokuapp.com/passwordReset/ and enter your username (${username}) and validation code (${validationCode}).`
+    let textmessage = `Please visit https://alexandriav2.herokuapp.com/#/passwordReset/ and enter your username (${username}) and validation code (${validationCode}).`
 
     var mailOptions = {
       from: 'quirinus.mercury.service@gmail.com',

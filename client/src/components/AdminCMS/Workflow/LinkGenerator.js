@@ -3,7 +3,7 @@ import LinksList from "./LinksList"
 
 function LinkGenerator({ currentEntry }) {
 
-  const [sortBy, setSortBy] = useState(localStorage.getItem('linkGenSortBy') === null ? 'seeds' : localStorage.getItem('linkGenSortBy'));
+  const [sortBy, setSortBy] = useState(localStorage.getItem('linkGenSortBy') === null ? 'seeders' : localStorage.getItem('linkGenSortBy'));
 
 
   function sortSelect(arg) {
@@ -22,9 +22,9 @@ function LinkGenerator({ currentEntry }) {
           <input
             type="radio"
             name="sortBy"
-            value="seeds"
-            checked={sortBy === "seeds"}
-            onChange={()=> {sortSelect('seeds')}}
+            value="seeders"
+            checked={sortBy === "seeders"}
+            onChange={()=> {sortSelect('seeders')}}
           />
           Number of Seeders
         </label>

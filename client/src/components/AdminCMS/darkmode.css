@@ -421,7 +421,7 @@ h4.warning, h5.warning {
 .adminActiveTask {
   width: 100%;
   height: 100%;
-  margin-left: 10vw;
+  margin-left: 11vw;
 }
 
 .adminNavBar {
@@ -1636,7 +1636,8 @@ td > table.usersVisTable {
   font-size: small;
   z-index: 3;
   bottom: 0;
-  width: 10%;
+  width: fit-content;
+  min-width: 8vw;
   color: white;
   transition: 1s;
 }

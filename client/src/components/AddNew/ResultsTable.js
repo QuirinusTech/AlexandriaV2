@@ -85,12 +85,13 @@ function ResultsTable({
         throw new Error("Invalid Episode values");
       }
       setLoading(true);
+      
       const readyObj = {
         IMDBResults,
         ...episodes,
         isPriority,
         isOngoing,
-        status: "new"
+        status: new Date(IMDBResults['Released']) > new Date() ? 'postponed' : 'new'
       };
       // console.log(readyObj);
       let result = await fetch("/db/c", {

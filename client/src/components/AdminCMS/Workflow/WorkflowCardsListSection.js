@@ -13,7 +13,7 @@ const WorkflowCardsListSection = ({list, currentEntryId, category, cardClick}) =
               if (wfTicket["resolved"]) {classNameString+=" resolved"}
               return (
                 <motion.div
-                  transition={{duration: 0.1, delay: index*0.2}}
+                  transition={{duration: 0.05, delay: index*0.1}}
                   initial={{ opacity: 0, y: "1vw" }}
                   animate={{opacity: 1, y: 0 }}
                   exit={{opacity: 0,  y: "-105px" }}

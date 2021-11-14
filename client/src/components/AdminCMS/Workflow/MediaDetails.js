@@ -24,18 +24,6 @@ const MediaDetails = ({ currentEntry, adminActiveMode }) => {
           <h4 className="highlightH4">Category</h4>
           <p>{currentEntry["category"]}</p>
         </div>
-        {currentEntry['category'] === 'postponed' && <div>
-          <h4 className="highlightH4">Release Date</h4>
-          <p>{currentEntry["imdbData"]['Released']}</p>
-        </div>}
-        <div>
-          <h4 className="highlightH4">Current Entry</h4>
-          <p className="imdbLinkExternal" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]}</p>
-        </div>
-        <div>
-          <h4 className="highlightH4">Owner</h4>
-          <p>{currentEntry["owner"]}</p>
-        </div>
         <div className={
               currentEntry["resolved"]
                 ? "WorkflowItemStatusText Resolved"
@@ -44,11 +32,24 @@ const MediaDetails = ({ currentEntry, adminActiveMode }) => {
           <h4 className="highlightH4">Ticket Status</h4>
           {currentEntry["resolved"] ? <span>Resolved</span> : <p>Requires Action</p>}
         </div>
+        <div>
+          <h4 className="highlightH4">Current Entry</h4>
+          <p className="imdbLinkExternal" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]}</p>
+        </div>
+        <div>
+          <h4 className="highlightH4">Release Date</h4>
+          <p>{currentEntry["imdbData"]['Released']}</p>
+        </div>
+        <div>
+          <h4 className="highlightH4">Owner</h4>
+          <p>{currentEntry["owner"]}</p>
+        </div>
         {currentEntry["mediaType"] !== "series" && (
         <div>
           <h4 className="highlightH4">Type</h4>
           <p>{currentEntry["mediaType"]}</p>
         </div>)}
+        {/* Episode List */}
         {currentEntry["mediaType"] === "series" && adminActiveMode === "wfDownload" && (
           <div>
             <h4 className="highlightH4">Required Episodes</h4>

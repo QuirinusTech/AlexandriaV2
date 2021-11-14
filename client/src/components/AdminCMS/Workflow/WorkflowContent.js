@@ -25,13 +25,6 @@ function WorkflowContent({
   });
   const [displayWarning, setDisplayWarning] = useState(false)
   const [bulkCommitResults, setbulkCommitResults] = useState(null)
-  // const [pendingWishlistChanges, setPendingWishlistChanges] = useState([])
-  // if (localStorage.getItem('bulkAction') === null) {
-  //   localStorage.setItem('bulkAction', false)
-  // }
-  // if (localStorage.getItem('ignoreWarnings') === null) {
-  //   localStorage.setItem('ignoreWarnings', false)
-  // }
 
   function cardClick(arg1) {
     let thisTicket = wfTicketList.filter(ticket => ticket["id"] === arg1)[0]
@@ -386,24 +379,25 @@ function WorkflowContent({
           if (response['success'] !== true) {
             throw new Error('Something went wrong. Integrity of bulk commit compromised.')
           }
-          let pendingChangesList = [...pendingChanges['list']]
-          let successfulIdList = [...response['payload']].map(ticket => ticket['id'])
-          let successCount = 0
-          let failCount = 0
-          successfulIdList.forEach(id => {
-            if (id === 'error') {
-              failCount++
-            } else {
-              successCount++
-              pendingChangesList = pendingChangesList.filter(ticket => ticket['id'] !== id)
+          let outcomeList = [...response['payload']]
+          let failed, successful, skipped = []
+          outcomeList.forEach(x => {
+            switch (x['ticketOutcome']) {
+              case 'noAction':
+                skipped.push(wfTicketList.filter(wfT => wfT['id'] === x['id'])[0])
+                break;
+              case 'success':
+                successful.push(wfTicketList.filter(wfT => wfT['id'] === x['id'].slice(0,-13))[0])
+                break;
+              default:
+                failed.push(wfTicketList.filter(wfT => wfT['id'] === x['id'])[0])
             }
           })
           setbulkCommitResults({
-            failCount,
-            successCount,
-            pendingChangesList
+            failed,
+            skipped,
+            successful
           })
-          // setPendingWishlistChanges(response['payload'])
         } catch (error) {
           console.log(error)
           alert(error.message)
@@ -480,11 +474,11 @@ function WorkflowContent({
         <i></i>
         Bulk Action Mode
       </label>
-      <label className="form-switch">
+      {bulkAction && (<label className="form-switch">
         <input type="checkbox" checked={ignoreWarnings} onChange={ignoreWarningsToggleSwitch} />
         <i></i>
         Skip Warnings
-      </label>
+      </label>)}
       {bulkAction && (
         <>
         <div className="bulkActionCommit">
@@ -619,16 +613,22 @@ function WorkflowContent({
       {bulkCommitResults && (
         <div className="modalBackground">
           <div className="modalContent">
-            <h3>Summary</h3>
-            <p>Successful: {bulkCommitResults['successCount']}</p>
-            <p>Failed: ({bulkCommitResults['failCount']})</p>
-            {bulkCommitResults['pendingChangesList'].length > 0 && (
-              <ol>
-                {bulkCommitResults['pendingChangesList'].map(ticket => {
-                  return <li>{`${ticket['affectedEntry']} - ${ticket['adminmode']}`} </li>
-                })}
-              </ol>
-            )}
+            <h3>Bulk Commit Results</h3>
+            {Object.keys(bulkCommitResults).map(cat => {
+              return bulkCommitResults[cat].length === 0 ? (
+                <p>{cat}: {bulkCommitResults[cat].length}</p>
+              ) : (
+                <details className="r5vw darkDetails">
+                  <summary className="adminButton">{cat}: {bulkCommitResults[cat].length}
+                  {cat === 'successful' ? bulkCommitResults[cat].length + bulkCommitResults['skipped'].length === pendingChanges['list'].length ? '✔️' : '❌' : cat === 'failed' ? bulkCommitResults['failed'].length === 0 ? '✔️' : '❌' : ''}</summary>
+                  <ol>
+                    {bulkCommitResults[cat].map(ticket => {
+                      return <li>{ticket['affectedEntry']} - {ticket['adminmode']}</li>
+                    })}
+                  </ol>
+                </details>
+              )
+            })}
             <p>Please click the below button to refresh the data.</p>
             <button onClick={PullAdminData}>Refresh</button>
           </div>

@@ -51,6 +51,7 @@ module.exports = {
   userUpdate,
   adminPasswordReset,
   notifyUser,
+  notifyUserBulk,
   blacklistCleanup,
   adminDelete,
   markRead
@@ -611,12 +612,10 @@ async function notifyAdmin(msgType, title, contentOrStatus, episodes=[0,0,0,0]) 
 }
 
 async function notifyUser(message) {
+  console.log('%cfirebase.js line:615 message', 'color: #007acc;', message);
   
-  // Duplicate checking of messages not necessary if msg originates from workflowTicketParser()
-  // for more info see final clause of WORKFLOWTICKETPARSER() in ADMINDATABASEINTERFACE module 
-  
-  // this duplicate check is just a backup
-  if (message.id.slice(-13) === '_notification') {
+  // Duplicate check
+  if (message['id'].slice(-13) === '_notification') {
     // check for duplicates
     let allMessages = []
     const snapshot = await notificationsRef.get();
@@ -624,7 +623,7 @@ async function notifyUser(message) {
     
     let flaggedId = ''
     allMessages = allMessages.forEach(msg => {
-      if (msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient']) {
+      if (msg['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
         flaggedId = msg['id']
       }
     })
@@ -635,9 +634,41 @@ async function notifyUser(message) {
     }
   }
 
-
   // set new Message
   const res = await notificationsRef.doc(message['id']).set(message).then(()=> "success").catch(err => err)
+  return res
+}
+
+async function notifyUserBulk(messageList) {
+  
+  let allMessages = []
+  let flagList = []
+  const snapshot = await notificationsRef.get();
+  snapshot.forEach((doc) => allMessages.push(doc.data()))
+
+  const batch = db.batch();
+
+  // Duplicate check
+  messageList.foreach(msg => {
+    if (msg.id.slice(-13) === '_notification') {
+      allMessages = allMessages.forEach(msg => {
+        if (msg['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
+          flagList.push(msg['id'])
+        }
+      })
+    }
+    let thisMessageRef = db.collection('notifications').doc(msg['id'])
+    batch.set(thisMessageRef, msg)
+  })
+
+  if (flagList.length > 0) {
+    flagList.forEach(flaggedMsg => {
+      batch.delete(flaggedMsg)
+    })
+  }
+
+  // set new Message
+  const res = await batch.commit().then(()=> "success").catch(err => err)
   return res
 }
 
