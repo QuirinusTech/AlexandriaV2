@@ -265,6 +265,10 @@ div > div > a{
     align-self: center;
 }
 
+.msgCentrePreview--statusMessages > h4, .linkstList > div > h4 {
+    text-transform: capitalize;
+}
+
 .message_centre {
     display: flex;
     flex-direction: column;

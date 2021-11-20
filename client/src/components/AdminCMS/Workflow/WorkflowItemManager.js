@@ -66,6 +66,14 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
         </div>
       )}
 
+      <Actions
+        disabled={currentEntry["resolved"]}
+        fullListState={fullListState}
+        resolveTicket={resolveTicket}
+        resolveTicketPartial={resolveTicketPartial}
+        adminActiveMode={adminActiveMode}
+        markComplete={markComplete}
+      />
       <div className="actionData">
         {currentEntry["resolved"] && (
         <div className="currentEntryResolved">
@@ -89,14 +97,6 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
         )}
       </div>
 
-      <Actions
-        disabled={currentEntry["resolved"]}
-        fullListState={fullListState}
-        resolveTicket={resolveTicket}
-        resolveTicketPartial={resolveTicketPartial}
-        adminActiveMode={adminActiveMode}
-        markComplete={markComplete}
-      />
     </>
   );
 

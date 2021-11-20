@@ -229,7 +229,7 @@ function WorkflowContent({
     ticket['resolved'] = true
     let newTicket = {
       ...currentEntry,
-      id: ticket['id']+"_split_"+Object.keys(newTicketOutstanding).length,
+      id: ticket['id']+"_split_"+ new Date().toJSON().replace(/[-.:TZ]/g, '').slice(4),
       outstanding: newTicketOutstanding
     }
     return {ticket, newTicket}

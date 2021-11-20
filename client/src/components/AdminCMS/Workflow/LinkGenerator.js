@@ -15,9 +15,8 @@ function LinkGenerator({ currentEntry }) {
     <div className="linkGenerator">
     <h4 className="highlightH4">Link Generator</h4>
       <div className="linkGenSettings">
-        <h4>Settings</h4>
+        <h4>Sort by</h4>
         <div>
-          <p style={{color: "white"}}>Sort by</p>
         <label className={sortBy === "seeders" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
@@ -38,15 +37,25 @@ function LinkGenerator({ currentEntry }) {
           />
           Size
         </label>
-        <label className={sortBy === "name" ? "adminButton adminButton--hover" : "adminButton"}>
+        <label className={sortBy === "filename" ? "adminButton adminButton--hover" : "adminButton"}>
           <input
             type="radio"
             name="sortBy"
-            value="name"
-            checked={sortBy === "name"}
-            onChange={()=> {sortSelect('name')}}
+            value="filename"
+            checked={sortBy === "filename"}
+            onChange={()=> {sortSelect('filename')}}
           />
           Name
+        </label>
+        <label className={sortBy === "data" ? "adminButton adminButton--hover" : "adminButton"}>
+          <input
+            type="radio"
+            name="sortBy"
+            value="data"
+            checked={sortBy === "data"}
+            onChange={()=> {sortSelect('data')}}
+          />
+          Chronologically
         </label>
         </div>
       </div>

@@ -35,34 +35,34 @@ function Actions({ resolveTicketPartial, fullListState, disabled, adminActiveMod
   // );
 
   return (
-    <div className="actions">
+    <div>
       {disabled ? (
         <div className="actions--disabled">
           <h4>No further action can be taken on a resolved ticket.</h4>
         </div>
       ) : (
-        <div>
+        <div className="actions">
           <span>Ticket Action</span>
           <button
             value="done"
             className="adminButton adminButton--submit"
             onClick={() => resolveTicketPartial("done", fullListState)}
           >
-            Done
+            {adminActiveMode === "wfDownload" ? "Downloading" : adminActiveMode === "wfCopy" ? "Copied" : 'Complete'}
           </button>
           <button
             value="postpone"
             className="adminButton adminButton--cancel"
             onClick={() => resolveTicketPartial("postpone", fullListState)}
           >
-            {adminActiveMode === "wfDownload" ? "Postpone" : "Skip"}
+            {adminActiveMode === "wfDownload" ? "Postponed" : "Skip"}
           </button>
           <button
             value="fail"
             className="adminButton adminButton--danger"
             onClick={() => resolveTicketPartial("fail", fullListState)}
           >
-            Failed
+            Fail
           </button>
         </div>
       )}

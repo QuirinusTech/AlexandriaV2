@@ -34,7 +34,7 @@ const MediaDetails = ({ currentEntry, adminActiveMode }) => {
         </div>
         <div>
           <h4 className="highlightH4">Current Entry</h4>
-          <p className="imdbLinkExternal" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]}</p>
+          <button className="adminButton adminButton--small" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]} 🔗</button>
         </div>
         <div>
           <h4 className="highlightH4">Release Date</h4>

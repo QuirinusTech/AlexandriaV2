@@ -7,9 +7,10 @@ const WorkflowCardsList = ({
   adminActiveMode
 }) => {
 
-  const listByMode = wfTicketList.filter(ticket => ticket['adminmode'] ===   adminActiveMode)
+  const listByMode = wfTicketList.filter(ticket => ticket['adminmode'] === adminActiveMode)
   const arr1 = listByMode.map(ticket => ticket["category"])
-  const catlist = Array.from(new Set(arr1))
+  const catlist = Array.from(new Set(arr1)).sort()
+
 
   return (
     <div className="workflowCardsList">

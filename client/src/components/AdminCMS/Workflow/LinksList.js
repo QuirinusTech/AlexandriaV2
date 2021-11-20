@@ -32,10 +32,10 @@ const LinksList = ({ currentEntry, sortBy }) => {
 
   return (
   <div className="linkstList">
-    <h4>Links List</h4>
+    <h4>Link List</h4>
     {currentEntry["mediaType"] === "movie" ? (
       <div>
-        <h4>movie</h4>
+        <h4>Movie</h4>
         <SingleLink season={null} episode={null} EorSorM="movie" />
       </div>
     ) : (

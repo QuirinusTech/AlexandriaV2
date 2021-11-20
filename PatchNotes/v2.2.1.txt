@@ -1,16 +1,5 @@
 RESOLVED:
- - left padding for .adminActiveTask adjusted to 11vw.
- - Workflow ticket cards animation speed increased by ~50%.
- - Resolved an issue causing BulkCommit in the Workflow Manager to fail due to entries being skipped.✔️
- - Notifications episode number generation fix. ✔️
- - "Skip Warnings" toggle should only be visible when Bulk Action Mode is enabled.✔️
- - reduce width of .bulkActionButtonsContainer and change width 8VW. ✔️
- - add release date to all entries, not just those in postponed status ✔️
- - Fixed extra (null) at the end of custom messages in message centre ✔️
- - When adding new movies to the wishlist, if the release date is in the future, set the status to postponed ✔️
- - Bulk Update summary needs a section for 'skipped' or 'postponed' and the outcomes need to be stated more clearly. ✔️
- - Add owner to notifications email ✔️
- - Fixed URL typo in password reset email ✔️
+ - Styling update: .adminTableTr>td>details[open] position => fixed. ✔️
 
  ONGOING TESTING:
  - In WorkflowItemManager > MediaDetails; rearranged Media Info by category ❓
@@ -21,3 +10,12 @@ RESOLVED:
 KNOWN ISSUES:
  - notification popup resets state when it vanishes.
  - No episode-specific release dates
+
+ FUTURE FEATURES:
+ // user email updates subscription option
+ // Qbittorrent log parsing
+ // dark mode toggle switch
+ // user preferences page
+ // localisations & translation
+ // Admin Page mobile version
+ // Entry history / changelog (i.e. requested on date, status changed to downloading on date, error reported on date)

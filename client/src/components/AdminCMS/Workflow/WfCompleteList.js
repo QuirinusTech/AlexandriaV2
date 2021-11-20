@@ -9,12 +9,16 @@ function WfCompleteList({fullList, handleTick, disabled}) {
     {Object.keys(fullList).map(season => {
       return (
         <div key={season} className="wfCompleteListSeasonDiv">
-          <h4>Season {season}</h4>
+          <div className="wfCompleteListSeasonDiv_tabLabel">
+          <h4>{season}</h4>
+            <div>
+
+            <input checked={fullList[season]['season']} type="checkbox" disabled={disabled} onChange={(e)=> {handleTick(season, 'season', e.target.checked)}} />
+            <h5 key={season+'season'}>All</h5>
+            </div>
+          </div>
+
           <div className="wfCompleteListEpisodeDiv">
-            <div key={season+'season'}>
-                <h5 key={season+'season'}><input checked={fullList[season]['season']} type="checkbox" disabled={disabled} onChange={(e)=> {handleTick(season, 'season', e.target.checked)}} />Select All
-                </h5>
-              </div>
             {Object.keys(fullList[season]).filter(episode => episode !== "season").map(episode => {
               return (
 

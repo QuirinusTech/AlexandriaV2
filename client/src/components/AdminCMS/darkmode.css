@@ -661,7 +661,7 @@ h4.warning, h5.warning {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  top: 10%;
+  bottom: 1%;
   right: 0;
   transition: 1s;
 }
@@ -777,7 +777,7 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
 }
 
 
-.adminSearchBox, .adminFilterContainer > select {
+.adminSearchBox, .adminFilterContainer > select, .adminFilter_Invert {
   border-radius: 10px;
   border: none;
   /* height: 40px; */
@@ -790,6 +790,23 @@ button.adminButton--refresh--loading > p, button.adminButton--refresh--loading >
   text-align: center;
   height: 3vh;
   transition:width 0.4s ease-in-out;
+  align-items: center;
+}
+
+.adminFilter_Invert {
+  width: fit-content;
+  padding: 0 1vw;
+  transition: all 0.5s;
+}
+
+.adminFilter_Invert > input[type='checkbox'] {
+  margin: 0 1vw 0 0.5vw;
+  transform: scale(2);
+  cursor: pointer;
+}
+
+.adminFilter_Invert > label {
+  cursor: pointer;
 }
 
 .adminSearchBox:focus {
@@ -1435,9 +1452,11 @@ td > table.usersVisTable {
 }
 
 .adminTableTr > td > details[open] {
-  position: absolute;
+  position: fixed;
   max-height: unset;
   border: 1px solid white;
+  top: 1vh;
+  right: 10vw;
 }
 .r5vw {
   right: 5vw;
@@ -1895,15 +1914,19 @@ span.workflow--notificationBar--block--count {
 }
 
 .actionableContent {
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   display: flex;
   flex-direction: column;
-  height: 85vh;
-  justify-content: space-between;
+  /* height: 86vh; */
+  justify-content: flex-start;
   margin: 0vw 1vw;
   width: 70vw;
   background-color: var(--darkGrey);
   border-radius: 15px;
+}
+
+.actionableContent > div {
+  width: 100%;
 }
 
 .actionableContent > h3 {
@@ -1931,6 +1954,11 @@ span.workflow--notificationBar--block--count {
   width: 100%;
 }
 
+.workflow--download--mediaDetails > div > h4, .workflow--download--mediaDetails > div > p, .workflow--download--mediaDetails > div > button {
+  text-align: center;
+  margin: 0.5vh;
+}
+
 .workflow--download--mediaDetails > div {
   flex-direction: column;
   flex-grow: 1;
@@ -1939,17 +1967,18 @@ span.workflow--notificationBar--block--count {
   background: var(--transparentGrey);
   /* border: 1px solid grey; */
   border-radius: 10px;
-  padding: 0px 15px 15px 10px;
+  padding-bottom: 0.5vh;
   /* box-shadow: var(--customBoxShadow); */
-  margin: 20px;
+  margin: 0.5vh 0.5vw;
   color: white;
+  flex: 1 1 24%;
 }
 
 .highlightH4 {
   color: wheat;
 }
 
-.workflow--download--mediaDetails > div > details, .workflow--download--mediaDetails > div > p, .workflow--download--mediaDetails > div > details > summary {
+.workflow--download--mediaDetails > div > details, .workflow--download--mediaDetails > div > details > summary {
   padding: 0;
   margin: 0;
 }
@@ -1980,20 +2009,17 @@ span.workflow--notificationBar--block--count {
 
 .linkGenSettings > div {
   margin: 0;
-  height: 100%;
   justify-content: center;
   align-items: center;
   display: flex;
-  flex-direction: column;
 }
 
 .linkGenSettings > div > label {
-  width: 10vw;
-  text-align: left;
   justify-content: space-between;
   align-items: stretch;
   margin: 0.5vw;
   padding-left: 0.4vw;
+  flex: 1 1 30%;
 }
 
 .linkstList {
@@ -2004,6 +2030,16 @@ span.workflow--notificationBar--block--count {
   margin: 1vw;
   text-align: center;
   flex-wrap: nowrap;
+}
+
+.linkstList > h4 {
+  padding: 0;
+  margin: 1vh 0 0 0;
+}
+
+.linkstList > h4:nth-child(1) {
+  color: wheat;
+  margin: 0;
 }
 
 .linksList--seasons > button {
@@ -2048,32 +2084,55 @@ span.workflow--notificationBar--block--count {
   border-radius: 15px;
   color: white;
   flex-wrap: nowrap;
-  padding-left: 1vw;
+  justify-content: space-between;
 }
 
 .wfCompleteListSeasonDiv > h4 {
-  width: 10vw;
+  padding: 0vh 0.5vw;
+  font-size: 1.5vh;
 }
 
 .wfCompleteListEpisodeDiv {
   flex-direction: row;
-  align-items: flex-start;
-  padding: 10px;
-  /* flex: 0 0 20%; */
+  padding: 1vh;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
   background: var(--grey);
   width: 100%;
+  align-content: center;
+  justify-content: center;
+  min-height: 5vh;
 }
 
-.wfCompleteListEpisodeDiv > div:nth-child(1) {
+/* .wfCompleteListEpisodeDiv > div:nth-child(1) {
   width: 100%;
+} */
+
+/* .wfCompleteListSeasonDiv > div {
+  flex: 1;
+} */
+
+.wfCompleteListSeasonDiv_tabLabel > div > h5 {
+  margin: 0.5vh 0.5vw;
+}
+
+.wfCompleteListSeasonDiv_tabLabel > h4 {
+  margin: 1vh 0;
+  font-size: x-large;
+}
+
+.wfCompleteListSeasonDiv_tabLabel > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .wfCompleteListEpisodeDiv > label {
-  flex: 1 0 20%;
+  flex: 1 0 10%;
+  margin: 0.1vh 0.1vw;
 }
 
 .linksList {
@@ -2118,7 +2177,7 @@ span.workflow--notificationBar--block--count {
 
 .actionData > div {
   width: 48% !important;
-  height: 60vh;
+  min-height: 55vh;
   overflow: auto;
   margin: 0 1vw;
   flex-wrap: nowrap;
@@ -2132,23 +2191,29 @@ span.workflow--notificationBar--block--count {
   /* text-shadow: 0 0 black; */
   font-size: large;
   color: wheat;
+  margin: 1vh 0 0 0;
 }
 
-.actions > div {
+.actions {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 45%;
-  margin: 10px 0px;
+  margin: 1vh 1vw;
   /* border: 1px solid firebrick; */
   border-radius: 10px;
-  padding: 5px 0px 5px 10px;
+  padding: 0.5vh 1vw;
   background: var(--grey);
   color: white;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   transition: 200ms;
+  margin: 1vh 1vw;
+  width: 100%;
+}
+
+.actions > button {
+  width: 12vw;
 }
 
 .disabled {

@@ -27,7 +27,8 @@ const AdminWishlist = ({
 
     const [filters, setFilters] = useState({
       field: !localStorage.getItem('filterField') ? "" : localStorage.getItem('filterField'),
-      val: !localStorage.getItem('filterVal') ? "" : localStorage.getItem('filterVal')
+      val: !localStorage.getItem('filterVal') ? "" : localStorage.getItem('filterVal'),
+      isInverted: localStorage.getItem('isInverted') === 'true' ? true : false
     })
 
     const [filterValuesArr, setFilterValuesArr] = useState([])
@@ -42,36 +43,55 @@ const AdminWishlist = ({
     ];
 
     useEffect(() => {
+      setFilterValuesArr(Array.from(new Set(adminListWishlist.map(x => x[filters['field']]))))
       applyFilter(filters) 
     }, [])
 
     function applyFilter(filter) {
+      console.log('%cAdminWishlist.js line:50 filter', 'color: #007acc;', filter);
       if (filter['field'] === '' || filter['val'] === '') {
         setLocalList(adminListWishlist)
       } else {
-        setLocalList(adminListWishlist.filter(x => x[filter['field']] === filter['val']))
+        if (filter['isInverted']) {
+          setLocalList(adminListWishlist.filter(x => x[filter['field']] !== filter['val']))
+        } else {
+          setLocalList(adminListWishlist.filter(x => x[filter['field']] === filter['val']))
+        }
       }
     }
 
+    function simulateInvertClick() {
+      let filtersVar = {...filters}
+      filtersVar['isInverted'] = !filtersVar['isInverted']
+      localStorage.setItem('isInverted', filtersVar['isInverted'].toString())
+      setFilters(filtersVar)
+      applyFilter(filtersVar)
+    }
 
 
     function filterChangeHandler(e) {
 
-      const {name, value} = e.target
+      const {name, value, checked} = e.target
       let filtersVar = {...filters}
       if (name === 'reset') {
         filtersVar = {
           field: '',
-          val: ''
+          val: '',
+          isInverted: false
         }
         localStorage.setItem('filterField', '')
         localStorage.setItem('filterVal', '')
+        localStorage.setItem('isInverted', 'false')
       } else if (name=== 'field') {
         filtersVar = {
+          ...filtersVar,
           field: value,
           val: ''
         }
         localStorage.setItem('filterField', value)
+      } else if (name==='isInverted') {
+        filtersVar['isInverted'] = checked
+        localStorage.setItem('isInverted', checked.toString())
       } else {
         filtersVar['val'] = value
         localStorage.setItem('filterVal', value)
@@ -102,6 +122,12 @@ const AdminWishlist = ({
               <div className="adminFilterContainer adminWishlistUtility"></div>
               <div className="adminFilterContainer adminWishlistUtility"></div>
               <div className="adminFilterContainer adminWishlistUtility">
+                <div className={filters['isInverted'] ? 'adminFilter_Invert adminButton adminButton--hover' : 'adminFilter_Invert adminButton'}
+                style={filters['isInverted'] ? {color: 'wheat', backgroundColor: 'var(--richGrey)'} : {}} onClick={simulateInvertClick}>
+
+                <input type='checkbox' name='isInverted' checked={filters['isInverted']} onChange={filterChangeHandler} />
+                <label htmlFor='isInverted'>Invert</label>
+                </div>
                 <select
                   className={
                     filters["field"] === ""
@@ -129,6 +155,7 @@ const AdminWishlist = ({
                   return <option key={x + "_valFilter"} value={x}>{checkBool(x)}</option>
                 })}
                 </select>
+                
                 <button className="adminButton adminButton--small adminButton--cancel" name="reset" onClick={filterChangeHandler}>Reset</button>
               </div>
             </div>

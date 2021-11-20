@@ -32,8 +32,12 @@ const MessageCentre = ({ notificationsList }) => {
 
     if (isNaN(epList[0]) || epList[0] === 0) {
       return (<></>) 
+    } else if (epList[0] === epList[2] && epList[1] === epList[3]) {
+      return (<>{`(S${stringMod(epList[0])} E${stringMod(epList[1])})`}</>)
+    } else if (epList[0] === epList[2] && epList[1] !== epList[3]) {
+      return (<>{`(S${stringMod(epList[0])}: E${stringMod(epList[1])} - ${stringMod(epList[3])})`}</>)
     } else {
-      return (<>{`(S${stringMod(epList[0])}E${stringMod(epList[1])} - S${stringMod(epList[2])}E${stringMod(epList[3])})`}</>)
+      return (<>{`(S${stringMod(epList[0])} E${stringMod(epList[1])} - S${stringMod(epList[2])} E${stringMod(epList[3])})`}</>)
     }
   }
 

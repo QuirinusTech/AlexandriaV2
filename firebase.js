@@ -649,11 +649,12 @@ async function notifyUserBulk(messageList) {
   const batch = db.batch();
 
   // Duplicate check
-  messageList.foreach(msg => {
+  messageList.forEach(msg => {
     if (msg.id.slice(-13) === '_notification') {
       allMessages = allMessages.forEach(msg => {
         if (msg['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
           flagList.push(msg['id'])
+          console.log(msg['affectedEntry'], ' flagged for delete')
         }
       })
     }
@@ -667,7 +668,6 @@ async function notifyUserBulk(messageList) {
     })
   }
 
-  // set new Message
   const res = await batch.commit().then(()=> "success").catch(err => err)
   return res
 }
