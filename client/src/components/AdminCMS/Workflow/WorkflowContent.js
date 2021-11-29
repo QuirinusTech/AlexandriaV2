@@ -380,8 +380,12 @@ function WorkflowContent({
             throw new Error('Something went wrong. Integrity of bulk commit compromised.')
           }
           let outcomeList = [...response['payload']]
-          let failed, successful, skipped = []
+          // console.log(outcomeList)
+          let failed = [];
+          let successful = []
+          let skipped = []
           outcomeList.forEach(x => {
+            // console.log(x['ticketOutcome'])
             switch (x['ticketOutcome']) {
               case 'noAction':
                 skipped.push(wfTicketList.filter(wfT => wfT['id'] === x['id'])[0])
@@ -393,6 +397,9 @@ function WorkflowContent({
                 failed.push(wfTicketList.filter(wfT => wfT['id'] === x['id'])[0])
             }
           })
+          console.log('%cWorkflowContent.js line:400 failed', 'color: #007acc;', failed);
+          console.log('%cWorkflowContent.js line:400 successful', 'color: #007acc;', successful);
+          console.log('%cWorkflowContent.js line:400 skipped', 'color: #007acc;', skipped);
           setbulkCommitResults({
             failed,
             skipped,

@@ -1,0 +1,7 @@
+v2.2.2.1 (build #43)
+
+NEW FEATURES:
+ - Detailed Bulk Commit summary.
+
+BUG FIXES:
+  - Resolved a bug preventing the completion of Bulk Commit and msg duplicate checking in BulkUserNotify

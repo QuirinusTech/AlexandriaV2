@@ -651,7 +651,7 @@ async function notifyUserBulk(messageList) {
   // Duplicate check
   messageList.forEach(msg => {
     if (msg.id.slice(-13) === '_notification') {
-      allMessages = allMessages.forEach(msg => {
+      allMessages = allMessages.forEach(message => {
         if (msg['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
           flagList.push(msg['id'])
           console.log(msg['affectedEntry'], ' flagged for delete')

@@ -8,14 +8,14 @@ NEW FEATURES:
   - Layout and minor styling changes to WorkflowItemManager
 
 BUG FIXES:
-  - Resolved a typo in NotifyUserBulk function that prevented the generation of status update notifications.
+  - Resolved typos in NotifyUserBulk function that prevented the generation of status update notifications.
   - Capitalised the status in each category of Message Centre and the series title h4 in Linkslist 
   - linkGenSettings now correctly sort by size / seeders / name and retain settings across sessions
   - fixed ticket splitting naming convention to prevent accidental overrides
 
 
 KNOWN ISSUES:
- - notification popup resets state when it vanishes.
+ - notification popup resets state when it vanishes. (but NOT in AdminNewMessage)
  - No episode-specific release dates
  - Multiple messages for the same entry still aren't overriding each other if the epArray isn't identical.
  - Ongoing series:
@@ -23,7 +23,7 @@ KNOWN ISSUES:
   > No way to remove flag from existing entries
 
  FUTURE FEATURES:
- // Edit entry Details directly from WorkflowItemManager
+ // Edit entry Details directly from WorkflowItemManager or add option to add episodes
  // user email updates subscription option
  // Qbittorrent log parsing
  // dark mode toggle switch
