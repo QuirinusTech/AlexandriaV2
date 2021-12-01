@@ -664,7 +664,8 @@ async function notifyUserBulk(messageList) {
 
   if (flagList.length > 0) {
     flagList.forEach(flaggedMsg => {
-      batch.delete(flaggedMsg)
+      const flaggedMsgRef = db.collection('notifications').doc(flaggedMsg)
+      batch.delete(flaggedMsgRef)
     })
   }
 

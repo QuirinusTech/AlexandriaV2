@@ -1,0 +1,4 @@
+v2.2.2.2 (build #44)
+
+BUG FIXES:
+  - Resolved a bug in the batch delete process for duplicate checking in BulkUserNotify
