@@ -4,7 +4,6 @@ import AdminNav from "./AdminNav";
 import AdminActiveTask from "./AdminActiveTask";
 import RefreshButtons from "./RefreshButtons";
 import "./darkmode.css"
-import Popup from "../Popup"
 import {
   useHistory
 } from "react-router-dom";
@@ -28,25 +27,6 @@ function AdminCMS({setErrorPageContent}) {
   const [loadingStep, setLoadingStep] = useState(null)
   const [blacklist, setBlacklist] = useState(null)
   const [dataLoadSuccess, setDataLoadSuccess] = useState(false)
-
-    const [popupContent, setPopupContent] = useState({
-    isDismissable: false,
-    isWarning: false,
-    heading: "",
-    messages: []
-  });
-  const [popupIsVisible, setPopupIsVisible] = useState(false);
-
-  function activatePopup(heading, msgs, showOk, warn = false) {
-    setPopupIsVisible(false)
-    setPopupContent({
-      isDismissable: showOk,
-      heading: heading,
-      messages: msgs,
-      isWarning: warn
-    });
-    setPopupIsVisible(true);
-  }
 
   async function refreshData(e) {
     // setAdminActiveTask(null)
@@ -150,21 +130,9 @@ function AdminCMS({setErrorPageContent}) {
 
   return (
     <>
-      {popupIsVisible && <Popup
-      isDismissable={popupContent['isDismissable']}
-      heading={popupContent['heading']}
-      messages={popupContent['messages']}
-      isWarning={popupContent['isWarning']}
-      popupIsVisible={popupIsVisible}
-      setPopupIsVisible={setPopupIsVisible}
-    />}
+
       <h2 className="admin">Admin</h2>
-             {/* <button className="adminButton" onClick={()=> {
-      activatePopup(' DismissableTest', ['Dismissable Message 1', 'Dismissable Message2'], true)
-    }}>Dismissable Test</button>
-    <button className="adminButton" onClick={()=> {
-      activatePopup('Undismissable Test', ['Undismissable Message 1'], false)
-    }}>Not Dismissable Test</button> */}
+
       <div className="adminCMS">
         <AdminNav loading={loading} setAdminActiveTask={setAdminActiveTask} adminActiveTask={adminActiveTask} adminActiveMode={adminActiveMode} setAdminActiveMode={setAdminActiveMode} />
         {loading ? (
@@ -188,7 +156,6 @@ function AdminCMS({setErrorPageContent}) {
             {adminListWishlist !== null && adminListWishlist.length > 0 && <AdminActiveTask
               blacklist={blacklist}
               setBlacklist={setBlacklist}
-              activatePopup={activatePopup}
               refreshData={refreshData}
               adminActiveTask={adminActiveTask}
               adminListWishlist={adminListWishlist}

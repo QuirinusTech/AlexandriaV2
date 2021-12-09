@@ -4,8 +4,9 @@ import Episodes from './AdminAddNew/Episodes'
 import ImportForm from "./ImportForm"
 import PNGLoader from "../../Loaders/PNGLoader"
 import { motion } from "framer-motion"
+import Popup from '../../Popup'
 
-function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist, activatePopup }) {
+function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist, loading, setLoading, setPopupContent }) {
   
   let dateObj = new Date()
   let month = dateObj.getMonth() + 1
@@ -13,8 +14,14 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   let dateString = `${dateObj.getFullYear()}-${month < 10 ? "0" + month : month}-${day < 10 ? "0" + day : day}`
   // console.log('%cAdminAddNew.js line:13 dateString', 'color: #007acc;', dateString);
 
-  const [loading, setLoading] = useState(false)
 
+  function activatePopup(heading, msgs, warn = false) {
+      setPopupContent({
+        heading: heading,
+        messages: msgs,
+        isWarning: warn
+      });
+    }
   const [mediaOptions, setMediaOptions] = useState({
     addedBy: 'addedBy',
     mediaType: 'mediaType',
@@ -55,7 +62,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         if (e.target.name === "title" && data['Response'] !== "False") {
           setPosterList(data['Search'])
         } else if (e.target.name === "title" && data['Response'] === "False") {
-          activatePopup('Failed', [data['Error']], false, true)
+          activatePopup('Failed', [data['Error']], true)
         } else {
           if (data['Type'] === 'series') {
             setEpisodes({sf: 1, ef: 1, st: data['totalSeasons'], et: 'all'})
@@ -193,7 +200,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       .then(data => data);
     console.log('%cAdminAddNew.js line:188 response', 'color: #007acc;', response);
     if (response['success']) {
-      activatePopup('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false, false)
+      activatePopup('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false)
       setAdminListWishlist(prevState => {
         return prevState.map(entry => {
           if (entry['id'] === response['payload']['id']) {
@@ -204,7 +211,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         })
       });
     } else {
-      activatePopup('Warning', [response['payload']], false, true)
+      activatePopup('Warning', [response['payload']], true)
     }
     // add new addition to the master wishlist
 

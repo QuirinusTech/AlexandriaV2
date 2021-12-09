@@ -1,0 +1,10 @@
+ FUTURE FEATURES:
+ // Edit entry Details directly from WorkflowItemManager or add option to add episodes
+ // user email updates subscription option
+ // schedule weekly checks of new episodes of series for 'OnGoing' series
+ // Qbittorrent log parsing
+ // dark mode toggle switch
+ // user preferences page
+ // localisations & translation
+ // Admin Page mobile version
+ // Entry history / changelog (i.e. requested on date, status changed to downloading on date, error reported on date)

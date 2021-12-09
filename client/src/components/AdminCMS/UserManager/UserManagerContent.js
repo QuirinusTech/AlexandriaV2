@@ -11,24 +11,21 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
   const [currentUser, setCurrentUser] = useState(null);
   const [detailsEditable, setDetailsEditable] = useState(false)
   const [loading, setLoading] = useState(false)
+  
   const [popupContent, setPopupContent] = useState({
-    isDismissable: false,
-    isWarning: false,
-    heading: '',
-    messages: [],
-  })
-  const [popupIsVisible, setPopupIsVisible] = useState(false)
+      isWarning: false,
+      heading: "",
+      messages: []
+    });
 
-
-  function activatePopup(heading, msgs, showOk, warn=false) {
+  function activatePopup(heading, msgs, warn = false) {
       setPopupContent({
-        isDismissable: showOk,
         heading: heading,
         messages: msgs,
         isWarning: warn
-      })
-      setPopupIsVisible(true)
-  }
+      });
+    }
+
   function selectUser(userId) {
     setCurrentUser(localList.filter(user => user['userId'] === userId)[0])
   }
@@ -39,14 +36,14 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
     let newPasswordConfirm = window.prompt("Please confirm the password:")
 
     if (newPassword.length < 8) {
-      activatePopup('Achtung', ['The new password is too short.', 'It should consist of at least 8 characters.', 'Aborted.'], true, true)
+      activatePopup('Warning', ['The new password is too short.', 'It must containt of at least 8 characters.', 'Aborted.'], true)
       return false
     }
 
     if (newPassword === '' || newPassword === null) {
-      activatePopup('', ['Aborted'], false, true)
+      activatePopup('', ['Aborted'], true)
     } else if (newPassword !== newPasswordConfirm) {
-      activatePopup('Warning', ['Passwords do not match.', 'Aborted'], false, true)
+      activatePopup('Warning', ['Passwords do not match.', 'Aborted'], true)
     } else {
       try {
         setLoading(true)
@@ -59,11 +56,11 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           console.log('%cUserManagerContent.js line:30 result', 'color: #007acc;', result);
           throw new Error(result['errormsg'])
         } else {
-          activatePopup('Erfolg', [`The password of user "${currentUser['username']}" has been changed successfully.`], true)
+          activatePopup('Success', [`The password of user "${currentUser['username']}" has been changed successfully.`])
         }
       } catch (error) {
         console.log('%cUserManagerContent.js line:41 error', 'color: #007acc;', error);
-        activatePopup('Warning', [error.message], false, true)
+        activatePopup('Warning', [error.message], true)
       } finally {
         setLoading(false)
       }
@@ -95,13 +92,13 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           }
         })
         setLocalList(newUserList)
-        activatePopup('Erfolg', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false, false)
+        activatePopup('Success', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false)
         } else {
           throw new Error('The requested changes could not be committed.')
         }
     } catch (error) {
       console.log('%cUserManagerContent.js line:51 error', 'color: #007acc;', error);
-      activatePopup('Fehlgeschlagen', [error.message], false, true)      
+      activatePopup('Failed', [error.message], true)      
     } finally {
       setLoading(false)
     }
@@ -135,7 +132,7 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
       } else {
         throw new Error('The requested changes could not be committed.')
       }
-      activatePopup('Erfolg', ['The requested changes could not be committed to the database.'], false, false)
+      activatePopup('Success', ['The requested changes could not be committed to the database.'], false)
       setDetailsEditable(false)
     } catch (err) {
       console.log('%c function commitChanges() err.message', 'color: #007acc;', err.message);
@@ -204,14 +201,10 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
 
   return (
     <div className="userManagerMain">
-    {popupIsVisible && <Popup
-      isDismissable={popupContent['isDismissable']}
-      heading={popupContent['heading']}
-      messages={popupContent['messages']}
-      isWarning={popupContent['isWarning']}
-      popupIsVisible={popupIsVisible}
-      setPopupIsVisible={setPopupIsVisible}
-    />}
+    <Popup
+      popupContent={popupContent}
+      setPopupContent={setPopupContent}
+      />
 
 
 

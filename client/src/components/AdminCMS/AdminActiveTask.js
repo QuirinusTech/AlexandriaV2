@@ -16,7 +16,6 @@ function AdminActiveTask({
   setAdminListUsers,
   allPossibleStatuses,
   refreshData,
-  activatePopup,
   blacklist,
   setBlacklist,
   PullAdminData,
@@ -33,7 +32,6 @@ function AdminActiveTask({
     allPossibleStatuses,
     setAdminActiveMode,
     refreshData,
-    activatePopup,
     blacklist,
     setBlacklist,
     PullAdminData,
@@ -48,7 +46,6 @@ function AdminActiveTask({
             allPossibleStatuses={allPossibleStatuses}
             setAdminListWishlist={setAdminListWishlist}
             adminListUsers={adminListUsers}
-            activatePopup={activatePopup}
           />
         );
       case "MsgCentre":
@@ -60,7 +57,6 @@ function AdminActiveTask({
             adminListWishlist={adminListWishlist}
             adminActiveMode={adminActiveMode}
             allPossibleStatuses={allPossibleStatuses}
-            activatePopup={activatePopup}
           />
         );
       case "Workflow":
@@ -71,7 +67,6 @@ function AdminActiveTask({
             setAdminListWishlist={setAdminListWishlist}
             adminActiveMode={adminActiveMode}
             setAdminActiveMode={setAdminActiveMode}
-            activatePopup={activatePopup}
             PullAdminData={PullAdminData}
           />
         );
@@ -82,7 +77,6 @@ function AdminActiveTask({
             adminListUsers={adminListUsers}
             setAdminListUsers={setAdminListUsers}
             adminActiveMode={adminActiveMode}
-            activatePopup={activatePopup}
             blacklist={blacklist}
             setBlacklist={setBlacklist}
           />
@@ -113,7 +107,6 @@ function AdminActiveTask({
         allPossibleStatuses={allPossibleStatuses}
         setAdminActiveMode={setAdminActiveMode}
         refreshData={refreshData}
-        activatePopup={activatePopup}
         blacklist={blacklist}
         setBlacklist={setBlacklist}
         PullAdminData={PullAdminData}

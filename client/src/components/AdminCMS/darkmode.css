@@ -290,31 +290,6 @@ summary.adminButton--small:hover {
   color: var(--accentBlue);
 }
 
-.popupDismissable {
-  z-index: 2020 !important;
-  left: unset;
-  width: 30vw;
-  top: unset;
-  bottom: unset;
-  height: fit-content;
-  position: fixed;
-  background: var(--transparentDarkGrey);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  flex-wrap: nowrap;
-  border: 1px solid var(--accentBlue);
-  padding: 1vw !important;
-}
-
-.popupDismissable > h4 {
-  color: wheat;
-  font-size: xx-large;
-  margin: 1vw;
-  padding: 0;
-}
-
 h4.warning, h5.warning {
   color: var(--accentRed);
 }
@@ -2045,6 +2020,10 @@ span.workflow--notificationBar--block--count {
 .linksList--seasons > button {
   flex: 0 0 22%;
 }
+
+.linksList > details {
+  max-height: 30vh;;
+} 
 
 .wfRequiredEpisodes {
   display: flex;

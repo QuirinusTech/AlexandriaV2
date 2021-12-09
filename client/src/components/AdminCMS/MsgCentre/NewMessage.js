@@ -33,24 +33,19 @@ function NewMessage({
     sortWishlist([...adminListWishlist])
   );
 
-  const [popupContent, setPopupContent] = useState({
-    isDismissable: false,
-    isWarning: false,
-    heading: "",
-    messages: []
-  });
-
-  const [popupIsVisible, setPopupIsVisible] = useState(false);
-
-  function activatePopup(heading, msgs, showOk, warn = false) {
-    setPopupContent({
-      isDismissable: showOk,
-      heading: heading,
-      messages: msgs,
-      isWarning: warn
+    const [popupContent, setPopupContent] = useState({
+      isWarning: false,
+      heading: "",
+      messages: []
     });
-    setPopupIsVisible(true);
-  }
+
+  function activatePopup(heading, msgs, warn = false) {
+      setPopupContent({
+        heading: heading,
+        messages: msgs,
+        isWarning: warn
+      });
+    }
 
 
 
@@ -178,14 +173,14 @@ function NewMessage({
         .then(res => res.json())
 
       if (response["success"]) {
-        activatePopup('Success', [response['payload']], false, false)
+        activatePopup('Success', [response['payload']], false)
         reset()
         // popup with confirmation
       } else {
-        activatePopup('Failure', [response['payload']], false, true)
+        activatePopup('Failure', [response['payload']], true)
       }
     } catch (e) {
-      activatePopup('Failure', [e.message], false, true)
+      activatePopup('Failure', [e.message], true)
       console.log('%cNewMessage.js line:198 error', 'color: #007acc;', e);
     } finally {
       setLoading(false)
@@ -212,14 +207,10 @@ function NewMessage({
     <GIFLoader />
   ) : (
     <div className="msgCentre--newMessage">
-      {popupIsVisible && <Popup
-        isDismissable={popupContent['isDismissable']}
-        heading={popupContent['heading']}
-        messages={popupContent['messages']}
-        isWarning={popupContent['isWarning']}
-        popupIsVisible={popupIsVisible}
-        setPopupIsVisible={setPopupIsVisible}
-      />}
+      <Popup
+  popupContent={popupContent}
+  setPopupContent={setPopupContent}
+  />
       <h3>New Message</h3>
 
       <div className="flexdr mar10px newMessageSubsection">

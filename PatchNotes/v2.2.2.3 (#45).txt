@@ -1,0 +1,7 @@
+v2.2.2.3 (build #45) - 9/12/2021
+
+BUG FIXES:
+  - Limited height of Link list details component (linksList > details) to 30vh
+  - Removed 'owner' column from hourly e-mail
+  - Fixed bulk commit notification creation: no more duplicates and bulk commits are no longer failing
+  - Split patch notes for known issues and future features into separate files for easier tracking

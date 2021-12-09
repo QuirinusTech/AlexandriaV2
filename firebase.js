@@ -640,37 +640,37 @@ async function notifyUser(message) {
 }
 
 async function notifyUserBulk(messageList) {
-  
-  let allMessages = []
-  let flagList = []
-  const snapshot = await notificationsRef.get();
-  snapshot.forEach((doc) => allMessages.push(doc.data()))
+  console.log(messageList)
+  try {
+    let allMessages = []
+    const snapshot = await notificationsRef.get();
+    snapshot.forEach((doc) => allMessages.push(doc.data()))
 
-  const batch = db.batch();
+    // console.log(allMessages)
+    // Duplicate check
+    const batch = db.batch();
 
-  // Duplicate check
-  messageList.forEach(msg => {
-    if (msg.id.slice(-13) === '_notification') {
-      allMessages = allMessages.forEach(message => {
-        if (msg['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
-          flagList.push(msg['id'])
-          console.log(msg['affectedEntry'], ' flagged for delete')
-        }
-      })
-    }
-    let thisMessageRef = db.collection('notifications').doc(msg['id'])
-    batch.set(thisMessageRef, msg)
-  })
-
-  if (flagList.length > 0) {
-    flagList.forEach(flaggedMsg => {
-      const flaggedMsgRef = db.collection('notifications').doc(flaggedMsg)
-      batch.delete(flaggedMsgRef)
+    messageList.forEach(msg => {
+      let thisMessageRef = db.collection('notifications').doc(msg['id'])
+      batch.set(thisMessageRef, msg)
+      
+      if (msg.id.slice(-13) === '_notification') {
+        allMessages.forEach(message => {
+          if (message['msgType'] === 'status' && msg['affectedEntry'] === message['affectedEntry'] && msg['msgRecipient'] === message['msgRecipient'] && msg['affectedEpisodes'] === msg['affectedEpisodes']) {
+            const flaggedMsgRef = db.collection('notifications').doc(message['id'])
+            console.log(JSON.stringify(flaggedMsgRef))
+            batch.delete(flaggedMsgRef)
+          }
+        })
+      }
     })
-  }
 
-  const res = await batch.commit().then(()=> "success").catch(err => err)
-  return res
+    const res = await batch.commit()
+    return 'success'
+  } catch (error) {
+    console.log(error.message)
+    return error.message
+  }
 }
 
 async function addToWishlist(username, data) {

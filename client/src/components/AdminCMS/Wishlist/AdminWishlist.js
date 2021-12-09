@@ -2,7 +2,7 @@ import BufferingLoader from "../../Loaders/BufferingLoader"
 import AdminAddNew from "./AdminAddNew";
 import AdminWishlistTable from "./WishlistTable/AdminWishlistTable";
 import { useState, useEffect } from 'react';
-
+import Popup from "../../Popup"
 
 const AdminWishlist = ({
   setAdminListWishlist,
@@ -10,20 +10,23 @@ const AdminWishlist = ({
   allPossibleStatuses,
   adminListUsers,
   adminActiveMode,
-  activatePopup
 }) => {
   const [loading, setLoading] = useState(false)
-  
+
   const Content = ({
-    setAdminListWishlist,
-    adminListWishlist,
-    allPossibleStatuses,
-    adminListUsers,
-    adminActiveMode,
-    activatePopup
-  }) => {
+      setAdminListWishlist,
+      adminListWishlist,
+      allPossibleStatuses,
+      adminListUsers,
+      adminActiveMode,
+    }) => {
     const [localList, setLocalList] = useState(adminListWishlist)
     const [searchBoxValue, setSearchBoxValue] = useState('')
+    const [popupContent, setPopupContent] = useState({
+      isWarning: false,
+      heading: "",
+      messages: []
+      });
 
     const [filters, setFilters] = useState({
       field: !localStorage.getItem('filterField') ? "" : localStorage.getItem('filterField'),
@@ -114,6 +117,9 @@ const AdminWishlist = ({
       case "wishlistList":
         return (
           <div className="adminWishlistMainDiv">
+          <Popup
+            popupContent={popupContent}
+          />
             <h3 className="admin">Wishlist</h3>
             <div className="adminWishlistUtilities">
               <div className="adminSearchBoxContainer adminWishlistUtility">
@@ -168,7 +174,7 @@ const AdminWishlist = ({
                 adminListUsers={adminListUsers}
                 loading={loading}
                 setLoading={setLoading}
-                activatePopup={activatePopup}
+                setPopupContent={setPopupContent}
               />
             </div>
           </div>
@@ -176,14 +182,19 @@ const AdminWishlist = ({
       case "wishlistNew":
         return (
           <div className="adminAddNewContainer">
-            <AdminAddNew
-              adminListUsers={adminListUsers}
-              adminListWishlist={adminListWishlist}
-              setAdminListWishlist={setAdminListWishlist}
-              allPossibleStatuses={allPossibleStatuses}
-              activatePopup={activatePopup}
-            />
-          </div>
+          <Popup
+            popupContent={popupContent}
+          />
+          <AdminAddNew
+            adminListUsers={adminListUsers}
+            adminListWishlist={adminListWishlist}
+            setAdminListWishlist={setAdminListWishlist}
+            allPossibleStatuses={allPossibleStatuses}
+            loading={loading}
+            setLoading={setLoading}
+            setPopupContent={setPopupContent}
+          />
+        </div>
         );
       default:
         return (
@@ -196,14 +207,15 @@ const AdminWishlist = ({
 
   return (
     <div>
+
       {loading && <BufferingLoader />}
+
       <Content
         setAdminListWishlist={setAdminListWishlist}
         adminListWishlist={adminListWishlist}
         allPossibleStatuses={allPossibleStatuses}
         adminListUsers={adminListUsers}
         adminActiveMode={adminActiveMode}
-        activatePopup={activatePopup}
       />
     </div>
   );
