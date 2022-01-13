@@ -15,7 +15,8 @@ const {
   userUpdate,
   adminPasswordReset,
   uname,
-  markRead
+  markRead,
+  toggleAutoUpdate
 } = require("./firebase");
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
 const express = require('express');
@@ -341,6 +342,12 @@ app.post('/logout', (_req, res) => {
   console.log("logout")
   res.cookie('jwt', '', { maxAge: 1 })
   res.status(200).send('OK!')
+})
+
+app.post('/toggleAutoUpdate', async (req, res) => {
+  const data = req.body
+  let response = await toggleAutoUpdate(data)
+  res.json(response)
 })
 
 // app.get('/serverping', (_req, res) => {

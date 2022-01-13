@@ -1100,6 +1100,16 @@ module.exports = {
       "affectedEpisodes": [1,4,2,5]
     },
     {
+      "id": "2345673553821",
+      "msgType": "status",
+      "msgContent": "Protheus",
+      "mailed": false,
+      "read": false,
+      "msgRecipient": "testuser1",
+      "affectedEntry": "Teen Wolf",
+      "affectedEpisodes": [2,6,2,12]
+    },
+    {
       "id": "2gfd9348766987423",
       "msgType": "custom",
       "msgContent": "text goes here",

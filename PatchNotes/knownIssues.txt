@@ -1,10 +1,4 @@
 KNOWN ISSUES:
- - Still no sorting for Message CMS table
+ - no sorting for Message CMS table
  - Ticket splitting doesn't work for wfComplete (does work for wfNew) 
- - Options Widget episode add function is re-adding existing episodes
- - notification popup resets state when it vanishes. (but NOT in AdminNewMessage)
- - No episode-specific release dates
- - Multiple messages for the same entry still aren't overriding each other if the epArray isn't identical.
- - Ongoing series:
-  > No way to flag existing entries
-  > No way to remove flag from existing entries
+ - Multiple messages for the same entry aren't overriding each other if the epArray isn't identical. (introduce intelligent parsing of episode detail arrays)

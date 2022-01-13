@@ -29,6 +29,7 @@ const usersRef = db.collection('users')
 const wishlistRef = db.collection('wishlist')
 const blacklistRef = db.collection('blacklist')
 const notificationsRef = db.collection('notifications')
+const logsRef = db.collection('logs')
 
 module.exports = {
   wishlistInterface,
@@ -42,6 +43,7 @@ module.exports = {
   adminUpdate,
   adminBulkFunction,
   adminListRetrieval,
+  adminListRetrievalWithLimiter,
   updateEpisodesObj,
   deleteDocFromWishlist,
   getUserNotifications,
@@ -54,7 +56,8 @@ module.exports = {
   notifyUserBulk,
   blacklistCleanup,
   adminDelete,
-  markRead
+  markRead,
+  toggleAutoUpdate
 }
 
 
@@ -545,6 +548,10 @@ async function userUpdate(dataObj) {
   }
 }
 
+async function toggleAutoUpdate(data) {
+  const res = await wishlistRef.doc(data['id']).update({isOngoing: data['isOngoing']}).then('success')
+  return res
+}
 
 function generateValidationCode() {
   let randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -763,7 +770,6 @@ async function getSingleWishlistEntry(id) {
   }
 }
 
-
 // UPDATE
 async function updateWishlistItem(id, data) {
 
@@ -797,13 +803,17 @@ async function addEpisodesToWishlistItem(data) {
 
     const { id, newSeasons, newEpisodes } = data
     let wishlistEntry = await wishlistRef.doc(id).get().then(doc => doc.data())
+    
+    // append the actual episode data to the wishlistEntry
     wishlistEntry['episodes'] = WishlistItem.appendEpisodes(data, wishlistEntry['episodes'])
+    // update progress obj
     wishlistEntry['progress'] = WishlistItem.setProgress(wishlistEntry['episodes'], wishlistEntry['status'])
     
+    // update ET value of WishlistEntry
     if (data.hasOwnProperty('newSeasons')) {
-      let checkvar = newSeasons.length-1
+      // assess the data in the newSeasons array and then, starting from the last new season, count downwards; the last selected season is the new max range and sets the 'st' value of the wishlistEntry
       let updated = false
-      let i = checkvar
+      let i = newSeasons.length-1
       while (!updated) {
         if (newSeasons[i]["selected"]) {
           wishlistEntry['st'] = newSeasons[i]['season']
@@ -817,6 +827,7 @@ async function addEpisodesToWishlistItem(data) {
     }
     wishlistEntry['status'] = 'new'
 
+    // aggregate changes and write to db
     const res = await wishlistRef.doc(id).set(wishlistEntry).then(()=>"success").catch(err=>{
       console.log(err)
       return "fail"
@@ -882,6 +893,10 @@ async function adminNew(department, data) {
       let MSGCENTREresult = await notificationsRef.doc(data['id']).set(data).then(()=>"success").catch(err=>{
       throw new Error(err)})
       return MSGCENTREresult
+    } else if (department.toUpperCase() === 'LOGS') {
+      let logId = uuid.v4();
+      await logsRef.doc(logId).set(data)
+      return logId
     }
   } catch (error) {
     console.log('%cfirebase.js line:802 error', 'color: #007acc;', error.message);
@@ -962,6 +977,7 @@ async function adminBulkFunction(department, data, operation) {
       const entryref = db.collection(collectionString).doc(entryrefString)
       if (operationString === "UPDATE") {batch.update(entryref, entry)}
       if (operationString === "DELETE") {batch.delete(entryref)}
+      if (operationString === "NEWBUL") {batch.set(entryref)}
     })
     await batch.commit();
     return "success"
@@ -984,6 +1000,33 @@ async function adminListRetrieval(department) {
   
   const listRef = db.collection(departmentCollectionRefs[department.toUpperCase()]);
   const snapshot = await listRef.get();
+
+  snapshot.forEach((doc) => {
+    let item = doc.data()
+    if (department.toUpperCase() === 'WISHLIST') {
+      item = setStatusAndProgress(item)
+    }
+    if (item['id'] !== "placeholder") {
+      requestedList.push(item);
+    }
+  });
+  return requestedList;
+
+}
+
+async function adminListRetrievalWithLimiter(department, limiter) {
+  // console.log('adminListRetrieval', department)
+  let requestedList = []
+
+  const departmentCollectionRefs = {
+    MSGCENTRE: "notifications",
+    USERMANAGER: "users",
+    BLACKLIST: "blacklist",
+    WISHLIST: "wishlist"
+  }
+  
+  const listRef = db.collection(departmentCollectionRefs[department.toUpperCase()]);
+  const snapshot = await listRef.where(limiter[0], '==', limiter[1]).get();
 
   snapshot.forEach((doc) => {
     let item = doc.data()

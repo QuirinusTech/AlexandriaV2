@@ -29,9 +29,11 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   );
   const [valuesInvalid, setValuesInvalid] = useState(false);
   const [selectAll, setSelectAll] = useState(false)
+  const [isOngoing, setIsOngoing] = useState(item['isOngoing'])
 
   const optionsWidgetStringRouterEN = {
     movie: {
+      "Auto-update": "",      
       "Report Error": "This Movie will be re-downloaded for you.",
       "Edit Range": "",
       "Add Missing": "",
@@ -39,15 +41,26 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
       "Blacklist": "Are you sure you want to blacklist this entry?"
     },
     series: {
+      "Auto-update": 'Turn ' + (item['isOngoing'] ? 'OFF' : 'ON') + " auto-updates for this entry?",
       "Report Error": "These episodes will be re-downloaded for you.",
       "Edit Range": "This will amend the range of seasons & episodes for this entry. Proceed?",
       "Add Missing": "This will add the specified range of seasons & episodes to this item. Proceed?",
       "Delete": "Are you sure you want to delete these seasons & episodes?",
       "Blacklist": "Are you sure you want to blacklist this entry?"
+      
     }
   }
 
   const optionsWidgetStringsEN = {
+    autoupdate: {
+      help: "The auto-update feature automatically adds new episodes to the wishlist as they become available.",
+      label: "Toggle Auto-update",
+      fn: "Auto-update",
+      applicable: {
+        movie: false,
+        series: true
+      }
+    },
     report: {
       help: "Use this to report faulty media. You can also an include an optional message for the admin.",
       label: "Report error",
@@ -94,6 +107,27 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
       }
     }
   };
+
+  async function toggleAutoUpdate() {
+    setCurrentFunction("Loading");
+    let result = await fetch('/toggleAutoUpdate', {
+        method: "POST",
+        body: JSON.stringify({id: item['id'], isOngoing: !isOngoing}),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+      }).then(res => res.json());
+    console.log(result)
+
+    setWishlistData(wlist => {
+      return wlist.map(x => {
+        if (x['id'] === item['id']) {
+          x['isOngoing'] = !isOngoing
+        } 
+        return x
+      })
+    })
+    setIsOngoing(!isOngoing)
+    setCurrentFunction('Done')
+  }
 
 
   function selectAllCheckbox(e) {
@@ -166,70 +200,88 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   }
 
   async function SubmitForm() {
-    try {
-      if (valuesInvalid) {
-        throw new Error("Invalid Values");
-      }
 
-      let formData = {
-        id: item["id"],
-        currentFunction,
-        formEpisodes,
-        userReportedError,
-        selectAll
-      };
-      let query = "/userUpdate";
-      if (currentFunction === "Blacklist") {
-        formData = {
+    if (currentFunction === 'Auto-update') {
+      toggleAutoUpdate()
+    } else {
+      try {
+        if (valuesInvalid) {
+          throw new Error("Invalid Values");
+        }
+
+        let formData = {
           id: item["id"],
           currentFunction,
-          blacklistData: {
-            imdbid: item["imdbID"],
-            mediaType: item["mediaType"],
-            title: item["name"]
-          }
+          formEpisodes,
+          userReportedError,
+          selectAll
         };
-        query = "/blacklist/c";
-      }
+        let query = "/userUpdate";
+        if (currentFunction === "Blacklist") {
+          formData = {
+            id: item["id"],
+            currentFunction,
+            blacklistData: {
+              imdbid: item["imdbID"],
+              mediaType: item["mediaType"],
+              title: item["name"]
+            }
+          };
+          query = "/blacklist/c";
+        }
 
-      setCurrentFunction("Loading");
-      console.log('%cOptionsWidget.js line:109 formData', 'color: #007acc;', formData);
-      let result = await fetch(query, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-      }).then(res => res.json());
-      if (result["success"]) {
-        if (formData['currentFunction'] === "Blacklist" || result['payload'] === 'removed') {
-          setWishlistData(prevState => {
-            return prevState.filter(entry => entry['id'] !== item['id'])
-          })
-        } else {
-          setWishlistData(prevState => {
-            return prevState.map(entry => {
-              if (entry["id"] === item["id"]) {
-                return result["payload"];
-              } else {
-                return entry;
-              }
+        setCurrentFunction("Loading");
+        console.log('%cOptionsWidget.js line:109 formData', 'color: #007acc;', formData);
+        let result = await fetch(query, {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: { "Content-type": "application/json; charset=UTF-8" }
+        }).then(res => res.json());
+        if (result["success"]) {
+          if (formData['currentFunction'] === "Blacklist" || result['payload'] === 'removed') {
+            setWishlistData(prevState => {
+              return prevState.filter(entry => entry['id'] !== item['id'])
+            })
+          } else {
+            setWishlistData(prevState => {
+              return prevState.map(entry => {
+                if (entry["id"] === item["id"]) {
+                  return result["payload"];
+                } else {
+                  return entry;
+                }
+              });
             });
-          });
-          }
-          setCurrentFunction("Done");
-      } else {
-        throw new Error(result["payload"]);
+            }
+            setCurrentFunction("Done");
+        } else {
+          throw new Error(result["payload"]);
+        }
+      } catch (error) {
+        alert(error.message);
+        setCurrentFunction("Error");
       }
-    } catch (error) {
-      alert(error.message);
-      setCurrentFunction("Error");
     }
   }
 
 
 
-  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN, setUserReportedError}) => {
+  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN, setUserReportedError, toggleAutoUpdate}) => {
 
     const [inputFormVal, setInputFormVal] = useState(userReportedError)
+    const [localFormEpVals, setLocalFormEpVals] = useState(formEpisodes)
+
+    function updateEpVals(e) {
+      const {name, value} = e.target
+      let copy = {...localFormEpVals}
+      copy[name] = value
+      setLocalFormEpVals(copy)
+    }
+
+    function onBlurUpdateParent() {
+      setFormEpisodes(localFormEpVals)
+    }
+
 
     function sync() {
       setUserReportedError(inputFormVal)
@@ -242,7 +294,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
       <motion.div initial={{opacity: 0}} animate={{opacity: 1}} key={item["id"]} className="wishListWidgetContent">
         <h4>{currentFunction}</h4>
         <p className="helpString">{helpString}</p>
-        {currentFunction !== "Blacklist" &&
+        {currentFunction !== "Blacklist" && currentFunction !== "Auto-update" &&
           item["mediaType"] === "series" && (
             <div className="optionsWidget__rangePickerForm">
             {currentFunction !== "Add Missing" && currentFunction !== "Edit Range" && <span><input type="checkbox" checked={selectAll} onChange={selectAllCheckbox} /><b>Select All</b></span>}
@@ -262,9 +314,10 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
                 type="number"
                 name="sf"
                 
-                value={formEpisodes['sf']}
+                value={localFormEpVals['sf']}
                 id={"formEpisodes_sf_" + item["id"]}
-                onChange={handleChange}
+                onBlur={onBlurUpdateParent}
+                onChange={updateEpVals}
                 placeholder="From season"
               /></label>
               <label className={invalidValueFlags['ef'] ? 'invalidValue' : ''}>Episode
@@ -273,9 +326,10 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
                 type="number"
                 name="ef"
                 
-                value={formEpisodes['ef']}
+                value={localFormEpVals['ef']}
                 id={"formEpisodes_ef_" + item["id"]}
-                onChange={handleChange}
+                onBlur={onBlurUpdateParent}
+                onChange={updateEpVals}
                 placeholder="from episode"
               /></label>
               </div>
@@ -287,9 +341,10 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
                 type="number"
                 name="st"
                 
-                value={formEpisodes['st']}
+                value={localFormEpVals['st']}
                 id={"formEpisodes_st_" + item["id"]}
-                onChange={handleChange}
+                onBlur={onBlurUpdateParent}
+                onChange={updateEpVals}
                 placeholder="up to season"
               /></label>
               <label className={invalidValueFlags['et'] ? 'invalidValue' : ''}>Episode
@@ -297,9 +352,10 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
                 disabled={selectAll}
                 type="number"
                 name="et"
-                value={formEpisodes['et']}
+                value={localFormEpVals['et']}
                 id={"formEpisodes_et_" + item["id"]}
-                onChange={handleChange}
+                onBlur={onBlurUpdateParent}
+                onChange={updateEpVals}
                 placeholder="up to episode"
               /></label>
               </div>
@@ -315,8 +371,19 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
             <input type="text" placeholder="Optional Error Message" name='userReportedError' value={inputFormVal} onChange={(e)=>setInputFormVal(e.target.value)} onBlur={sync} />
           </>
         )}
+          {currentFunction === "Auto-update" && (
+            <>
+            <span 
+              className='autoUpdates'>
+                Auto-updates are currently: {" "}
+            </span>
+                <b className={item['isOngoing'] ? 'autoUpdates_ON' : 'autoUpdates_OFF'}>
+                {item['isOngoing'] ? 'ENABLED' : 'DISABLED'}
+                </b>
+                </>
+            )}
           <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
-          <button className={adminMode ? "adminButton adminButton--submit" :"btn_submit"} onClick={SubmitForm}>
+          <button className={currentFunction === "Auto-update" ? item['isOngoing'] ? 'switch_off' : 'switch_on' : adminMode ? "adminButton adminButton--submit" :"btn_submit"} onClick={SubmitForm}>
             {
               currentFunction === "Edit Range"
                 ? "Update"
@@ -324,6 +391,8 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
                 ? "Submit"
                 : currentFunction === "Add Missing"
                 ? "Add"
+                : currentFunction === "Auto-update"
+                ? item['isOngoing'] ? 'Disable' : 'Enable'
                 : "Confirm"
             }
           </button>
@@ -340,7 +409,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
     )
   };
 
-  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, setUserReportedError}) => {
+  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, setUserReportedError, toggleAutoUpdate}) => {
     
     switch (currentFunction) {
       case null:
@@ -439,6 +508,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
           handleChange={handleChange}
           invalidValueFlags={invalidValueFlags}
           setUserReportedError={setUserReportedError}
+          toggleAutoUpdate={toggleAutoUpdate}
          />;
     }
   };
@@ -455,6 +525,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
           handleChange={handleChange}
           invalidValueFlags={invalidValueFlags}
           setUserReportedError={setUserReportedError}
+          toggleAutoUpdate={toggleAutoUpdate}
          />
     </div>
     </>

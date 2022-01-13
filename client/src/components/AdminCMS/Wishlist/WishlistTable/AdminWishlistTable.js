@@ -3,23 +3,10 @@ import TrMovie from "./TrMovie";
 import EditableTr from "./EditableTr"
 import { useState } from "react";
 
-function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, adminListUsers, searchBoxValue, loading, setLoading, setPopupContent }) {
+function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, adminListUsers, searchBoxValue, loading, setLoading }) {
   const [editableEntry, setEditableEntry] = useState(null);
   const [sortField, setSortField] = useState(!localStorage.getItem('sortField') ? "" : localStorage.getItem('sortField') )
   const [sortAsc, setSortAsc] = useState(!localStorage.getItem('sortAsc') ? false : localStorage.getItem('sortAsc') )
-
-  function activatePopup(heading, msgs, warn = false) {
-      setPopupContent({
-        heading: heading,
-        messages: msgs,
-        isWarning: warn
-      });
-    }
-
-
-
-
-
 
   function sortClick(newField) {
 
@@ -56,11 +43,11 @@ function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, admi
       }).then(res => res.json())
 
       if (!result['success']) {
-        activatePopup('Failed', [result['payload']], true)
+        console.log('Failed', [result['payload']], true)
       } else {
         console.log('%cEditableTr.js line:91 result', 'color: #007acc;', result);
         // replace the exisiting entry in the wishlist with DB response
-        activatePopup('Success', [`Successfully deleted ${entryName}.`], false)
+        console.log('Success', [`Successfully deleted ${entryName}.`], false)
         setEditableEntry(null);
         let newList = localList.filter(entry => entry["id"] !== id)
         console.log('%cAdminWishlistTable.js line:28 newList', 'color: #007acc;', newList);
@@ -82,7 +69,7 @@ function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, admi
         .then(result => result);
       console.log('%cAdminWishlistTable.js line:43 result', 'color: #ff0080;', result);
       if (!result['success']) {
-        activatePopup('Failed', ['Database interaction failure: ' + result['payload']], true)
+        console.log('Failed', ['Database interaction failure: ' + result['payload']], true)
       } else {
         // replace the exisiting entry in the wishlist with DB response
         let newList = localList.map(listicle => {
@@ -93,7 +80,7 @@ function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, admi
             }
           })
           console.log(newList);
-        activatePopup('Success', ['The requested changes were successful.'], false)
+        console.log('Success', ['The requested changes were successful.'], false)
         setLocalList(newList);
         console.log('poing')
         setEditableEntry(null);
@@ -195,13 +182,6 @@ function AdminWishlistTable({ localList, setLocalList, allPossibleStatuses, admi
 
   return (
     <>
-    <button className="adminButton" onClick={()=> {
-      activatePopup('Test Heading', ['Message 1'], false)
-    }}>Test Popup</button>
-      {/* <Popup
-      popupContent={popupContent}
-      setPopupContent={setPopupContent}
-      /> */}
     <table className="adminTable">
       <Thead headers={headers} sortClick={sortClick} sortField={sortField} sortAsc={sortAsc} />
       <Tbody

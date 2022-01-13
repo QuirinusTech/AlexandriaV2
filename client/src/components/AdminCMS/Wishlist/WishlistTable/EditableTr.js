@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProgressBar from "../../../Wishlist/TableComponents/TrContent/ProgressBar";import EpisodesConsole from "./EpisodesConsole";
 import OptionsWidget from "../../../Wishlist/TableComponents/TrContent/OptionsWidget"
-import AvailabilityWidget from "../../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
+// import AvailabilityWidget from "../../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
 
 function formatString(arg, marker = "E") {
   if (arg === "all") {
@@ -133,13 +133,13 @@ function EditableTr({
 
   <div onClick={e=>e.stopPropagation()} className="editableTr--optionsWidget modalContent">
 
-              {entry["mediaType"] === 'series' && <AvailabilityWidget
+              {/* {entry["mediaType"] === 'series' && <AvailabilityWidget
                 setWishlistData={setLocalList}
                 imdbID={entry["imdbID"]}
                 st={entry["st"]}
                 et={entry["et"]}
                 id={entry["id"]}
-              />}
+              />} */}
   <OptionsWidget item={entry} setWishlistData={setLocalList} adminMode={true} />
   <button
                       onClick={() => setShowOptionsWidget(false)}

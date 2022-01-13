@@ -1,0 +1,19 @@
+v2.2.2.4 (build #46) - 13/01/2022
+
+NEW FEATURES:
+  - Protheus is LIVE!
+    The Protheus module adds new episodes automatically to new series via weekly auto-updates.
+    Protheus logs a copy of the report to the db and also mails the admin a copy of the report.
+    Episodes auto-added by Protheus are shown in a separate section in the message centre.
+
+UI/UX:
+  - Availability Widget has been removed and replace with a button to enable/disable auto-updates.
+  - Improved visibility of 'isOngoing' status for wishlist items.
+  - Popup feature removed from all admin pages pending a better solution that doesn't cause other bugs.
+  - Added overflow scrolling for fullscreen message centre
+  - Message Centre sections are now collapsable.
+  - Added poster + minor styling changes to Wishlist items for visibility.
+
+BUG FIXES:
+  - Corrected an error in the Availability widget that was causing episode duplication
+  - Fixed an issue in the Options Widget where users would have to reselect a field after every character they type.

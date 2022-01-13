@@ -3,7 +3,7 @@ import Actions from "./Actions";
 import LinkGenerator from "./LinkGenerator";
 import MediaDetails from "./MediaDetails";
 import WfCompleteList from "./WfCompleteList"
-import AvailabilityWidget from "../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
+// import AvailabilityWidget from "../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
 
 const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, getNextTicket, resolveTicketPartial, resetTicket }) => {
   const [fullListState, setFullListState] = useState(generateFullListSelectable(currentEntry['outstanding']))
@@ -54,7 +54,7 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
           adminActiveMode={adminActiveMode}
         />
       </div>
-      {currentEntry["category"] === "ongoing" && (
+      {/* {currentEntry["category"] === "ongoing" && (
         <div>
           <AvailabilityWidget
             imdbID={currentEntry["imdbData"]["imdbID"]}
@@ -64,7 +64,7 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
             setWishlistData
           />
         </div>
-      )}
+      )} */}
 
       <Actions
         disabled={currentEntry["resolved"]}

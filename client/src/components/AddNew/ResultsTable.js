@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import IMDBDataTable from "./IMDBDataTable";
 import GIFLoader from "../Loaders/GIFLoader";
-import AvailabilityWidget from "../Wishlist/TableComponents/TrContent/AvailabilityWidget";
+// import AvailabilityWidget from "../Wishlist/TableComponents/TrContent/AvailabilityWidget";
 import OptionsWidget from "../Wishlist/TableComponents/TrContent/OptionsWidget";
 import SeriesEpisodes from "../Wishlist/TableComponents/SeriesEpisodes"
 import { Link } from "react-router-dom"
@@ -35,7 +35,7 @@ function ResultsTable({
           et: 0
         }
   );
-  const [isOngoing, setIsOngoing] = useState(false);
+  const [isOngoing, setIsOngoing] = useState(true);
   const alreadyOnWishlist =
     warning === "alreadyOnList"
       ? wishlistData.filter(
@@ -142,7 +142,7 @@ function ResultsTable({
       <>
         {isSeries && <div className="episodesPickTickboxesRow">
           <label>
-            Is there a new episode due to release within the next month?
+            Automatically add new episodes as they become available? (Auto-updates)
           </label>
           <input
             type="checkbox"
@@ -182,13 +182,13 @@ function ResultsTable({
             {alreadyOnWishlist["mediaType"] === "series" && (
               <>
               <SeriesEpisodes item={alreadyOnWishlist} />
-              <AvailabilityWidget
+              {/* <AvailabilityWidget
                 imdbID={alreadyOnWishlist["imdbID"]}
                 st={alreadyOnWishlist["st"]}
                 et={alreadyOnWishlist["et"]}
                 id={alreadyOnWishlist["id"]}
                 setWishlistData={setWishlistData}
-              />
+              /> */}
               </>
             )}
             <OptionsWidget item={alreadyOnWishlist} />

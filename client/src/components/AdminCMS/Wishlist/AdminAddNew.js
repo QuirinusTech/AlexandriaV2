@@ -4,9 +4,8 @@ import Episodes from './AdminAddNew/Episodes'
 import ImportForm from "./ImportForm"
 import PNGLoader from "../../Loaders/PNGLoader"
 import { motion } from "framer-motion"
-import Popup from '../../Popup'
 
-function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist, loading, setLoading, setPopupContent }) {
+function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist, adminListWishlist }) {
   
   let dateObj = new Date()
   let month = dateObj.getMonth() + 1
@@ -15,13 +14,8 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   // console.log('%cAdminAddNew.js line:13 dateString', 'color: #007acc;', dateString);
 
 
-  function activatePopup(heading, msgs, warn = false) {
-      setPopupContent({
-        heading: heading,
-        messages: msgs,
-        isWarning: warn
-      });
-    }
+  const [loading, setLoading] = useState(false)
+
   const [mediaOptions, setMediaOptions] = useState({
     addedBy: 'addedBy',
     mediaType: 'mediaType',
@@ -39,7 +33,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   });
 
   const [showImportForm, setShowImportForm] = useState(false)
-  const [posterList, setPosterList] = useState(null)
+  const [posterList, setPosterList] = useState([])
     
   const [episodes, setEpisodes] = useState(
     {
@@ -53,16 +47,17 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   async function getImdbData(e) {
     setLoading(true)
     await fetch(
-      `/imdbsearch/${e.target.name}/${imdbInfo[e.target.name]}`
+      `/imdbsearch/${e.target.name}/${imdbInfo[e.target.name.replace(/[\s:,]/g, '')]}`
     , {method: 'POST'})
       // assign values
       .then(res => res.json())
       .then(data => {
-        console.log('%cAdminAddNew.js line:47 data', 'color: #007acc;', data);
+        console.log('%cAdminAddNew.js line:60 data', 'color: #007acc;', data);
         if (e.target.name === "title" && data['Response'] !== "False") {
+          console.log('Activate posterlist')
           setPosterList(data['Search'])
         } else if (e.target.name === "title" && data['Response'] === "False") {
-          activatePopup('Failed', [data['Error']], true)
+          console.log('Failed', [data['Error']], true)
         } else {
           if (data['Type'] === 'series') {
             setEpisodes({sf: 1, ef: 1, st: data['totalSeasons'], et: 'all'})
@@ -78,7 +73,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 
   async function posterClick(imdbID) {
     setLoading(true)
-    setPosterList(null)
+    setPosterList([])
     await fetch(
       `/imdbsearch/imdbID/${imdbID}`
     , {method: 'POST'})
@@ -126,6 +121,9 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       st: 0,
       et: 0
     });
+
+    setPosterList([])
+
   }
 
   function importData(newEntry) {
@@ -200,7 +198,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       .then(data => data);
     console.log('%cAdminAddNew.js line:188 response', 'color: #007acc;', response);
     if (response['success']) {
-      activatePopup('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false)
+      console.log('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false)
       setAdminListWishlist(prevState => {
         return prevState.map(entry => {
           if (entry['id'] === response['payload']['id']) {
@@ -211,7 +209,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         })
       });
     } else {
-      activatePopup('Warning', [response['payload']], true)
+      console.log('Warning', [response['payload']], true)
     }
     // add new addition to the master wishlist
 
@@ -265,7 +263,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         </div>
       </div>
 
-      {posterList !== null && (
+      {posterList !== [] && posterList.length > 0 && (
         // console.log(posterarr)
           <div className="adminPosterList">
             <button onClick={resetForm}>Cancel</button>

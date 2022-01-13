@@ -4,3 +4,7 @@ node_modules
 .env
 alexandria-v2-89a5a-30e14e932b3d.json
 fakedata.js
+/TvMazeApiSampleData
+weeklyCronJob.js
+tvMazeApiTest.js
+/logs

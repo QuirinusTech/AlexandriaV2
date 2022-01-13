@@ -1,8 +1,8 @@
 const globalvars = require('./Classes/globals')
-const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem, notifyUser, notifyUserBulk, adminDelete } = require('./firebase')
+const {adminNew, adminUpdate, adminBulkFunction, adminListRetrieval, adminListRetrievalWithLimiter, updateEpisodesObj, deleteDocFromWishlist, updateWishlistItem, notifyUser, notifyUserBulk, adminDelete } = require('./firebase')
 
 async function workFlowTicketParser(entry) {
-  // console.log('%cAdminDatabaseInterface.js line:5 entry', 'color: #007acc;', entry);
+  // console.log('%cAdminDatabaseInterface.js line:5 entry', entry);
 
   // the router uses the format router[adminMode][actionType] to determine the status the marked entries will be updated with.
   const newStatusRouter = {
@@ -80,8 +80,8 @@ async function workFlowTicketParser(entry) {
 async function adminDatabaseInterface(department, operation, data) {
   // if (process.env.test === 'true') {
     console.log('adminDatabaseInterface', 'department', department, 'operation', operation, 'data', data)
-    console.log('%cAdminDatabaseInterface.js line:55 deparment', 'color: #007acc;', department);
-    console.log('%cAdminDatabaseInterface.js line:56 operation', 'color: #007acc;', operation);
+    console.log('%cAdminDatabaseInterface.js line:55 deparment', department);
+    console.log('%cAdminDatabaseInterface.js line:56 operation', operation);
   // }
 
     let success = false
@@ -110,7 +110,6 @@ async function adminDatabaseInterface(department, operation, data) {
       } else {
         switch(operation.toUpperCase()) {
           case "NEW": //create
-            let newEntry = {...data}
             // parse the new data
             // if episodes not present, set the episodesObj
             // fix the progress bar
@@ -133,9 +132,16 @@ async function adminDatabaseInterface(department, operation, data) {
               success = true
             }
             break;
+          case "NEWBULK":
+            // bulk update
+            outcome = await adminBulkFunction(department, data, 'NEWBULK')
+            if (outcome === "success") {
+              success = true
+            }
+            break;
           case "DELETE":
             // delete entry
-            console.log('%cAdminDatabaseInterface.js line:119 data', 'color: #007acc;', data);
+            console.log('%cAdminDatabaseInterface.js line:119 data', data);
             outcome = await adminDelete(department, data)
             if (outcome !== "fail") {
               payload = outcome
@@ -150,7 +156,11 @@ async function adminDatabaseInterface(department, operation, data) {
             }
             break;
           case "LIST":
-            outcome = await adminListRetrieval(department)
+            if (data !== null && Array.isArray(data) && data.length === 2) {
+              outcome = await adminListRetrievalWithLimiter(department, data)
+            } else {
+              outcome = await adminListRetrieval(department)
+            }
             if (Array.isArray(outcome)) {
               payload = [...outcome]
               success = true
@@ -176,7 +186,7 @@ async function adminDatabaseInterface(department, operation, data) {
         console.log(error, error.message)
         payload = error.message
       } finally {
-        console.log('%cAdminDatabaseInterface.js line:143 success', 'color: #007acc;', success);
+        console.log('%cAdminDatabaseInterface.js line:143 success', success);
         return {success, payload, outcome}
       }
 }

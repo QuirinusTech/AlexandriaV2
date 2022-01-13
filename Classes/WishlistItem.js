@@ -169,6 +169,7 @@ class WishlistItem {
     return obj[season]
   }
 
+  /** data is the new data, episodes is the existing episodesObj */
   static appendEpisodes(data, episodes) {
     const {st, et, newEpisodes} = data
     let episodesObj = {...episodes}
@@ -177,17 +178,20 @@ class WishlistItem {
     // console.log("et", et, "newet", newet)
     Object.keys(episodesObj).forEach(ep => {
       for (let index = parseInt(et)+1; index <= newet; index++) {
-        episodesObj[st][index.toString()] = "new"
+        if (!episodesObj[st].hasOwnProperty(index.toString())) {
+          episodesObj[st][index.toString()] = "new"
+        }
       }
       if (data.hasOwnProperty("newSeasons")) {
         data["newSeasons"].forEach((thisNewSeason) => {
           let {season, maxEpisodes, selected} = thisNewSeason
-          if (selected) {
+          if (selected && !episodesObj.hasOwnProperty(season)) {
             episodesObj[season] = WishlistItem.addSeason(parseInt(season), 1, parseInt(maxEpisodes))
           }
         });
       }
     })
+    console.log('%cWishlistItem.js line:194 episodesObj', 'color: #007acc;', episodesObj);
     return episodesObj
   }
 

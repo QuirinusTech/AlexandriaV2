@@ -77,5 +77,104 @@ module.exports = {
     });
 
     })
+  }, protheusReport: async function protheusReport(reportVar) {
+
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'quirinus.mercury.service@gmail.com',
+        pass: process.env.mercuryServiceAppPassword
+      }
+    });
+    
+    let htmlstring = `<div style="display=flex;flex-direction:column;">`
+    htmlstring += `<div>`
+    htmlstring += `<details>`
+    
+    htmlstring += `<summary>Protheus Report: ${reportVar['eventInitTime']}</summary>`
+    htmlstring += reportVar['isTest'] ? `<h4>Test run</h4>` : ''
+    
+    htmlstring += `<details>`
+    htmlstring += `<summary>Check Type</summary>`
+    htmlstring += `<p>Monthly: <b>${reportVar['reportType']['isMonthly'] ? 'Yes' : 'No'}</b>`
+    htmlstring += `</p>`
+    htmlstring += `<p>Weekly: <b>${reportVar['reportType']['isWeekly'] ? 'Yes' : 'No'}</b>`
+    htmlstring += `</p>`
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += `<summary>Stats</summary>`
+    htmlstring += `<h4>API Calls: </h4>`
+    htmlstring += `<p>${reportVar['apiCalls']}</p>`
+    htmlstring += `<h4>Run checks</h4>`
+    htmlstring += `<ol>`
+    htmlstring += `<li><b>Start</b>: ${reportVar['jobDidStart'] ? 'Yes' : 'No'}</li>`
+    htmlstring += `<li><b>Run</b>: ${reportVar['jobDidRun'] ? 'Yes' : 'No'}</li>`
+    htmlstring += `<li><b>Error</b>: ${reportVar['jobDidError'] ? 'Yes' : 'No'}</li>`
+    htmlstring += `<li><b>Complete</b>: ${reportVar['jobDidComplete'] ? 'Yes' : 'No'}</li>`
+    htmlstring += `</ol>`
+    htmlstring += `<h4>Function Run Count</h4>`
+    htmlstring += `<ol>`
+    htmlstring += `<li><b>loadTvMazeData</b>: ${reportVar['functionRunCount']['loadTvMazeData']}</li>`
+    htmlstring += `<li><b>checkForNewEpisodes</b>: ${reportVar['functionRunCount']['checkForNewEpisodes']}</li>`
+    htmlstring += `<li><b>createTicket</b>: ${reportVar['functionRunCount']['createTicket']}</li>`
+    htmlstring += `</ol>`
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += `<summary>Modified Wishlist Items</summary>`
+    htmlstring += `<ol>`
+    reportVar['modifiedWishlistItems'].forEach(mwi => { htmlstring += `<li>${mwi}</li>`})
+    htmlstring += `</ol>`
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += `<summary>Data Anomalies</summary>`
+    htmlstring += `<ol>`
+    reportVar['dataAnomalies'].forEach(dA => {
+      htmlstring += `<li>${dA}</li>`
+    })
+    htmlstring += `</ol>`
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += '<summary>Database Commit Results</summary>'
+    htmlstring += `<p><b>Db Updates</b>: ${reportVar['dbCommitResults']['dbUpdates'] === null ? 'N/A' : reportVar['dbCommitResults']['dbUpdates']['success'] ? 'Success' : 'Fail'}</p>`
+    htmlstring += `<p><b>Notifications</b>: ${reportVar['dbCommitResults']['notifications'] === null ? 'N/A' : reportVar['dbCommitResults']['notifications']['success'] ? 'Success' : 'Fail'}</p>`
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += `<summary>Ticket List</summary>`
+    reportVar['ticketList'].forEach(ticket => { htmlstring += `<p>${JSON.stringify(ticket)}</p>` })
+    htmlstring += `</details>`
+
+    htmlstring += `<details>`
+    htmlstring += `<summary>Event Log</summary>`
+    htmlstring += `<ol>`
+    reportVar['log'].forEach(x => {
+      htmlstring += `<li>${x}</li>`
+    })
+    htmlstring += `</ol>`
+    htmlstring += `</details>`
+    htmlstring += `</details></div>`
+  
+    var mailOptions = {
+      from: 'quirinus.mercury.service@gmail.com',
+      to: 'quirinustech@gmail.com',
+      subject: 'Protheus Report - Alexandria V2',
+      text: JSON.stringify(reportVar),
+      html: htmlstring,
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error.message);
+        return error.message;
+      } else {
+        console.log('Email sent: ' + info.response);
+        return 'Email sent: ' + info.response;
+      }
+    });
+
   }
 }

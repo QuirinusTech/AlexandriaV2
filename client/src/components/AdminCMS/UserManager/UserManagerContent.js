@@ -3,7 +3,6 @@ import UserDetailDashboard from "./UserDetailDashboard"
 import UserDetailManager from "./UserDetailManager"
 import UsersList from "./UsersList"
 import GIFLoader from "../../Loaders/GIFLoader"
-import Popup from "../../Popup"
 import Blacklist from "./Blacklist"
 
 function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBlacklist }) {
@@ -12,20 +11,6 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
   const [detailsEditable, setDetailsEditable] = useState(false)
   const [loading, setLoading] = useState(false)
   
-  const [popupContent, setPopupContent] = useState({
-      isWarning: false,
-      heading: "",
-      messages: []
-    });
-
-  function activatePopup(heading, msgs, warn = false) {
-      setPopupContent({
-        heading: heading,
-        messages: msgs,
-        isWarning: warn
-      });
-    }
-
   function selectUser(userId) {
     setCurrentUser(localList.filter(user => user['userId'] === userId)[0])
   }
@@ -36,14 +21,14 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
     let newPasswordConfirm = window.prompt("Please confirm the password:")
 
     if (newPassword.length < 8) {
-      activatePopup('Warning', ['The new password is too short.', 'It must containt of at least 8 characters.', 'Aborted.'], true)
+      console.log('Warning', ['The new password is too short.', 'It must containt of at least 8 characters.', 'Aborted.'], true)
       return false
     }
 
     if (newPassword === '' || newPassword === null) {
-      activatePopup('', ['Aborted'], true)
+      console.log('', ['Aborted'], true)
     } else if (newPassword !== newPasswordConfirm) {
-      activatePopup('Warning', ['Passwords do not match.', 'Aborted'], true)
+      console.log('Warning', ['Passwords do not match.', 'Aborted'], true)
     } else {
       try {
         setLoading(true)
@@ -56,11 +41,11 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           console.log('%cUserManagerContent.js line:30 result', 'color: #007acc;', result);
           throw new Error(result['errormsg'])
         } else {
-          activatePopup('Success', [`The password of user "${currentUser['username']}" has been changed successfully.`])
+          console.log('Success', [`The password of user "${currentUser['username']}" has been changed successfully.`])
         }
       } catch (error) {
         console.log('%cUserManagerContent.js line:41 error', 'color: #007acc;', error);
-        activatePopup('Warning', [error.message], true)
+        console.log('Warning', [error.message], true)
       } finally {
         setLoading(false)
       }
@@ -92,13 +77,13 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           }
         })
         setLocalList(newUserList)
-        activatePopup('Success', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false)
+        console.log('Success', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false)
         } else {
           throw new Error('The requested changes could not be committed.')
         }
     } catch (error) {
       console.log('%cUserManagerContent.js line:51 error', 'color: #007acc;', error);
-      activatePopup('Failed', [error.message], true)      
+      console.log('Failed', [error.message], true)      
     } finally {
       setLoading(false)
     }
@@ -132,7 +117,7 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
       } else {
         throw new Error('The requested changes could not be committed.')
       }
-      activatePopup('Success', ['The requested changes could not be committed to the database.'], false)
+      console.log('Success', ['The requested changes could not be committed to the database.'], false)
       setDetailsEditable(false)
     } catch (err) {
       console.log('%c function commitChanges() err.message', 'color: #007acc;', err.message);
@@ -201,12 +186,6 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
 
   return (
     <div className="userManagerMain">
-    <Popup
-      popupContent={popupContent}
-      setPopupContent={setPopupContent}
-      />
-
-
 
     <h3>User Manager Console</h3>
     <Content

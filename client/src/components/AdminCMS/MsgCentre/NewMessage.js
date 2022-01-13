@@ -1,7 +1,6 @@
 import { useState } from "react";
 import GIFLoader from "../../Loaders/GIFLoader.js";
 // import AffectedEntryEpisodeListCheckboxes from "./AffectedEntryEpisodesListCheckboxes";
-import Popup from "../../Popup"
 
 function NewMessage({
   adminListWishlist,
@@ -32,22 +31,6 @@ function NewMessage({
   const [filteredWishlist, setFilteredWishlist] = useState(
     sortWishlist([...adminListWishlist])
   );
-
-    const [popupContent, setPopupContent] = useState({
-      isWarning: false,
-      heading: "",
-      messages: []
-    });
-
-  function activatePopup(heading, msgs, warn = false) {
-      setPopupContent({
-        heading: heading,
-        messages: msgs,
-        isWarning: warn
-      });
-    }
-
-
 
   function filterEntriesSelect(e) {
     const { name, value } = e.target;
@@ -173,14 +156,14 @@ function NewMessage({
         .then(res => res.json())
 
       if (response["success"]) {
-        activatePopup('Success', [response['payload']], false)
+        console.log('Success', [response['payload']], false)
         reset()
         // popup with confirmation
       } else {
-        activatePopup('Failure', [response['payload']], true)
+        console.log('Failure', [response['payload']], true)
       }
     } catch (e) {
-      activatePopup('Failure', [e.message], true)
+      console.log('Failure', [e.message], true)
       console.log('%cNewMessage.js line:198 error', 'color: #007acc;', e);
     } finally {
       setLoading(false)
@@ -207,10 +190,6 @@ function NewMessage({
     <GIFLoader />
   ) : (
     <div className="msgCentre--newMessage">
-      <Popup
-  popupContent={popupContent}
-  setPopupContent={setPopupContent}
-  />
       <h3>New Message</h3>
 
       <div className="flexdr mar10px newMessageSubsection">

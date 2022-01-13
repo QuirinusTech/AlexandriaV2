@@ -14,7 +14,7 @@ const MessageCentre = ({ notificationsList }) => {
           {customMessages.map(message => {
             return (
               <li key={message["affectedEntry"]}>
-                {message["msgContent"]}
+                {message["msgContent"] + " "}
                 {message["affectedEntry"] !== "" && message["affectedEntry"] !== null && "(" + message["affectedEntry"] + ")"} {message['affectedEpisodes'][0] !== 0 && <AffectedEpisodesString epList={message['affectedEpisodes']} />}
               </li>
             );
@@ -47,8 +47,8 @@ const MessageCentre = ({ notificationsList }) => {
 
     let MessagesDiv = statuses.map(status => {
       return (
-        <div className="msgCentrePreview--statusMessages" key={status}>
-          <h4>{status}</h4>
+        <details className="msgCentrePreview--statusMessages" key={status} open>
+          <summary>{status.toUpperCase() === 'PROTHEUS' ? 'Auto-update additions' : status}</summary>
           <ul>
             {statusMessages
               .filter(message => message["msgContent"] === status)
@@ -61,7 +61,7 @@ const MessageCentre = ({ notificationsList }) => {
                 }
               )}
           </ul>
-        </div>
+        </details>
       )
     });
     return MessagesDiv;

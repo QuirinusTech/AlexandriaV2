@@ -1,5 +1,5 @@
 import OptionsWidget from "./TrContent/OptionsWidget";
-import AvailabilityWidget from "./TrContent/AvailabilityWidget";
+// import AvailabilityWidget from "./TrContent/AvailabilityWidget";
 import ProgressBar from "./TrContent/ProgressBar";
 import SeriesEpisodes from "./SeriesEpisodes";
 
@@ -56,27 +56,35 @@ const TableRows = ({
         <td
           className={recentlyViewedBool ? "colhead_mediaDetails flash" : "colhead_mediaDetails"}
           style={{
-            border: recentlyViewedBool && "2px solid #68ff68"
+            border: recentlyViewedBool && "2px solid #68ff68",
           }}
         ><h4>{item["name"]}</h4>
-          <span>
-          <p> ({`${item["mediaType"]}: ${item["imdbData"]["Year"] || ''})`}</p>
+        <img src={item['imdbData']['Poster']} className='wishlistRowPoster' alt='poster' />
+
+          <span className='wishlistRowLabel'>
+          {
+            item["mediaType"] === "movie" ? 
+              <p>{"Movie: (" + item["imdbData"]["Year"] + ")"}</p>
+                :
+              <p style={{background: '#c5c5c58c'}}>
+              {"Auto-Update: "}<b className={item['isOngoing'] ? 'autoUpdates_ON' : 'autoUpdates_OFF'}>{item["isOngoing"] ? "Enabled" : "Disabled"}</b>
+              </p>
+          }
           </span>
 
-          {item["isOngoing"] && <p>Ongoing</p>}
           <div>
             <ProgressBar item={item} />
             <br />
             {item["mediaType"] === "series" && <SeriesEpisodes item={item} />}
             <details>
               <summary>Options for {item["name"]}</summary>
-              {item["mediaType"] === 'series' && <AvailabilityWidget
+              {/* {item["mediaType"] === 'series' && <AvailabilityWidget
                 setWishlistData={setWishlistData}
                 imdbID={item["imdbID"]}
                 st={item["st"]}
                 et={item["et"]}
                 id={item["id"]}
-              />}
+              />} */}
               <OptionsWidget setWishlistData={setWishlistData} item={item} adminMode={false} />
             </details>
           </div>
