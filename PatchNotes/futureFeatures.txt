@@ -11,7 +11,10 @@
     - New episodes that are added before they have aired are put into POSTPONED status.
     - Episodes marked as POSTPONED that have aired are changed to 'NEW' status.
 
-// WorkflowItemManager ticket filters
+// WorkflowItemManager
+ - ticket filters
+ - Add Links to 'Complete" mode
+ - Incorporate TvMaze datapoints 
 
 // Archiving.
  - implement the addition of a new status

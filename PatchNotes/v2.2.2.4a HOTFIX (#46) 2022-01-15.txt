@@ -1,0 +1,5 @@
+v2.2.2.4a HOTFIX (#46) - 2022-01-15
+
+BUG FIXES:
+ - Fixed scheduling issue for Protheus.
+ - Fixed error that would've caused notifications to write to the Wishlist folder

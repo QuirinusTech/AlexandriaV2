@@ -1,4 +1,4 @@
-v2.2.2.4 (build #46) - 13/01/2022
+v2.2.2.4 (#45) - 2022-01-13
 
 NEW FEATURES:
   - Protheus is LIVE!

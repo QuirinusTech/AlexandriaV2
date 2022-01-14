@@ -164,7 +164,7 @@ async function main() {
     console.log('notification count : ' + notificationsList.length)
     if (notificationsList.length > 0 && !reportVar['isTest']) {
       reportVar['log'].push('INIT: notification creation @ ' + new Date().toGMTString())
-      reportVar['dbCommitResults']['notifications'] = await adminDatabaseInterface('wishlist', 'NEWBULK', notificationsList)
+      reportVar['dbCommitResults']['notifications'] = await adminDatabaseInterface('msgCentre', 'NEWBULK', notificationsList)
       reportVar['log'].push('COMPLETE: notification creation @ ' + new Date().toGMTString())
     } else if (notificationsList.length > 0 && reportVar['isTest']) {
       reportVar['log'].push('Test run. Notifications will be printed to log: ')
@@ -274,7 +274,7 @@ function preflight() {
     reportVar['log'].push('Weekly Check')
   } else {
     // check if first saturday of the month
-    if (reportVar['eventInitTime'].getDate() <= 7 && reportVar['eventInitTime'].getDay() === 6 && reportVar['eventInitTime'].getHours() === 22) {
+    if (reportVar['eventInitTime'].getDate() <= 7 && reportVar['eventInitTime'].getDay() === 6) {
       reportVar['reportType']['isMonthly'] = true
       reportVar['log'].push('Monthly Check')
     } else {
@@ -282,7 +282,7 @@ function preflight() {
     }
 
     // check if sunday
-    if (reportVar['eventInitTime'].getDay() === 0 && reportVar['eventInitTime'].getHours() === 22) {
+    if (reportVar['eventInitTime'].getDay() === 0) {
       reportVar['reportType']['isWeekly'] = true
       reportVar['log'].push('Weekly Check')
     } else {

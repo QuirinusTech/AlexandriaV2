@@ -1,4 +1,4 @@
-v2.2.2.0 (build #42)
+v2.2.2.0 (build #41)
 
 NEW FEATURES:
   - Message Centre episode string dynamically adjusts format based on input to differenciate more easily between single episodes / season updates as opposed to multi-season & multi-episode.
