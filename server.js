@@ -16,9 +16,13 @@ const {
   adminPasswordReset,
   uname,
   markRead,
-  toggleAutoUpdate
+  toggleAutoUpdate,
+  appendEpisodes,
+  updateEpisodesObj
 } = require("./firebase");
 const {adminDatabaseInterface} = require('./AdminDatabaseInterface')
+const {protheusSingle, getSeasonData} = require('./protheusSingle')
+
 const express = require('express');
 const path = require('path')
 const app = express();
@@ -336,6 +340,26 @@ app.post("/imdbsearch/:searchBy/:field", async (req, res) => {
     });
   req2.end();
 });
+
+app.post("/protheusSingle", async (req, res) => {
+  const data = req.body
+  let response = await protheusSingle(data)
+  res.json(response)
+})
+
+app.post("/protheusAppend", async (req, res) => {
+  const data = req.body
+  console.log('%cserver.js line:352 data', 'color: #007acc;', data);
+  let response = await updateEpisodesObj(data['id'], data['episodesObj'])
+  res.json(response)
+})
+
+app.post("/getSeasonData/:id", async (req, res) => {
+  const id = req.params.id
+  console.log('id', id)
+  const seasonDataMap = await getSeasonData(id)
+  res.json(seasonDataMap)
+})
 
 /** [Logout] */
 app.post('/logout', (_req, res) => {

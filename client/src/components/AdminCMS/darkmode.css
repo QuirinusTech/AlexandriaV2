@@ -1214,6 +1214,8 @@ display: flex;
   background-color: var(--transparentDarkGrey);
   width: 50vw;
   place-self: center;
+  max-height: 70vh;
+  overflow: auto;
 }
 
 .messageCentrePreview > h5, .messageCentrePreview > h4 {
@@ -1946,7 +1948,7 @@ span.workflow--notificationBar--block--count {
   /* box-shadow: var(--customBoxShadow); */
   margin: 0.5vh 0.5vw;
   color: white;
-  flex: 1 1 24%;
+  flex: 1 1 20%;
 }
 
 .highlightH4 {
@@ -1997,7 +1999,7 @@ span.workflow--notificationBar--block--count {
   flex: 1 1 30%;
 }
 
-.linkstList {
+.linksList {
   flex-direction: column;
   border-radius: 10px;
   padding: 1vw;
@@ -2007,12 +2009,12 @@ span.workflow--notificationBar--block--count {
   flex-wrap: nowrap;
 }
 
-.linkstList > h4 {
+.linksList > h4 {
   padding: 0;
   margin: 1vh 0 0 0;
 }
 
-.linkstList > h4:nth-child(1) {
+.linksList > h4:nth-child(1) {
   color: wheat;
   margin: 0;
 }
@@ -2033,6 +2035,59 @@ span.workflow--notificationBar--block--count {
 
 .wfRequiredEpisodes > div {
   width: 30% !important;
+}
+
+.protheusSingleMainDiv {
+  background: var(--transparentGrey);
+  border-radius: 15px;
+  flex-direction: column;
+  margin: 1vh 1vw;
+  width: 100%;
+}
+
+.protheusSingleMainDiv > summary {
+  width: 100%;
+  text-align: center;
+  /* text-shadow: 0 0 black; */
+  font-size: large;
+  color: wheat;
+  margin: 1vh 0 0 0;
+}
+
+.protheusSingle-subDiv[open] {
+  /* position: absolute !important; */
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 10px;
+  padding: 0 !important;
+  background-color: var(--darkGrey);
+  /* margin: 1vw; */
+  /* width: 90%; */
+  position: fixed;
+    top: 25vh;
+    bottom: 25vh;
+    width: 30vw;
+    height: 50vh;
+    right: 40vw;
+    left: 40vw;
+}
+
+.protheusSingle-subDiv > ul {
+  color: white;
+}
+
+.protheusSingle-subDiv > div > p, .protheusSingle-subDiv > div > button {
+  width: 33%;
+}
+
+
+.protheusSingle-subDiv > div {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  justify-content: stretch;
 }
 
 .currentEntryActionType {
@@ -2110,7 +2165,7 @@ span.workflow--notificationBar--block--count {
 }
 
 .wfCompleteListEpisodeDiv > label {
-  flex: 1 0 10%;
+  flex: 1 0 19%;
   margin: 0.1vh 0.1vw;
 }
 
@@ -2118,17 +2173,35 @@ span.workflow--notificationBar--block--count {
   flex-direction: column;
 }
 
+.linksList--movie > h4 {
+  width: 100%;
+}
+
+.linksList--movie {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.linksList--movie > div {
+  align-items: center;
+  width: 50%;
+  justify-content: center;
+}
+
 .linksList > button, .linksList > div > button {
   padding: 10px;
   width: unset !important;
   border-radius: 5px;
-  background-color: firebrick;
+  /* background-color: firebrick; */
   min-width: 60px;
   margin: 10px;
 }
 
 .linksList > details {
   width: 99%;
+  padding: 0 !important;
 }
 
 .linksList--seasons {
@@ -2162,6 +2235,8 @@ span.workflow--notificationBar--block--count {
   flex-wrap: nowrap;
   justify-content: flex-start;
   flex-grow: 1;
+  max-height: 70vh;
+  overflow: auto;
 }
 
 .actionData > div > h4 {
@@ -2198,6 +2273,7 @@ span.workflow--notificationBar--block--count {
 .disabled {
   background-color: var(--transparentLightGrey) !important;
   color: var(--lightGrey) !important;
+  cursor:not-allowed;
 }
 
 .userManagerContent {

@@ -1,5 +1,5 @@
  FUTURE FEATURES:
- // Edit entry Details directly from WorkflowItemManager or add option to add episodes
+ // Edit entry Details directly from WorkflowItemManager or add option to add episodes (implemented in v2.3)
  // user email updates subscription option
  // Qbittorrent log parsing
  // dark mode toggle switch
@@ -10,11 +10,14 @@
  // PROTHEUS:
     - New episodes that are added before they have aired are put into POSTPONED status.
     - Episodes marked as POSTPONED that have aired are changed to 'NEW' status.
+ // replace ALL usage of the OMDB API with TvMaze
+  - AddNew
+  - AvailabilityWidget (implemented in v2.3)
 
 // WorkflowItemManager
  - ticket filters
- - Add Links to 'Complete" mode
- - Incorporate TvMaze datapoints 
+ - Add Links to 'wfComplete" mode (implemented in v2.3)
+ - Incorporate TvMaze datapoints (lastEpisodeAirDate + seasonDataMap implemented in v2.3)
 
 // Archiving.
  - implement the addition of a new status

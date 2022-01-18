@@ -1,0 +1,37 @@
+v2.3 (Major Release) (#47) (2022-01-18)
+
+ --- New Features --- 
+  + ProtheusSingle
+   - individual version of Protheus available for adhoc usage. API exposure scaffolded. No current implementations.
+   - Does not create notifications
+   - writeToDb (boolean) optional argument
+  + seasonDataMap Function 
+   - retrieves a seasonDataMap (list of episodes per season) exposed to API. (e.g. {1: 10, 2: 12, 3: 11 etc.})
+   - available through WorkFlowItemManager and OptionsWidget (replaced 'Add Episodes' button)
+    > Option to add episodes directly from WorkFlowItemManager or OptionsWidget based on data retrieved from seasonDataMap
+  - replaces 'Outstanding Episodes' section of MediaDetails where mediaType = 'series'
+  + Last Episode Air date
+   - Feature added to WorkFlowItemManager
+   - Auto-loads if ticket has only one season
+   - Button can be clicked for manual loading
+   - Where data available/loaded, replaces Release Date section of MediaDetails where mediaType = 'series'
+  + Minor styling / UX / UI / layout changes
+   - linkstList: Movies spacing updated
+   - mediaDetails sections reshuffled:
+    > Those without buttons are now the first row of four.
+    > Those with buttons are now the bottom row of two
+   - Overflow properties added to msgCentrePreview, CompleteEpisodeList & LinkGen
+   - CompleteEpisodeList widget spacing of individual labels (containing episode number + tickboxes) increased to 5 per row for better legibility.
+   - Cursor for .disabled:hover now correctly = 'not-allowed'
+   - Removed 'manually add episodes' from OptionsWidget
+
+ --- Bug fixes --- 
+  + Several small improvements to Protheus for updating the 'et' and 'st' values
+  + Improvements to updateEpisodeObj().
+   - Previously, trying to add a new season could've caused errors.
+   - et and st values will now be updated as well
+  + LinkGen now shows also shows in wfComplete mode, not just in Download mode
+  + Links now also include "x264" in the search. x265 is generally incompatible with user antjeg's media player box
+
+ --- Admin --- 
+ Updated readme.md

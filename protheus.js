@@ -3,6 +3,7 @@ const { protheusReport } = require('./MercuryService')
 const fetch = require('node-fetch');
 const WishlistItem = require("./Classes/WishlistItem");
 const envs = require('./config');
+console.log(envs.test)
 
 // set up report variable
 let reportVar = {
@@ -99,7 +100,7 @@ async function main() {
     let updatedWishlist = []
 
     // monthly function
-    if (reportVar['reportType']['isMonthly']) {
+    if (reportVar['reportType']['isMonthly'] || reportVar['reportType']['isWeekly']) {
       reportVar['jobDidRun'] = true
       // preparation and ticket creation
       reportVar['log'].push('INIT: evaluateRunEligibility() @ ' + new Date().toGMTString())
@@ -146,7 +147,8 @@ async function main() {
     console.log('dbUpdates required: ' + dbUpdatesRequired.length)
     if (dbUpdatesRequired.length > 0 && !reportVar['isTest']) {
       reportVar['log'].push('INIT: db updates @ ' + new Date().toGMTString())
-      reportVar['dbCommitResults']['dbUpdates'] = await adminDatabaseInterface('wishlist', 'BULKUPDATE', dbUpdatesRequired)
+      console.table(dbUpdatesRequired)
+      reportVar['dbCommitResults']['dbUpdates'] = await adminDatabaseInterface('wishlist', 'NEWBULK', dbUpdatesRequired)
       reportVar['log'].push('COMPLETE: db updates @ ' + new Date().toGMTString())
     } else if (dbUpdatesRequired.length > 0 && reportVar['isTest']) {
       reportVar['log'].push('Test run. updates will be printed to log: ')
@@ -159,7 +161,10 @@ async function main() {
     }
 
     // create notifications
-    const notificationsList = ticketList.map(t => t['notification'])
+    if (!reportVar['dbCommitResults']['dbUpdates']['success']) {
+      reportVar['log'].push('dbUpdates failed. No notifications will be created.')
+    }
+    const notificationsList = ticketList.map(t => t['notification'] && reportVar['dbCommitResults']['dbUpdates']['success'])
     reportVar['log'].push('notifications count: ' + notificationsList.length)
     console.log('notification count : ' + notificationsList.length)
     if (notificationsList.length > 0 && !reportVar['isTest']) {
@@ -200,7 +205,7 @@ async function main() {
       let reportMailed = await protheusReport(reportVar)
       console.log('report mailed @ ' + new Date().toGMTString())
     } else {
-      console.log('Test run. Skipping email. Skipping db commit')
+      console.log(reportVar['isTest'] ? 'Test run. Skipping email. Skipping db commit.' : "Job didn't finish. Skipping email. Skipping db commit.")
       var fs = require('fs')
       var stream = fs.createWriteStream("./logs/log" + reportVar['eventInitTime'].toGMTString().replace(/[\s\:\,]/g, '') + '.json');
       stream.once('open', function(fd) { 
@@ -218,7 +223,7 @@ async function main() {
     if (reportVar['isTest']) {
       try {
         var fs = require('fs')
-        var stream = fs.createWriteStream("/logs/log" + reportVar['eventInitTime'].toGMTString().replace(/[\s\:\,]/g, '') + '.txt');
+        var stream = fs.createWriteStream("./logs/log" + reportVar['eventInitTime'].toGMTString().replace(/[\s\:\,]/g, '') + '.txt');
         stream.once('open', function(fd) { 
           Object.keys(reportVar).forEach(key => {
             if (typeof reportVar[key] === 'object') {
@@ -296,15 +301,18 @@ async function dataIntegrityChecks(wList) {
   reportVar['log'].push('Loading TvMazeData.')
   const dataLoad = wList.map(x => loadTvMazeData(x))
   const dataLoaded = await Promise.all(dataLoad)
-  return wList
+  // console.table(dataLoaded)
+  return dataLoaded
 }
 
 async function loadTvMazeData(entry) {
+  // console.table(entry)
 
   try {
     reportVar['functionRunCount']['loadTvMazeData']++
     // reportVar['log'].push(`Fetching data for "${entry['name']}" (Owner: ${entry['addedBy']}) - api.tvmaze.com/lookup/shows?imdb=${entry['imdbID']}`)
     let newData = await indivAPICall(entry);
+
     // let failcount = 0
     // let dataloaded = false
     // if (typeof newData === 'object' && newData.hasOwnProperty('id')) {
@@ -316,11 +324,17 @@ async function loadTvMazeData(entry) {
     //   dataloaded = true
     // }
 
+    console.log('ping')
     if (typeof newData === 'object' && newData !== null) {
-      if (JSON.stringify(newData) !== JSON.stringify(entry['tvMazeData'])) {
+      console.log('pong')
+      if (JSON.stringify(newData) !== JSON.stringify(entry['tvMazeData']) || !entry.hasOwnProperty('tvMazeData')) {
         // reportVar['log'].push('tvMazeData change found for ' + entry['name'])
+        entry['tvMazeData'] = {...newData}
+        let seasonData = await getSeasonData(entry['tvMazeData']['id'])
+        if (Array.isArray(seasonData) && seasonData.length > 0) {
+          entry['seasonData'] = [...seasonData]
+        }
         reportVar['modifiedWishlistItems'].push(entry['id'])
-        entry['tvMazeData'] = newData
       }
     } else {
       reportVar['log'].push(`Data anomaly detected in loadTvMazeData() for entry with id ${entry['id']}.`)
@@ -335,6 +349,21 @@ async function loadTvMazeData(entry) {
     return entry
   }
 
+}
+
+async function getSeasonData(id) {
+  try {
+    let query = `https://api.tvmaze.com/seasons/${id}/episodes` 
+    let response = await fetch(query).then(res => res.json())
+    
+    if (typeof response === 'object') {
+      return response
+    } else {
+      throw new Error('typeof response: ' + typeof response)
+    }
+  } catch (error) {
+    return 'Error message in getSeasonData(): ' + error.message
+  }
 }
 
 async function indivAPICall(entry, standard=true) {
@@ -538,6 +567,11 @@ function ticketParser(tList, wList) {
             // run through the additions object
             Object.keys(thisTicket['additions']).forEach(season => {
               // current season to modify
+              if (parseInt(season) > parseInt(entry['st'])) {
+                entry['st'] = season
+                entry['et'] = thisTicket['additions'][season][1]
+              }
+
               // create a 'new' episode for each number between the start and ends values of this add 
               for (let ep = thisTicket['additions'][season][0]; ep <= thisTicket['additions'][season][1]; ep++) {
                 if (entry['episodes'].hasOwnProperty(season)) {

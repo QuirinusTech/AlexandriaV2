@@ -541,6 +541,8 @@ function WorkflowContent({
               currentEntry={currentEntry}
               adminActiveMode={adminActiveMode}
               resetTicket={resetTicket}
+              generateWfTicket={generateWfTicket}
+              setWfTicketList={setWfTicketList}
             />
           </motion.div>
         </AnimatePresence>

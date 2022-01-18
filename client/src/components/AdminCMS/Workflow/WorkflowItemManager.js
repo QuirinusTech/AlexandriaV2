@@ -5,8 +5,16 @@ import MediaDetails from "./MediaDetails";
 import WfCompleteList from "./WfCompleteList"
 // import AvailabilityWidget from "../../Wishlist/TableComponents/TrContent/AvailabilityWidget"
 
-const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, getNextTicket, resolveTicketPartial, resetTicket }) => {
+const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, getNextTicket, resolveTicketPartial, resetTicket, generateWfTicket, setWfTicketList }) => {
   const [fullListState, setFullListState] = useState(generateFullListSelectable(currentEntry['outstanding']))
+  const [protheusData, setProtheusData] = useState(null)
+
+  async function protheusSingle() {
+    console.log('Protheus')
+    setProtheusData('loading')
+    const result = await fetch('/getSeasonData/' + currentEntry['affectedEntryId'], {method: 'post'}).then(res=>res.json())
+    setProtheusData(result)
+  }
 
   function generateFullListSelectable(fullListObj) {
     if (currentEntry['mediaType'] === "movie") {
@@ -52,6 +60,10 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
         <MediaDetails
           currentEntry={currentEntry}
           adminActiveMode={adminActiveMode}
+          protheusData={protheusData}
+          protheusSingle={protheusSingle}
+          generateWfTicket={generateWfTicket}
+          setWfTicketList={setWfTicketList}
         />
       </div>
       {/* {currentEntry["category"] === "ongoing" && (
@@ -89,14 +101,15 @@ const WorkflowItemManager = ({ currentEntry, adminActiveMode, resolveTicket, get
           </div>
         </div>
         )} 
-        {adminActiveMode === "wfDownload" && !currentEntry["resolved"] && (
+        {(adminActiveMode === "wfDownload" || adminActiveMode === "wfComplete") && !currentEntry["resolved"] && (
           <LinkGenerator currentEntry={currentEntry} />
         )}
         {currentEntry["mediaType"] === "series" && (
           <WfCompleteList fullList={fullListState} disabled={currentEntry["resolved"]} handleTick={handleTick} />
         )}
+      
       </div>
-
+      
     </>
   );
 

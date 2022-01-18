@@ -74,6 +74,8 @@ async function wishlistInterface(username, operation, data) {
       return await deleteDocFromWishlist(data);
     case "UE":
       return await addEpisodesToWishlistItem(data["readyobj"]);
+    case "AE":
+      return await appendEpisodes(data)
     // case "F":
     //   return await findEntryByfield(username, data)
     default:
@@ -782,15 +784,24 @@ async function updateWishlistItem(id, data) {
 }
 
 async function updateEpisodesObj(id, episodesObj) {
-  // console.log('updateEpisodesObj', id);
+  console.log('updateEpisodesObj', id);
   try {
     let wishlistEntry = await wishlistRef.doc(id).get().then(doc => doc.data())
     Object.keys(episodesObj).forEach(season => {
+      if (!wishlistEntry['episodes'].hasOwnProperty(season)) {
+        wishlistEntry['episodes'][season] = {}
+        if (parseInt(season) > parseInt(wishlistEntry['st'])) {
+          wishlistEntry['st'] = season
+        }
+      }
       Object.keys(episodesObj[season]).forEach(ep => {
         wishlistEntry['episodes'][season][ep] = episodesObj[season][ep]
+        if (parseInt(season) === parseInt(wishlistEntry['st']) && parseInt(ep) > parseInt(wishlistEntry['et'])) {
+          wishlistEntry['et'] = ep
+        }
       })
     })
-    wishlistEntry['progress'] = WishlistItem.setProgress(episodesObj)
+    wishlistEntry['progress'] = WishlistItem.setProgress(wishlistEntry['episodes'])
     await wishlistRef.doc(id).update(wishlistEntry)
     return wishlistEntry
   } catch(e) {
@@ -957,6 +968,7 @@ async function adminDelete(department, data) {
 }
 
 async function adminBulkFunction(department, data, operation) {
+  // console.log('typeof data', typeof data)
   try {
     const batch = db.batch();
 
@@ -969,18 +981,24 @@ async function adminBulkFunction(department, data, operation) {
 
     let operationString = operation.slice(0,6).toUpperCase()
     let collectionString = router[department.toUpperCase()]
-    console.log('%cfirebase.js line:852 operationString', 'color: #007acc;', operationString);
-    console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
+    // console.log('%cfirebase.js line:852 operationString', 'color: #007acc;', operationString);
+    // console.log('%cfirebase.js line:853 collectionString', 'color: #007acc;', collectionString);
 
     data.forEach(entry => {
       let entryrefString = typeof entry === 'string' ? entry : entry['id']
       const entryref = db.collection(collectionString).doc(entryrefString)
+      // console.log('%cfirebase.js line:979 entryrefString', 'color: #007acc;', entryrefString);
+      // console.log('%cfirebase.js line:980 entryref', 'color: #007acc;', entryref);
+      // console.log('typeof entry', typeof entry)
+      // console.log('typeof Array.isArray(entry)', Array.isArray(entry))
+
       if (operationString === "UPDATE") {batch.update(entryref, entry)}
       if (operationString === "DELETE") {batch.delete(entryref)}
-      if (operationString === "NEWBUL") {batch.set(entryref)}
+      if (operationString === "NEWBUL") {batch.set(entryref, entry)}
     })
-    await batch.commit();
-    return "success"
+    let answer = await batch.commit().then(()=>"success").catch(err=>{
+        throw new Error(err)})
+    return answer
   } catch (error) {
     console.log('%cfirebase.js line:876 error', 'color: #007acc;', error.message);
     return error.message
@@ -1015,28 +1033,33 @@ async function adminListRetrieval(department) {
 }
 
 async function adminListRetrievalWithLimiter(department, limiter) {
-  // console.log('adminListRetrieval', department)
-  let requestedList = []
+  try {
+    console.log('adminListRetrievalWithLimiter function triggered')
+    let requestedList = []
 
-  const departmentCollectionRefs = {
-    MSGCENTRE: "notifications",
-    USERMANAGER: "users",
-    BLACKLIST: "blacklist",
-    WISHLIST: "wishlist"
+    const departmentCollectionRefs = {
+      MSGCENTRE: "notifications",
+      USERMANAGER: "users",
+      BLACKLIST: "blacklist",
+      WISHLIST: "wishlist"
+    }
+    
+    const listRef = db.collection(departmentCollectionRefs[department.toUpperCase()]);
+    const snapshot = await listRef.where(limiter[0], '==', limiter[1]).get();
+
+    snapshot.forEach((doc) => {
+      let item = doc.data()
+      if (department.toUpperCase() === 'WISHLIST') {
+        item = setStatusAndProgress(item)
+      }
+      if (item['id'] !== "placeholder") {
+        requestedList.push(item);
+      }
+    });
+    console.log('returning requested list');
+    return requestedList;
+  } catch (error) {
+    console.log('%cfirebase.js line:1043 error.message', 'color: #007acc;', error.message);
+    return 'Error: ' + error.message
   }
-  
-  const listRef = db.collection(departmentCollectionRefs[department.toUpperCase()]);
-  const snapshot = await listRef.where(limiter[0], '==', limiter[1]).get();
-
-  snapshot.forEach((doc) => {
-    let item = doc.data()
-    if (department.toUpperCase() === 'WISHLIST') {
-      item = setStatusAndProgress(item)
-    }
-    if (item['id'] !== "placeholder") {
-      requestedList.push(item);
-    }
-  });
-  return requestedList;
-
 }

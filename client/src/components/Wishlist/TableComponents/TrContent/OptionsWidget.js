@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PNGLoader from "../../../Loaders/PNGLoader";
 import { motion, AnimatePresence } from "framer-motion"
+import UtilityForm from "./UtilityForm"
 
 
 function OptionsWidget({ item, setWishlistData, adminMode=true }) {
@@ -34,17 +35,19 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   const optionsWidgetStringRouterEN = {
     movie: {
       "Auto-update": "",      
+      "adhocUpdate": "",      
       "Report Error": "This Movie will be re-downloaded for you.",
       "Edit Range": "",
-      "Add Missing": "",
+      // "Add Missing": "",
       "Delete": "Are you sure you want to delete this movie from the list?",
       "Blacklist": "Are you sure you want to blacklist this entry?"
     },
     series: {
       "Auto-update": 'Turn ' + (item['isOngoing'] ? 'OFF' : 'ON') + " auto-updates for this entry?",
+      "adhocUpdate": 'Search for new episodes.',
       "Report Error": "These episodes will be re-downloaded for you.",
       "Edit Range": "This will amend the range of seasons & episodes for this entry. Proceed?",
-      "Add Missing": "This will add the specified range of seasons & episodes to this item. Proceed?",
+      // "Add Missing": "This will add the specified range of seasons & episodes to this item. Proceed?",
       "Delete": "Are you sure you want to delete these seasons & episodes?",
       "Blacklist": "Are you sure you want to blacklist this entry?"
       
@@ -56,6 +59,15 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
       help: "The auto-update feature automatically adds new episodes to the wishlist as they become available.",
       label: "Toggle Auto-update",
       fn: "Auto-update",
+      applicable: {
+        movie: false,
+        series: true
+      }
+    },
+    adhocupdate: {
+      help: "You can use this to search for new Episodes once-off.",
+      label: "Add Episodes",
+      fn: "adhocUpdate",
       applicable: {
         movie: false,
         series: true
@@ -79,15 +91,15 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
         series: true
       }
     },
-    add: {
-      help: "This will add the specified range of seasons & episodes to this item, even if they fall outside the current range.",
-      label: "Manually add episodes",
-      fn: "Add Missing",
-      applicable: {
-        movie: false,
-        series: true
-      }     
-    },
+    // add: {
+    //   help: "This will add the specified range of seasons & episodes to this item, even if they fall outside the current range.",
+    //   label: "Manually add episodes",
+    //   fn: "Add Missing",
+    //   applicable: {
+    //     movie: false,
+    //     series: true
+    //   }     
+    // },
     del: {
       help: "Use this to delete specific episodes, seasons or an entire entry.",
       label: "Delete",
@@ -264,152 +276,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
     }
   }
 
-
-
-  const UtilityForm = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, optionsWidgetStringsEN, setUserReportedError, toggleAutoUpdate}) => {
-
-    const [inputFormVal, setInputFormVal] = useState(userReportedError)
-    const [localFormEpVals, setLocalFormEpVals] = useState(formEpisodes)
-
-    function updateEpVals(e) {
-      const {name, value} = e.target
-      let copy = {...localFormEpVals}
-      copy[name] = value
-      setLocalFormEpVals(copy)
-    }
-
-    function onBlurUpdateParent() {
-      setFormEpisodes(localFormEpVals)
-    }
-
-
-    function sync() {
-      setUserReportedError(inputFormVal)
-    }
-
-    let findStringProps = Object.keys(optionsWidgetStringsEN).filter(obj => optionsWidgetStringsEN[obj]['fn'] === currentFunction)[0]
-    let helpString = optionsWidgetStringsEN[findStringProps]['help']
-
-    return (
-      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} key={item["id"]} className="wishListWidgetContent">
-        <h4>{currentFunction}</h4>
-        <p className="helpString">{helpString}</p>
-        {currentFunction !== "Blacklist" && currentFunction !== "Auto-update" &&
-          item["mediaType"] === "series" && (
-            <div className="optionsWidget__rangePickerForm">
-            {currentFunction !== "Add Missing" && currentFunction !== "Edit Range" && <span><input type="checkbox" checked={selectAll} onChange={selectAllCheckbox} /><b>Select All</b></span>}
-            {!selectAll && 
-            <>
-              {valuesInvalid && (
-                <span>
-                  <p>Please ensure that you have specified seasons / episodes between</p>
-                  <p><b>S {item["sf"]} E {item["ef"]}</b> and <b>S {item["st"]} E{item["et"]}</b></p>
-                </span>
-              )}
-              <div>
-              <p><b>FROM</b></p>
-              <label className={invalidValueFlags['sf'] ? 'invalidValue' : ''}>Season
-              <input
-                disabled={selectAll}
-                type="number"
-                name="sf"
-                
-                value={localFormEpVals['sf']}
-                id={"formEpisodes_sf_" + item["id"]}
-                onBlur={onBlurUpdateParent}
-                onChange={updateEpVals}
-                placeholder="From season"
-              /></label>
-              <label className={invalidValueFlags['ef'] ? 'invalidValue' : ''}>Episode
-              <input
-                disabled={selectAll}
-                type="number"
-                name="ef"
-                
-                value={localFormEpVals['ef']}
-                id={"formEpisodes_ef_" + item["id"]}
-                onBlur={onBlurUpdateParent}
-                onChange={updateEpVals}
-                placeholder="from episode"
-              /></label>
-              </div>
-              <div>
-              <p><b>TO</b></p>
-              <label className={invalidValueFlags['st'] ? 'invalidValue' : ''}>Season
-              <input
-                disabled={selectAll}
-                type="number"
-                name="st"
-                
-                value={localFormEpVals['st']}
-                id={"formEpisodes_st_" + item["id"]}
-                onBlur={onBlurUpdateParent}
-                onChange={updateEpVals}
-                placeholder="up to season"
-              /></label>
-              <label className={invalidValueFlags['et'] ? 'invalidValue' : ''}>Episode
-              <input  
-                disabled={selectAll}
-                type="number"
-                name="et"
-                value={localFormEpVals['et']}
-                id={"formEpisodes_et_" + item["id"]}
-                onBlur={onBlurUpdateParent}
-                onChange={updateEpVals}
-                placeholder="up to episode"
-              /></label>
-              </div>
-
-            </>
-            }
-            </div>
-          )}
-        <div className="wishListWidgetButtonRowHorizontal">
-        {currentFunction === "Report Error" && (
-          <>
-            <p>You do not need to specify the issue. </p>
-            <input type="text" placeholder="Optional Error Message" name='userReportedError' value={inputFormVal} onChange={(e)=>setInputFormVal(e.target.value)} onBlur={sync} />
-          </>
-        )}
-          {currentFunction === "Auto-update" && (
-            <>
-            <span 
-              className='autoUpdates'>
-                Auto-updates are currently: {" "}
-            </span>
-                <b className={item['isOngoing'] ? 'autoUpdates_ON' : 'autoUpdates_OFF'}>
-                {item['isOngoing'] ? 'ENABLED' : 'DISABLED'}
-                </b>
-                </>
-            )}
-          <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
-          <button className={currentFunction === "Auto-update" ? item['isOngoing'] ? 'switch_off' : 'switch_on' : adminMode ? "adminButton adminButton--submit" :"btn_submit"} onClick={SubmitForm}>
-            {
-              currentFunction === "Edit Range"
-                ? "Update"
-                : currentFunction === "Report Error"
-                ? "Submit"
-                : currentFunction === "Add Missing"
-                ? "Add"
-                : currentFunction === "Auto-update"
-                ? item['isOngoing'] ? 'Disable' : 'Enable'
-                : "Confirm"
-            }
-          </button>
-          <button
-            className={adminMode ? "adminButton adminButton--cancel" :"btn_warning"}
-            onClick={() => {
-              setCurrentFunction(null);
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </motion.div>
-    )
-  };
-
-  const WidgetInsides = ({currentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, setUserReportedError, toggleAutoUpdate}) => {
+  const WidgetInsides = ({currentFunction, setCurrentFunction, item, formEpisodes, setFormEpisodes, handleChange, invalidValueFlags, setUserReportedError, toggleAutoUpdate, setWishlistData}) => {
     
     switch (currentFunction) {
       case null:
@@ -500,15 +367,24 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
         );
       default:
         return <UtilityForm
-          optionsWidgetStringsEN={optionsWidgetStringsEN}
           currentFunction={currentFunction}
+          setCurrentFunction={setCurrentFunction}
           item={item}
           formEpisodes={formEpisodes}
           setFormEpisodes={setFormEpisodes}
           handleChange={handleChange}
+          valuesInvalid={valuesInvalid}
           invalidValueFlags={invalidValueFlags}
+          optionsWidgetStringsEN={optionsWidgetStringsEN}
+          userReportedError={userReportedError}
           setUserReportedError={setUserReportedError}
           toggleAutoUpdate={toggleAutoUpdate}
+          selectAllCheckbox={selectAllCheckbox}
+          selectAll={selectAll}
+          optionsWidgetStringRouterEN={optionsWidgetStringRouterEN}
+          SubmitForm={SubmitForm}
+          adminMode={adminMode}
+          setWishlistData={setWishlistData}
          />;
     }
   };
@@ -519,6 +395,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
     
       <WidgetInsides
           currentFunction={currentFunction}
+          setCurrentFunction={setCurrentFunction}
           item={item}
           formEpisodes={formEpisodes}
           setFormEpisodes={setFormEpisodes}
@@ -526,6 +403,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
           invalidValueFlags={invalidValueFlags}
           setUserReportedError={setUserReportedError}
           toggleAutoUpdate={toggleAutoUpdate}
+          setWishlistData={setWishlistData}
          />
     </div>
     </>

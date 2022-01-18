@@ -16,11 +16,11 @@ const TableRows = ({
   return wishlistData.length === 0 ? <h5>There are no entries in your wishlist.</h5> : wishlistData.map(item => {
 
     let isFiltered = !statusFilters[item["status"]]
-    let searchValSimple = searchBoxValue.replace(/\s/g, '')
+    let searchValSimple = !searchBoxValue ? '' : searchBoxValue.replace(/\s/g, '')
     let svl = searchValSimple.length
     if (svl > 0) {
       let thisMatchCheck = false
-      let titleSimple = item['name'].replace(/\s/g, '')
+      let titleSimple = !item['name'] ? '' : item['name'].replace(/\s/g, '')
       let tsl = titleSimple.length
       for (let index = 0; index <= tsl; index++) {
         if (searchValSimple.toLowerCase() === titleSimple.slice(index,svl+index).toLowerCase()) {
@@ -59,7 +59,7 @@ const TableRows = ({
             border: recentlyViewedBool && "2px solid #68ff68",
           }}
         ><h4>{item["name"]}</h4>
-        <img src={item['imdbData']['Poster']} className='wishlistRowPoster' alt='poster' />
+        <img src={!item['imdbData']['Poster'] ? '' : item['imdbData']['Poster']} className='wishlistRowPoster' alt='poster' />
 
           <span className='wishlistRowLabel'>
           {

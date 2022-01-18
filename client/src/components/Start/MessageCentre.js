@@ -1,10 +1,10 @@
 const MessageCentre = ({ notificationsList }) => {
   const customMessages = notificationsList.filter(
     x => x["msgType"] === "custom"
-  );
+  ).sort((a, b) => (a['affectedEntry'] > b['affectedEntry']) ? 1 : -1);
   const statusMessages = notificationsList.filter(
     x => x["msgType"] === "status"
-  );
+  ).sort((a, b) => (a['affectedEntry'] > b['affectedEntry']) ? 1 : -1);
 
   const CustomMessages = ({ customMessages }) => {
     return (

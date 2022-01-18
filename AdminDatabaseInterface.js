@@ -79,9 +79,9 @@ async function workFlowTicketParser(entry) {
 
 async function adminDatabaseInterface(department, operation, data) {
   // if (process.env.test === 'true') {
-    console.log('adminDatabaseInterface', 'department', department, 'operation', operation, 'data', data)
-    console.log('%cAdminDatabaseInterface.js line:55 deparment', department);
-    console.log('%cAdminDatabaseInterface.js line:56 operation', operation);
+    console.log('ADMINDATABASEINTERFACE: ', 'DEPARTMENT', department, 'OPERATION', operation)
+    console.log('DATA: ' + typeof data)
+    // console.table(data)
   // }
 
     let success = false
@@ -141,7 +141,7 @@ async function adminDatabaseInterface(department, operation, data) {
             break;
           case "DELETE":
             // delete entry
-            console.log('%cAdminDatabaseInterface.js line:119 data', data);
+            console.log('%cAdminDatabaseInterface.js line:119');
             outcome = await adminDelete(department, data)
             if (outcome !== "fail") {
               payload = outcome
@@ -157,8 +157,10 @@ async function adminDatabaseInterface(department, operation, data) {
             break;
           case "LIST":
             if (data !== null && Array.isArray(data) && data.length === 2) {
+              console.log('adminListRetrievalWithLimiter', department, data[0], data[1])
               outcome = await adminListRetrievalWithLimiter(department, data)
             } else {
+              console.log('adminListRetrieval', department)
               outcome = await adminListRetrieval(department)
             }
             if (Array.isArray(outcome)) {
@@ -180,15 +182,15 @@ async function adminDatabaseInterface(department, operation, data) {
               allPossibleStatuses: [...globalvars['allPossibleStatuses']]
             };
             success = true
-          }
-        }  
-      } catch (error) {
-        console.log(error, error.message)
-        payload = error.message
-      } finally {
-        console.log('%cAdminDatabaseInterface.js line:143 success', success);
-        return {success, payload, outcome}
+        }
       }
+  } catch (error) {
+    console.log(error, error.message)
+    payload = error.message
+  } finally {
+    console.log('%cAdminDatabaseInterface.js line:143 success', success);
+    return {success, payload, outcome}
+  }
 }
 
 module.exports = {adminDatabaseInterface}

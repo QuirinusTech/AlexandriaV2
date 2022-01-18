@@ -13,7 +13,7 @@ const LinksList = ({ currentEntry, sortBy }) => {
         urlString += `+${episodeString}`;
       }
     }
-
+    urlString += '+x264'
     urlString += `&order=${sortBy}&by=DESC`;
 
     let buttondesc =
@@ -31,13 +31,17 @@ const LinksList = ({ currentEntry, sortBy }) => {
   }
 
   return (
-  <div className="linkstList">
+  <div className={currentEntry["mediaType"] === "movie" ? "linksList linksList--movie" : 'linksList'}>
     <h4>Link List</h4>
     {currentEntry["mediaType"] === "movie" ? (
-      <div>
-        <h4>Movie</h4>
-        <SingleLink season={null} episode={null} EorSorM="movie" />
-      </div>
+      <>
+        <div>
+          <h4>Movie</h4>
+        </div>
+        <div>
+          <SingleLink season={null} episode={null} EorSorM="movie" />
+        </div>
+      </>
     ) : (
       <>
         <h4>Seasons</h4>

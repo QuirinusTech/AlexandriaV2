@@ -272,7 +272,7 @@ class WishlistItem {
 
   static setProgress(episodesObj, status="new") {
     if (typeof(episodesObj) !== "object") {
-      return status
+      return {[status]: 100}
     }
 
     let allStatuses = []
@@ -290,15 +290,15 @@ class WishlistItem {
       return {[usedStatuses[0]]: 100}
     } else {
       let counters = {};
-      usedStatuses.forEach(status => {
-        counters[status] = 0
+      usedStatuses.forEach(stat => {
+        counters[stat] = 0
       })
-      allStatuses.forEach(status => {
-          counters[status]++
+      allStatuses.forEach(stat => {
+          counters[stat]++
       })
       let progress = {}
-      Object.keys(counters).forEach(status => {
-        progress[status] = (counters[status] / allStatuses.length * 100).toFixed(2)
+      Object.keys(counters).forEach(stat => {
+        progress[stat] = (counters[stat] / allStatuses.length * 100).toFixed(2)
       })
       return progress;
     }

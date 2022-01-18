@@ -16,7 +16,7 @@ function Preview({ adminListUsers, adminListNotifications }) {
     //   });
     // });
     // setNotificationListPreview(newList);
-    setNotificationListPreview(adminListNotifications.filter(msg => msg['msgRecipient'] === e.target.value))
+    setNotificationListPreview(adminListNotifications.filter(msg => msg['msgRecipient'] === e.target.value).sort((a, b) => (a['affectedEntry'] > b['affectedEntry']) ? 1 : -1))
   }
 
   return (
