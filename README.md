@@ -33,8 +33,13 @@ Developed in *Visual Studio Code*.
 
 ***2. The story of Alexandria***
 
+<<<<<<< HEAD
 Alexandria was originally written as its creator's first full-stack project in jQuery & Jinja Templating with a Python/Flask back-end and an SQL database back in 2019.
 Version 2 of Alexandria first went live in June 2021 after several months of development as a revival with a more intuitive UI and a plethora of new features, ported to React with Node/Express backend and a Firebase database.
+=======
+Alexandria was originally written as its original creators first full-stack project in jQuery with a Python/Flask back end and an SQL database back in 2019.
+Version 2 of Alexandria first went live in 2020 after several months of development as a revival thereof with a more intuitive UI and a plethora of new features, ported to React with Node/Express backend and a Firebase database.
+>>>>>>> accf20d82548e4896d00bcef8a210d7bef6e1384
 
 Since then, over multiple iterations, the available features have grown and the repo is now well over 50'000 lines of code.
 
@@ -104,4 +109,8 @@ From the Admin's perspective, a comprehensive tool for managing the user's wishl
     - Formik
     - Framer-motion
     - js-cookie
+<<<<<<< HEAD
     - React Router
+=======
+    - React Router
+>>>>>>> accf20d82548e4896d00bcef8a210d7bef6e1384
