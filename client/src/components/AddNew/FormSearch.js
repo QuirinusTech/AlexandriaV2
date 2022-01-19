@@ -6,8 +6,13 @@ const FormSearch = ({
   handleChange,
   searchBy,
   isSearching,
-  errorMsg
+  errorMsg,
+  year,
+  mediaType
 }) => {
+
+  const buttonText = isSearching ? 'Searching. Please wait.' : field === '' ? searchBy === "title" ? 'Enter Title' : 'Enter IMDB ID' : 'Search!'
+
   return isSearching ? <PNGLoader /> :  (
       <form onSubmit={handleSubmit} className="formSearch">
         <h3>Let's get some info first:</h3>
@@ -39,7 +44,7 @@ const FormSearch = ({
               onChange={handleChange}
             />
              IMDB ID</label>
-
+        <h3>Title</h3>
         <input
           className="formsearchFieldInput"
           type="text"
@@ -48,7 +53,23 @@ const FormSearch = ({
           onChange={handleChange}
           placeholder={"Search by " + searchBy}
         />
-        <input className={isSearching ? "buttonload" : "formSearch__btn--submit"} type="submit" value={isSearching ? "searching..." : "Search!"} />
+        {searchBy === "title" && (<>
+        <h3>Year</h3>
+        <input
+          className="formsearchFieldInput"
+          type="text"
+          name="year"
+          value={year}
+          onChange={handleChange}
+          placeholder={"Year of release"}
+        />
+        <h3>Series / Movie</h3>
+        <select style={{fontSize: 'large'}} className='formsearchFieldInput' name='mediaType' value={mediaType} onChange={handleChange}>
+          <option value='all'>All</option>
+          <option value='isMovie'>Movie</option>
+          <option value='isSeries'>Series</option>
+        </select></>)}
+        <input disabled={field === ''} className={isSearching ? "buttonload" : field === '' ? 'disabled formSearch__btn--submit' : "formSearch__btn--submit"} type="submit" value={buttonText} />
       </form>
   );
 }

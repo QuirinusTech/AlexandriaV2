@@ -1,0 +1,21 @@
+v2.3.0a (HOTFIX) (#47) (2022-01-19)
+
+ --- New Features --- 
+  + AddNew/FormSearch
+    - Added Year and MediaType fields to  
+  + OptionsWidget/AddNew (Adhoc Updates)
+    - Added Last Episode Air Date
+    - Added small blue block and styling for the above
+
+ --- Bug Fixes / UI Changes ---
+  + OptionsWidget
+    - Renamed: "Auto-Update" => "Auto-add new episodes"
+    - Renamed: "Add New Episodes" => "Search for new Episodes"
+  + Posterlist:
+    - Fixed scroll location on load (previously scrolled to bottom on load)
+    - Added Title, MediaType and Year
+  + messageCentre (FullScreen / Mobile Version)
+    - Set z-index of 'done' button to 5.
+  + Readme.md
+   - Minor grammatical updates.
+   - Initial Launch date updated to June 2021.

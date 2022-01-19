@@ -1,11 +1,20 @@
 import GIFLoader from "../../../Loaders/GIFLoader"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 // ProtheusSingle > SeasonDataMap - admin version 
-const ProtheusUser = ({id, episodes, tvMazeId, setWishlistData, setCurrentFunction}) => {
+const ProtheusUser = ({id, episodes, tvMazeId, imdbId, setWishlistData, setCurrentFunction}) => {
   const [protheusData, setProtheusData] = useState(null)
   let maxSeasons = Math.max(...Object.keys(episodes))
   let minSeasons = Math.min(...Object.keys(episodes))
+  const [lastEpisodeData, setLastEpisodeData] = useState('loading')
+
+      useEffect(() => {
+      
+      const getReleaseDateInfo = async () => {
+        getLastAirdate()
+      }
+      getReleaseDateInfo()
+    }, [])
 
   async function retrieveSeasonDataMap() {
     console.log('Protheus')
@@ -15,6 +24,27 @@ const ProtheusUser = ({id, episodes, tvMazeId, setWishlistData, setCurrentFuncti
     const result = await fetch(query, {method: 'POST'}).then(res=>res.json())
     setProtheusData(result)
   }
+
+  async function getLastAirdate(retry=true) {
+      try {
+        const tvMazeData = await fetch('https://api.tvmaze.com/lookup/shows?imdb=' + imdbId).then(res => res.json())
+        console.log(tvMazeData);
+        if (tvMazeData === null) {
+          setLastEpisodeData(retry ? 'error' : 'fail')
+        } else if (tvMazeData.hasOwnProperty('_links')) {
+          const query2 = tvMazeData['_links'].hasOwnProperty('nextepisode') ? tvMazeData['_links']['nextepisode']['href'] : tvMazeData['_links']['previousepisode']['href'] 
+          const lastEpData = await fetch(query2).then(res => res.json())
+          if (lastEpData.hasOwnProperty('season') && lastEpData.hasOwnProperty('number') && lastEpData.hasOwnProperty('airdate')) {
+            setLastEpisodeData(lastEpData)
+          } else {
+            setLastEpisodeData(retry ? 'error' : 'fail')
+          }
+        }
+      } catch (error) {
+        console.log(error.message)
+        setLastEpisodeData(retry ? 'error' : 'fail')
+      }
+    }
 
 
   async function updateEpisodesObj(e) {
@@ -41,10 +71,29 @@ const ProtheusUser = ({id, episodes, tvMazeId, setWishlistData, setCurrentFuncti
 
   return (
     <div className='seasonDataMapMainDiv'>
+    <div className="lastEpisodeAirDate">
+    {lastEpisodeData === 'loading' ? 
+        <>
+          
+          <h4>Last Episode:</h4>
+          <GIFLoader />
+        </> : (lastEpisodeData === null || lastEpisodeData === 'error') ? (<>
+          <button className='adminButton--submit' onClick={() => {
+            getLastAirdate(lastEpisodeData !== 'error')
+          }}>Load last Episode</button>
+        </>) : (lastEpisodeData === 'fail') ? (<>
+          <p>Unable to retrieve data.</p>
+        </>) : (
+          <>
+          <h4>Last Episode:</h4>
+          <p>S{lastEpisodeData['season'] < 10 && '0'}{lastEpisodeData['season']} E{lastEpisodeData['number'] < 10 && '0'}{lastEpisodeData['number']}{"  ("+new Date(lastEpisodeData['airdate']).toUTCString().slice(0,-13)+")"}</p>
+        </>
+        )}
+        </div>
           {protheusData === null ? (
           <button onClick={retrieveSeasonDataMap}
-            className="adminButton adminButton--submit"
-            >Search IMDB</button>
+            className="adminButton--submit"
+            >Search For New Episodes</button>
           ) : (
             protheusData === 'loading' ? (
               <GIFLoader />
@@ -79,9 +128,9 @@ const ProtheusUser = ({id, episodes, tvMazeId, setWishlistData, setCurrentFuncti
                     )
                   })}
               </details>
-              <button onClick={retrieveSeasonDataMap}
+              {/* <button onClick={retrieveSeasonDataMap}
             className="adminButton adminButton--small adminButton--cancel"
-            >Refresh</button>
+            >Refresh</button> */}
             </>
               ) :
               (

@@ -17,7 +17,9 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false)
   const [blacklist, setBlacklist] = useState(null)
-
+  const [year, setYear] = useState('')
+  const [mediaType, setMediaType] = useState('all')
+  
   useEffect(() => {
     const InitData = async () => {
       await dataSetup()
@@ -115,10 +117,17 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
 
   async function searchIMDB(searchByArg, fieldArg) {
     // console.log("searchIMDB(", searchBy, ",", field, ")");
+    const searchOptions = {
+      year,
+      mediaType
+    }
     try {
       const data = await fetch(`/imdbsearch/${searchByArg}/${fieldArg}`, {
-        method: "POST"
+        body: JSON.stringify(searchOptions),
+        method: "POST",
+        headers: { "Content-type": "application/json; charset=UTF-8" }
       })
+      
         .then(res => res.json())
         .then(data => data)
       console.log('%cAddNew.js line:91 data', 'color: #007acc;', data);
@@ -142,11 +151,15 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
   }
 
   const handleChange = e => {
-    const { value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target;
     // console.log("value:", value, "type:", type, "Checked: ", checked)
-    if (type === "radio" && checked) {
+    if (name === 'year') {
+      setYear(value)
+    } else if (name === 'mediaType') {
+      setMediaType(value)
+    } else if (type === "radio" && checked) {
       setSearchBy(value);
-    } else if (type === "text") {
+    } else if (type === "text" && name === 'field') {
       setField(value);
     }
     // console.log("Field: ", field)
@@ -157,6 +170,7 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
     setField("");
     setPosterList([]);
     setIsSearching(false);
+    setErrorMsg(null)
     SetProgress("FormSearch");
   }
 
@@ -197,6 +211,8 @@ function AddNew({ wishlistData, setWishlistData, dataSetup }) {
           searchBy={searchBy}
           isSearching={isSearching}
           errorMsg={errorMsg}
+          year={year}
+          mediaType={mediaType}
         />
       )}
       {progress === "IMDBResultsPosterList" && (

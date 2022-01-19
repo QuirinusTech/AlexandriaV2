@@ -295,6 +295,7 @@ app.post("/imdbsearch/:searchBy/:field", async (req, res) => {
   let searchBy = req.params.searchBy.toUpperCase();
   const field = req.params.field;
   const apikey = envs.imdbAPI_key;
+  const searchOptions = req.body
   let responseData = "";
   console.log("searchBy", searchBy, "field", field);
   const options = {
@@ -304,7 +305,8 @@ app.post("/imdbsearch/:searchBy/:field", async (req, res) => {
     method: "GET"
   };
   if (searchBy === "TITLE") {
-    options["path"] = `/?s=${field.replace(/ /g, "%20")}&apikey=${apikey}`;
+    options["path"] = `/?s=${field.replace(/ /g, "%20")}&apikey=${apikey}${searchOptions['mediaType'] !=='all' ? "&type=" + searchOptions['mediaType'].slice(2) : ''}${searchOptions['year'] !=='' ? "&y=" + searchOptions['year'] : ''}`;
+    // console.log(options['path'])
   } else if (searchBy === "IMDBID") {
     options["path"] = `/?i=${field}&apikey=${apikey}`;
   } else if (parseInt(searchBy) !== NaN) {

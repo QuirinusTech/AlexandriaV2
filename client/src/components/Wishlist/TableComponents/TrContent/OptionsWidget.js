@@ -57,7 +57,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
   const optionsWidgetStringsEN = {
     autoupdate: {
       help: "The auto-update feature automatically adds new episodes to the wishlist as they become available.",
-      label: "Toggle Auto-update",
+      label: "Auto-Add New Entries",
       fn: "Auto-update",
       applicable: {
         movie: false,
@@ -66,7 +66,7 @@ function OptionsWidget({ item, setWishlistData, adminMode=true }) {
     },
     adhocupdate: {
       help: "You can use this to search for new Episodes once-off.",
-      label: "Add Episodes",
+      label: "Search for new Episodes",
       fn: "adhocUpdate",
       applicable: {
         movie: false,

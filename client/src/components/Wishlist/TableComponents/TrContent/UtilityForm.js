@@ -37,6 +37,7 @@ const UtilityForm = ({currentFunction, setCurrentFunction, item, formEpisodes, s
           <ProtheusUser
             id={item['id']}
             tvMazeId={item.hasOwnProperty('tvMazeData') ? item['tvMazeData']['id'] : null}
+            imdbId={item['imdbData']['imdbID']}
             episodes={item['episodes']}
             setWishlistData={setWishlistData}
             setCurrentFunction={setCurrentFunction}
@@ -130,15 +131,15 @@ const UtilityForm = ({currentFunction, setCurrentFunction, item, formEpisodes, s
           </>
         )}
           {currentFunction === "Auto-update" && (
-            <>
-            <span 
-              className='autoUpdates'>
-                Auto-updates are currently: {" "}
-            </span>
+            <div className='autoUpdates'>
+
+                <p>For this entry, auto-updates are currently  {" \n"}</p>
+
                 <b className={item['isOngoing'] ? 'autoUpdates_ON' : 'autoUpdates_OFF'}>
-                {item['isOngoing'] ? 'ENABLED' : 'DISABLED'}
+                {item['isOngoing'] ? 'ON' : 'OFF'}
                 </b>
-                </>
+
+            </div>
             )}
           <p><b>{optionsWidgetStringRouterEN[item['mediaType']][currentFunction]}</b></p>
           {currentFunction !== 'adhocUpdate' && <button className={currentFunction === "Auto-update" ? item['isOngoing'] ? 'switch_off' : 'switch_on' : adminMode ? "adminButton adminButton--submit" :"btn_submit"} onClick={SubmitForm}>

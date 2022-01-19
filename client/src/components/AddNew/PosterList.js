@@ -1,5 +1,9 @@
+import {useEffect} from 'react'
+
 const PosterList = ({ posterList, reset, posterClick }) => {
-  
+  useEffect(() => {
+  window.scrollTo(0, 500)
+  }, [])
   // console.log(posterarr)
   return (
     <div className="posterList">
@@ -9,12 +13,14 @@ const PosterList = ({ posterList, reset, posterClick }) => {
         {posterList.map(poster => {
           return (
             <li key={poster.imdbID+"_li"}>
+              <p><b>{poster.Title}</b></p>
+              <p><b>{poster.Type} ({poster.Year})</b></p>
               <img
                 id={poster.imdbID}
                 src={poster.Poster}
                 alt={poster.Title}
                 key={poster.imdbID + "_poster_img"}
-                onClick={() => {
+                 onClick={() => {
                   posterClick(poster.imdbID);
                 }}
               />
