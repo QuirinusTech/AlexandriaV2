@@ -17,6 +17,7 @@ function MessageCMS({
         element["checked"] = false;
         element["editable"] = false;
       });
+      newList = newList.sort((a, b) => (a['affectedEntry'] > b['affectedEntry']) ? 1 : -1)
       return newList
     });
 

@@ -151,7 +151,7 @@ const UtilityForm = ({currentFunction, setCurrentFunction, item, formEpisodes, s
                 : currentFunction === "Add Missing"
                 ? "Add"
                 : currentFunction === "Auto-update"
-                ? item['isOngoing'] ? 'Disable' : 'Enable'
+                ? item['isOngoing'] ? 'TURN OFF' : 'TURN ON'
                 : "Confirm"
             }
           </button>}

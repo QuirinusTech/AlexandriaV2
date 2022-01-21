@@ -920,7 +920,7 @@ async function adminUpdate(department, data) {
   try {
     switch (department.toUpperCase()) {
       case "WISHLIST":
-        data = setStatusAndProgress(data) 
+        data = setStatusAndProgress(data)
         await wishlistRef.doc(data['id']).update(data).then(()=>"success").catch(err=>{
         throw new Error(err)})
         return data

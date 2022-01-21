@@ -82,7 +82,13 @@ const MediaDetails = ({ currentEntry, adminActiveMode, protheusSingle, protheusD
           <h4 className="highlightH4">Current Entry</h4>
           <button className="adminButton adminButton--small" onClick={()=>{window.open(`https://www.imdb.com/title/${currentEntry['imdbData']['imdbID']}/`, "_blank")}} src="img/admin_imgs/link.png" alt="external imdb link">{currentEntry["affectedEntry"]} 🔗</button>
         </div>
-        {lastEpisodeData === 'loading' ? <div>
+        
+        {currentEntry["mediaType"]==='movie' ? (
+          <div>
+          <h4 className="highlightH4">Release Date</h4>
+          <p>{currentEntry["imdbData"]['Released']}</p>
+        </div>
+        ) : lastEpisodeData === 'loading' ? <div>
           <h4 className="highlightH4">Last Episode Airdate</h4>
           <BufferingLoader />
         </div> : (lastEpisodeData === null || lastEpisodeData === 'error') ? (<div>
@@ -106,8 +112,7 @@ const MediaDetails = ({ currentEntry, adminActiveMode, protheusSingle, protheusD
           <p>{currentEntry["mediaType"]}</p>
         </div>)}
         {/* Episode List */}
-        {currentEntry["mediaType"] === "series" && adminActiveMode === "wfDownload" && 
-          currentEntry["mediaType"] === "series" && (
+        {currentEntry["mediaType"] === "series" && (
             <Protheus 
               protheusSingle={protheusSingle} 
               protheusData={protheusData} 

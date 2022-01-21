@@ -11,13 +11,14 @@
     - New episodes that are added before they have aired are put into POSTPONED status.
     - Episodes marked as POSTPONED that have aired are changed to 'NEW' status.
  // replace ALL usage of the OMDB API with TvMaze
-  - AddNew
-  - AvailabilityWidget (implemented in v2.3)
+  - in AddNew
+  - in AvailabilityWidget (implemented in v2.3)
 
 // WorkflowItemManager
  - ticket filters
  - Add Links to 'wfComplete" mode (implemented in v2.3)
  - Incorporate TvMaze datapoints (lastEpisodeAirDate + seasonDataMap implemented in v2.3)
+ - Add option for modifying the notification that will be created on ticket completion.
 
 // Archiving.
  - implement the addition of a new status

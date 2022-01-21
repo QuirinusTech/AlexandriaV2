@@ -12,12 +12,11 @@ const UserDetailDashboard = ({
   }
 
   return (
-    <AnimateSharedLayout type="crossfade">
-    <AnimatePresence>
+    <>
       {currentUser !== null && (
-        <motion.div
+        <div
           className="userDetailManager"
-          key={currentUser["userId"]+"key"}
+          key={currentUser["userId"]+'udd'}
           layoutId={currentUser["userId"]+"layout"}
           transition={{duration: 0.5}}
           initial={{ opacity: 0, x: -100 }}
@@ -109,10 +108,9 @@ const UserDetailDashboard = ({
               Edit
             </button>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
-    </AnimateSharedLayout>
+      </>
   );
 };
 export default UserDetailDashboard;

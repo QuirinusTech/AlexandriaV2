@@ -2310,3 +2310,13 @@ details > ul {
     background-image: url(/img/admin_imgs/link.png);
     background-position: right;
 }
+
+.checkmark {
+    cursor: pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/img/checkmark.png");
+    background-position: right;
+    width: 4vw;
+    height: 4vh;
+}

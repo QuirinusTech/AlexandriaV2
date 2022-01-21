@@ -15,6 +15,7 @@
   --customBoxShadow: 2px 2px 2px #6c6c73, 3px 3px 3px #6c6c73;
   --customTextShadow: 1px 1px 1px #6c6c73, 2px 2px 2px #6c6c73;
   --darkDetailsBackground: #2f2f35;
+  --darkerBlackBackground: #181820de;
 }
 
 
@@ -160,6 +161,8 @@
   color: wheat;
   transition: 0.3s;
   border: none;
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 3px 12px wheat;
 }
 
 .adminFormSearch--input--text {
@@ -192,6 +195,7 @@ summary.adminButton--small:hover {
   animation-name: flash;
   animation-iteration-count: infinite;
   animation-duration: 3s;
+  box-shadow: 0 3px 12px var(--accentBlue);
 }
 
 @keyframes flash {
@@ -210,6 +214,7 @@ summary.adminButton--small:hover {
   background-color: var(--accentRedDeep) !important;
   color: white !important;
   transition: 1s;
+  box-shadow: 0 3px 12px var(--accentRedDeep);
 }
 
 .adminButton--cancel {
@@ -222,6 +227,7 @@ summary.adminButton--small:hover {
   background-color: var(--accentOrangeDeep);
   color: white;
   transition: 1s;
+  box-shadow: 0 3px 12px var(--accentOrange);
 }
 
 .absoluteTopRight {
@@ -2274,6 +2280,7 @@ span.workflow--notificationBar--block--count {
   background-color: var(--transparentLightGrey) !important;
   color: var(--lightGrey) !important;
   cursor:not-allowed;
+  box-shadow: none !important;
 }
 
 .userManagerContent {
@@ -2365,7 +2372,9 @@ span.workflow--notificationBar--block--count {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  height: 30vh;
+  align-items: stretch;
+  height: fit-content;
+  overflow: hidden;
 }
 
 .blacklistAddnew--addBy--search > .formSearch > h3 {
@@ -2377,7 +2386,7 @@ span.workflow--notificationBar--block--count {
   background: var(--darkGrey);
   padding: 1vw;
   flex-direction: column;
-  height: 70%;
+  height: 22vh;
 }
 
 .adminFormSearch--radio, .adminFormSearch--input--text, .adminFormSearch--input--submit {
@@ -2388,19 +2397,115 @@ span.workflow--notificationBar--block--count {
   flex-grow: 1;
 }
 
+.blacklistAddnew--addBy--search > form > label {
+  flex: 1;
+}
+
 .searchSuccess {
-  color: var(--accentBlue) !important;
-  border: 1px solid var(--accentBlue) !important;
+  color: greenyellow !important;
+  border: 1px solid greenyellow !important;
+  box-shadow: 0 5px 15px greenyellow;
+}
+
+.glow {
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 5px 15px var(--accentBlue);
+}
+
+.popup--right {
+  position: fixed;
+  top: 35%;
+  right: 0;
+  margin-right: -21vw;
+  border: 1px solid black;
+  width: 20vw;
+  transition: 0.5s;
+  background: var(--darkerBlackBackground);
+  border-radius: 1vw;
+  align-items: center;
+  padding: 0 0 0 1vw;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+}
+
+.popup--right:hover {
+  padding: 0 1vw 0 0;
+  background: var(--transparentDarkGrey);
+  box-shadow: 0 5px 15px var(--accentBlue);
+  transition: 0.6s;
+}
+
+.popup--right > div {
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.popup--right > div > p {
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  margin-bottom: 1vh;
+}
+
+.popup--right > h4 {
+  font-size: large;
+  padding: 0;
+  margin: 1vh;
+}
+
+.popup--right--X {
+  transition: 0.5s;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  /* height: 0; */
+  cursor: pointer;
+  background: var(--accentRedDeep);
+  width: 0;
+  height: 0;
+}
+
+.popup--right:hover > .popup--right--X {
+  /* display: unset; */
+  width: unset;
+  height: unset;
+  opacity: 1;
+  padding: 1vh;
+  margin: 1vh;
+}
+
+
+.slideLeft {
+  transform: translateX(-15vw) translateZ(0);
+  transition: 0.4s;
+}
+
+.exitStrageRight {
+  animation-delay: 6s;
+  animation-name: getOut;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+
+@keyframes getOut {
+  from {right: 0vw;}
+  to {right: -20;}
 }
 
 .searchSuccess--invertBlue {
-  color: var(--accentBlue) !important;
+  color: greenyellow !important;
   background: var(--transparentGrey);
-  border: 2px solid var(--accentBlue) !important;
+  border: 2px solid greenyellow !important;
 }
 
 .searchSuccess--bg {
-  background: var(--accentBlue) !important;
+  background: greenyellow !important;
   color: black;
 }
 
@@ -2437,6 +2542,7 @@ span.workflow--notificationBar--block--count {
 
 .blacklistAddnew--addBy--manual > div {
   flex-direction: row;
+  align-items: center;
 }
 
 .blacklistAddnew--addBy--manual > div > div {

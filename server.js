@@ -7,6 +7,7 @@ const {
   addUserToDatabase,
   getimdbidlist,
   blacklistInterface,
+  blacklistCleanup,
   forgottenPassword,
   deleteDocFromWishlist,
   passwordResetAttempt,
@@ -296,6 +297,7 @@ app.post("/imdbsearch/:searchBy/:field", async (req, res) => {
   const field = req.params.field;
   const apikey = envs.imdbAPI_key;
   const searchOptions = req.body
+  console.log(searchOptions)
   let responseData = "";
   console.log("searchBy", searchBy, "field", field);
   const options = {
@@ -450,7 +452,7 @@ app.post('/blacklist/:operation', verifyToken, async function (req, res) {
   } catch (error) {
     console.log(error)
     console.log(error.message)
-    res.status(500).send('error')
+    res.status(500).send(error.message)
   }
 
 })

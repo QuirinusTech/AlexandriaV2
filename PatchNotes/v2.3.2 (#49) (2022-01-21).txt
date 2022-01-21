@@ -1,0 +1,24 @@
+v2.3.2 (#49) (2022-01-21)
+
+***Bug Fixes***
+  - Option to "Load last Episode Air date" removed from MediaDetails where mediaType = 'movie'
+  - OptionsWidget: Enable/Disable renamed to "TURN ON" / "TURN OFF" for Auto-Update
+  - Retrieve SeasonDataMap now shows in all WF modes, not just in download
+  - Messages in Admin MessageCMS are now sorted by Title
+  - fixed blacklistCleanup() missing import in server.js
+  - Added Check Mark to found results in BlacklistAddNew
+  - updated fetch request in Blacklist imdb search function to be compatible with recent changes in AddNew\FormSearch
+  - Replaced motion.div with divs in UserManager and Wishlist. State conflict made the animations janky.
+  - Fixed an issue where opening the Admin Wishlist wouldn't populate the filter dropdowns properly. Filters now load correctly.
+  - Fixed an issue that caused occasional crashes when updating wishlist items from the WishlistCMS. (editableTr.js, line183)
+  - Fixed an issue where Movies in the WorkflowItemManager would show the option to load the Last Episode Air Date instead of release date.
+  - Ticket splitting seems to be working fine in wfComplete again.
+
+- New FEATURES
+  - New Popup component
+  - Added to UserManager, Wishlist and MessageCMS. Testing is ongoing.
+  - Further improvement required. (Added to Known Issues)
+  - Admin User Manager dashboard:
+    - Added Buttons for changing active mode (blacklist/user manager)
+
+

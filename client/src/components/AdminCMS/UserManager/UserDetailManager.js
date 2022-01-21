@@ -2,10 +2,10 @@ import {motion, AnimatePresence} from 'framer-motion'
 
 const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, updateField, passwordReset, commitChanges, reset}) => {
   return (
-  <AnimatePresence>
-    <motion.div
+  <>
+    <div
      className="userDetailManager"
-     key={currentUser['userId']}
+     key={currentUser['userId']+'udm'}
      initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -96,8 +96,8 @@ const UserDetailManager = ({currentUser, setcurrentUser, setDetailsEditable, upd
         <button className="adminButton adminButton--danger" onClick={passwordReset}>Password Reset</button>
         <button className="adminButton adminButton--submit" onClick={commitChanges}>Commit Changes</button>
       </div>
-    </motion.div>
-    </AnimatePresence>
+    </div>
+    </>
     )
 }
 export default UserDetailManager

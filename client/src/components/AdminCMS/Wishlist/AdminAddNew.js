@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MediaOptions from "./AdminAddNew/MediaOptions"
 import Episodes from './AdminAddNew/Episodes'
 import ImportForm from "./ImportForm"
@@ -12,6 +12,18 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
   let day = dateObj.getDate()
   let dateString = `${dateObj.getFullYear()}-${month < 10 ? "0" + month : month}-${day < 10 ? "0" + day : day}`
   // console.log('%cAdminAddNew.js line:13 dateString', 'color: #007acc;', dateString);
+  const [popupContent, setPopupContent] = useState(['',''])
+  const [popupClass, setPopupClass] = useState('popup--right')
+
+  useEffect(() => {
+    const update = async () => {
+      setTimeout(() => setPopupClass('popup--right'), 5000)      
+    }
+    if (popupContent[0].length > 0) {
+      setPopupClass('popup--right slideLeft')
+      update()
+    }
+  }, [popupContent]);
 
 
   const [loading, setLoading] = useState(false)
@@ -57,7 +69,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
           console.log('Activate posterlist')
           setPosterList(data['Search'])
         } else if (e.target.name === "title" && data['Response'] === "False") {
-          console.log('Failed', [data['Error']], true)
+          setPopupContent(['Warning', data['Error'], 'Failed'])
         } else {
           if (data['Type'] === 'series') {
             setEpisodes({sf: 1, ef: 1, st: data['totalSeasons'], et: 'all'})
@@ -86,6 +98,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         });
         setMediaOptions({...mediaOptions, mediaType: data['Type']})
         setLoading(false)
+        setPopupContent(data['success'] ? [ 'Success', 'API Call successful.'] : ['Warning',data['payload'],'Failure'])
       });
   }
 
@@ -198,7 +211,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
       .then(data => data);
     console.log('%cAdminAddNew.js line:188 response', 'color: #007acc;', response);
     if (response['success']) {
-      console.log('Success', ['Successfully added ' + newEntry['title'] + ' to the wishlist.'], false)
+      setPopupContent(['Success', 'Successfully added to the wishlist: ', newEntry['title']])
       setAdminListWishlist(prevState => {
         return prevState.map(entry => {
           if (entry['id'] === response['payload']['id']) {
@@ -209,7 +222,8 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         })
       });
     } else {
-      console.log('Warning', [response['payload']], true)
+      // console.log('Warning', [response['payload']], true)
+      setPopupContent(['Warning', response['payload'], 'Failed'])
     }
     // add new addition to the master wishlist
 
@@ -228,7 +242,15 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
 
 
 
-  return (
+  return (<>
+      <div className={popupClass}>
+      <button className='popup--right--X adminButton--cancel adminButton adminButton-small' onClick={()=>setPopupClass('popup--right')}>OK</button>
+      <div>
+      {popupContent[0] !== '' && <h4 className={popupContent[0].toUpperCase() === 'WARNING' ? 'warning' : 'highlightH4'}>{popupContent[0]}</h4>}
+        <p>{popupContent[1]}</p>
+        <p className={popupContent[0].toUpperCase() === 'WARNING' ? 'boldRedText' : ''}>{popupContent[2]}</p>
+      </div>
+    </div>
     <motion.div className="adminAddNewForm"
       initial={{ opacity: 0, y: -1000 }}
       animate={{ opacity: 1, y: 0 }}
@@ -308,7 +330,7 @@ function AdminAddNew({ adminListUsers, allPossibleStatuses, setAdminListWishlist
         <button className="adminButton adminButton--submit" onClick={createNewEntry}>Create</button>
       </div>}
     </motion.div>
-  )
+  </>)
 }
 
 export default AdminAddNew;

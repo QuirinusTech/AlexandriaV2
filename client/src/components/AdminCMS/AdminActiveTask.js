@@ -77,6 +77,7 @@ function AdminActiveTask({
             adminListUsers={adminListUsers}
             setAdminListUsers={setAdminListUsers}
             adminActiveMode={adminActiveMode}
+            setAdminActiveMode={setAdminActiveMode}
             blacklist={blacklist}
             setBlacklist={setBlacklist}
           />

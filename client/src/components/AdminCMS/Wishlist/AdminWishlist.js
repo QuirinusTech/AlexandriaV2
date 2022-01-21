@@ -12,14 +12,31 @@ const AdminWishlist = ({
 }) => {
   const [loading, setLoading] = useState(false)
 
+  const [popupContent, setPopupContent] = useState(['',''])
+  const [popupClass, setPopupClass] = useState('popup--right')
+
+  useEffect(() => {
+    const update = async () => {
+      setTimeout(() => setPopupClass('popup--right'), 3000)      
+    }
+    if (popupContent[0].length > 0) {
+      setPopupClass('popup--right slideLeft')
+      update()
+    }
+  }, [popupContent]);
+
   const Content = ({
       setAdminListWishlist,
       adminListWishlist,
       allPossibleStatuses,
       adminListUsers,
       adminActiveMode,
+      popupContent,
+      setPopupContent,
+      popupClass,
+      setPopupClass
     }) => {
-    const [localList, setLocalList] = useState(adminListWishlist)
+    const [localList, setLocalList] = useState(checkForUpdates(adminListWishlist))
     const [searchBoxValue, setSearchBoxValue] = useState('')
 
     const [filters, setFilters] = useState({
@@ -27,6 +44,7 @@ const AdminWishlist = ({
       val: !localStorage.getItem('filterVal') ? "" : localStorage.getItem('filterVal'),
       isInverted: localStorage.getItem('isInverted') === 'true' ? true : false
     })
+    
 
     const [filterValuesArr, setFilterValuesArr] = useState([])
 
@@ -39,9 +57,34 @@ const AdminWishlist = ({
       "isPriority",
     ];
 
+    function checkForUpdates(wList) {
+      try {
+        if (!localStorage.getItem('wlItemForUpdate_ID') || localStorage.getItem('wlItemForUpdate_ID') === null || localStorage.getItem('wlItemForUpdate_ID') === '') {
+          return wList
+        } else {
+          let id = localStorage.getItem('wlItemForUpdate_ID')
+          console.log('%cAdminWishlist.js line:66 id', 'color: #007acc;', id);
+          let replacement = JSON.parse(localStorage.getItem('wlItemForUpdate'))
+          console.log('%cAdminWishlist.js line:68 replacement', 'color: #007acc;', replacement);
+          let newWList = wList.map(x => x['id'] === id ? replacement : x)
+          localStorage.setItem('wlItemForUpdate_ID','')
+          localStorage.setItem('wlItemForUpdate','')
+          return newWList
+        }
+      } catch (error) {
+        console.log(error.message)
+        return wList
+      }
+    }
+
     useEffect(() => {
-      if (adminActiveMode === 'adminwishlistList') {
-        setFilterValuesArr(Array.from(new Set(adminListWishlist.map(x => x[filters['field']]))))
+      // console.log('useEffect')
+      // console.log(filters)
+      // console.log(adminActiveMode)
+      if (adminActiveMode === 'wishlistList') {
+        let arr1 = adminListWishlist.map(x => x[filters['field']])
+        // console.log(arr1)
+        setFilterValuesArr(Array.from(new Set(arr1)))
         applyFilter(filters) 
       }
     }, [])
@@ -167,6 +210,10 @@ const AdminWishlist = ({
                 adminListUsers={adminListUsers}
                 loading={loading}
                 setLoading={setLoading}
+                        popupContent={popupContent}
+        setPopupContent={setPopupContent}
+        popupClass={popupClass}
+        setPopupClass={setPopupClass}
               />
             </div>
           </div>
@@ -202,6 +249,10 @@ const AdminWishlist = ({
         allPossibleStatuses={allPossibleStatuses}
         adminListUsers={adminListUsers}
         adminActiveMode={adminActiveMode}
+        popupContent={popupContent}
+        setPopupContent={setPopupContent}
+        popupClass={popupClass}
+        setPopupClass={setPopupClass}
       />
     </div>
   );

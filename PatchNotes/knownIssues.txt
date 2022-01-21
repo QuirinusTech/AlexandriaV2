@@ -1,5 +1,7 @@
 KNOWN ISSUES:
  - no sorting for Message CMS table
- - Ticket splitting doesn't work for wfComplete (does work for wfNew)
+ - Ticket splitting doesn't work for wfComplete (does work for wfNew) (provisionally resolved)
  - Multiple messages for the same entry aren't overriding each other if the epArray isn't identical. (introduce intelligent parsing of episode detail arrays)
  - Some functions in the OptionsWidget (e.g. deleting episodes) can cause the page to crash
+ - lastEpisodeAirDate is actually the NEXT episode air date. Either update the name, or load both.
+ - Popup messages can still be a bit janky with state conflict.

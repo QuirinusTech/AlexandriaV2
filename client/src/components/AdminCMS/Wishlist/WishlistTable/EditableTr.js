@@ -175,11 +175,19 @@ function EditableTr({
                 <th>
                   <button
                     className="adminButton adminButton--submit"
-                    onClick={() =>commit({
+                    onClick={() =>{
+                      let readyObj = {
                       ...entryValues,
                       episodes: episodesObj,
                       ...episodeRange
-                    })}
+                    }
+                    Object.keys(originalValues).forEach(key => {
+                      if (!readyObj.hasOwnProperty(key)) {
+                        readyObj[key] = originalValues[key]
+                      }
+                    })
+                      commit(readyObj)
+                    }}
                   >
                     UPDATE
                   </button>

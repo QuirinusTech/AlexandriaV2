@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserDetailDashboard from "./UserDetailDashboard"
 import UserDetailManager from "./UserDetailManager"
 import UsersList from "./UsersList"
 import GIFLoader from "../../Loaders/GIFLoader"
 import Blacklist from "./Blacklist"
 
-function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBlacklist }) {
+function UserManagerContent({ adminListUsers, adminActiveMode, setAdminActiveMode, blacklist, setBlacklist }) {
   const [localList, setLocalList] = useState(adminListUsers)
   const [currentUser, setCurrentUser] = useState(null);
   const [detailsEditable, setDetailsEditable] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState(['',''])
+  const [messageClass, setMessageClass] = useState('popup--right')
+
+  useEffect(() => {
+    const update = async () => {
+      setTimeout(() => setMessageClass('popup--right'), 5000)      
+    }
+    if (message[0].length > 0) {
+      setMessageClass('popup--right slideLeft')
+      update()
+    }
+  }, [message]);
   
   function selectUser(userId) {
     setCurrentUser(localList.filter(user => user['userId'] === userId)[0])
@@ -21,14 +33,10 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
     let newPasswordConfirm = window.prompt("Please confirm the password:")
 
     if (newPassword.length < 8) {
-      console.log('Warning', ['The new password is too short.', 'It must containt of at least 8 characters.', 'Aborted.'], true)
-      return false
-    }
-
-    if (newPassword === '' || newPassword === null) {
-      console.log('', ['Aborted'], true)
+      console.log('Warning', ['The new password is too short.', 'It must consist of at least 8 characters.', 'Aborted.'], true)
+      setMessage(['Warning', 'The new password is too short. It must consist of at least 8 characters.', 'Aborted.'])
     } else if (newPassword !== newPasswordConfirm) {
-      console.log('Warning', ['Passwords do not match.', 'Aborted'], true)
+      setMessage(['Warning', 'Passwords do not match.', 'Aborted.'])
     } else {
       try {
         setLoading(true)
@@ -41,11 +49,12 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           console.log('%cUserManagerContent.js line:30 result', 'color: #007acc;', result);
           throw new Error(result['errormsg'])
         } else {
-          console.log('Success', [`The password of user "${currentUser['username']}" has been changed successfully.`])
+          setMessage(['Success',`The password of user "${currentUser['username']}" has been changed successfully.`])
         }
       } catch (error) {
         console.log('%cUserManagerContent.js line:41 error', 'color: #007acc;', error);
-        console.log('Warning', [error.message], true)
+        setMessage(['Warning', error.message, 'Unhandled Exception.'])
+        setMessage(error.message)
       } finally {
         setLoading(false)
       }
@@ -77,13 +86,15 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           }
         })
         setLocalList(newUserList)
-        console.log('Success', [`The account was successfully ${!user["privileges"]["is_active_user"] && "de"}activated.`], false)
+        console.log(['Success','The account was successfully', !user["privileges"]["is_active_user"] ? "deactivated." : 'activated.'])
+          setMessage(['Success','The account was successfully', !user["privileges"]["is_active_user"] ? "deactivated." : 'activated.'])
         } else {
-          throw new Error('The requested changes could not be committed.')
+          setMessage(['Warning', 'The requested changes could not be committed.', 'Aborted.'])
         }
     } catch (error) {
       console.log('%cUserManagerContent.js line:51 error', 'color: #007acc;', error);
-      console.log('Failed', [error.message], true)      
+      console.log(error.message)
+      setMessage(['Warning', error.message, 'Failed'])      
     } finally {
       setLoading(false)
     }
@@ -117,10 +128,12 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
       } else {
         throw new Error('The requested changes could not be committed.')
       }
-      console.log('Success', ['The requested changes could not be committed to the database.'], false)
+      setMessage(['Success', 'The requested changes were committed to the database.'])
+      setMessage(['Success', 'The requested changes could not be committed to the database.'])
       setDetailsEditable(false)
     } catch (err) {
       console.log('%c function commitChanges() err.message', 'color: #007acc;', err.message);
+      setMessage(['Warning', 'Error encountered: ' , err.message])
     } finally {
       setLoading(false)
     }
@@ -133,23 +146,38 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
   }
 
   const Content = ({ usersList, currentUser, setCurrentUser, commitChanges, blacklist, setBlacklist }) => {
-    console.log(usersList);
-    console.log(blacklist)
-    return loading ? (<div><GIFLoader /></div>) : !usersList ? (<div>Problem</div>) : (
+    // console.log(usersList);
+    // console.log(blacklist)
+    return loading ? (<div><GIFLoader /></div>) : !usersList ? (<div>Problem</div>) : (<>
+
+    <div className='bulkActionButtonsContainer'>
+      <button className='adminButton--neutral adminButton--small' onClick={()=> setMessage(['heading', new Date().toGMTString(), 'testy testy'])}>Test</button>
+      <button className='adminButton--danger adminButton--small' onClick={()=> setMessage(['Warning', new Date().toGMTString(), 'hello'])}>Test warning</button>
+      <button className='adminButton--submit adminButton--small' onClick={()=> setMessage(['Success', 'The requested changes were committed to the database.'])}>Test Success</button>
+      <button className='adminButton--cancel adminButton--small' onClick={()=> setMessageClass('popup--right slideLeft')}>Force button open</button>
+    </div>
+
+        <div>
+            <button className={adminActiveMode === 'userCMS' ? 'adminButton adminButton--hover' : 'adminButton'} onClick={()=>setAdminActiveMode('userCMS')}>User Manager</button>
+          <button className={adminActiveMode === 'blacklist' ? 'adminButton adminButton--hover' : 'adminButton'} onClick={()=>setAdminActiveMode('blacklist')}>Blacklist</button>
+        </div>
       <div className="userManagerContent">
-        <div className="usersList">
+        {adminActiveMode !== null && 
+        <>
+          <div className="usersList">
           <UsersList
             usersList={usersList}
             selectUser={selectUser}
             currentUser={currentUser}
           />
-        </div> 
+        </div></> }
 
-        {currentUser === null && (<h4 className="UMC-selectUserMessage">Select a user</h4>)}
+        {currentUser === null && adminActiveMode !== null && (<h4 className="UMC-selectUserMessage">Select a user from the list above.</h4>)}
         {adminActiveMode === 'userCMS' ? (
           <>
           {currentUser !== null &&
-            (<>{detailsEditable ? 
+            (<>
+            {detailsEditable ? 
               <UserDetailManager
                 currentUser={currentUser}
                 setCurrentUser={setCurrentUser}
@@ -167,7 +195,8 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
                 setDetailsEditable={setDetailsEditable}
                 passwordReset={passwordReset}
               />
-            }</>)
+            }
+            </>)
             }
           </>
         ) : (
@@ -177,16 +206,30 @@ function UserManagerContent({ adminListUsers, adminActiveMode, blacklist, setBla
           <Blacklist currentUser={currentUser} blacklist={blacklist} setBlacklist={setBlacklist} />
           </>
           
-          ) : (<></>)
+          ) : (<><h4 className='UMC-selectUserMessage'>Select a Mode</h4>
+          <div>
+            <button className='adminButton' onClick={()=>setAdminActiveMode('userCMS')}>User Manager</button>
+            <button className='adminButton' onClick={()=>setAdminActiveMode('blacklist')}>Blacklist</button>
+          </div>
+          </>)
         )}
 
       </div>
+      </>
     )
   };
 
+
   return (
     <div className="userManagerMain">
-
+    <div className={messageClass}>
+      <button className='popup--right--X adminButton--cancel adminButton adminButton-small' onClick={()=>setMessageClass('popup--right')}>OK</button>
+        <div>
+        {message[0] !== '' && <h4 className={message[0].toUpperCase() === 'WARNING' ? 'warning' : 'highlightH4'}>{message[0]}</h4>}
+        <p>{message[1]}</p>
+        <p className={message[0].toUpperCase() === 'WARNING' ? 'boldRedText' : ''}>{message[2]}</p>
+        </div>
+      </div>
     <h3>User Manager Console</h3>
     <Content
       blacklist={blacklist}

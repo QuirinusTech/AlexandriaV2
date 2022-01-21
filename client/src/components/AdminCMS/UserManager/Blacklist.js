@@ -119,7 +119,9 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
     try {
       setLoading(true)
       const data = await fetch(`/imdbsearch/${searchByArg}/${fieldArg}`, {
-        method: "POST"
+        method: "POST",
+        body: JSON.stringify({mediaType: 'all', year: ''}),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
       })
         .then(res => res.json())
         .then(data => data)
@@ -216,10 +218,10 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
       <div className="blacklistAddnew">
         <h4>Add New</h4>
         <div className="blacklistAddnew--addBy">
-          <label disabled={searchSuccess} className={addBy === 'manual' ? "adminButton adminButton--small adminButton--hover bold" : "adminButton adminButton--small bold"}>
+          <label disabled={searchSuccess} className={searchSuccess ? 'disabled adminButton adminButton--small bold' : addBy === 'manual' ? "adminButton adminButton--small adminButton--hover bold" : "adminButton adminButton--small bold"}>
             <input disabled={searchSuccess} type="radio" name='addBy' value='manual' checked={addBy === 'manual'} onChange={handleChange} />
               Manual Input</label>
-          <label disabled={searchSuccess} className={addBy === 'search' ? "adminButton adminButton--small adminButton--hover bold" : "adminButton adminButton--small bold"}>
+          <label disabled={searchSuccess} className={searchSuccess ? 'disabled adminButton adminButton--small bold' : addBy === 'search' ? "adminButton adminButton--small adminButton--hover bold" : "adminButton adminButton--small bold"}>
             <input disabled={searchSuccess} type="radio" name='addBy' value='search' checked={addBy === 'search'} onChange={handleChange} />
               Search</label>
         </div>
@@ -230,27 +232,29 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
             <div>
 
             <div>
-              <label>Imdb ID</label>
+              <label>Imdb ID{searchSuccess && ' ✔'}</label>
               <input
                 className={searchSuccess ? "searchSuccess--bg" : ""}
                 type="text"
                 name="newImdbID"
                 value={newImdbID}
                 onChange={e => {setNewImdbID(e.target.value); setSearchSuccess(false)}}
+                readOnly={searchSuccess}
               />
             </div>
             <div>
-              <label>Title</label>
+              <label>Title{searchSuccess && ' ✔'}</label>
               <input
                 className={searchSuccess ? "searchSuccess--bg" : ""}
                 type="text"
                 name="newTitle"
                 value={newTitle}
                 onChange={e => {setNewTitle(e.target.value); setSearchSuccess(false)}}
+                readOnly={searchSuccess}
               />
             </div>
             <div>
-              <label>Media Type</label>
+              <label>Media Type{searchSuccess && ' ✔'}</label>
               <select
                 className={searchSuccess ? "searchSuccess--bg" : ""}
                 name="mediaType"
@@ -258,12 +262,13 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
                 onChange={e => {
                   setNewMediaType(e.target.value);
                 }}
+                disabled={searchSuccess}
               >
-                <option value="" hidden>
-                  select
+                <option value="all">
+                  Series or Movie
                 </option>
-                <option value="series">series</option>
-                <option value="movie">movie</option>
+                <option value="series">Series</option>
+                <option value="movie">Movie</option>
               </select>
             </div>
             </div>
@@ -304,7 +309,7 @@ const Blacklist = ({currentUser, blacklist, setBlacklist }) => {
         
         <div className="blacklistAddnew--addButton">
           <button className="adminButton adminButton--cancel" onClick={reset}>Reset</button>
-          {loading ? <PNGLoader /> : <button disabled={loading} className={searchSuccess ? ("adminButton adminButton--submit searchSuccess--invertBlue") : (newTitle === '' || newImdbID.length < 7 || newImdbID.slice(0,2) !== "tt" || newMediaType === '') ? ("adminButton adminButton--danger") : ("adminButton adminButton--submit")} name="create" onClick={blacklistInterface}>Add</button>}
+          {loading ? <PNGLoader /> : <button disabled={loading} className={searchSuccess ? ("adminButton adminButton--submit searchSuccess--invertBlue glow") : (newTitle === '' || newImdbID.length < 7 || newImdbID.slice(0,2) !== "tt" || newMediaType === '') ? ("adminButton adminButton--danger") : ("adminButton adminButton--submit")} name="create" onClick={blacklistInterface}>Add</button>}
         </div>
         
       </div>
