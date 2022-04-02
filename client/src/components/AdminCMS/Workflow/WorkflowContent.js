@@ -126,6 +126,7 @@ function WorkflowContent({
       wfTicket['outstanding'] = "movie"
       return wfTicket
     } else {
+      wfTicket['fullEpObj'] = {...entry['episodes']}
       let listOutstanding = {};
       // console.log(category, entry['name'])
       if (category !== "ongoing") {

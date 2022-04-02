@@ -191,7 +191,7 @@ function ResultsTable({
               /> */}
               </>
             )}
-            <OptionsWidget item={alreadyOnWishlist} />
+            <OptionsWidget item={alreadyOnWishlist} setWishlistData={setWishlistData} />
           </>
         ) : (
           <ul>

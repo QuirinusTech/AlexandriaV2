@@ -3,7 +3,7 @@ const { protheusReport } = require('./MercuryService')
 const fetch = require('node-fetch');
 const WishlistItem = require("./Classes/WishlistItem");
 const envs = require('./config');
-console.log(envs.test)
+// console.log(envs.test)
 
 // set up report variable
 let reportVar = {
@@ -37,39 +37,39 @@ let ticketList = []
 main()
 
 async function main() {
-  console.log('Starting Protheus Cronjob task @ ' + reportVar['eventInitTime'].toString())
+  // console.log('Starting Protheus Cronjob task @ ' + reportVar['eventInitTime'].toString())
   try {
     // determine if should run
-    reportVar['log'].push('INITIATE: preflight checks @ ' + new Date().toGMTString())
+    reportVar['log'].push('INITIATE: preflight checks')
     preflight()
     reportVar['log'].push('COMPLETED: preflight checks')
-    console.log('%c isWeekly: ', 'color: #007acc;', reportVar['reportType']['isWeekly']);
-    console.log('%c isMonthly: ', 'color: #007acc;', reportVar['reportType']['isMonthly'] );
+    // console.log('%c isWeekly: ', 'color: #007acc;', reportVar['reportType']['isWeekly']);
+    // console.log('%c isMonthly: ', 'color: #007acc;', reportVar['reportType']['isMonthly'] );
     
     if (reportVar['reportType']['isMonthly'] || reportVar['reportType']['isWeekly'] || reportVar['isTest']) {
       reportVar['jobDidStart'] = true
     } else {
-      reportVar['log'].push('Not scheduled for now: ' + reportVar['eventInitTime'].toString())
+      // reportVar['log'].push('Not scheduled for now: ' + reportVar['eventInitTime'].toString())
       throw new Error('Not scheduled for now: ' + reportVar['eventInitTime'].toString())
     }
 
-    reportVar['log'].push('INIT: extract wishlist data @ ' + new Date().toGMTString())
+    reportVar['log'].push('INIT: extract wishlist data')
     // pull wishlist
     const tempVar = await adminDatabaseInterface('wishlist', 'LIST', ['mediaType', 'series'])
     // console.log('%cProtheus.js line:57 tempVar', 'color: #007acc;', tempVar);
     let wishlist = tempVar['payload']
-    reportVar['log'].push('COMPLETE: extracted wishlist data @ ' + new Date().toGMTString())
-    reportVar['log'].push('INIT: extract blacklist data @ ' + new Date().toGMTString())
+    reportVar['log'].push('COMPLETE: extracted wishlist data')
+    reportVar['log'].push('INIT: extract blacklist data')
     // pull wishlist
     const tempVar2 = await adminDatabaseInterface('blacklist', 'LIST', null)
     // console.log('%cProtheus.js line:57 tempVar', 'color: #007acc;', tempVar);
     const blacklist = tempVar2['payload']
-    reportVar['log'].push('COMPLETE: extracted blacklist data @ ' + new Date().toGMTString())
-    console.log('%cProtheus.js line:58 blacklist.length', 'color: #007acc;', blacklist.length);
+    reportVar['log'].push('COMPLETE: extracted blacklist data')
+    // console.log('%cProtheus.js line:58 blacklist.length', 'color: #007acc;', blacklist.length);
 
 
     // primary filters remove blacklisted entries and those not marked as isOngoing
-    reportVar['log'].push('INIT: primary filter @ ' + new Date().toGMTString())
+    reportVar['log'].push('INIT: primary filter')
     let preFilterCount = wishlist.length
     wishlist = primaryFilter(wishlist, blacklist)
     let postFilterCount = wishlist.length
@@ -78,20 +78,20 @@ async function main() {
     if (preFilterCount - postFilterCount === preFilterCount || postFilterCount === 0) {
       throw new Error('entire wishlist removed by primary filter. Aborting.')
     }
-    reportVar['log'].push('COMPLETE: primary filter @ ' + new Date().toGMTString())
+    reportVar['log'].push('COMPLETE: primary filter')
 
     // data checks
-    reportVar['log'].push('INIT: integrity checks @ ' + new Date().toGMTString())
+    reportVar['log'].push('INIT: integrity checks')
     let wishlistChecked = await dataIntegrityChecks(wishlist)
     reportVar['log'].push(reportVar['modifiedWishlistItems'].length + ' items flagged for data updates.')
-    reportVar['log'].push('COMPLETE: integrity checks @ ' + new Date().toGMTString())
+    reportVar['log'].push('COMPLETE: integrity checks')
 
     // remove anomalies
     let anomalyRemovalCounterA_A = wishlistChecked.length
     wishlistChecked = wishlistChecked.filter(x => !isInList(reportVar['dataAnomalies'], x['id']))
     let anomalyRemovalCounterA_B = wishlistChecked.length
     let differenceA = anomalyRemovalCounterA_A - anomalyRemovalCounterA_B
-    reportVar['log'].push(differenceA + ' entries removed from wishlist for data anomalies (A) @ ' + new Date().toGMTString())
+    reportVar['log'].push(differenceA + ' entries removed from wishlist for data anomalies (A)')
 
     if (differenceA === anomalyRemovalCounterA_A || anomalyRemovalCounterA_B === 0) {
       throw new Error('entire wishlist removed for data anomalies. Aborting.')
@@ -103,22 +103,27 @@ async function main() {
     if (reportVar['reportType']['isMonthly'] || reportVar['reportType']['isWeekly']) {
       reportVar['jobDidRun'] = true
       // preparation and ticket creation
-      reportVar['log'].push('INIT: evaluateRunEligibility() @ ' + new Date().toGMTString())
+      reportVar['log'].push('INIT: evaluateRunEligibility()')
       const monthlyFunctionResults = await evaluateRunEligibility(wishlistChecked)
-      reportVar['log'].push('COMPLETE: evaluateRunEligibility() @ ' + new Date().toGMTString())
+      reportVar['log'].push('COMPLETE: evaluateRunEligibility()')
 
       // ticket execution
-      reportVar['log'].push('INIT: ticketParser() @ ' + new Date().toGMTString())
-      updatedWishlist = ticketParser(ticketList, wishlistChecked)
-      // var fs = require('fs');
-      // var stream = fs.createWriteStream("/logs/updatedWishlist.json");
-      // stream.once('open', function(fd) {
-      //   updatedWishlist.forEach(entry => {
-      //     stream.write(JSON.stringify(entry) + "\n");
-      //   })
-      //   stream.end();
-      // });
-      reportVar['log'].push('COMPLETE: ticketParser() @ ' + new Date().toGMTString())
+      if (ticketlist.length >0) {
+        reportVar['log'].push('INIT: ticketParser()')
+        updatedWishlist = ticketParser(ticketList, wishlistChecked)
+        // var fs = require('fs');
+        // var stream = fs.createWriteStream("/logs/updatedWishlist.json");
+        // stream.once('open', function(fd) {
+        //   updatedWishlist.forEach(entry => {
+        //     stream.write(JSON.stringify(entry) + "\n");
+        //   })
+        //   stream.end();
+        // });
+        reportVar['log'].push('COMPLETE: ticketParser()')
+      } else {
+        reportVar['log'].push('0 Tickets.')
+        reportVar['log'].push('SKIP: ticketParser()')
+      }
 
     } else {
       // no tickets will be parsed, use the current wishlist with api data updates
@@ -141,23 +146,23 @@ async function main() {
 
 
     // commit changes to db
-    reportVar['log'].push('INIT: db commits() @ ' + new Date().toGMTString())
+    reportVar['log'].push('INIT: db commits()')
     const dbUpdatesRequired = filterRequiredUpdates(reportVar['modifiedWishlistItems'], updatedWishlist)
     reportVar['log'].push('dbUpdates required: ' + dbUpdatesRequired.length)
     console.log('dbUpdates required: ' + dbUpdatesRequired.length)
     if (dbUpdatesRequired.length > 0 && !reportVar['isTest']) {
-      reportVar['log'].push('INIT: db updates @ ' + new Date().toGMTString())
+      reportVar['log'].push('INIT: db updates')
       console.table(dbUpdatesRequired)
       reportVar['dbCommitResults']['dbUpdates'] = await adminDatabaseInterface('wishlist', 'NEWBULK', dbUpdatesRequired)
-      reportVar['log'].push('COMPLETE: db updates @ ' + new Date().toGMTString())
+      reportVar['log'].push('COMPLETE: db updates')
     } else if (dbUpdatesRequired.length > 0 && reportVar['isTest']) {
       reportVar['log'].push('Test run. updates will be printed to log: ')
       dbUpdatesRequired.forEach(x => {
         reportVar['log'].push(JSON.stringify(x))
       })
-      reportVar['log'].push('COMPLETE: db updates log output @ ' + new Date().toGMTString())
+      reportVar['log'].push('COMPLETE: db updates log output')
     } else {
-      reportVar['log'].push('SKIP: db updates @ ' + new Date().toGMTString())
+      reportVar['log'].push('SKIP: db updates')
     }
 
     // create notifications
@@ -168,22 +173,22 @@ async function main() {
     reportVar['log'].push('notifications count: ' + notificationsList.length)
     console.log('notification count : ' + notificationsList.length)
     if (notificationsList.length > 0 && !reportVar['isTest']) {
-      reportVar['log'].push('INIT: notification creation @ ' + new Date().toGMTString())
+      reportVar['log'].push('INIT: notification creation')
       reportVar['dbCommitResults']['notifications'] = await adminDatabaseInterface('msgCentre', 'NEWBULK', notificationsList)
-      reportVar['log'].push('COMPLETE: notification creation @ ' + new Date().toGMTString())
+      reportVar['log'].push('COMPLETE: notification creation')
     } else if (notificationsList.length > 0 && reportVar['isTest']) {
       reportVar['log'].push('Test run. Notifications will be printed to log: ')
       notificationsList.forEach(msg => {
         reportVar['log'].push(JSON.stringify(msg))
       })
-      reportVar['log'].push('COMPLETE: notification log output @ ' + new Date().toGMTString())
+      reportVar['log'].push('COMPLETE: notification log output')
     } else {
-      reportVar['log'].push('SKIP: notification creation @ ' + new Date().toGMTString())
+      reportVar['log'].push('SKIP: notification creation')
     }
 
     // db commits completed
-    reportVar['log'].push('primary job complete. @ ' + new Date().toGMTString())
-    console.log('primary job complete. @ ' + new Date().toGMTString())
+    reportVar['log'].push('primary job complete.')
+    console.log('primary job complete.')
     reportVar['jobDidComplete'] = true
 
     // write report to db
@@ -195,15 +200,15 @@ async function main() {
       // get log id from payload
       if (reportSubmitted['success']) {
         reportVar['logId'] = reportSubmitted['payload']
-        reportVar['log'].push('Report committed to db successfully @ ' + new Date().toGMTString())
-        console.log('Report committed to db successfully @ ' + new Date().toGMTString())
+        reportVar['log'].push('Report committed to db successfully')
+        console.log('Report committed to db successfully')
       } else {
-        reportVar['log'].push('reportSubmitted: ' + JSON.stringify(reportSubmitted) + ' @ ' + new Date().toGMTString())
+        reportVar['log'].push('reportSubmitted: ' + JSON.stringify(reportSubmitted) + '')
         throw new Error(reportSubmitted['payload'])
       }
       console.log('Mailing report.')
       let reportMailed = await protheusReport(reportVar)
-      console.log('report mailed @ ' + new Date().toGMTString())
+      console.log('report mailed')
     } else {
       console.log(reportVar['isTest'] ? 'Test run. Skipping email. Skipping db commit.' : "Job didn't finish. Skipping email. Skipping db commit.")
       var fs = require('fs')
@@ -217,7 +222,7 @@ async function main() {
     
   } catch (error) {
     reportVar['jobDidError'] = true
-    reportVar['log'].push('Error in main() @ ' + new Date().toGMTString())
+    reportVar['log'].push('Error in main()')
     reportVar['log'].push(error.message)
     reportVar['ticketList'] = ticketList
     if (reportVar['isTest']) {
@@ -257,9 +262,9 @@ async function main() {
     }
   } finally {
     if (reportVar['jobDidError']) {
-      console.log('Protheus run completed @ ' + new Date().toGMTString() + ' with ERRORS!')
+      console.log('Protheus run completed' + ' with ERRORS!')
     } else {
-      console.log('Protheus run completed @ ' + new Date().toGMTString())
+      console.log('Protheus run completed')
     }
     // reportVar['ticketParserOutput'].forEach(y => {
     //   console.log(y)
@@ -324,9 +329,9 @@ async function loadTvMazeData(entry) {
     //   dataloaded = true
     // }
 
-    console.log('ping')
+    // console.log('ping')
     if (typeof newData === 'object' && newData !== null) {
-      console.log('pong')
+      // console.log('pong')
       if (JSON.stringify(newData) !== JSON.stringify(entry['tvMazeData']) || !entry.hasOwnProperty('tvMazeData')) {
         // reportVar['log'].push('tvMazeData change found for ' + entry['name'])
         entry['tvMazeData'] = {...newData}
@@ -338,11 +343,11 @@ async function loadTvMazeData(entry) {
       }
     } else {
       reportVar['log'].push(`Data anomaly detected in loadTvMazeData() for entry with id ${entry['id']}.`)
-      reportVar['dataAnomalies'].push(entry['id'])
+      reportVar['dataAnomalies'].push(entry['id'] + ' : ' + entry['name'])
     }    
   } catch (error) {
     reportVar['jobDidError'] = true
-    reportVar['log'].push(`Error retrieving TvMazeData for entry with id ${entry['id']}.`)
+    reportVar['log'].push(`Error retrieving TvMazeData for entry with id ${entry['id']} - ${entry['name']}.`)
     reportVar['log'].push('error message: ' + error.message)
     reportVar['dataAnomalies'].push(entry['id'])
   } finally {
@@ -406,6 +411,8 @@ async function checkForNewEpisodes(entry) {
   try {
     let query = 'https://api.tvmaze.com/shows/' + entry['tvMazeData']['id'] + '/seasons'
     const seasonData = await fetch(query).then(res => res.json())
+    let query2 = 'https://api.tvmaze.com/shows/' + entry['tvMazeData']['id'] + '/seasons'
+    const episodeData = await fetch(query2).then(res => res.json())
     let seasonDataMap = {}
     seasonData.forEach(x => {
       if (x['episodeOrder'] !== null) {
@@ -418,15 +425,15 @@ async function checkForNewEpisodes(entry) {
     const newEt = parseInt(seasonDataMap[newSt.toString()])
 
     if ((newSt > oldSt || (newSt === oldSt && newEt > oldEt)) && Object.keys(seasonDataMap).length > 0) {
-      createTicket(entry, seasonDataMap, {oldSt, oldEt, newSt, newEt})
+      createTicket(entry, seasonDataMap, {oldSt, oldEt, newSt, newEt}, episodeData)
     }
 
   } catch (error) {
     reportVar['jobDidError'] = true
     reportVar['log'].push('Error encountered in checkForNewEpisodes with entry ' + entry['name'])
     reportVar['log'].push(error.message)
-    console.log('Error encountered in checkForNewEpisodes with entry ' + entry['name'])
-    console.log(error.message)
+    // console.log('Error encountered in checkForNewEpisodes with entry ' + entry['name'])
+    // console.log(error.message)
   } finally {
     return entry
   }
@@ -437,7 +444,7 @@ async function checkForNewEpisodes(entry) {
     origData = entry from wishlist
     rangeDetails: contains oldSt, oldEt, newSt, newEt
  */
-function createTicket(origData, sdm, rangeDetails) {
+function createTicket(origData, sdm, rangeDetails, epData) {
   try {
     reportVar['functionRunCount']['createTicket']++
     let additions = {}
@@ -472,7 +479,7 @@ function createTicket(origData, sdm, rangeDetails) {
             additions[s] = [x+1, sdm[s]]
             // more episodes on file than available onlinew
           } else if (x > sdm[s]) {
-            reportVar['log'].push(`Data anomaly detected in entry with id ${origData['id']}. Current Season: ${s}. Max Episodes in API: ${sdm[s]}. Max Episodes on File: ${x}.`)
+            reportVar['log'].push(`Data anomaly detected in entry with id ${origData['id']} (${entry['name']}). Current Season: ${s}. Max Episodes in API: ${sdm[s]}. Max Episodes on File: ${x}.`)
           }
           // a new season must be added
         } else if (!origData['episodes'].hasOwnProperty(s)) {
@@ -511,6 +518,7 @@ function createTicket(origData, sdm, rangeDetails) {
       title: origData['name'],
       rangeDetails,
       additions,
+      epData,
       notification: {
         id: origData['id'] + '_protheus_notification_' + reportVar['eventInitTime'].toGMTString().replace(/[\s\:\,]/g, ''),
         msgType: "status",
@@ -564,6 +572,34 @@ function ticketParser(tList, wList) {
           // reportVar['ticketParserOutput'].push(wlEntry['episodes'])
           // if the results of the filter are an object and not an array
           if (typeof thisTicket === 'object' && !Array.isArray(thisTicket) && thisTicket.hasOwnProperty('additions')) {
+            let cutoff = [0,0] 
+            epData.forEach(epItem => {
+              if (new Date(epItem['airdate']) < new Date()) {
+                if (cutoff[0] <= epItem['season'] || (cutoff[0] === epItem['season'] && cutoff[1] < epItem['number'])) {
+                  cutoff = [epItem['season'], epItem['number']]
+                }
+              }
+            })
+
+            // ST = CoS & ET < CoE
+            if (cutoff[0] === thisTicket['notification']['affectedEpisodes'][2] && cutoff[0] < thisTicket['notification']['affectedEpisodes'][3]) {
+              thisTicket['notification']['affectedEpisodes'][3] = cutoff[1]
+              
+              // ST < CoS
+            } else if (cutoff[0] < thisTicket['notification']['affectedEpisodes'][2]) {
+              thisTicket['notification']['affectedEpisodes'][2] = cutoff[0]
+              thisTicket['notification']['affectedEpisodes'][3] = cutoff[1]
+            }
+              // SF = CoS & SF < CoE
+            if (cutoff[0] === thisTicket['notification']['affectedEpisodes'][0] && cutoff[1] < thisTicket['notification']['affectedEpisodes'][1]) {
+              thisTicket['notification']['affectedEpisodes'][1] = cutoff[1]
+
+              // SF < CoS
+            } else if (cutoff[0] < thisTicket['notification']['affectedEpisodes'][0]) {
+              thisTicket['notification']['affectedEpisodes'][0] = cutoff[0]
+              thisTicket['notification']['affectedEpisodes'][1] = cutoff[1]
+            }
+
             // run through the additions object
             Object.keys(thisTicket['additions']).forEach(season => {
               // current season to modify
@@ -572,12 +608,18 @@ function ticketParser(tList, wList) {
                 entry['et'] = thisTicket['additions'][season][1]
               }
 
+
               // create a 'new' episode for each number between the start and ends values of this add 
               for (let ep = thisTicket['additions'][season][0]; ep <= thisTicket['additions'][season][1]; ep++) {
+                let statusname = 'new'
+                if (season > cutoff[0] || (season === cutoff[0] && ep > cutoff[1])) {
+                  statusname = 'postponed'
+                }
+
                 if (entry['episodes'].hasOwnProperty(season)) {
-                  entry['episodes'][season][ep] = 'new'
+                  entry['episodes'][season][ep] = statusname
                 } else {
-                  entry['episodes'][season] = { [ep]: 'new' }
+                  entry['episodes'][season] = { [ep]: statusname }
                 }
                 // reportVar['ticketParserOutput'].push('season' + season);
                 // reportVar['ticketParserOutput'].push('ep' + ep);
@@ -594,7 +636,7 @@ function ticketParser(tList, wList) {
         reportVar['modifiedWishlistItems'].push(entry['id'])
       } catch (error) {
         reportVar['jobDidError'] = true
-        console.log('Error detected in ticketParser() in entry with id ' + entry['id'])
+        // console.log('Error detected in ticketParser() in entry with id ' + entry['id'])
         reportVar['log'].push('Error detected in ticketParser() in entry with id ' + entry['id'])
         reportVar['log'].push('Error message: ' + error.message)
         reportVar['log'].push('entry: ' + JSON.stringify(entry))

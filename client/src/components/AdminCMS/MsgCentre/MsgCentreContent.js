@@ -38,7 +38,7 @@ function MsgCentreContent({
         );
       case "msgCMS":
         return (
-        <div className="adminCMSTitlePage">
+        <div className="adminCMSTitlePage limitHeight100vh yscroll">
           <MessageCMS
             adminListNotifications={adminListNotifications}
             adminListUsers={adminListUsers}

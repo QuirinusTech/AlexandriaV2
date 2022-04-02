@@ -1,11 +1,11 @@
 import BufferingLoader from "../../Loaders/BufferingLoader"
 
 // ProtheusSingle > SeasonDataMap - admin version 
-const Protheus = ({protheusSingle, protheusData, id, outstanding, ticketId, generateWfTicket, setWfTicketList}) => {
+const Protheus = ({protheusSingle, protheusData, id, outstanding, ticketId, generateWfTicket, setWfTicketList, fullEpObj}) => {
 
-  let maxSeasons = Math.max(...Object.keys(outstanding))
+  let maxSeasons = Math.max(...Object.keys(fullEpObj))
   console.log('%cProtheus.js line:6 maxSeasons', 'color: #007acc;', maxSeasons);
-  let minSeasons = Math.min(...Object.keys(outstanding))
+  let minSeasons = Math.min(...Object.keys(fullEpObj))
   console.log('%cProtheus.js line:6 minSeasons', 'color: #007acc;', minSeasons);
 
   async function retrieveSeasonDataMap(e) {
@@ -56,7 +56,7 @@ const Protheus = ({protheusSingle, protheusData, id, outstanding, ticketId, gene
                   {Object.keys(protheusData).map(k => {
                     let no = protheusData[k]
                     if (parseInt(k) >= minSeasons && parseInt(k) <= maxSeasons && Array.isArray(outstanding[k])) {
-                      no = protheusData[k] - Math.max(...outstanding[k])
+                      no = protheusData[k] - Math.max(...Object.keys(fullEpObj[k]))
                     }
                     return (
                       <div>
@@ -65,7 +65,7 @@ const Protheus = ({protheusSingle, protheusData, id, outstanding, ticketId, gene
                         {k < minSeasons ? (
                           <button className="disabled adminButton--small">Not in current ticket</button>
                             ) :
-                          no === 0 ? (
+                          no <= 0 ? (
                             <button className="disabled adminButton--small">Nothing new</button>
                             ) : (
                             <button 

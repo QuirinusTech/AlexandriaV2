@@ -1,0 +1,11 @@
+v2.3.3 (#50) (2022-04-02)
+
+NEW FEATURES
+  // PROTHEUS (Background update):
+    - New episodes that are added before they have aired are put into POSTPONED status.
+
+BUG FIXES
+  // ProtheusUser:
+    - Resolved an issue causing the OptionsWidget to crash when adding episodes due to infinity values being passed into a for-loop.
+    - Fixed an issue causing new available episode values to show as 'infinity'.
+    - Resolved an issue casuing the OptionsWidget to crash when trying to update the WishlistData because the function wasn't passed down correctly as a prop from the parent component.

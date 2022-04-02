@@ -1,7 +1,24 @@
-KNOWN ISSUES:
+KNOWN ISSUES WITH:
  - no sorting for Message CMS table
- - Ticket splitting doesn't work for wfComplete (does work for wfNew) (provisionally resolved)
- - Multiple messages for the same entry aren't overriding each other if the epArray isn't identical. (introduce intelligent parsing of episode detail arrays)
+  > copy method used in AdminCMS table
+ - Multiple messages for the same entry aren't overriding each other if the epArray isn't identical.
+  > introduce intelligent parsing of episode detail arrays
+
+
+FURTHER INVESTIGATION required
+ + WorkflowItemManager
+  - when BulkMode is not active, after taking partial action on a ticket, if you reselect the ticket, the OLD episodes are shown as they were before the action you just took.
+    > Investigate the way in which state is updated when using the Split ticket function.
+ 
+ NO SOLUTION:
+ - Popup messages can still be a bit janky with state conflict. (Redux / framework)
+ - Ticket splitting doesn't work for wfComplete (does work for wfNew) (provisionally resolved (?))
  - Some functions in the OptionsWidget (e.g. deleting episodes) can cause the page to crash
- - lastEpisodeAirDate is actually the NEXT episode air date. Either update the name, or load both.
- - Popup messages can still be a bit janky with state conflict.
+ 
+ RESOLVED
+  // v2.3.3
+    + WorkflowItemManager
+      - lastEpisodeAirDate is actually the NEXT episode air date. Either update the name, or load both.  
+        > SOLVED: Naming convention updated based on available TvMazeData
+      - seasonDataMap currently compares the map with what is in the ticket rather than with the actual entry in the Database, leading to misinformation, especially where entries have multiple episodes in different statuses, resulting in multiple tickets for the same entry.
+        > SOLVED: fullEpObj included in wfTickets, allowing for parsing of those numbers to compare against sdm

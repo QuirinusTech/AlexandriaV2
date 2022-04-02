@@ -17,11 +17,12 @@ const ProtheusUser = ({id, episodes, tvMazeId, imdbId, setWishlistData, setCurre
     }, [])
 
   async function retrieveSeasonDataMap() {
-    console.log('Protheus')
+    console.log('retrieve Season Data Map')
     setProtheusData('loading')
     let query = '/getSeasonData/'
     query = query + (typeof tvMazeId === 'string' ? tvMazeId : id)
     const result = await fetch(query, {method: 'POST'}).then(res=>res.json())
+    console.log('%cProtheusUser.js line:25 result', 'color: #007acc;', result);
     setProtheusData(result)
   }
 
@@ -51,7 +52,15 @@ const ProtheusUser = ({id, episodes, tvMazeId, imdbId, setWishlistData, setCurre
     setCurrentFunction("Loading")
     let s = e.target.name
     let eps = e.target.value
-    let thisSeasonMaxEps = Math.max(...Object.keys(episodes[s]))
+    console.log('%cProtheusUser.js line:54 episodes', 'color: #007acc;', episodes);
+    console.log('%cProtheusUser.js line:55 s', 'color: #007acc;', s);
+    console.log('%cProtheusUser.js line:56 eps', 'color: #007acc;', eps);
+    // let maxSeason = Math.max(...Object.keys(episodes))
+    let thisSeasonMaxEps = episodes.hasOwnProperty(s) ? Math.max(...Object.keys(episodes[s])) : 0
+    if (thisSeasonMaxEps === Infinity || thisSeasonMaxEps === -Infinity) {
+      thisSeasonMaxEps = 0
+    }
+    console.log(thisSeasonMaxEps)
     let episodesObj = {}
     episodesObj[s.toString()] = {}
     for (let i = thisSeasonMaxEps+1; i <= eps; i++) {
@@ -104,8 +113,15 @@ const ProtheusUser = ({id, episodes, tvMazeId, imdbId, setWishlistData, setCurre
                 <summary>Season Data Map</summary>
                   {Object.keys(protheusData).map(k => {
                     let no = protheusData[k]
+                    {/* {console.log(k, no, minSeasons, maxSeasons)} */}
                     if (parseInt(k) >= minSeasons && parseInt(k) <= maxSeasons) {
-                      no = protheusData[k] - Math.max(...Object.keys(episodes[k]))
+                      let copyArr = [...Object.keys(episodes[k])]
+                      if (isNaN(Math.max(copyArr))) {
+                        no = protheusData[k] - Math.max(...Object.keys(episodes[k]))
+                      } else {
+                        no = protheusData[k] - Math.max([copyArr])
+                      }
+                      console.log('no',no)
                     }
                     return (
                       <div>
