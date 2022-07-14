@@ -4,6 +4,8 @@ NEW FEATURES
   // PROTHEUS (Background update):
     - New episodes that are added before they have aired are put into POSTPONED status.
 
+
+
 BUG FIXES
   // ProtheusUser:
     - Resolved an issue causing the OptionsWidget to crash when adding episodes due to infinity values being passed into a for-loop.

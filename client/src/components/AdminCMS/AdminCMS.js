@@ -120,6 +120,7 @@ function AdminCMS({setErrorPageContent}) {
       console.log('%cAdminCMS.js line:97 error', 'color: #007acc;', error);
       console.log('%cAdminCMS.js line:98 error.message', 'color: #007acc;', error.message);
     } finally {
+      window.scroll(0,window.innerHeight/100*60)
       setLoading(false);
     }
   }

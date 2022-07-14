@@ -17,6 +17,11 @@ const WorkflowCardsList = ({
       
       {catlist.map(category => {
         let listByCategory = listByMode.filter(entry => entry['category'] === category)
+        listByCategory = listByCategory.sort(function(a, b) {
+            var x = a["affectedEntry"];
+            var y = b["affectedEntry"];
+            return x < y ? -1 : x > y ? 1 : 0;
+          });
         return (
           <WorkflowCardsListSection
             list={listByCategory}

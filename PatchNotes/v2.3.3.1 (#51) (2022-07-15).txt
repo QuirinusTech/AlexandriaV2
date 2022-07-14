@@ -1,0 +1,10 @@
+v2.3.3.1 (#51) (2022/07/15)
+
+MINOR UI Update:
+  // Admin CMS:
+    - On initial AdminData load, scroll down to title page.
+  // Wishlist CMS
+    - Fixed styling of <Select> in EditableTr
+  // Workflow
+    - Increased Animation speed of cards
+    - Alphabetical sorting of ticketlist
