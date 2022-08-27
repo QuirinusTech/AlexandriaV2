@@ -29,7 +29,7 @@ let reportVar = {
     dbUpdates: null,
     notifications: null
   },
-  isTest: envs.test === 'true' ? true : false
+  isTest: true// envs.test === 'true'
 }
 
 let ticketList = []
@@ -108,7 +108,7 @@ async function main() {
       reportVar['log'].push('COMPLETE: evaluateRunEligibility()')
 
       // ticket execution
-      if (ticketlist.length >0) {
+      if (ticketList.length >0) {
         reportVar['log'].push('INIT: ticketParser()')
         updatedWishlist = ticketParser(ticketList, wishlistChecked)
         // var fs = require('fs');
@@ -166,12 +166,16 @@ async function main() {
     }
 
     // create notifications
-    if (!reportVar['dbCommitResults']['dbUpdates']['success']) {
+    try {
+      if (!reportVar['dbCommitResults']['dbUpdates']['success']) {
+       throw new Error('Updates failed.') 
+      }
+      const notificationsList = ticketList.map(t => t['notification'] && reportVar['dbCommitResults']['dbUpdates']['success'])
+      reportVar['log'].push('notifications count: ' + notificationsList.length)
+      console.log('notification count : ' + notificationsList.length)
+    } catch (error) {
       reportVar['log'].push('dbUpdates failed. No notifications will be created.')
     }
-    const notificationsList = ticketList.map(t => t['notification'] && reportVar['dbCommitResults']['dbUpdates']['success'])
-    reportVar['log'].push('notifications count: ' + notificationsList.length)
-    console.log('notification count : ' + notificationsList.length)
     if (notificationsList.length > 0 && !reportVar['isTest']) {
       reportVar['log'].push('INIT: notification creation')
       reportVar['dbCommitResults']['notifications'] = await adminDatabaseInterface('msgCentre', 'NEWBULK', notificationsList)
@@ -263,6 +267,10 @@ async function main() {
   } finally {
     if (reportVar['jobDidError']) {
       console.log('Protheus run completed' + ' with ERRORS!')
+      reportVar['log'].forEach(x => {
+
+        console.log(x)
+      })
     } else {
       console.log('Protheus run completed')
     }
@@ -401,13 +409,25 @@ async function indivAPICall(entry, standard=true) {
 
 
 async function evaluateRunEligibility(wList) {
-  const checkRun = wList.map(x => reportVar['reportType']['isWeekly'] && x['tvMazeData']['status'] !== 'Ended' ? checkForNewEpisodes(x) : reportVar['reportType']['isMonthly'] ? checkForNewEpisodes(x) : x)
+  console.log('MARK A')
+  const checkRun = wList.map(x => reportVar['reportType']['isWeekly'] && x.hasOwnProperty('tvMazeData') && x['tvMazeData'].hasOwnProperty('status') && x['tvMazeData']['status'] !== 'Ended' ? checkForNewEpisodes(x) : reportVar['reportType']['isMonthly'] ? checkForNewEpisodes(x) : x)
+  console.log('MARK B')
   const checksDone = await Promise.all(checkRun)
+  console.log('MARK c')
   return checksDone
 }
 
 async function checkForNewEpisodes(entry) {
+  if (!entry.hasOwnProperty('tvMazeData')) {
+    reportVar['dataAnomalies'].push(entry['id'])
+    return entry
+  }
   reportVar['functionRunCount']['checkForNewEpisodes']++
+  Object.keys(entry).forEach(key => {
+    if (key.toUpperCase() !== 'SEASONDATA') {
+      console.log(`${key.toUpperCase()} : ${entry[key]}`)
+    }
+  })
   try {
     let query = 'https://api.tvmaze.com/shows/' + entry['tvMazeData']['id'] + '/seasons'
     const seasonData = await fetch(query).then(res => res.json())
@@ -551,6 +571,7 @@ function createTicket(origData, sdm, rangeDetails, epData) {
 
 function ticketParser(tList, wList) {
 
+  let thisTicket = {}
   // extract
   const ticketIdList = tList.map(x => x['id'])
   let updatedList = []
@@ -564,7 +585,7 @@ function ticketParser(tList, wList) {
         if (isInList(ticketIdList, entry['id'])) {
           let arr1 = tList.filter(x => x['id'] === entry['id'])
           // console.log(arr1)
-          let thisTicket = arr1[0]
+          thisTicket = arr1[0]
           // console.log(thisTicket)
           // reportVar['ticketParserOutput'].push('Additions: ')
           // reportVar['ticketParserOutput'].push(thisTicket['additions'])

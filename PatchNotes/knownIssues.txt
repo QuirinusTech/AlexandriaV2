@@ -1,9 +1,12 @@
 KNOWN ISSUES WITH:
  - no sorting for Message CMS table
-  > copy method used in AdminCMS table
+  > S: copy method used in AdminCMS table
  - Multiple messages for the same entry aren't overriding each other if the epArray isn't identical.
-  > introduce intelligent parsing of episode detail arrays
-
+  > S: introduce intelligent parsing of episode detail arrays
+- UMC : Blacklist
+  > List of blacklisted entries table displays incorrect info in incorrect columns
+  > Selecting a mode after selecting a user resets the selected user.
+  > Currently unable to add new entries to blacklist via this console
 
 FURTHER INVESTIGATION required
  + WorkflowItemManager

@@ -1,0 +1,3 @@
+v2.3.3.1b (#52) (2022/08/27)
+
+Multiple bugfixes in Protheus scheduled job
